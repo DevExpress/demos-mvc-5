@@ -1,0 +1,14 @@
+﻿@model ImageGalleryFolderBindingDemoOptions
+@Html.DevExpress().ImageGallery(settings => {
+    settings.Name = "imageGallery";
+    settings.Width = Unit.Percentage(100);
+    settings.CallbackRouteValues = new {
+        Controller = "ImageGallery",
+        Action = "FolderBindingPartial",
+        ApplyWatermark = Model.ApplyWatermark,
+        ImageSourceFolder = Model.ImageSourceFolder
+    };
+    settings.ImageCacheFolder = Model.ImageCacheFolder;
+    if (Model.ApplyWatermark)
+        settings.CustomImageProcessing = (s, e) => { PhotoUtils.DrawWatermarkText(e.Graphics, "ImageGallery", "Arial"); };
+}).BindToFolder(Model.ImageSourceFolder).GetHtml()

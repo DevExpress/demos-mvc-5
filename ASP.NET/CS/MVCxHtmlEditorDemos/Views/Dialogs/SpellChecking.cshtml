@@ -1,0 +1,11 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+@Html.Partial("SpellCheckingPartial")
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

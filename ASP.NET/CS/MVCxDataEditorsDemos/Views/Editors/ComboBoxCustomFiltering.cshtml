@@ -1,0 +1,73 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMinHeight = Unit.Pixel(350);
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(800);
+}
+
+@section AdditionalResources {    
+    <script type="text/javascript">
+        function onItemFiltering(s, e) {
+            if (!e.isFit)
+                e.isFit = toLatin(e.item.text).indexOf(toLatin(e.filter)) > -1;
+        }
+        function onCustomHighlighting(s, e) {
+            e.highlighting = new RegExp(toLatin(e.filter)
+                .replace(/u/gi, "(u|\u00fc)")
+                .replace(/a/gi, "(a|\u00e4)")
+                .replace(/o/gi, "(o|\u00f6)")
+                , "gi");
+        }
+        function toLatin(text) {
+            return text
+                .replace(/\u00fc/gi, "u")
+                .replace(/\u00e4/gi, "a")
+                .replace(/\u00f6/gi, "o")
+                .toLowerCase();
+        }
+    </script>
+}
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "FormLayout";
+    settings.UseDefaultPaddings = false;
+    settings.SettingsItems.ShowCaption = DefaultBoolean.False;
+    settings.Items.AddGroupItem(groupSettings => {
+        groupSettings.UseDefaultPaddings = false;
+        groupSettings.ColumnCount = 2;
+        groupSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        groupSettings.ShowCaption = DefaultBoolean.False;
+        groupSettings.GridSettings.Breakpoints.Add(new LayoutBreakpoint { ColumnCount = 1, MaxWidth = 525, Name = "S" });
+        groupSettings.Items.Add(item => {
+            item.Paddings.PaddingBottom = 16;
+            item.SetNestedContent(() => {
+                Html.RenderAction("ComboBoxCustomFilteringPartial");
+            });
+        });
+        groupSettings.Items.Add(item => {
+            item.Paddings.PaddingBottom = 30;
+            item.SetNestedContent(() => {
+                Html.ViewContext.Writer.Write("<div class='defaultFont'>Server-Side Event Handler</div>");
+                Html.ViewContext.Writer.Write("<div class='TopPadding defaultFont'>Multi-Column Search</div>");
+            });
+        });
+        groupSettings.Items.Add(item => {
+            item.Paddings.PaddingBottom = 16;
+            item.SetNestedContent(() => {
+                Html.DevExpress().ComboBox(cmbSettings => {
+                    cmbSettings.Name = "cmbWithClientFiltering";
+                    cmbSettings.Width = Unit.Percentage(100);
+                    cmbSettings.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                    cmbSettings.Properties.ValueField = "Name";
+                    cmbSettings.Properties.TextField = "Name";
+                    cmbSettings.Properties.ClientSideEvents.ItemFiltering = "onItemFiltering";
+                    cmbSettings.Properties.ClientSideEvents.CustomHighlighting = "onCustomHighlighting";
+                }).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/GermanCities.xml"), "//City").Render();
+            });
+        });
+        groupSettings.Items.Add(item => {
+            item.SetNestedContent(() => {
+                Html.ViewContext.Writer.Write("<div class='defaultFont'>Client-Side Event Handler</div>");
+                Html.ViewContext.Writer.Write("<div class='TopPadding defaultFont'>\"Umlaut Insensitive\" Search</div>");
+            });
+        });
+    });
+}).GetHtml()

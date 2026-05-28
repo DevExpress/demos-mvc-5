@@ -1,0 +1,88 @@
+﻿@model string
+@{DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(400); }
+<script type="text/javascript">
+    function Submit() {
+        $("form").submit();
+    }
+
+    function OnSelectionChanged(s, e) {
+        selectedFilesList.ClearItems();
+        var selectedFiles = s.GetSelectedItems();
+        for (var i = 0; i < selectedFiles.length; i++) {
+            selectedFilesList.AddItem(selectedFiles[i].name);
+        }
+        $("#count").html(selectedFiles.length);
+    }
+</script>
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings =>
+    {
+        settings.Name = "OptionsFormLayout";
+        settings.Items.AddGroupItem(g =>
+        {
+            g.Caption = "Modes";
+            g.Width = Unit.Percentage(100);
+            g.Items.Add(i =>
+            {
+                i.Caption = "View Mode";
+                i.SetNestedContent(() =>
+                {
+                    Html.DevExpress().ComboBox(cbSettings =>
+                    {
+                        cbSettings.Name = "fileListViewMode";
+                        cbSettings.Theme = DemoHelper.Instance.Theme;
+                        cbSettings.Properties.ValueType = typeof(FileListView);
+                        cbSettings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e){ Submit(); }";
+                        cbSettings.Width = Unit.Pixel(120);
+                    }).BindList(FileManagerDemoHelper.GetFileListViewModes()).Bind(Session["FileListViewMode"]).Render();
+                });
+            });
+        });
+        settings.Items.AddGroupItem(g =>
+        {
+            g.Caption = "Selection";
+            g.Width = Unit.Percentage(100);
+            g.Items.Add(i =>
+            {
+                i.Caption = "Selected files";
+                i.SetNestedContent(() =>
+                {
+                    Html.DevExpress().ListBox(lbSettings =>
+                     {
+                         lbSettings.Name = "selectedFilesList";
+                         lbSettings.Theme = DemoHelper.Instance.Theme;
+                         lbSettings.Width = Unit.Percentage(100);
+                         lbSettings.Height = Unit.Pixel(250);
+                         lbSettings.Properties.EnableClientSideAPI = true;
+                     }).Render();
+                });
+            });
+            g.Items.Add(i =>
+            {
+                i.Caption = "Selected count";
+                i.SetNestedContent(() =>
+                {
+                    ViewContext.Writer.Write("<strong id='count'>0</strong>");
+                });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings
+        {
+            ColumnMinWidth = 380,
+            ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+        });
+    }).GetHtml()
+}
+
+@Html.Partial("MultipleFilesSelectionPartial", Model)
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

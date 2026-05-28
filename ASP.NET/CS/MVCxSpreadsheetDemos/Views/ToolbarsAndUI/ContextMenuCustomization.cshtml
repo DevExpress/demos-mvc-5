@@ -1,0 +1,22 @@
+﻿@section AdditionalResources {
+    <script src="@Url.Content("~/Scripts/ContextMenuCustomization.js")" type="text/javascript"></script>
+    <script type="text/javascript">
+        function PerformCallback(hintElement) {
+            var activeCellRowIndex = Spreadsheet.GetSelection().activeCellRowIndex;
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetDiscountStructure", "ToolbarsAndUI")',
+                data: { rowIndex: activeCellRowIndex },
+                success: function(response) {
+                    ShowCallbackResultInHint(hintElement, response);
+                }
+            });
+        }
+    </script>
+}
+
+@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+@using(Html.BeginForm()) {
+    @Html.Partial("ContextMenuCustomizationPartial")
+}

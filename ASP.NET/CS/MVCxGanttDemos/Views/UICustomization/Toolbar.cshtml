@@ -1,0 +1,64 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        var areResourcesShown = true;
+        function CustomCommand(s, e) {
+            if(e.commandName == "About")
+                AboutPopup.Show();
+            if (e.commandName == "ShowResources") {
+                areResourcesShown = !areResourcesShown;
+                gantt.ShowResources(areResourcesShown);
+            }
+        }
+    </script>
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(settings => {
+                settings.Name = "ToolbarAlignment";
+                settings.Properties.Caption = "Alignment";
+                settings.Theme = DemoHelper.Instance.Theme;
+                settings.Properties.ValueType = typeof(int);
+                settings.Properties.ValueField = "Value";
+                settings.Properties.TextField = "Text";
+                settings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e) { $('form').submit(); }";
+            }).BindList(GanttDemoOptions.AvailableToolbarAlignmentTypes.Select(i => new { Value = (int)i, Text = i.ToString() })).Bind((int)DemoOptions.ToolbarAlignment).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(cbSettings => {
+               cbSettings.Name = "ShowToolbar";
+               cbSettings.Text = "Show Toolbar";
+               cbSettings.Theme = DemoHelper.Instance.Theme;
+               cbSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { $('form').submit(); }";
+           }).Bind((bool)DemoOptions.ShowToolbar).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.Partial("ToolbarPartial")
+
+@Html.DevExpress().PopupControl(settings => {
+    settings.Name = "AboutPopup";
+    settings.Modal = true;
+    settings.HeaderText = "About";
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.CloseOnEscape = true;
+    settings.Width = Unit.Pixel(500);
+    settings.ShowFooter = true;
+    settings.FooterText = "";
+    settings.SetContent(@"The DevExpress ASP.NET MVC Gantt (GanttExtension) is a project management tool that enables you to organize and manage tasks.
+        It uses the Microsoft Project-style UI to edit and scale tasks, track a project's progress, and important deadlines.");
+}).GetHtml()
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+
+@functions {
+    GanttDemoOptions DemoOptions { get { return ViewBag.GanttDemoOptions; } }
+}

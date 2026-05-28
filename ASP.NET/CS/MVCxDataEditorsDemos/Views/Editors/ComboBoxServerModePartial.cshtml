@@ -1,0 +1,25 @@
+﻿@Html.DevExpress().ComboBox(
+    settings => {
+        settings.Name = "comboBox";
+        settings.Width = 285;
+        settings.Properties.DropDownWidth = 350;
+        settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+        settings.CallbackRouteValues = new { Controller = "Editors", Action = "ComboBoxServerModePartial" };
+        settings.Properties.CallbackPageSize = 15;
+        settings.Properties.TextField = "FirstName";
+        settings.Properties.FilterMinLength = 0;
+        settings.Properties.TextFormatString = "{0} {1} {2}";
+        settings.Properties.ValueField = "ID";
+        settings.Properties.ValueType = typeof(int);
+
+        settings.Properties.Columns.Add("FirstName", "FirstName", 90);
+        settings.Properties.Columns.Add("LastName", "LastName", 90);
+        settings.Properties.Columns.Add("Phone", "Phone", Unit.Percentage(100));
+
+        settings.Properties.ClientSideEvents.BeginCallback = "onStartCallback";
+        settings.Properties.ClientSideEvents.EndCallback = "onEndCallback";
+        settings.Properties.ClientSideEvents.SelectedIndexChanged = "onSelectedIndexChanged";
+    }
+).BindToEF(string.Empty, string.Empty, (s, e) => {
+    e.QueryableSource = LargeDatabaseDataProvider.DB.Persons;
+}).GetHtml()

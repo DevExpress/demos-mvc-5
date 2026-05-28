@@ -1,0 +1,35 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "gvScrolling";
+    settings.CallbackRouteValues = new { Controller = "PagingAndScrolling", Action = "ScrollingPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = 200;
+    settings.SettingsPager.PageSize = 20;
+
+    settings.Columns.Add("OrderID").Width = 80;
+    settings.Columns.Add("CustomerID").Width = 105;
+    settings.Columns.Add(c => {
+        c.FieldName = "EmployeeID";
+        c.Caption = "Employee";
+        c.Width = 80;
+        c.EditorProperties().ComboBox(cb => {
+            cb.DataSource = NorthwindDataProvider.GetEmployees();
+            cb.TextField = "LastName";
+            cb.ValueField = "EmployeeID";
+            cb.ValueType = typeof(int);
+        });
+    });
+    settings.Columns.Add("OrderDate", MVCxGridViewColumnType.DateEdit).Width = 100;
+    settings.Columns.Add("RequiredDate", MVCxGridViewColumnType.DateEdit).Width = 110;
+    settings.Columns.Add("ShippedDate", MVCxGridViewColumnType.DateEdit).Width = 105;
+    settings.Columns.Add("Freight").Width = 70;
+    settings.Columns.Add("ShipName").Width = 200;
+    settings.Columns.Add("ShipCity").Width = 100;
+    settings.Columns.Add("ShipRegion").Width = 100;
+    settings.Columns.Add("ShipPostalCode").Width = 120;
+    settings.Columns.Add("ShipCountry").Width = 100;
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

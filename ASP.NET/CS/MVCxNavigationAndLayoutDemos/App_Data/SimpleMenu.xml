@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mainmenu>
+  <item Text="Home" />
+  <item Text="Products">
+    <item Text="Downloads" />
+    <item Text="Support" />
+    <item Text="Order" />
+  </item>
+  <item Text="Client Center">
+    <item Text="Examples">
+      <item Text="Example1" />
+      <item Text="Example2" />
+      <item Text="Example3" />
+    </item>
+  </item>
+  <item Text="News" Enabled="false">
+    <item Text="Subscriptions" />
+  </item>
+  <item Text="About" />
+  <item Text="Help" />
+</mainmenu>

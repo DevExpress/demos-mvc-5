@@ -1,0 +1,88 @@
+﻿@model IEnumerable<EditableOrderDetailExtended>
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+@Html.DevExpress().GridView(settings => {
+    settings.Name = "gridView";
+    settings.KeyFieldName = "OrderID;ProductID";
+    settings.Width = Unit.Percentage(100);
+    settings.CallbackRouteValues = new { Controller = "Summary", Action = "BatchEditClientSummaryPartial" };
+    settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Summary", Action = "BatchEditClientSummaryUpdateModel" };
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsEditing.BatchEditSettings.HighlightSummaryItems = true;
+
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowDeleteButton = true;
+
+    settings.Columns.Add(c => {
+        c.FieldName = "OrderID";
+        c.EditFormSettings.Visible = DefaultBoolean.False;
+        c.GroupIndex = 0;
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "ProductName";
+        c.EditFormSettings.Visible = DefaultBoolean.False;
+        c.Width = Unit.Pixel(220);
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "UnitPrice";
+        c.Width = Unit.Pixel(100);
+        c.EditorProperties().SpinEdit(p => {
+            p.DisplayFormatString = "c";
+            p.DisplayFormatInEditMode = true;
+            p.MinValue = 0;
+            p.MaxValue = 60000;
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "Quantity";
+        c.Width = Unit.Pixel(100);
+        c.EditorProperties().SpinEdit(p => {
+            p.MinValue = 0;
+            p.MaxValue = 60000;
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "Discount";
+        c.Caption = "Discount";
+        c.Width = Unit.Pixel(100);
+        c.EditorProperties().SpinEdit(p => {
+            p.MinValue = 0m;
+            p.MaxValue = 1m;
+            p.DecimalPlaces = 2;
+            p.Increment = 0.1m;
+            p.DisplayFormatString = "p0";
+        });
+    });
+
+    settings.Columns.Add(c => {
+        c.FieldName = "Total";
+        c.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+        c.UnboundExpression = "[UnitPrice] * [Quantity] * (1 - [Discount])";
+        c.Settings.ShowEditorInBatchEditMode = false;
+        c.EditorProperties().TextBox(p => {
+            p.DisplayFormatString = "c";
+        });
+    });
+
+    settings.Settings.ShowFooter = true;
+    settings.SettingsBehavior.AutoExpandAllGroups = true;
+
+    settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "ProductName");
+    settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Max, "Discount").DisplayFormat = "Max Discount = {0:p0}";
+    settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
+
+    settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Count, "ProductName");
+    settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Max, "Discount").DisplayFormat = "Max Discount = {0:p0}";
+    settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");    
+
+    settings.ClientSideEvents.BatchEditEndEditing = "onBatchEditEndEditing";
+
+    settings.CellEditorInitialize = (s, e) => {
+        ASPxEdit editor = (ASPxEdit)e.Editor;
+        editor.ValidationSettings.Display = Display.None;
+    };
+}).Bind(Model).GetHtml()

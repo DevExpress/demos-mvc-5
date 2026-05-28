@@ -1,0 +1,17 @@
+﻿@using(Html.BeginForm()) {
+    @Html.DevExpress().UploadControl(settings => {
+        settings.Name = "UploadControl";
+    
+        settings.Width = Unit.Pixel(300);
+        settings.ShowProgressPanel = true;
+        settings.ShowUploadButton = true;
+        
+        settings.UploadMode = UploadControlUploadMode.Auto;
+        settings.AdvancedModeSettings.EnableMultiSelect = true;
+        settings.AdvancedModeSettings.EnableFileList = true;
+        settings.AdvancedModeSettings.EnableDragAndDrop = true;
+
+        settings.ValidationSettings.MaxFileSize = 4194304;
+        settings.ValidationSettings.AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".gif", ".png" };
+    }).GetHtml()
+}

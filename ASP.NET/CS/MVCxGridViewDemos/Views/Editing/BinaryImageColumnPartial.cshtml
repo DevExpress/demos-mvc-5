@@ -1,0 +1,64 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Action = "BinaryImageColumnPartial", Controller = "Editing" };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Action = "BinaryImageColumnUpdatePartial", Controller = "Editing" };
+    settings.SettingsEditing.Mode = GridViewEditingMode.EditForm;
+    settings.Width = Unit.Percentage(100);
+
+    settings.KeyFieldName = "EmployeeID";
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowEditButton = true;
+    settings.Columns.Add(c => {
+        c.FieldName = "Photo";
+        c.EditorProperties().BinaryImage(p => {
+            p.ImageHeight = 170;
+            p.ImageWidth = 160;
+            p.EnableServerResize = true;
+            p.ImageSizeMode = ImageSizeMode.FitProportional;
+            p.CallbackRouteValues = new { Action = "BinaryImageColumnPhotoUpdate", Controller = "Editing" };
+            p.EditingSettings.Enabled = true;
+            p.EditingSettings.UploadSettings.UploadValidationSettings.MaxFileSize = 4194304;
+        });
+    });
+    settings.Columns.Add("FirstName");
+    settings.Columns.Add("LastName");
+    settings.Columns.Add("Title");
+    settings.Columns.Add(c => {
+        c.FieldName = "HomePhone";
+        c.EditorProperties().TextBox(p => {
+            p.MaskSettings.Mask = "(999) 000-0000";
+            p.ValidationSettings.Display = Display.Dynamic;
+        });
+    });
+    settings.Columns.Add("HireDate", MVCxGridViewColumnType.DateEdit);
+    settings.Columns.Add("BirthDate", MVCxGridViewColumnType.DateEdit);
+
+    settings.EditFormLayoutProperties.ColCount = 3;
+    settings.EditFormLayoutProperties.Items.Add(i => {
+        i.ColumnName = "Photo";
+        i.RowSpan = 4;
+        i.ShowCaption = DefaultBoolean.False;
+        i.Width = 160;
+    });
+    settings.EditFormLayoutProperties.Items.Add("FirstName");
+    settings.EditFormLayoutProperties.Items.Add("LastName");
+    settings.EditFormLayoutProperties.Items.Add("Title");
+    settings.EditFormLayoutProperties.Items.Add("HomePhone");
+    settings.EditFormLayoutProperties.Items.Add("HireDate");
+    settings.EditFormLayoutProperties.Items.Add("BirthDate");
+    settings.EditFormLayoutProperties.Items.AddCommandItem(i => {
+        i.ShowUpdateButton = true;
+        i.ShowCancelButton = true;
+        i.ColumnSpan = 2;
+        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+    });
+
+    settings.SettingsPager.PageSize = 3;
+    settings.ClientSideEvents.BeginCallback = "Grid_BeginCallback";
+
+    settings.PreRender = (sender, e) => {
+        ((MVCxGridView)sender).StartEdit(0);
+    };
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).SetEditErrorText(ViewData["EditError"] as string).Bind(Model).GetHtml()

@@ -1,0 +1,45 @@
+﻿@using DevExpress.Data.Filtering
+@using DevExpress.Data.Filtering.Helpers;
+
+@Html.DevExpress().GridView(settings => {
+    settings.Name = "gridView";
+    settings.CallbackRouteValues = new { Controller = "Filtering", Action = "FilterBuilderCustomFunctionsPartial" };
+    settings.Settings.ShowFilterBar = GridViewStatusBarMode.Visible;
+    settings.Width = Unit.Percentage(100);
+
+    settings.Columns.Add("ProductName", MVCxGridViewColumnType.TextBox);
+    settings.Columns.Add("Country", MVCxGridViewColumnType.TextBox);
+    settings.Columns.Add("OrderDate", MVCxGridViewColumnType.DateEdit);
+    settings.Columns.Add("Quantity", MVCxGridViewColumnType.SpinEdit);
+    settings.Columns.Add("UnitPrice", MVCxGridViewColumnType.SpinEdit).PropertiesEdit.DisplayFormatString = "N2";
+    settings.Columns.Add("Discount", MVCxGridViewColumnType.SpinEdit).PropertiesEdit.DisplayFormatString = "P0";
+
+    settings.SettingsFilterControl.ViewMode = FilterControlViewMode.VisualAndText;
+    settings.SettingsFilterControl.AllowHierarchicalColumns = false;
+    settings.SettingsFilterControl.ShowAllDataSourceColumns = false;
+    settings.SettingsFilterControl.MaxHierarchyDepth = 1;
+
+    settings.PreRender = (sender, e) => {
+        MVCxGridView gridView = sender as MVCxGridView;
+        if (gridView != null)
+            gridView.FilterExpression = "IsSalesDiscount([Discount])";
+    };
+
+    settings.FilterControlOperationVisibility = (sender, e) => {
+        if(e.PropertyInfo.PropertyName == "Discount" && e.FunctionType == FunctionOperatorType.Custom && e.CustomFunctionName == "IsSalesDiscount")
+            e.Visible = true;
+
+        if(e.PropertyInfo.PropertyName == "ProductName" || e.PropertyInfo.PropertyName == "Country") {
+            List<ClauseType> availableOperators = new List<ClauseType>() { ClauseType.BeginsWith, ClauseType.Contains, ClauseType.DoesNotContain, ClauseType.Like };
+            if(availableOperators.Contains(e.Operation) || (e.FunctionType == FunctionOperatorType.Custom && e.CustomFunctionName == "DoesNotBeginWith"))
+                e.Visible = true;
+            else
+                e.Visible = false;
+        }
+
+        if(e.PropertyInfo.PropertyName == "OrderDate" && e.FunctionType == FunctionOperatorType.Custom && e.CustomFunctionName == "IsWeekend")
+            e.Visible = true;
+    };
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

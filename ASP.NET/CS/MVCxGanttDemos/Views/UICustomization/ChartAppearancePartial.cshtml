@@ -1,0 +1,49 @@
+﻿@Html.DevExpress().Gantt(settings => {
+    settings.Name = "gantt";
+    settings.CallbackRouteValues = new { Controller = "UICustomization", Action = "ChartAppearancePartial" };
+    settings.Height = Unit.Pixel(700);
+    settings.Width = Unit.Percentage(100);
+
+    settings.SettingsGanttView.ViewType = DemoOptions.ViewType;
+    settings.SettingsGanttView.TaskTitlePosition = DemoOptions.TitlePosition;
+    settings.SettingsGanttView.ShowResources = DemoOptions.ShowResources;
+    settings.SettingsGanttView.ShowDependencies = DemoOptions.ShowDependencies;
+    settings.SettingsGanttView.StartDateRange = DemoOptions.StartDateRange;
+    settings.SettingsGanttView.EndDateRange = DemoOptions.EndDateRange;
+
+    settings.SettingsEditing.Enabled = false;
+    settings.SettingsToolbar.Visible = false;
+
+    settings.SettingsTaskList.Width = Unit.Percentage(40);
+
+    settings.SettingsTaskList.Columns.Add(new GanttTextColumn() { FieldName = "Subject", Caption = "Title", Width = Unit.Pixel(360) });
+    settings.SettingsTaskList.Columns.Add(new GanttDateTimeColumn() { FieldName = "StartDate", Caption = "Start Date", Width = Unit.Pixel(100), DisplayFormat = "MM/dd/yyyy" });
+    settings.SettingsTaskList.Columns.Add(new GanttDateTimeColumn() { FieldName = "EndDate", Caption = "Due Date", Width = Unit.Pixel(100), DisplayFormat = "MM/dd/yyyy" });
+
+    settings.Mappings.Task.Key = "ID";
+    settings.Mappings.Task.ParentKey = "ParentID";
+    settings.Mappings.Task.Title = "Subject";
+    settings.Mappings.Task.Start = "StartDate";
+    settings.Mappings.Task.End = "EndDate";
+    settings.Mappings.Task.Progress = "PercentComplete";
+
+    settings.Mappings.Dependency.Key = "ID";
+    settings.Mappings.Dependency.PredecessorKey = "ParentID";
+    settings.Mappings.Dependency.SuccessorKey = "DependentID";
+    settings.Mappings.Dependency.DependencyType = "Type";
+
+    settings.Mappings.Resource.Key = "ID";
+    settings.Mappings.Resource.Name = "Name";
+
+    settings.Mappings.ResourceAssignment.Key = "ID";
+    settings.Mappings.ResourceAssignment.TaskKey = "TaskID";
+    settings.Mappings.ResourceAssignment.ResourceKey = "ResourceID";
+
+    settings.ClientSideEvents.BeginCallback = "onBeginCallback";
+    settings.ClientSideEvents.TooltipShowing = DemoOptions.CustomizeTaskTooltip ? "onShowTooltip" : "";
+
+}).Bind(GanttDataProvider.Tasks, GanttDataProvider.Dependencies, GanttDataProvider.Resources, GanttDataProvider.ResourceAssignments).GetHtml()
+
+@functions {
+    GanttDemoOptions DemoOptions { get { return ViewBag.GanttDemoOptions; } }
+}

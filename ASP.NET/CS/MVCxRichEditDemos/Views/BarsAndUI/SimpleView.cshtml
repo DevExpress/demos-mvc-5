@@ -1,0 +1,24 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@using(Html.BeginForm()) {
+    @Html.DevExpress().Splitter(settings => {
+        settings.Name = "Splitter";
+        settings.Height = Unit.Pixel(600);
+        settings.Styles.Pane.Paddings.Padding = Unit.Pixel(0);
+        settings.Styles.Pane.Paddings.PaddingRight = Unit.Pixel(15);
+        settings.Styles.Pane.Border.BorderWidth = Unit.Pixel(0);
+        settings.Styles.Separator.BackColor = Color.FromArgb(208, 208, 208);
+        settings.Styles.Separator.HoverStyle.BackColor = Color.FromArgb(160, 160, 160);
+
+        settings.Panes.Add(pane => {
+            pane.Size = Unit.Percentage(90);
+            pane.MinSize = Unit.Pixel(150);
+            pane.SetContent(() => {
+                Html.RenderPartial("SimpleViewPartial");
+            });
+        });
+        settings.Panes.Add(pane => {
+            pane.SetContent(() => { });
+        });
+    }).GetHtml()
+}

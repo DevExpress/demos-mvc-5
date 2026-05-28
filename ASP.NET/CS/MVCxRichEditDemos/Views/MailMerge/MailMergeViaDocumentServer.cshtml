@@ -1,0 +1,34 @@
+﻿@model MailMergeViaDocumentServerOptions
+@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("MailMergeViaDocumentServerPartial", Model)
+@section DemoOptionsTop {
+    <div class="options">
+    <div class="options-item">
+        @Html.DevExpress().ComboBox(s => {
+            s.Name = "City";
+            s.Properties.Caption = "Create invitation by city";
+            s.Properties.Items.Add("London");
+            s.Properties.Items.Add("Seattle");
+            s.Properties.Items.Add("Tacoma");
+            s.Properties.Items.Add("Kirkland");
+            s.Properties.Items.Add("Redmond");
+            s.Theme = DemoHelper.Instance.Theme;
+            s.Properties.ClientSideEvents.ValueChanged = "function(s, e) { $('form').submit(); }";
+            s.PreRender = (sender, e) => {
+                MVCxComboBox cmb = sender as MVCxComboBox;
+                cmb.Value = Model.City;
+            };
+        }).GetHtml()
+    </div>
+</div>
+}
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

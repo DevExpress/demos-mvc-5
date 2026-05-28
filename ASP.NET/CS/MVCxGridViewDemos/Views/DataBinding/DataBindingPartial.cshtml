@@ -1,0 +1,53 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "gvDataBinding";
+    settings.CallbackRouteValues = new { Controller = "DataBinding", Action = "DataBindingPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.ClientSideEvents.Init = "grid_Init";
+    settings.ClientSideEvents.BeginCallback = "grid_BeginCallback";
+    settings.ClientSideEvents.EndCallback = "grid_EndCallback";
+
+    settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+    settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Vertical;
+    settings.SettingsBehavior.AllowDragDrop = false;
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.ShowOnStatusBar;
+
+    settings.Columns.Add("Symbol", MVCxGridViewColumnType.TextBox);
+    settings.Columns.Add(column => {
+        SetCommonSettings(column, "Price");
+        column.PropertiesEdit.DisplayFormatString = "0.00";
+    });
+    settings.Columns.Add(column => {
+        SetCommonSettings(column, "Change");
+        column.SetDataItemTemplateContent(c => {
+            var text = ((Decimal)DataBinder.Eval(c.DataItem, "Change")).ToString("P");
+            var imageUrl = Url.Content(string.Format("~/Content/GridView/{0}{1}Theme.svg", ((Decimal)DataBinder.Eval(c.DataItem, "Change")) >= 0 ? "Up" : "Down", ASPxWebControl.GlobalTheme != "Office365Dark" ? "Light" : "Dark"));
+            ViewContext.Writer.Write("<img alt='' src='" + imageUrl + "' style='border: 0; margin: 2px 4px;height: 10px;width: 10px;' />" + text);
+        });
+    });
+    settings.Columns.Add(column => {
+        SetCommonSettings(column, "DayMax");
+        column.PropertiesEdit.DisplayFormatString = "0.00";
+    });
+    settings.Columns.Add(column => {
+        SetCommonSettings(column, "DayMin");
+        column.PropertiesEdit.DisplayFormatString = "0.00";
+    });
+    settings.Columns.Add(column => {
+        SetCommonSettings(column, "LastUpdated");
+        column.CellStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.EditorProperties().DateEdit(p => {
+            p.DisplayFormatString = "HH:mm:ss";
+        });
+    });
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()
+
+@functions {
+    void SetCommonSettings(MVCxGridViewColumn c, string name) {
+        c.FieldName = name;
+        c.Width = 120;
+    }
+}

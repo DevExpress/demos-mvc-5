@@ -1,0 +1,41 @@
+﻿@model IEnumerable
+
+@{
+    PivotGridPagingDemoOptions demoOptions = Session["DemoOptions"] as PivotGridPagingDemoOptions;
+}
+
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(70);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(400); }
+
+@Html.Partial("PagingPartial", Model)
+
+@section DemoOptions {
+    <script>
+        function applySettings() {
+            pivotGrid.PerformCallback({
+                options: {
+                    Position: Position.GetValue(),
+                    PagerAlign: PagerAlign.GetValue(),
+                    ShowPageSizeItem: ShowPageSizeItem.GetValue(),
+                    ShowDisabledButtons: ShowDisabledButtons.GetValue(),
+                    ShowNumericButtons: ShowNumericButtons.GetValue(),
+                    ShowSeparators: ShowSeparators.GetValue(),
+                    PageSizeItemPosition: PageSizeItemPosition.GetValue(),
+                    ShowSummary: ShowSummary.GetValue()
+                }
+            });
+        }
+    </script>
+
+    @Html.Partial("PagingOptionsPartial", demoOptions )
+
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.ClientSideEvents.Click = "applySettings";
+   }).GetHtml()
+    </div>
+}

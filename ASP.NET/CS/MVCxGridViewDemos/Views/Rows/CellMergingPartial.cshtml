@@ -1,0 +1,57 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "gridView";
+    settings.CallbackRouteValues = new { Controller = "Rows", Action = "CellMergingPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.SettingsBehavior.AllowCellMerge = true;
+
+    settings.Columns.Add(c => {
+        c.FieldName = "Country";
+        c.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+        c.SortIndex = 0;
+    });
+    settings.Columns.Add("City");
+    settings.Columns.Add("ContactName");
+    settings.Columns.Add(c => {
+        c.FieldName = "ContactTitle";
+        c.Caption = "Position";
+        c.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+        c.SortIndex = 1;
+        c.SetDataItemTemplateContent(container => {
+            Html.DevExpress().Image(s => {
+                string position = DataBinder.Eval(container.DataItem, "ContactTitle").ToString();
+                s.Properties.Caption = position;
+                s.Properties.EmptyImage.IconID = GetIconIDByPosition(position);
+                s.Properties.CaptionSettings.Position = EditorCaptionPosition.Right;
+                s.Properties.CaptionSettings.ShowColon = false;
+            }).Render();
+        });
+    });
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()
+
+@using DevExpress.Web.ASPxThemes
+@functions{
+    protected string GetIconIDByPosition(string position) {
+        if(position == "Sales Representative")
+            return IconID.BusinessobjectsBoorder16x16;
+        if(position == "Sales Manager" || position == "Assistant Sales Agent")
+            return IconID.BusinessobjectsBoposition16x16;
+        if(position == "Sales Associate")
+            return IconID.BusinessobjectsBodepartment16x16;
+        if(position == "Sales Agent")
+            return IconID.BusinessobjectsBoperson16x16;
+        if(position.Contains("Owner") || position == "Order Administrator")
+            return IconID.BusinessobjectsBoposition216x16;
+        if(position == "Marketing Manager")
+            return IconID.BusinessobjectsBorole16x16;
+        if(position == "Marketing Assistant")
+            return IconID.BusinessobjectsBoemployee16x16;
+        if(position == "Assistant Sales Representative")
+            return IconID.BusinessobjectsBoorderitem16x16;
+        if(position == "Accounting Manager")
+            return IconID.BusinessobjectsBouser16x16;
+        return string.Empty;
+    }
+}

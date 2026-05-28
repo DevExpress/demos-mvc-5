@@ -1,0 +1,100 @@
+﻿@model IEnumerable
+
+@section AdditionalResources{
+	<style type="text/css">
+        .titleContainer > span,
+        .titleContainer > a {
+            line-height: 145%;
+        }
+	</style>
+}
+<script type="text/javascript">
+	function onSelectAllClick() {
+		grid.SelectRows();
+	}
+	function onClearSelectionClick() {
+		grid.UnselectRows();
+	}
+
+	function OnGridViewInit() {
+		UpdateTitlePanel();
+	}
+	function OnGridViewSelectionChanged() {
+		UpdateTitlePanel();
+	}
+	function OnGridViewBeginCallback(s, e) {
+		e.customArgs["selectAllMode"] = selectAllMode.GetText();
+	}
+	function OnGridViewEndCallback() {
+		UpdateTitlePanel();
+	}
+	function UpdateTitlePanel() {
+		var selectedFilteredRowCount = GetSelectedFilteredRowCount();
+
+		var text = "Total rows selected: <b>" + grid.GetSelectedRowCount() + "</b>. ";
+		var hiddenSelectedRowCount = grid.GetSelectedRowCount() - GetSelectedFilteredRowCount();
+		if (hiddenSelectedRowCount > 0)
+			text += "Selected rows hidden by the applied filter: <b>" + hiddenSelectedRowCount + "</b>.";
+		text += "<br />";
+		lblInfo.SetText(text);
+
+        var isAllPages = selectAllMode.GetText() == "AllPages";
+        SetElementVisibility(lnkSelectAllRows, !isAllPages && grid.cpVisibleRowCount > selectedFilteredRowCount);
+        SetElementVisibility(lnkClearSelection, !isAllPages && grid.GetSelectedRowCount() > 0);
+	}
+	function GetSelectedFilteredRowCount() {
+		return grid.cpFilteredRowCountWithoutPage + grid.GetSelectedKeysOnPage().length;
+	}
+	function SetElementVisibility(id, visible) {
+		visible ? id.SetVisible(true) : id.SetVisible(false)
+	}
+</script>
+
+@section StartDemoRegion {
+	@{ Html.BeginForm(); }
+}
+
+@section DemoOptionsTop {
+	<div class="options">
+		<div class="options-item">
+			@Html.DevExpress().ComboBox(settings => {
+                settings.Name = "selectAllMode";
+                settings.Properties.Caption = "SelectAll button mode:";
+                settings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s,e) { grid.PerformCallback(); }";
+                settings.Theme = DemoHelper.Instance.Theme;
+                settings.Properties.ValueType = typeof(GridViewSelectAllCheckBoxMode);
+            }).BindList(Enum.GetValues(typeof(GridViewSelectAllCheckBoxMode))).Bind(ViewBag.SelectAllCheckBoxMode).GetHtml()
+		</div>
+	</div>
+}
+<div class="titleContainer BottomLargeMargin">
+    @Html.DevExpress().Label(settingslbl => {
+        settingslbl.Name = "lblInfo";
+        settingslbl.Properties.EnableClientSideAPI = true;
+        settingslbl.Theme = DemoHelper.Instance.Theme;
+    }).GetHtml()
+    @Html.DevExpress().HyperLink(settings => {
+        settings.Name = "lnkSelectAllRows";
+        settings.Properties.Text = "Select all rows.";
+        settings.ControlStyle.Cursor = "Pointer";
+        settings.Properties.EnableClientSideAPI = true;
+        settings.Theme = DemoHelper.Instance.Theme;
+        settings.ClientVisible = false;
+        settings.Properties.ClientSideEvents.Click = "onSelectAllClick";
+    }).GetHtml()
+    @Html.DevExpress().HyperLink(settings => {
+        settings.Name = "lnkClearSelection";
+        settings.Properties.Text = "Clear selection.";
+        settings.ControlStyle.Cursor = "Pointer";
+        settings.Properties.EnableClientSideAPI = true;
+        settings.Theme = DemoHelper.Instance.Theme;
+        settings.ClientVisible = false;
+        settings.Properties.ClientSideEvents.Click = "onClearSelectionClick";
+    }).GetHtml()    
+</div>
+
+@Html.Partial("AdvancedSelectionPartial", Model)
+
+@section EndDemoRegion {
+	@{ Html.EndForm(); }
+}

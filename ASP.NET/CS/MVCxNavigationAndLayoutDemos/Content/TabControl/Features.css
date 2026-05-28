@@ -1,0 +1,8 @@
+﻿.dxtcFixed {
+    max-width: 750px;
+}
+.dxtcFixed .dxtc-image-london,
+.dxtcFixed .dxtc-image-newyork,
+.dxtcFixed .dxtc-image-tokyo {
+    width: 100%;
+}

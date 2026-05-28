@@ -1,0 +1,78 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "gridView";
+    settings.CallbackRouteValues = new { Action = "ContextMenuPartial", Controller = "Customization" };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Action = "AddNewRowContextMenuPartial", Controller = "Customization" };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Action = "UpdateRowContextMenuPartial", Controller = "Customization" };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Action = "DeleteRowContextMenuPartial", Controller = "Customization" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Settings.ShowGroupPanel = true;
+    settings.Settings.ShowFooter = true;
+    settings.Settings.ShowGroupFooter = GridViewGroupFooterMode.VisibleIfExpanded;
+    settings.SettingsContextMenu.Enabled = true;
+    settings.SettingsContextMenu.RowMenuItemVisibility.ExportMenu.Visible = true;
+    settings.SettingsContextMenu.RowMenuItemVisibility.GroupSummaryMenu.SummaryAverage = false;
+    settings.SettingsContextMenu.RowMenuItemVisibility.GroupSummaryMenu.SummaryMax = false;
+    settings.SettingsContextMenu.RowMenuItemVisibility.GroupSummaryMenu.SummaryMin = false;
+    settings.SettingsContextMenu.RowMenuItemVisibility.GroupSummaryMenu.SummarySum = false;
+    settings.SettingsBehavior.EnableCustomizationWindow = true;
+    settings.SettingsExport.EnableClientSideExportAPI = true;
+    settings.SettingsBehavior.ConfirmDelete = true;
+    settings.SettingsBehavior.EnableRowHotTrack = true;
+    settings.ClientSideEvents.ContextMenuItemClick = "OnContextMenuItemClick";
+
+    settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "UnitPrice");
+    settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "UnitPrice").ShowInGroupFooterColumn = "UnitPrice";
+
+    settings.KeyFieldName = "ProductID";
+    settings.Columns.Add("ProductName");
+    settings.Columns.Add(c => {
+        c.FieldName = "CategoryID";
+        c.Caption = "Category Name";
+        c.GroupIndex = 0;
+        c.SortOrder = DevExpress.Data.ColumnSortOrder.Descending;
+        c.EditorProperties().ComboBox(cb => {
+            cb.ValueType = typeof(int);
+            cb.ValueField = "CategoryID";
+            cb.TextField = "CategoryName";
+            cb.DataSource = NorthwindDataProvider.GetCategories();
+        });
+    });
+    settings.Columns.Add("QuantityPerUnit");
+    settings.Columns.Add(c => {
+        c.FieldName = "UnitPrice";
+        c.EditorProperties().SpinEdit(sp => {
+            sp.DisplayFormatString = "c";
+            sp.DisplayFormatInEditMode = true;
+            sp.MinValue = 0;
+            sp.MaxValue = 60000;
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "UnitsInStock";
+        c.EditorProperties().SpinEdit(sp => {
+            sp.MinValue = 0;
+            sp.MaxValue = 10000;
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "Discontinued";
+        c.EditorProperties().CheckBox(cb => {
+            cb.AllowGrayed = true;
+            cb.AllowGrayedByClick = false;
+        });
+    });
+
+    settings.ContextMenuInitialize = (s, e) => {
+        if(e.MenuType == GridViewContextMenuType.Rows) {
+            var exportMenuItem = e.ContextMenu.Items.FindByCommand(GridViewContextMenuCommand.ExportMenu);
+            exportMenuItem.Items.Add("Custom export to XLS(WYSIWYG)", "CustomExportToXLS").Image.IconID = DevExpress.Web.ASPxThemes.IconID.ExportExporttoxls16x16;
+        }
+    };
+
+    settings.PreRender = (s, e) => {
+        ((MVCxGridView)s).ExpandRow(1);
+    };
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).SetEditErrorText(ViewData["EditError"] as string).Bind(Model).GetHtml()

@@ -1,0 +1,30 @@
+﻿@model IEnumerable
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section AdditionalResources{
+    <style type="text/css">
+        .item {
+            position: relative;
+        }
+        .item-image {
+            opacity: 0.2;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .items-info {
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            color: black !important;
+        }
+        .dxflCaptionCellSys span {
+            color: rgb(46, 46, 46) !important;
+            font-weight: 700;
+        }
+    </style>
+}
+
+@Html.Partial("ScrollingPartial", Model)

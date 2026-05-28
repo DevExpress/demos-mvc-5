@@ -1,0 +1,120 @@
+﻿@model FormLayoutResponsiveLayout
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>Responsive Layout - ASP.NET MVC FormLayout Extension</title>
+   
+     @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionType = ExtensionType.FormLayout },
+        new StyleSheet { ExtensionType = ExtensionType.TextBox },
+        new StyleSheet { ExtensionType = ExtensionType.DateEdit }        
+    )
+    <script src="@Url.Content("~/Scripts/jquery.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <style type="text/css">
+        .formLayout {
+            max-width: 1300px;
+            margin: auto;
+        }
+    </style>
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionType = ExtensionType.FormLayout },
+        new Script { ExtensionType = ExtensionType.TextBox },
+        new Script { ExtensionType = ExtensionType.DateEdit }        
+    )  
+    @{
+        Html.EnableClientValidation();
+        Html.EnableUnobtrusiveJavaScript();
+    }
+</head>
+<body>
+@using (Html.BeginForm()){
+    @Html.AntiForgeryToken()
+
+    @Html.DevExpress().FormLayout(settings => {
+            settings.Name = "detailFormLayout";
+            settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 700;
+            settings.ControlStyle.CssClass = "formLayout";
+
+            settings.Items.AddGroupItem(g => {
+                g.Caption = "Employee Details";
+                g.ColCount = 2;
+                g.UseDefaultPaddings = false;
+                g.Paddings.PaddingTop = Unit.Pixel(10);
+                g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+                g.GroupBoxStyle.Caption.Font.Bold = true;
+                g.GroupBoxStyle.Caption.Font.Size = 16;
+
+                g.Items.Add(m => m.FirstName, i => {
+                    i.NestedExtension().TextBox(s => {
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.Display = Display.Dynamic;
+                    });
+                });
+                g.Items.Add(m => m.LastName, i => {
+                    i.NestedExtension().TextBox(s => {
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.Display = Display.Dynamic;
+                    });
+                });
+                g.Items.Add(m => m.BirthDate, i => {
+                    i.NestedExtension().DateEdit(s => {
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.Display = Display.Dynamic;
+                    });
+                });
+                g.Items.Add(m => m.Country, i => {
+                    i.NestedExtension().TextBox(s => {
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.Display = Display.Dynamic;
+                    });
+                });
+                g.Items.Add(m => m.City, i => {
+                    i.NestedExtension().TextBox(s => {
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.Display = Display.Dynamic;
+                    });
+                });
+                g.Items.Add(m => m.Address, i => {
+                    i.NestedExtension().TextBox(s => {
+                        s.ShowModelErrors = true;
+                        s.Properties.ValidationSettings.Display = Display.Dynamic;
+                    });
+                });
+                g.Items.Add(m => m.Notes, i => {
+                    i.Width = Unit.Percentage(100);
+                    i.NestedExtension().Memo(s => s.Properties.Rows = 6);
+                });
+                g.Items.Add(i => {
+                    i.ShowCaption = DefaultBoolean.False;
+                    i.Width = Unit.Percentage(100);
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+                }).SetNestedContent(() => {
+                    ViewContext.Writer.Write("<table><tr><td style=\"padding-right:10px;\">");
+                
+                    Html.DevExpress().Button(s => {
+                        s.Name = "Submit";
+                        s.Width = Unit.Pixel(100);
+                        s.Text = "Submit";
+                        s.UseSubmitBehavior = true;
+                    }).Render();
+                
+                    ViewContext.Writer.Write("</td><td>");
+
+                    Html.DevExpress().HyperLink(s => {
+                        s.Name = "Cancel";
+                        s.Properties.Text = "Cancel";
+                        s.NavigateUrl = Url.Content("ResponsiveLayoutPage");
+                    }).Render();
+                
+                    ViewContext.Writer.Write("</td></tr></table>");
+                });
+            });
+        }).GetHtml()
+    }
+</body>
+</html>

@@ -1,0 +1,77 @@
+﻿@model CaptchaDemoOptions
+@section AdditionalResources {
+    <style type="text/css">
+        @@media(max-width:824px) {
+            .control-area {
+                max-width:824px !important;
+            }                     
+        }
+    </style>
+}
+<script type="text/javascript">
+    function OnApplyButtonClick(s, e) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CaptchaPartial", "Editors")',
+            data: {
+                characterSet: CharacterSet.GetValue(),
+                codeLength: CodeLength.GetValue(),
+                isApplyOptions: true
+            },
+            success: function (response) {
+                $("#content").html(response);
+            }
+        });
+    }
+</script>
+@{
+    var options = Session["CaptchaOptions"] != null ? (CaptchaDemoOptions)Session["CaptchaOptions"] : CaptchaDemoOptions.Default;
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(300);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(420);
+}
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}   
+    <div style="width: 200px; margin: auto">
+        <div id="content">
+            @Html.Partial("CaptchaPartial")
+        </div>
+        <div style="text-align: center">
+            @Html.DevExpress().Button(s => {
+                s.Name = "Submit";
+                s.Text = "Submit";
+                s.UseSubmitBehavior = true;       
+            }).GetHtml()    
+        </div>
+    </div>
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "optionsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(g => {
+            g.Caption = "Options";
+            g.Items.Add(m => m.CharacterSet);
+            g.Items.Add(m => m.CodeLength, i => {
+                i.NestedExtension().SpinEdit(spin => {
+                    spin.Properties.MinValue = 3;
+                    spin.Properties.MaxValue = 7;
+                });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 320,
+            ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+        });
+    }).Bind(options).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.ClientSideEvents.Click = "OnApplyButtonClick";
+        }).GetHtml()
+    </div>
+}
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

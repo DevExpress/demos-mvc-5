@@ -1,0 +1,32 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "Accessibility", Action = "KeyboardSupportPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.KeyboardSupport = true;
+    settings.AccessKey = "D";
+
+    settings.KeyFieldName = "ProductID";
+    settings.CommandColumn.VisibleIndex = 0;
+    settings.CommandColumn.ShowSelectCheckbox = true;
+    settings.Columns.Add("ProductID");
+    settings.Columns.Add("ProductName");
+    settings.Columns.Add(c => {
+        c.FieldName = "CategoryID";
+        c.Caption = "Category";
+        c.GroupIndex = 0;
+        c.EditorProperties().ComboBox(cb => {
+            cb.DataSource = NorthwindDataProvider.GetCategories();
+            cb.TextField = "CategoryName";
+            cb.ValueField = "CategoryID";
+            cb.ValueType = typeof(int);
+        });
+    });
+    settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "{0:C}";
+
+    settings.Settings.ShowGroupPanel = true;
+    settings.SettingsBehavior.AutoExpandAllGroups = true;
+    settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

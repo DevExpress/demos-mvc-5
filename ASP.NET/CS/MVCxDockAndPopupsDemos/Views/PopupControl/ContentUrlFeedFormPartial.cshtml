@@ -1,0 +1,43 @@
+﻿@model Mail
+
+@Html.DevExpress().FormLayout(s => {
+    s.Name = "FeedBackFormLayout";
+    s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(100);
+
+    s.NestedExtensionWidth = Unit.Percentage(100);
+    s.Items.Add(m => m.Email, i => {
+        i.NestedExtension().TextBox(tb => {
+            tb.ShowModelErrors = true;
+            tb.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Left;
+            tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        });
+    });
+    s.Items.Add(m => m.Subject, i => {
+        i.NestedExtension().TextBox(tb => {
+            tb.ShowModelErrors = true;
+            tb.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Left;
+            tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        });
+    });
+    s.Items.Add(m => m.Message, i => {
+        i.Height = Unit.Percentage(100);
+        i.NestedExtension().Memo(memo => {
+            memo.Height = Unit.Percentage(100);
+            memo.ShowModelErrors = true;
+            memo.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Left;
+            memo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        });
+    });
+    s.Items.Add(i => {
+        i.ShowCaption = DefaultBoolean.False;
+        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+        i.Paddings.PaddingTop = 5;
+        i.NestedExtension().Button(b => {
+            b.Name = "btnSend";
+            b.Text = "Send";
+            b.UseSubmitBehavior = true;
+        });
+    });
+}).GetHtml()

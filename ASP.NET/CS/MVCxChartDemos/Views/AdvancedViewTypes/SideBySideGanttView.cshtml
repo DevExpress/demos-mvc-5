@@ -1,0 +1,92 @@
+﻿
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    @Html.DevExpress().Chart(settings => {
+    settings.Name = "chart";
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.CrosshairEnabled = DefaultBoolean.False;
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Project Comparsion"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Tasks",
+        Dock = ChartTitleDockStyle.Left,
+        DXFont = new DXFont("Tahoma", 12)
+    });
+
+    settings.Series.Template(t => {
+        t.ChangeView(DevExpress.XtraCharts.ViewType.SideBySideGantt);
+        t.LabelsVisibility = DefaultBoolean.False;
+        t.ValueScaleType = ScaleType.DateTime;
+        t.SetGanttDataMembers("TaskName", "BeginDate", "EndDate");
+    });
+
+    settings.GanttDiagram(d => {
+        d.Panes.Add(p => {
+            p.Name = "AdditionalPane";
+            p.LayoutOptions.RowSpan = d.DefaultPane.LayoutOptions.RowSpan;
+        });
+
+        d.AxisX.WholeRange.AutoSideMargins = true;
+        d.AxisX.GridLines.Visible = true;
+
+        d.AxisY.Label.TextPattern = "{V:m}";
+        d.AxisY.SetVisibilityInPane(false, d.DefaultPane);
+
+        d.SecondaryAxesX.Add(x => {
+            x.Name = "SecondaryAxisX";
+            x.Reverse = true;
+            x.Alignment = AxisAlignment.Near;
+            x.WholeRange.AutoSideMargins = true;
+            x.GridLines.Visible = true;
+        });
+    });
+
+    settings.Legends.Default(l => {
+        settings.GanttDiagram(d => {
+            l.DockTarget = d.DefaultPane;
+            l.Border.Visibility = DefaultBoolean.False;
+        });
+    });
+    settings.Legends.Add(l => {
+        settings.GanttDiagram(d => {
+            l.Name = "AdditionalLegend";
+            l.DockTarget = d.Panes["AdditionalPane"];
+            l.Border.Visibility = DefaultBoolean.False;
+        });
+    });
+
+    settings.BoundDataChanged = (s, e) => {
+        MVCxChartControl chart = (MVCxChartControl)s;
+        if (chart.Series.Count == 4) {
+            for (int i = 2; i < 4; i++)
+                chart.Series[i].Views().SideBySideGanttSeriesView(v => {
+                    chart.GanttDiagram(d => {
+                        v.AxisX = d.SecondaryAxesX["SecondaryAxisX"];
+                        v.Pane = d.Panes["AdditionalPane"];
+                    });
+                    chart.Series[i].Legend = chart.Legends["AdditionalLegend"];
+                });
+        }
+        Series series = chart.GetSeriesByName(ViewBag.SeriesName);
+        if (series != null) {
+            foreach (SeriesPoint point in series.Points) {
+                if (point.Argument == ViewBag.Argument) {
+                    ProjectTask task = (ProjectTask)point.Tag;
+                    if (ViewBag.ValueIndex == 0)
+                        task.BeginDate = ViewBag.Date;
+                    else
+                        task.EndDate = ViewBag.Date;
+                    break;
+                }
+            }
+        }
+    };
+}).Bind(Model, seriesDataMember: "ProjectName").GetHtml();
+}

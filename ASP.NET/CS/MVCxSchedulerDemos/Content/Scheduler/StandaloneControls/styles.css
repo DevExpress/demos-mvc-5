@@ -1,0 +1,49 @@
+﻿.dx-hint-container {
+    float: left;
+    height: 70px;
+    width: 100px;
+}
+div.dx-notification {
+    background-color: rgba(0,0,0,0.7);
+}
+.dx-notification .dxh-title {
+    padding-right: 6px;
+    width: 300px;
+} 
+.dx-notification .dxh-title .dx-notification-button {
+    float: right;
+    margin-top: -4px;
+}
+.dx-notification-button {
+    color: #CFCFCF;
+}
+.dx-snooze .dx-notification-button-content {
+    padding-left: 4px;
+}
+.dx-notification-button-icon:before {
+    width: 14px;
+    height: 14px;
+    content: ' ';
+    vertical-align: middle;
+    display: inline-block;
+    background-repeat: no-repeat;
+}
+.dx-snooze .dx-notification-button-icon:before {
+    background-image: url("dx-snooze.png");
+    opacity: 0.7;
+}
+.dx-dismiss .dx-notification-button-icon:before {
+    background-image: url("dx-dismiss.png");
+}
+
+td.customStyle {
+    text-decoration: underline;
+}
+
+.agenda-demo .dxsc-agenda-header-row,
+.agenda-demo .dxsc-agenda-fixed-header {
+    display: none;
+}
+.agenda-demo .dxscAgendaViewScrollContainer > table > tr:last-child .dxscApt > table {
+    border-bottom: 0px;
+}

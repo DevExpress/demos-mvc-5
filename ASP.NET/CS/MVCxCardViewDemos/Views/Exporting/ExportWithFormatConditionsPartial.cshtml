@@ -1,0 +1,90 @@
+﻿@Html.DevExpress().CardView(settings => {
+    settings.Name = "cardView";
+    settings.CallbackRouteValues = new { Controller = "Exporting", Action = "ExportWithFormatConditionsPartial" };
+    settings.Width = Unit.Percentage(100);
+    settings.SettingsExport.EnableClientSideExportAPI = true;
+    settings.SettingsExport.CardWidth = 430;
+    settings.EnableCardsCache = false;
+
+    settings.Toolbars.Add(tb => {
+        tb.SettingsAdaptivity.Enabled = true;
+        tb.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+        tb.Items.Add(CardViewToolbarCommand.ExportToPdf);
+        tb.Items.Add(CardViewToolbarCommand.ExportToXls);
+        tb.Items.Add(CardViewToolbarCommand.ExportToXlsx);
+        tb.Items.Add(CardViewToolbarCommand.ExportToDocx);
+        tb.Items.Add(CardViewToolbarCommand.ExportToRtf);
+    });
+
+    settings.Columns.Add("Address");
+    settings.Columns.Add("Baths");
+    settings.Columns.Add("Beds");
+    settings.Columns.Add("HouseSize");
+    settings.Columns.Add(column => {
+        column.FieldName = "Price";
+        column.PropertiesEdit.DisplayFormatString = "c";
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "Photo";
+        column.ColumnType = MVCxCardViewColumnType.BinaryImage;
+        var properties = (BinaryImageEditProperties)column.PropertiesEdit;
+        properties.ImageWidth = 200;
+        properties.ExportImageSettings.Width = 200;
+        properties.ExportImageSettings.Height = 133;
+    });
+
+    settings.CardLayoutProperties.ColumnCount = 2;
+    settings.CardLayoutProperties.Items.Add(layoutItem => {
+        layoutItem.ColumnName = "Photo";
+        layoutItem.ShowCaption = DefaultBoolean.False;
+        layoutItem.RowSpan = 6;
+        layoutItem.VerticalAlign = FormLayoutVerticalAlign.Top;
+    });
+    settings.CardLayoutProperties.Items.Add("Baths");
+    settings.CardLayoutProperties.Items.Add("Beds");
+    settings.CardLayoutProperties.Items.Add("HouseSize");
+    settings.CardLayoutProperties.Items.Add("Price");
+    settings.CardLayoutProperties.Items.Add("Address");
+
+    settings.FormatConditions.AddTopBottom(item => {
+        item.FieldName = "Price";
+        item.Threshold = 10;
+        item.Rule = GridTopBottomRule.BottomItems;
+        item.Format = GridConditionHighlightFormat.BoldText | GridConditionHighlightFormat.GreenText;
+    });
+    settings.FormatConditions.AddTopBottom(item => {
+        item.FieldName = "TopItems";
+        item.Threshold = 10;
+        item.Rule = GridTopBottomRule.BottomItems;
+        item.Format = GridConditionHighlightFormat.BoldText | GridConditionHighlightFormat.RedText;
+    });
+    settings.FormatConditions.AddIconSet(item => {
+        item.FieldName = "Baths";
+        item.Format = GridConditionIconSetFormat.Arrows3Colored;
+    });
+    settings.FormatConditions.AddIconSet(item => {
+        item.FieldName = "Beds";
+        item.Format = GridConditionIconSetFormat.Arrows3Colored;
+    });
+    settings.FormatConditions.AddTopBottom(item => {
+        item.FieldName = "HouseSize";
+        item.Rule = GridTopBottomRule.TopItems;
+        item.Threshold = 5;
+        item.Format = GridConditionHighlightFormat.GreenText;
+    });
+    settings.FormatConditions.AddTopBottom(item => {
+        item.FieldName = "HouseSize";
+        item.Rule = GridTopBottomRule.BottomItems;
+        item.Threshold = 5;
+        item.Format = GridConditionHighlightFormat.RedText;
+    });
+
+    settings.TotalSummary.Add(SummaryItemType.Min, "Price");
+    settings.TotalSummary.Add(SummaryItemType.Max, "Price");
+
+    settings.SettingsPager.SettingsTableLayout.ColumnCount = 2;
+    settings.SettingsPager.SettingsTableLayout.RowsPerPage = 2;
+    settings.SettingsPager.EnableAdaptivity = true;
+
+    settings.Styles.Card.Width = 450;    
+}).Bind(Model).GetHtml()

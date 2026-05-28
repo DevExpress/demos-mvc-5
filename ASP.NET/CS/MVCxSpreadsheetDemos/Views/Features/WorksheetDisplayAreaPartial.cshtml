@@ -1,0 +1,19 @@
+﻿@Html.DevExpress().Spreadsheet(
+
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "WorksheetDisplayAreaPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Pixel(700);
+        settings.RibbonMode = SpreadsheetRibbonMode.OneLineRibbon;
+        settings.ActiveTabIndex = 2;
+        settings.ShowConfirmOnLosingChanges = false;
+
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideAllTabsExceptHomeAndFormulas(spreadsheet);
+
+            spreadsheet.WorksheetDisplayArea.SetSize(0, 6, 20);
+        };
+    }
+    ).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "WorksheetDisplayArea.xlsx")).GetHtml()

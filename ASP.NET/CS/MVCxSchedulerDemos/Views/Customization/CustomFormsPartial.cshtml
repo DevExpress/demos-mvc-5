@@ -1,0 +1,57 @@
+﻿@functions{
+    AppointmentRecurrenceFormSettings CreateAppointmentRecurrenceFormSettings(AppointmentFormTemplateContainer container) {
+        return new AppointmentRecurrenceFormSettings {
+            Name = "appointmentRecurrenceForm",
+            Width = Unit.Percentage(100),
+            IsRecurring = container.Appointment.IsRecurring,
+            DayNumber = container.RecurrenceDayNumber,
+            End = container.RecurrenceEnd,
+            Month = container.RecurrenceMonth,
+            OccurrenceCount  = container.RecurrenceOccurrenceCount,
+            Periodicity = container.RecurrencePeriodicity,
+            RecurrenceRange = container.RecurrenceRange,
+            Start = container.Start,
+            WeekDays = container.RecurrenceWeekDays,
+            WeekOfMonth = container.RecurrenceWeekOfMonth,
+            RecurrenceType = container.RecurrenceType,
+            IsFormRecreated = container.IsFormRecreated
+        };
+    }
+}
+@Html.DevExpress().Scheduler(
+    settings => {
+        settings.Name = "scheduler";
+        settings.CallbackRouteValues = new { Controller = "Customization", Action = "CustomFormsPartial" };
+        settings.EditAppointmentRouteValues = new { Controller = "Customization", Action = "CustomFormsPartialEditAppointmen" };
+        settings.Start = new DateTime(2016, 10, 10);
+        settings.GroupType = SchedulerGroupType.Resource;
+        settings.ActiveViewType = SchedulerViewType.WorkWeek;
+
+        SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.DayView);
+        SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.WorkWeekView);
+        SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.FullWeekView);
+
+        settings.Views.DayView.ResourcesPerPage = 3;
+        settings.Views.FullWeekView.Enabled = true;
+        settings.Views.WeekView.Enabled = false;
+        settings.Views.MonthView.ResourcesPerPage = 1;
+        settings.Views.MonthView.AppointmentDisplayOptions.ShowRecurrence = true;
+        settings.Views.TimelineView.ResourcesPerPage = 2;
+        
+        settings.Storage.EnableReminders = false;
+        settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+        settings.Storage.Appointments.Assign(SchedulerDemoHelper.CustomAppointmentStorage);
+        settings.OptionsForms.RecurrenceFormName = "appointmentRecurrenceForm";
+        settings.OptionsToolTips.ShowSelectionToolTip = false;
+
+        settings.OptionsForms.SetAppointmentFormTemplateContent(c => {
+            var schedule = (ViewData["EditableSchedule"] as ValidationSchedule) ?? ValidationSchedule.ConvertFrom(c.Appointment);
+            ViewBag.DeleteButtonEnabled = c.CanDeleteAppointment;
+            ViewBag.AppointmentRecurrenceFormSettings = CreateAppointmentRecurrenceFormSettings(c);
+            Html.RenderPartial("CustomAppointmentFormPartial", schedule);
+        });
+
+        settings.OptionsForms.SetAppointmentInplaceEditorFormTemplateContent(c => {
+            Html.RenderPartial("CustomInplaceEditorFormPartial", ValidationSchedule.ConvertFrom(c.Appointment));
+        });
+    }).Bind(Model.Appointments, Model.Resources).SetErrorText(ViewBag.SchedulerErrorText).GetHtml()

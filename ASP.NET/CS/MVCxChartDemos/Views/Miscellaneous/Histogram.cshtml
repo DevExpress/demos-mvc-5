@@ -1,0 +1,270 @@
+﻿@model ChartHistogramOptions
+
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(340);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartHistogramOptions options = Model;
+    settings.Name = "chart";
+    settings.Width = 920;
+    settings.Height = 500;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+
+    settings.Legends.Default(l => {
+        l.Visibility = DefaultBoolean.False;
+    });
+    settings.XYDiagram(d => {
+        d.Panes.Add(p => {
+            p.Name = "Pane";
+        });
+        d.AxisX.WholeRange.AlwaysShowZeroLevel = false;
+        d.AxisX.Tickmarks.MinorVisible = false;
+        d.AxisX.Title.Text = "Arguments";
+        d.AxisX.Title.Visibility = DefaultBoolean.True;
+
+        d.AxisY.GridLines.Visible = false;
+        d.AxisY.Tickmarks.MinorVisible = false;
+        d.AxisY.Title.Text = "Values";
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+
+        d.SecondaryAxesX.Add(y => {
+            y.NumericScaleOptions.AggregateFunction = AggregateFunction.Histogram;
+            y.NumericScaleOptions.ScaleMode = ScaleMode.Interval;
+            y.NumericScaleOptions.IntervalOptions.DivisionMode = options.IntervalDivisionMode;
+            y.NumericScaleOptions.IntervalOptions.Width = options.Width;
+            y.NumericScaleOptions.IntervalOptions.Count = options.Count;
+            y.NumericScaleOptions.IntervalOptions.Pattern = "{A1:#}-{A2:#}";
+            y.NumericScaleOptions.IntervalOptions.GridLayoutMode = GridLayoutMode.GridAndLabelShifted;
+            y.Name = "SecondaryAxisX";
+            y.Tickmarks.MinorVisible = false;
+            y.Alignment = AxisAlignment.Near;
+            y.Title.Text = "Intervals";
+            y.Title.Visibility = DefaultBoolean.True;
+            y.Label.TextPattern = "{A:#}";
+            y.Label.ResolveOverlappingOptions.AllowRotate = false;
+            y.Label.ResolveOverlappingOptions.AllowStagger = false;
+        });
+        d.SecondaryAxesY.Add(y => {
+            y.Name = "SecondaryAxisY";
+            y.GridLines.Visible = false;
+            y.Tickmarks.MinorVisible = false;
+            y.Alignment = AxisAlignment.Near;
+            y.Title.Text = "Number of Points";
+            y.Title.Visibility = DefaultBoolean.True;
+            y.WholeRange.AlwaysShowZeroLevel = true;
+        });
+    });
+    settings.Series.Add(s => {
+        s.LabelsVisibility = DefaultBoolean.False;
+        s.ChangeView(DevExpress.XtraCharts.ViewType.Point);
+        PointSeriesView view = (PointSeriesView)s.View;
+        s.SetDataMembers("P1.X", "P1.Y");
+        s.CrosshairLabelPattern = "{A} : {V}";
+    });
+    settings.Series.Add(s => {
+        s.LabelsVisibility = DefaultBoolean.False;
+        s.ChangeView(options.HistogramView);
+        s.ArgumentDataMember = "P1.X";
+        if(options.HistogramView == DevExpress.XtraCharts.ViewType.RangeBar) {
+            s.CrosshairLabelPattern = "{A} : {V2}";
+            s.Views().OverlappedRangeBarSeriesView(v => {
+                v.BarWidth = 1;
+                v.FillStyle.FillMode = FillMode.Solid;
+                settings.XYDiagram(d => {
+                    v.Pane = d.Panes["Pane"];
+                    v.AxisX = d.SecondaryAxesX["SecondaryAxisX"];
+                    v.AxisY = d.SecondaryAxesY["SecondaryAxisY"];
+                });
+            });
+        }
+        else {
+            s.CrosshairLabelPattern = "{A} : {V}";
+            s.Views().SplineAreaSeriesView(v => {
+                v.MarkerVisibility = DefaultBoolean.False;
+                settings.XYDiagram(d => {
+                    v.Pane = d.Panes["Pane"];
+                    v.AxisX = d.SecondaryAxesX["SecondaryAxisX"];
+                    v.AxisY = d.SecondaryAxesY["SecondaryAxisY"];
+                });
+            });
+        }
+    });
+    settings.Series.Add(s => {
+        s.LabelsVisibility = DefaultBoolean.False;
+        s.ChangeView(DevExpress.XtraCharts.ViewType.Point);
+        PointSeriesView view = (PointSeriesView)s.View;
+        s.SetDataMembers("P2.X", "P2.Y");
+        s.Visible = options.SeriesCount > 1;
+        s.CrosshairLabelPattern = "{A} : {V}";
+    });
+    settings.Series.Add(s => {
+        s.LabelsVisibility = DefaultBoolean.False;
+        s.ChangeView(options.HistogramView);
+        s.ArgumentDataMember = "P2.X";
+        s.Visible = options.SeriesCount > 1;
+        if(options.HistogramView == DevExpress.XtraCharts.ViewType.RangeBar) {
+            s.CrosshairLabelPattern = "{A} : {V2}";
+            s.Views().OverlappedRangeBarSeriesView(v => {
+                v.BarWidth = 1;
+                v.FillStyle.FillMode = FillMode.Solid;
+                settings.XYDiagram(d => {
+                    v.Pane = d.Panes["Pane"];
+                    v.AxisX = d.SecondaryAxesX["SecondaryAxisX"];
+                    v.AxisY = d.SecondaryAxesY["SecondaryAxisY"];
+                });
+            });
+        }
+        else {
+            s.CrosshairLabelPattern = "{A} : {V}";
+            s.Views().SplineAreaSeriesView(v => {
+                v.MarkerVisibility = DefaultBoolean.False;
+                settings.XYDiagram(d => {
+                    v.Pane = d.Panes["Pane"];
+                    v.AxisX = d.SecondaryAxesX["SecondaryAxisX"];
+                    v.AxisY = d.SecondaryAxesY["SecondaryAxisY"];
+                });
+            });
+        }
+    });
+    settings.Series.Add(s => {
+        s.LabelsVisibility = DefaultBoolean.False;
+        s.ChangeView(DevExpress.XtraCharts.ViewType.Point);
+        PointSeriesView view = (PointSeriesView)s.View;
+        s.SetDataMembers("P3.X", "P3.Y");
+        s.Visible = options.SeriesCount > 2;
+        s.CrosshairLabelPattern = "{A} : {V}";
+    });
+    settings.Series.Add(s => {
+        s.LabelsVisibility = DefaultBoolean.False;
+        s.ChangeView(options.HistogramView);
+        s.ArgumentDataMember = "P3.X";
+        s.Visible = options.SeriesCount > 2;
+        if(options.HistogramView == DevExpress.XtraCharts.ViewType.RangeBar) {
+            s.CrosshairLabelPattern = "{A} : {V2}";
+            s.Views().OverlappedRangeBarSeriesView(v => {
+                v.BarWidth = 1;
+                v.FillStyle.FillMode = FillMode.Solid;
+                settings.XYDiagram(d => {
+                    v.Pane = d.Panes["Pane"];
+                    v.AxisX = d.SecondaryAxesX["SecondaryAxisX"];
+                    v.AxisY = d.SecondaryAxesY["SecondaryAxisY"];
+                });
+            });
+        }
+        else {
+            s.CrosshairLabelPattern = "{A} : {V}";
+            s.Views().SplineAreaSeriesView(v => {
+                v.MarkerVisibility = DefaultBoolean.False;
+                settings.XYDiagram(d => {
+                    v.Pane = d.Panes["Pane"];
+                    v.AxisX = d.SecondaryAxesX["SecondaryAxisX"];
+                    v.AxisY = d.SecondaryAxesY["SecondaryAxisY"];
+                });
+            });
+        }
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Point Distribution by Arguments"
+    });
+    settings.BoundDataChanged = (s, e) => {
+        MVCxChartControl chart = (MVCxChartControl)s;
+        if (chart.Series.Count > 1) {
+            PaletteEntry[] paletteEntries = chart.GetPaletteEntries(3);
+            chart.Series[0].View.Color = Color.FromArgb(130, paletteEntries[0].Color);
+            chart.Series[1].View.Color = Color.FromArgb(130, paletteEntries[0].Color);
+            chart.Series[2].View.Color = Color.FromArgb(130, paletteEntries[1].Color);
+            chart.Series[3].View.Color = Color.FromArgb(130, paletteEntries[1].Color);
+            chart.Series[4].View.Color = Color.FromArgb(130, paletteEntries[2].Color);
+            chart.Series[5].View.Color = Color.FromArgb(130, paletteEntries[2].Color);
+        }
+    };
+}).Bind(Model.Data).GetHtml()
+
+<script type="text/javascript">
+    function IntervalDivisionModeChanged() {
+        var mode = IntervalDivisionMode.GetValue();
+        Width.SetEnabled(mode == "Width");
+        Count.SetEnabled(mode == "Count");
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+    s.Name = "SettingsFormLayout";
+    s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    s.Items.AddGroupItem(group => {
+        group.Caption = "General";
+        group.Items.Add(model => model.IntervalDivisionMode, item => {
+            item.NestedExtension().ComboBox(comboBox => {
+                comboBox.Properties.Items.AddRange(ChartDemoHelper.GetIntervalDivisionModes());
+                comboBox.Properties.ClientSideEvents.ValueChanged = "function(s, e) { IntervalDivisionModeChanged(); }";
+            });
+        });
+        group.Items.Add(model => model.Width, item => {
+            item.NestedExtension().SpinEdit(spinEdit => {
+                spinEdit.ClientEnabled = Model.IntervalDivisionMode == IntervalDivisionMode.Width;
+                spinEdit.Properties.MinValue = 1;
+                spinEdit.Properties.MaxValue = 10;
+                spinEdit.Properties.Increment = 1;
+            });
+        });
+        group.Items.Add(model => model.Count, item => {
+            item.NestedExtension().SpinEdit(spinEdit => {
+                spinEdit.ClientEnabled = Model.IntervalDivisionMode == IntervalDivisionMode.Count;
+                spinEdit.Properties.MinValue = 15;
+                spinEdit.Properties.MaxValue = 80;
+                spinEdit.Properties.Increment = 1;
+            });
+        });
+        group.Items.Add(model => model.HistogramView, item => {
+            item.NestedExtension().ComboBox(comboBox => {
+                comboBox.Properties.Items.AddRange(ViewTypesItemsHelper.CreateHistogramItems());
+            });
+        });
+        group.Items.Add(model => model.SeriesCount, item => {
+            item.NestedExtension().SpinEdit(spinEdit => {
+                spinEdit.Properties.MinValue = 1;
+                spinEdit.Properties.MaxValue = 3;
+                spinEdit.Properties.Increment = 1;
+            });
+        });
+        group.Items.Add(model => model, item => {
+            item.Paddings.PaddingTop = Unit.Point(12);
+            item.ShowCaption = DefaultBoolean.False;
+            item.NestedExtension().Button(button => {
+                button.Name = "ApplyButton";
+                button.Text = "Apply Changes";
+                button.RouteValues = new { Action = "Histogram" };
+                button.UseSubmitBehavior = true;
+            });
+        });
+        group.Items.Add(model => model, item => {
+            item.Paddings.PaddingTop = Unit.Point(12);
+            item.ShowCaption = DefaultBoolean.False;
+            item.NestedExtension().Button(button => {
+                button.Name = "btnNewDataSet";
+                button.Text = "Generate Points";
+                button.Theme = "MaterialCompact";
+                button.RouteValues = new { Action = "RefreshAction" };
+                button.UseSubmitBehavior = true;
+            });
+        });
+    });
+    DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings { ColumnMinWidth = 320 });
+}).GetHtml()
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+

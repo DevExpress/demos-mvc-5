@@ -1,0 +1,67 @@
+﻿@Html.DevExpress().Chart(settings => {
+    settings.Name = "chart";
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.EnableClientSideAPI = true;
+    settings.CallbackRouteValues = new { Controller = "AdvancedViewTypes", Action = "GanttViewsPartial" };
+    settings.ClientSideEvents.BeginCallback = "function (s, e) { e.customArgs[\"CompletedDate\"] = this.completedDate; }";
+    settings.CrosshairEnabled = DefaultBoolean.False;
+    settings.SaveStateOnCallbacks = false;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+        l.AlignmentVertical = LegendAlignmentVertical.Top;
+        l.Direction = LegendDirection.LeftToRight;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "R&D Schedule"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Tasks",
+        Dock = ChartTitleDockStyle.Left,
+        DXFont = new DXFont("Tahoma", 12)
+    });
+    
+    settings.Series.Template(t => {
+        t.ChangeView(DevExpress.XtraCharts.ViewType.Gantt);
+        t.LabelsVisibility = DefaultBoolean.False;
+        t.ValueScaleType = ScaleType.DateTime;
+        t.SetGanttDataMembers("TaskName", "BeginDate", "EndDate");
+    });
+      
+    settings.GanttDiagram(d => {
+        d.AxisX.WholeRange.AutoSideMargins = true;
+        d.AxisX.GridLines.Visible = true;
+        d.AxisY.GridLines.MinorVisible = true;
+        d.AxisY.WholeRange.SetMinMaxValues(new DateTime(2006, 08, 16), new DateTime(2006, 11, 16));
+        d.AxisY.WholeRange.SideMarginsValue = 0;
+        d.AxisY.MinorCount = 4;
+        d.AxisY.Interlaced = true;
+        d.AxisY.Label.TextPattern = "{V:m}";
+        d.AxisY.DateTimeScaleOptions.AutoGrid = false;
+        d.AxisY.DateTimeScaleOptions.GridSpacing = 1;
+        d.AxisY.DateTimeScaleOptions.GridAlignment = DateTimeGridAlignment.Month;
+        d.AxisY.ConstantLines.Add(new ConstantLine("Progress line", (DateTime)Session[ChartDemoHelper.CompletedDateKey]));
+        d.AxisY.ConstantLines[0].ShowInLegend = false;
+    });
+
+    settings.BoundDataChanged = (s, e) => {
+        MVCxChartControl chart = (MVCxChartControl)s;
+        if (chart.Series.Count > 0)
+            foreach (SeriesPoint point in chart.Series[0].Points) {
+                IList<int> relations = ((ProjectTask)point.Tag).Relations;
+                if (relations != null)
+                    foreach (int relation in relations)
+                        point.Relations.Add(chart.Series[0].Points[relation], TaskLinkType.FinishToStart);
+            }
+        if (chart.Series.Count == 2)
+            chart.Series[1].Views().OverlappedGanttSeriesView(v => {
+                v.BarWidth = 0.3;
+            });
+    };
+}).Bind(Model, seriesDataMember: "ProjectName").GetHtml()

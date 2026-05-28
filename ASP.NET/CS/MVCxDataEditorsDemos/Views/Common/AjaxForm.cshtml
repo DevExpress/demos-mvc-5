@@ -1,0 +1,36 @@
+﻿@model AjaxFormValidationData
+
+@section AdditionalResources {
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
+}
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+@using (Ajax.BeginForm("AjaxForm", "Common",
+    new AjaxOptions { 
+        HttpMethod = "POST", 
+        OnBegin = "loadingPanel.Show();",
+        OnComplete = "loadingPanel.Hide();",
+        UpdateTargetId = "content", 
+        InsertionMode = InsertionMode.Replace 
+    },
+    new { 
+        id = "validationForm"         
+    })) {
+    @Html.AntiForgeryToken()
+
+    <div id="content">
+        @Html.Partial("AjaxFormPartial", Model)
+    </div>
+}
+
+@Html.DevExpress().LoadingPanel(settings => {
+    settings.Name = "loadingPanel";
+    settings.Modal = true;
+    settings.ContainerElementID = "validationForm";
+    settings.Styles.LoadingDiv.BackColor = Color.White;
+}).GetHtml()

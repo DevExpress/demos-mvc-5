@@ -1,0 +1,23 @@
+﻿@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "Filtering", Action = "FilterRowPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.SettingsBehavior.AutoExpandAllNodes = true;
+
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowFilterRowMenu = true;
+
+    settings.KeyFieldName = "ID";
+    settings.ParentFieldName = "ParentID";
+    settings.Columns.Add(c => {
+        c.FieldName = "DepartmentName";
+        c.Caption = "Departments";
+    });
+    settings.Columns.Add("Location");
+    settings.Columns.Add(c => {
+        c.FieldName = "Budget";
+        c.PropertiesEdit.DisplayFormatString = "{0:C}";
+    });
+    settings.Columns.Add("Phone1");
+}).Bind(Model).GetHtml()

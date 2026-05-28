@@ -1,0 +1,42 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "gridView";
+    settings.CallbackRouteValues = new { Controller = "PagingAndScrolling", Action = "EndlessPagingPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.KeyFieldName = "OrderID";
+    settings.Columns.Add(c => {
+        c.FieldName = "ShipName";
+        c.Width = 200;
+        c.GroupIndex = 0;
+    });
+    settings.Columns.Add("ShipCity").Width = 100;
+    settings.Columns.Add("ShipPostalCode").Width = 120;
+    settings.Columns.Add("ShipCountry").Width = 100;
+    settings.Columns.Add("Freight").Width = 70;
+
+    settings.Columns.Add(c => {
+        c.FieldName = "OrderDate";
+        c.Width = 100;
+        c.ColumnType = MVCxGridViewColumnType.DateEdit;
+        c.PropertiesEdit.DisplayFormatString = "d";
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "ShippedDate";
+        c.Width = 100;
+        c.ColumnType = MVCxGridViewColumnType.DateEdit;
+        c.PropertiesEdit.DisplayFormatString = "d";
+    });
+              
+    settings.Settings.ShowGroupPanel = true;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = 400;
+
+    settings.SettingsPager.Mode = GridViewPagerMode.EndlessPaging;
+    settings.SettingsPager.PageSize = 20;
+
+    settings.PreRender = (s, e) => {
+        ((MVCxGridView)s).ExpandRow(1);
+    };
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

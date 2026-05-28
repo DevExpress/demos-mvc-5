@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XtraReportsLayoutSerializer SerializerVersion="22.1.0.0" Ref="0" ControlType="DevExpress.XtraScheduler.Reporting.XtraSchedulerReport, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Name="TriFoldResource" Landscape="true" PageWidth="1100" PageHeight="850" Version="22.1">
+  <Views>
+    <Item1 SchedulerViewType="DevExpress.XtraScheduler.Reporting.ReportDayView, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Ref="1">
+      <Appearance Ref="2" />
+    </Item1>
+    <Item2 SchedulerViewType="DevExpress.XtraScheduler.Reporting.ReportMonthView, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Ref="3">
+      <Appearance Ref="4" />
+    </Item2>
+    <Item3 SchedulerViewType="DevExpress.XtraScheduler.Reporting.ReportWeekView, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Ref="5">
+      <Appearance Ref="6" />
+    </Item3>
+  </Views>
+  <Bands>
+    <Item1 Ref="7" ControlType="DetailBand" Name="Detail" PageBreak="AfterBand" HeightF="792.25" TextAlignment="TopLeft" Padding="0,0,0,0,100">
+      <Controls>
+        <Item1 Ref="9" ControlType="DevExpress.XtraScheduler.Reporting.TimeIntervalInfo, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Name="timeIntervalInfo3" TimeCells="#Ref-8" AutoScaleFont="false" View="#Ref-3" SizeF="279,50" LocationFloat="611,57.00002">
+          <Font Ref="10" />
+          <PrintColorSchemas Ref="11" />
+        </Item1>
+        <Item2 Ref="13" ControlType="DevExpress.XtraScheduler.Reporting.TimeIntervalInfo, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Name="timeIntervalInfo2" TimeCells="#Ref-12" AutoScaleFont="false" View="#Ref-5" SizeF="280.21,50" LocationFloat="317.7081,56.95831">
+          <Font Ref="10" />
+          <PrintColorSchemas Ref="14" />
+        </Item2>
+        <Item3 Ref="16" ControlType="DevExpress.XtraScheduler.Reporting.TimeIntervalInfo, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Name="timeIntervalInfo1" TimeCells="#Ref-15" View="#Ref-1" SizeF="305.13,46" LocationFloat="1.041476,56.95831">
+          <PrintColorSchemas Ref="17" />
+        </Item3>
+        <Item4 Ref="18" ControlType="DevExpress.XtraScheduler.Reporting.DayOfWeekHeaders, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Name="dayOfWeekHeaders1" TimeCells="#Ref-8" View="#Ref-5" SizeF="279,26" LocationFloat="612.0417,113.5">
+          <PrintColorSchemas Ref="19" />
+        </Item4>
+        <Item5 Ref="20" ControlType="DevExpress.XtraScheduler.Reporting.DayViewTimeRuler, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Name="dayViewTimeRuler1" TimeCells="#Ref-15" View="#Ref-1" SizeF="50,531.9166" LocationFloat="1.041667,113.5">
+          <TimeRuler Ref="21" />
+          <Corners Ref="22" />
+          <PrintColorSchemas Ref="23" />
+        </Item5>
+        <Item6 Ref="12" ControlType="DevExpress.XtraScheduler.Reporting.FullWeek, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Name="fullWeek1" View="#Ref-5" SizeF="280.2084,531.9584" LocationFloat="317.7084,113.4583">
+          <AppointmentDisplayOptions Ref="24" StartTimeVisibility="Never" EndTimeVisibility="Never" />
+          <PrintColorSchemas Ref="25" />
+        </Item6>
+        <Item7 Ref="8" ControlType="DevExpress.XtraScheduler.Reporting.HorizontalWeek, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Name="horizontalWeek1" View="#Ref-3" SizeF="279,505.9167" LocationFloat="612.0417,139.5">
+          <AppointmentDisplayOptions Ref="26" StartTimeVisibility="Never" EndTimeVisibility="Never" />
+          <PrintColorSchemas Ref="27" />
+        </Item7>
+        <Item8 Ref="15" ControlType="DevExpress.XtraScheduler.Reporting.DayViewTimeCells, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Name="dayViewTimeCells1" TimeScale="01:00:00" VisibleTimeSnapMode="false" ShowWorkTimeOnly="true" View="#Ref-1" SizeF="255.1251,531.9584" LocationFloat="51.04167,113.5">
+          <AppointmentDisplayOptions Ref="28" ShowShadows="false">
+            <ColumnPadding Ref="29" />
+          </AppointmentDisplayOptions>
+          <VisibleTime Ref="30" Start="09:00:00" End="18:00:00" />
+          <ExtraCells Ref="31" MinCount="1" />
+          <PrintColorSchemas Ref="32" />
+        </Item8>
+        <Item9 Ref="33" ControlType="XRLine" Name="xrLine1" SizeF="890,8" LocationFloat="0,42.00001">
+          <StylePriority Ref="34" UseBorderWidth="false" />
+        </Item9>
+        <Item10 Ref="35" ControlType="DevExpress.XtraScheduler.Reporting.ResourceInfo, DevExpress.XtraScheduler.v22.1.Core.Reporting, Version=22.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4" Name="resourceInfo1" TimeCells="#Ref-15" ForeColor="Navy" View="#Ref-1" SizeF="872.2085,33" LocationFloat="0,1">
+          <Font Ref="36" />
+          <PrintColorSchemas Ref="37" />
+        </Item10>
+      </Controls>
+    </Item1>
+  </Bands>
+</XtraReportsLayoutSerializer>

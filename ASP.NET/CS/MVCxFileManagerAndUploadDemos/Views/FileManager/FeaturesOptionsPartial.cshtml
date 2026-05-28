@@ -1,0 +1,84 @@
+﻿@model FileManagerFeaturesDemoOptions
+<script type="text/javascript">
+    function OnInit(s, e) {
+        UpdateEditingSettingsAvailability();
+    }
+    function OnCheckedChanged(s, e) {
+        UpdateEditingSettingsAvailability();
+    }
+    function UpdateEditingSettingsAvailability() {
+        var isChecked = GetControlByName('SettingsFolders.Visible').GetChecked();
+        GetControlByName('SettingsEditing.AllowMove').SetEnabled(isChecked);
+        GetControlByName('SettingsEditing.AllowCreate').SetEnabled(isChecked);
+        GetControlByName('SettingsEditing.AllowCopy').SetEnabled(isChecked);
+    }
+    function GetControlByName(name) {
+        return ASPxClientControl.GetControlCollection().GetByName(name);
+    }
+</script>
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "FormLayoutSettings";
+    settings.ColCount = 5;
+    settings.ShowItemCaptionColon = false;
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.Items.AddGroupItem(m => m.SettingsEditing, g => {
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Items.Add(m => m.SettingsEditing.AllowMove);
+        g.Items.Add(m => m.SettingsEditing.AllowDelete);
+        g.Items.Add(m => m.SettingsEditing.AllowRename);
+        g.Items.Add(m => m.SettingsEditing.AllowCreate);
+        g.Items.Add(m => m.SettingsEditing.AllowCopy);
+        g.Items.Add(m => m.SettingsEditing.AllowDownload);
+    });
+    settings.Items.AddGroupItem(m => m.SettingsToolbar, g => {
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Items.Add(m => m.SettingsToolbar.ShowPath);
+        g.Items.Add(m => m.SettingsToolbar.ShowFilterBox);
+    });
+    settings.Items.AddGroupItem(m => m.SettingsFolders, g => {
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Items.Add(m => m.SettingsFolders.Visible, i => {
+            i.NestedExtension().CheckBox(s => {
+                s.Properties.ClientSideEvents.Init = "OnInit";
+                s.Properties.ClientSideEvents.CheckedChanged = "OnCheckedChanged";
+            });
+        });
+        g.Items.Add(m => m.SettingsFolders.EnableCallBacks);
+        g.Items.Add(m => m.SettingsFolders.ShowFolderIcons);
+        g.Items.Add(m => m.SettingsFolders.ShowLockedFolderIcons);
+    });
+    settings.Items.AddGroupItem(m => m.SettingsFileList, g => {
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Items.Add(m => m.SettingsFileList.ShowFolders);
+        g.Items.Add(m => m.SettingsFileList.ShowParentFolder);
+    });
+    settings.Items.AddGroupItem(m => m.SettingsUpload, g => {
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Items.Add(m => m.SettingsUpload.Enabled);
+        g.Items.Add(m => m.SettingsUpload.AdvancedModeSettings.EnableMultiSelect);
+    });
+    settings.Items.AddGroupItem(m => m.SettingsBreadcrumbs, g => {
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.Items.Add(m => m.SettingsBreadcrumbs.Visible);
+        g.Items.Add(m => m.SettingsBreadcrumbs.ShowParentFolderButton);
+        g.Items.Add(m => m.SettingsBreadcrumbs.Position, i => {
+            i.NestedExtension().ComboBox(s => {
+                s.Width = Unit.Pixel(100);
+            });
+        });
+
+        DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+            ColumnMinWidth = 300,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    });
+}).GetHtml()
+<div class="apply-button-container">
+    @Html.DevExpress().Button(s => {
+        s.Name = "Apply";
+        s.Text = "Apply";
+        s.Width = 80;
+        s.Theme = DemoHelper.Instance.Theme;
+        s.UseSubmitBehavior = true;
+    }).GetHtml()
+</div>

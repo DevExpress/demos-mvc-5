@@ -1,0 +1,31 @@
+﻿@Html.DevExpress().DataView(settings => {
+    settings.Name = "dataView";
+    settings.CallbackRouteValues = new { Controller = "Panel", Action = "ResponsiveLayoutWithScrollingDataViewPartial" };    
+    settings.ControlStyle.CssClass = "dataView";
+    
+    settings.Layout = DevExpress.Web.Layout.Flow;
+    settings.SettingsFlowLayout.ItemsPerPage = 6;
+    settings.PagerSettings.EndlessPagingMode = DataViewEndlessPagingMode.OnScroll;
+    
+    settings.Styles.Content.CssClass = "dateViewContent";
+    settings.Styles.Item.CssClass = "dateViewItem";    
+    settings.SetItemTemplateContent(c => {
+        ViewContext.Writer.Write(
+                   @"<img src='" + Url.Content(DataBinder.Eval(c.DataItem, "PhotoUrl").ToString()) + @"' alt='' />
+                     <table>
+                        <tr>
+                            <td><b>Name:</b></td>
+                            <td><span>" + DataBinder.Eval(c.DataItem, "Name") + @"</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>Address:</b></td>
+                            <td><span>" + DataBinder.Eval(c.DataItem, "Address") + @"</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>Phone:</b></td>
+                            <td><span>" + DataBinder.Eval(c.DataItem, "Phone") + @"</span></td>
+                        </tr>
+                   </table>"
+               );
+    });
+}).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/Contacts.xml"), "//Contact").GetHtml()

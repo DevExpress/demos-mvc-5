@@ -1,0 +1,15 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "SpreadsheetAPI", Action = "CellValuePartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 475;
+        settings.ActiveTabIndex = 0;
+        settings.ShowConfirmOnLosingChanges = false;
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideFileTab(spreadsheet);
+            CellValueDemoHelper.PrepareWorksheet(spreadsheet.Document.Worksheets[0]);
+        };
+    }
+).GetHtml()

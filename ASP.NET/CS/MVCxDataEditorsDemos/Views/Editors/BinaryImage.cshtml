@@ -1,0 +1,75 @@
+﻿@model BinaryImageOptionsModel
+
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Editors/BinaryImage/Css/BinaryImage.css")" />
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
+}
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+<script type="text/javascript">
+    MVCxClientGlobalEvents.AddControlsInitializedEventHandler(InitializeOptions);
+
+    function InitializeOptions() {
+        ImageSizeMode.ValueChanged.AddHandler(onChangeDemoOptions);
+        ImageSize.ValueChanged.AddHandler(onChangeDemoOptions);
+    }
+    function onChangeDemoOptions() {
+        CallbackPanel.PerformCallback();
+    }
+    
+    function onBeginCallback(s, e) {
+        e.customArgs["ImageSizeMode"] = ImageSizeMode.GetText();
+        e.customArgs["ImageSize"] = ImageSize.GetValue();
+    }
+
+    function onBinaryImageInit(s, e) {
+        var src = document.getElementById("content").querySelector("img").src;
+        var xhr = new XMLHttpRequest();
+        xhr.open('HEAD', src, true);
+        xhr.onreadystatechange = function() {
+            if(xhr.status == 200) {
+                var sizeKb = (xhr.getResponseHeader('Content-Length') /1024).toFixed(1);
+                document.getElementById("fileSize").innerHTML = sizeKb;
+                document.getElementById("imageSizes").innerHTML = ImageSize.GetText();
+            }
+        }
+        xhr.send(null);
+    }
+</script>
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@section DemoOptionsTop {
+    <div id="options" class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBoxFor(m => m.ImageSizeMode , s => s.Theme = DemoHelper.Instance.Theme).BindList(Enum.GetNames(typeof(ImageSizeMode))).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().ComboBoxFor(m => m.ImageSize, s => {
+                s.Name = "ImageSize";
+                s.Properties.Caption = "Size";
+                s.Theme = DemoHelper.Instance.Theme;
+                s.Properties.ValueField = "ID";
+                s.Properties.TextField = "Text";
+                s.Properties.ValueType = typeof(int);                
+            }).BindList(Model.AvailableSizes).GetHtml()
+        </div>
+    </div>
+}
+<div class="mainContainer">
+    <div id="content">
+        @Html.Action("BinaryImagePartial", Model)
+    </div>
+    <p>
+        The original image file size is <b>328KB</b> (1200 x 900 px), the resized image
+        file size is <b><span id="fileSize"></span>KB</b> for (<span id="imageSizes"></span>).
+    </p>
+</div>
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

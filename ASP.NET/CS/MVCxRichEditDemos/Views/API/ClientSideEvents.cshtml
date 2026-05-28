@@ -1,0 +1,29 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+<script type="text/javascript">
+    function checkAllEvents(checked) {
+        var eventsCheckboxes = $("#EventListContainer").children("INPUT")
+        for (var i = 0; i < eventsCheckboxes.length; i++)
+            eventsCheckboxes[i].checked = checked;
+    }
+</script>
+
+@using(Html.BeginForm()) {
+    @Html.Action("ClientSideEventsPartial")
+}
+@Html.Partial("EventMonitor")
+
+<div style="padding: 10px 0px; float: right;">
+    @Html.DevExpress().Button(s => {
+        s.Name = "CheckEventsButton";
+        s.Text = "Check All";
+        s.Theme = DemoHelper.Instance.Theme;
+        s.ClientSideEvents.Click = "function(s, e) { checkAllEvents(true); }";
+    }).GetHtml()
+    @Html.DevExpress().Button(s => {
+        s.Name = "UncheckEventsButton";
+        s.Text = "Uncheck All";
+        s.Theme = DemoHelper.Instance.Theme;
+        s.ClientSideEvents.Click = "function(s, e) { checkAllEvents(false); }";
+    }).GetHtml()
+</div>

@@ -1,0 +1,18 @@
+﻿@model ChartDrillDownDemoOptions
+
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(300);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("DrillDownPartial", Model)
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

@@ -1,0 +1,9 @@
+﻿.timeRulerMinute,
+.timeRulerHour {
+	cursor: pointer;
+}
+
+.timeRulerSelected .timeRulerHour,
+.timeRulerSelected .timeRulerMinute {
+	background-color: #eeeeee;
+}

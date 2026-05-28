@@ -1,0 +1,14 @@
+﻿@Html.DevExpress().PopupControl(settings => {
+    settings.Name = "pcOverview";
+    settings.PopupElementID = "popupArea";
+    //settings.AllowDragging = true;
+    settings.ShowOnPageLoad = true;
+    settings.CloseAction = CloseAction.CloseButton;
+    settings.HeaderText = "Area of Countries";
+    settings.SetContent(() => {
+        ViewContext.Writer.Write(
+            "<img src=\"" + Url.Content("~/Content/PopupControl/Features/CountriesArea.png") + "\" alt=\"Area of Countries\" />"
+        );
+    });
+}).GetHtml()
+<div id="popupArea" style="height: 300px;">Click here to invoke a popup window</div>

@@ -1,0 +1,82 @@
+﻿@model List<RevenueEntry>
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(300);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("PrintingAndExportingPartial", Model)
+
+<script type="text/javascript">
+    function InitializePrintOptions() {
+        chart.GetPrintOptions().SetSizeMode('Zoom');
+    }
+    function PrintChart() {
+        InitializePrintOptions();
+        chart.Print();
+    }
+    function SaveChart() {
+        InitializePrintOptions();
+        chart.SaveToDisk(cbFormat.GetValue());
+    }
+    function PreviewChart() {
+        InitializePrintOptions();
+        chart.SaveToWindow(cbFormat.GetValue())
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Export Settings";
+            group.Items.Add(model => model, item => {
+                item.Caption = "Format";
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Name = "cbFormat";
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetExportFormats());
+                    comboBox.SelectedIndex = 0;
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.ShowCaption = DefaultBoolean.False;
+            group.Items.Add(model => model, item => {
+                item.ShowCaption = DefaultBoolean.False;
+                item.NestedExtension().Button(button => {
+                    button.Name = "btnSave";
+                    button.Text = "Save";
+                    button.ClientSideEvents.Click = "function(s, e) { SaveChart(); }";
+                });
+            });
+            group.Items.Add(model => model, item => {
+                item.ShowCaption = DefaultBoolean.False;
+                item.NestedExtension().Button(button => {
+                    button.Name = "btnShowPreview";
+                    button.Text = "Show Preview";
+                    button.ClientSideEvents.Click = "function(s, e) { PreviewChart(); }";
+                });
+            });
+            group.Items.Add(model => model, item => {
+                item.ShowCaption = DefaultBoolean.False;
+                item.NestedExtension().Button(button => {
+                    button.Name = "btnPrint";
+                    button.Text = "Print";
+                    button.ClientSideEvents.Click = "function(s, e) { PrintChart(); }";
+                });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings { ColumnMinWidth = 280 });
+    }).GetHtml()
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

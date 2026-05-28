@@ -1,0 +1,17 @@
+﻿@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "MailMerge", Action = "BuiltInMailMergePartial" };
+
+    settings.WorkDirectory = Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "MailMergeResults");
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(700);
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ActiveTabIndex = 5;
+    settings.ViewMergedData = true;
+
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        richEdit.Focus();
+    };
+
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "MailMergeTemplate.docx")).Bind(Model).GetHtml()

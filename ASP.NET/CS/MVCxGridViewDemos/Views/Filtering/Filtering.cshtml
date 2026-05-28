@@ -1,0 +1,26 @@
+﻿@model IEnumerable
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+@section DemoOptionsTop {
+    @Html.AntiForgeryToken()
+
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(cbSettings => {
+                cbSettings.Name = "EnableCheckedListMode";
+                cbSettings.Text = "Enable CheckedList Mode";
+                cbSettings.Theme = DemoHelper.Instance.Theme;
+                cbSettings.ControlStyle.Wrap = DefaultBoolean.False;
+                cbSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e){ $('form').submit(); }";
+            }).Bind((bool)ViewBag.EnableCheckedListMode).GetHtml()
+        </div>
+    </div>
+}
+@Html.Partial("FilteringPartial", Model)
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+

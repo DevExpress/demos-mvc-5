@@ -1,0 +1,21 @@
+﻿@{ FileManagerDetailsViewModeDemoOptions options = (FileManagerDetailsViewModeDemoOptions)Session["Options"]; } 
+
+@Html.DevExpress().FileManager(
+    settings => {
+        settings.Name = "fileManager";
+        settings.CallbackRouteValues = new { Controller = "FileManager", Action = "DetailsViewModePartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Settings.AllowedFileExtensions = FileManagerDemoHelper.AllowedFileExtensions;
+        settings.Settings.InitialFolder = "Leonardo Da Vinci\\1481 - 1490";
+        settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+
+        settings.SettingsFileList.View = FileListView.Details;
+        settings.SettingsFileList.DetailsViewSettings.AllowColumnDragDrop = options.AllowColumnDragDrop;
+        settings.SettingsFileList.DetailsViewSettings.AllowColumnResize = options.AllowColumnResize;
+        settings.SettingsFileList.DetailsViewSettings.AllowColumnSort = options.AllowColumnSort;
+        settings.SettingsFileList.DetailsViewSettings.ShowHeaderFilterButton = options.ShowHeaderFilterButton;
+
+        settings.SettingsAdaptivity.Enabled = true;
+    }
+).BindToFileSystemProvider(Model).GetHtml()

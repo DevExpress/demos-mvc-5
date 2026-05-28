@@ -1,0 +1,99 @@
+﻿<script type="text/javascript" src="@Url.Content("~/Scripts/ExternalRibbon.js")"></script>
+@functions{
+    RibbonButtonItem CreateButtonItem(string name, string text, RibbonItemSize size, string iconID) {
+        var item = new RibbonButtonItem(name, text, size);
+        item.LargeImage.IconID = iconID;
+        return item;
+    }
+}
+
+@using(Html.BeginForm()) {
+    @Html.DevExpress().Ribbon(settings => {
+        settings.Name = "ribbon";
+        settings.ShowFileTab = false;
+        settings.ClientSideEvents.CommandExecuted = "CommandExecutedHandler";
+        settings.Width = Unit.Pixel(917);
+    
+        var homeTab = new HEHomeRibbonTab();
+        var editingGroup = homeTab.Groups.Add("Editing");
+        editingGroup.Items.Add(CreateButtonItem("SaveChanges", "Save Changes", RibbonItemSize.Large, IconID.SaveSave32x32));
+        editingGroup.Items.Add(CreateButtonItem("CancelChanges", "Cancel Changes", RibbonItemSize.Large, IconID.ActionsCancel32x32));
+    
+        var undoGroup = new HEUndoRibbonGroup();
+        undoGroup.Items.Add(new HEUndoRibbonCommand(RibbonItemSize.Large));
+        undoGroup.Items.Add(new HERedoRibbonCommand(RibbonItemSize.Large));
+        homeTab.Groups.Add(undoGroup);
+    
+        var fontGroup = new HEFontRibbonGroup();
+        var fontNameItem = new HEFontNameRibbonCommand();
+        fontNameItem.CreateDefaultItems(false);
+        fontGroup.Items.Add(fontNameItem);
+        var fontSizeItem = new HEFontSizeRibbonCommand();
+        fontSizeItem.CreateDefaultItems(false);
+        fontGroup.Items.Add(fontSizeItem);
+        fontGroup.Items.Add(new HERemoveFormatRibbonCommand());
+        var paragraphFormattingItem = new HEParagraphFormattingRibbonCommand();
+        paragraphFormattingItem.CreateDefaultItems(false);
+        fontGroup.Items.Add(paragraphFormattingItem);
+        fontGroup.Items.Add(new HEBoldRibbonCommand());
+        fontGroup.Items.Add(new HEItalicRibbonCommand());
+        fontGroup.Items.Add(new HEUnderlineRibbonCommand());
+        fontGroup.Items.Add(new HEStrikeoutRibbonCommand());
+        fontGroup.Items.Add(new HESuperscriptRibbonCommand());
+        fontGroup.Items.Add(new HESubscriptRibbonCommand());
+        homeTab.Groups.Add(fontGroup);
+    
+        var paragraphGroup = new HEParagraphRibbonGroup();
+        paragraphGroup.Items.Add(new HEInsertUnorderedListRibbonCommand());
+        paragraphGroup.Items.Add(new HEInsertOrderedListRibbonCommand());
+        paragraphGroup.Items.Add(new HEOutdentRibbonCommand());
+        paragraphGroup.Items.Add(new HEIndentRibbonCommand());
+        paragraphGroup.Items.Add(new HEAlignmentLeftRibbonCommand());
+        paragraphGroup.Items.Add(new HEAlignmentCenterRibbonCommand());
+        paragraphGroup.Items.Add(new HEAlignmentRightRibbonCommand());
+        homeTab.Groups.Add(paragraphGroup);
+    
+        var navigationGroup = homeTab.Groups.Add("Navigation");
+        navigationGroup.Items.Add(CreateButtonItem("PreviousDocument", "Previous Document", RibbonItemSize.Large, IconID.NavigationPrevious32x32));
+        navigationGroup.Items.Add(CreateButtonItem("NextDocument", "Next Document", RibbonItemSize.Large, IconID.NavigationNext32x32));
+        settings.Tabs.Add(homeTab);
+    
+        var insertTab = new HEInsertRibbonTab();
+        var imagesGroup = new HEImagesRibbonGroup();
+        imagesGroup.Items.Add(new HEInsertImageRibbonCommand(RibbonItemSize.Large));
+        insertTab.Groups.Add(imagesGroup);
+    
+        var linksGroup = new HELinksRibbonGroup();
+        linksGroup.Items.Add(new HEInsertLinkDialogRibbonCommand(RibbonItemSize.Large));
+        linksGroup.Items.Add(new HEUnlinkRibbonCommand(RibbonItemSize.Large));
+        insertTab.Groups.Add(linksGroup);
+        settings.Tabs.Add(insertTab);
+    
+        var viewTab = new HEViewRibbonTab();
+        var viewsGroup = new HEViewsRibbonGroup();
+        viewsGroup.Items.Add(new HEFullscreenRibbonCommand(RibbonItemSize.Large));
+        viewTab.Groups.Add(viewsGroup);
+        settings.Tabs.Add(viewTab);
+    }).GetHtml()
+    <div style="width: 960px;">
+        <div style="float: left; padding: 20px 20px 0 0;">
+            @Html.DevExpress().ListBox(settings =>
+            {
+                settings.Name = "listBox";
+                settings.Width = Unit.Pixel(146);
+                settings.Height = Unit.Pixel(370);
+                settings.SelectedIndex = 1;
+                settings.Properties.ClientSideEvents.SelectedIndexChanged = "SelectedIndexChangedHandler";
+                settings.Properties.ClientSideEvents.Init = "ListBoxInitHandler";
+            }).BindList(Model).GetHtml()
+        </div>
+        <div style="float: left; padding-top: 20px;">
+            @Html.Partial("ExternalRibbonPartial")
+        </div>
+</div>
+    @Html.DevExpress().LoadingPanel(settings =>
+    {
+        settings.Name = "LoadingPanel";
+        settings.Modal = true;
+    }).GetHtml()
+}

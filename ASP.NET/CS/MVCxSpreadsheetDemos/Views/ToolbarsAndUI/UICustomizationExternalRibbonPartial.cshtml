@@ -1,0 +1,8 @@
+﻿@Html.DevExpress().Ribbon(settings => {
+    settings.Name = "ExternalRibbon";
+    settings.ControlStyle.CssClass = "externalRibbon";
+    settings.ShowFileTab = false;
+    settings.Tabs.AddRange(SpreadsheetExtension.DefaultRibbonTabs);
+    settings.Tabs[0].Visible = false;
+    settings.ContextTabCategories.AddRange(SpreadsheetExtension.DefaultRibbonContextTabCategories);
+}).GetHtml()

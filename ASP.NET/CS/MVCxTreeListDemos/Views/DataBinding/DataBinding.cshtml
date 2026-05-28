@@ -1,0 +1,25 @@
+﻿@model IList<Department>
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(cbSettings => {
+                cbSettings.Name = "ShowServiceColumns";
+                cbSettings.Text = "Show service columns";
+                cbSettings.Theme = DemoHelper.Instance.Theme;
+                cbSettings.ControlStyle.Wrap = DefaultBoolean.False;
+                cbSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e){ $('form').submit(); }";
+            }).Bind((bool)ViewBag.ShowServiceColumns).GetHtml()
+        </div>
+    </div>
+}
+@Html.Partial("DataBindingPartial", Model)
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

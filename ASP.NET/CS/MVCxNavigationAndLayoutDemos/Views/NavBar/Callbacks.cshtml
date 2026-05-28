@@ -1,0 +1,28 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(560);
+}
+@section AdditionalResources {
+    <style>
+        .custom-nav-bar {
+            width: 100%!important;
+            padding: 0!important;
+        }
+        .custom-nav-bar .dxnb-content {
+            padding: 5px!important;
+        }
+        .custom-nav-bar .dxnb-content > img {
+            float: left;
+            width: 50%;
+            margin-right: 5px;
+        }
+    </style>
+}
+
+@Html.Partial("CallbacksPartial")
+
+<p class="Note">
+    <b>Note</b>: The sample images used in this demo were created using the
+    <a href="https://www.devexpress.com/products/net/controls/winforms/chart/" target="_blank">
+        XtraCharts
+    </a> suite.
+</p>

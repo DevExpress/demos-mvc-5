@@ -1,0 +1,70 @@
+﻿@model ListBoxFilteringOptions
+<script type="text/javascript">
+    function EnsureOptionsState(s, e) {
+        var selectionMode = s.GetValue();
+        SetCheckBoxEnabled(EnableSelectAll, selectionMode == "CheckColumn");
+        SetCheckBoxEnabled(EnableCallbackMode, selectionMode == "Single");
+    }
+    function SetCheckBoxEnabled(checkBoxObj, enabled) {
+        if(checkBoxObj.GetEnabled() != enabled) {
+            checkBoxObj.SetEnabled(enabled);
+            if(!enabled)
+                checkBoxObj.SetChecked(false);
+        }    
+    }
+    function onListBoxBeginCallback(s, e) {
+        e.customArgs["UseCustomFilteringEditor"] = UseCustomFilteringEditor.GetValue();
+        e.customArgs["SelectionMode"] = SelectionMode.GetValue();
+        e.customArgs["EnableSelectAll"] = EnableSelectAll.GetValue();
+        e.customArgs["EnableCallbackMode"] = EnableCallbackMode.GetValue();
+    }
+</script>
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(340);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(390);
+}
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}    
+@if(Model.UseCustomFilteringEditor.Value) {
+    @Html.DevExpress().TextBox(s => {
+        s.Name = "customFilteringEditor";
+        s.Properties.Caption = "Custom Filtering Editor";
+        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+        s.Width = Unit.Pixel(285);
+    }).GetHtml()
+<br />
+}
+@Html.Action("ListBoxFilteringPartial")
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "optionsFormLayout";
+        s.Items.AddGroupItem(g => {
+            g.Caption = "Options";
+            g.Items.Add(m => m.UseCustomFilteringEditor);
+            g.Items.Add(m => m.SelectionMode, i => {
+                i.NestedExtension().ComboBox(combo => {
+                    combo.Properties.ClientSideEvents.Init = "EnsureOptionsState";
+                    combo.Properties.ClientSideEvents.SelectedIndexChanged = "EnsureOptionsState";
+                });                
+            });
+            g.Items.Add(m => m.EnableSelectAll);
+            g.Items.Add(m => m.EnableCallbackMode);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 318,
+            ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+        });
+    }).Bind(Model).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}            
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

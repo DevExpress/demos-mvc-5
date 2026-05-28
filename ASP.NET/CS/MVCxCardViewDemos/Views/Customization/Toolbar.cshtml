@@ -1,0 +1,20 @@
+﻿@model IEnumerable
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1100); }
+
+<script>
+    function OnToolbarItemClick(s, e){
+        e.processOnServer = true;
+    }
+    function OnSortingChanged(s, e){
+        HeadphoneCards.PerformCallback();
+    }
+    function OnHeadphoneCardsBeginCallback(s, e){
+        e.customArgs["isCardView"] = this.IsCardView();
+        e.customArgs["sortMode"] = Sorting.GetValue();
+    }
+    function IsCardView(){
+        return HeadphoneCards.GetToolbar(0).GetItemByName("CardView").GetChecked();
+    }
+</script>
+
+@Html.Partial("ToolbarPartial", Model)

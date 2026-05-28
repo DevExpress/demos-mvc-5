@@ -1,0 +1,45 @@
+﻿@{
+    var scheduler = Html.DevExpress().Scheduler(
+        settings => {
+            settings.Name = "scheduler";
+            settings.CallbackRouteValues = new { Controller = "Adaptivity", Action = "AdaptiveLayoutPagePartial" };
+            settings.EditAppointmentRouteValues = new { Controller = "Adaptivity", Action = "AdaptiveLayoutPagePartialEditAppointment" };
+            settings.Start = new DateTime(2016, 10, 10);
+            settings.ActiveViewType = SchedulerViewType.Agenda;
+            settings.OptionsView.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.OptionsToolTips.ShowSelectionToolTip = false;
+
+            settings.Views.DayView.ResourcesPerPage = 3;
+            settings.Views.WorkWeekView.Enabled = false;
+            settings.Views.FullWeekView.Enabled = false;
+            settings.Views.WeekView.Enabled = false;
+            settings.Views.MonthView.Enabled = false;
+
+            settings.Views.AgendaView.Enabled = true;
+            settings.Views.AgendaView.DayCount = 4;
+            settings.Views.AgendaView.AppointmentDisplayOptions.ShowResource = true;
+
+            TimeScale[] timeScales = new TimeScale[] {
+                new TimeScaleYear() { Enabled = false },
+                new TimeScaleQuarter() { Enabled = false },
+                new TimeScaleMonth(),
+                new TimeScaleFixedInterval() { Enabled = false },
+                new TimeScaleDay(),
+                new TimeScaleHour() { Enabled = false },
+            };
+            settings.Views.TimelineView.IntervalCount = 10;
+            settings.Views.TimelineView.DisplayedIntervalCount = 4;
+            settings.Views.TimelineView.Scales.AddRange(timeScales);
+            settings.Views.TimelineView.ResourcesPerPage = 2;
+            settings.Views.TimelineView.CellAutoHeightOptions.Mode = AutoHeightMode.FitToContent;
+            settings.Views.TimelineView.CellAutoHeightOptions.MinHeight = 300;
+
+            settings.Storage.EnableReminders = false;
+            settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+            settings.Storage.Appointments.Assign(SchedulerDemoHelper.DefaultAppointmentStorage);
+        });
+    if(ViewData["SchedulerErrorText"] != null) {
+        scheduler.SetErrorText((string)ViewData["SchedulerErrorText"]);
+    }
+}
+@scheduler.Bind(Model.Appointments, Model.Resources).GetHtml()

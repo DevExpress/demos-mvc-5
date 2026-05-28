@@ -1,0 +1,80 @@
+﻿@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/ImageGallery/CustomImageViewer.css")" />
+}
+
+<script type="text/javascript">
+    var imageIndex = 0;
+    function GetImageByIndex() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetImageUrlByIndex", "ImageGallery")',
+            data: { index: imageIndex },
+            beforeSend: function() {
+                lp.Show();
+            },
+            success: function(response) {
+                $('#largeImg').attr('src', response);
+                $('#text').html(imageIndex + 1 + '/' + imageGallery.cpCount);
+            }
+        });
+    }
+    function NextImage() {
+        imageIndex++;
+        if(imageIndex == imageGallery.cpCount)
+            imageIndex = 0;
+        GetImageByIndex();
+    }
+    function PrevImage() {
+        imageIndex--;
+        if(imageIndex < 0)
+            imageIndex = imageGallery.cpCount - 1;
+        GetImageByIndex();
+    }
+    function OnPopupControlInit(s, e) {
+        $('.btn.prev').click(function(event) {
+            PrevImage();
+            event.preventDefault();
+        });
+        $('.btn.next, #largeImg').click(function(event) {
+            NextImage();
+            event.preventDefault();
+        });
+        $('#largeImg').on('load', function() {
+            lp.Hide();
+            popup.UpdatePosition();
+        });
+    }
+    function OnFullscreenViewerShowing(s, e) {
+        imageIndex = e.index;
+        GetImageByIndex();
+        popup.Show();
+    }
+</script>
+
+@Html.DevExpress().PopupControl(
+    settings => {
+        settings.Name = "popup";
+        settings.EnableTheming = false;
+        settings.Modal = true;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        settings.ShowCloseButton = false;
+        settings.ShowHeader = false;
+        settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+        settings.ClientSideEvents.Init = "OnPopupControlInit";
+
+        settings.SetContent(() => {
+            Html.DevExpress().LoadingPanel(lpSettings => {
+                lpSettings.Name = "lp";
+                lpSettings.ContainerElementID = "largeImg";
+                lpSettings.EnableTheming = true;
+            }).Render();
+            ViewContext.Writer.Write("<div class=\"btn prev\"></div>");
+            ViewContext.Writer.Write("<div class=\"btn next\"></div>");
+            ViewContext.Writer.Write("<img id=\"largeImg\" class=\"largeImg\" src=\"" + Url.Content("~/Content/1x1.gif") + "\" alt=\"\" />");
+            ViewContext.Writer.Write("<div id=\"text\"></div>");      
+        });
+    }
+).GetHtml()
+
+@Html.Partial("CustomImageViewerPartial")

@@ -1,0 +1,160 @@
+﻿@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+
+    var grid = Html.DevExpress().GridView(settings => {
+        settings.Name = "gvEditing";
+        settings.KeyFieldName = "EmployeeID";
+        settings.CallbackRouteValues = new { Controller = "Editing", Action = "EditFormLayoutPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Editing", Action = "EditFormLayoutAddNewPartial" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Editing", Action = "EditFormLayoutUpdatePartial" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Editing", Action = "EditFormLayoutDeletePartial" };
+
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.Width = Unit.Percentage(100);
+        settings.ClientSideEvents.BeginCallback = "Grid_BeginCallback";
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.ConfirmDelete = false;
+
+        settings.SettingsPager.PageSize = 5;
+
+        settings.Settings.ShowPreview = true;
+        settings.PreviewFieldName = "Notes";
+
+        settings.Columns.Add("FirstName");
+        settings.Columns.Add("LastName");
+        settings.Columns.Add("BirthDate", MVCxGridViewColumnType.DateEdit);
+        settings.Columns.Add("Title").Caption = "Position";
+        settings.Columns.Add("Address").Visible = false;
+        settings.Columns.Add("HireDate", MVCxGridViewColumnType.DateEdit).Visible = false;
+        settings.Columns.Add("FireDate", MVCxGridViewColumnType.DateEdit).Visible = false;
+        settings.Columns.Add("FireReason").Visible = false;
+        settings.Columns.Add("NewCompany").Visible = false;
+
+        settings.Columns.Add(c => {
+            c.FieldName = "References";
+            c.ColumnType = MVCxGridViewColumnType.Memo;
+            c.Visible = false;
+            (c.PropertiesEdit as MVCxColumnMemoProperties).Height = Unit.Pixel(70);
+        });
+
+        settings.Columns.Add(c => {
+            c.FieldName = "Notes";
+            c.ColumnType = MVCxGridViewColumnType.Memo;
+            c.Visible = false;
+            (c.PropertiesEdit as MVCxColumnMemoProperties).Height = Unit.Pixel(130);
+        });
+
+        settings.EditFormLayoutProperties.ColCount = 2;
+        settings.EditFormLayoutProperties.AlignItemCaptionsInAllGroups = true;
+        settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+        settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 700;
+
+        settings.EditFormLayoutProperties.Items.AddTabbedGroupItem(tabbedGroupSettings => {
+            tabbedGroupSettings.ColumnSpan = 2;
+            tabbedGroupSettings.Items.AddGroupItem(groupEmployeeInformation => {
+                groupEmployeeInformation.ColumnCount = 2;
+                groupEmployeeInformation.Caption = "Employee Information";
+                groupEmployeeInformation.Items.AddGroupItem(groupSettings => {
+                    groupSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+                    groupSettings.Paddings.PaddingBottom = Unit.Pixel(0);
+                    groupSettings.Items.Add("FirstName");
+                    groupSettings.Items.Add("LastName");
+                    groupSettings.Items.Add("BirthDate");
+
+                });
+
+                groupEmployeeInformation.Items.AddGroupItem(groupSettings => {
+                    groupSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+                    groupSettings.Paddings.PaddingBottom = Unit.Pixel(0);
+                    groupSettings.Items.Add("HireDate");
+                    groupSettings.Items.Add("Title");
+                    groupSettings.Items.Add(i => {
+                        i.ColumnName = "FireDate";
+                        i.Caption = "Dismissal Date";
+                        i.HelpText = "When you specify a dismissal date, an additional 'Dismissal Information' tab will be shown.";
+                    });
+                });
+
+                groupEmployeeInformation.Items.AddGroupItem(groupSettings => {
+                    groupSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+                    groupSettings.Paddings.PaddingTop = Unit.Pixel(0);
+                    groupSettings.ClientVisible = false;
+                    groupSettings.Name = "groupContactInfo";
+                    groupSettings.ColumnSpan = 2;
+                    groupSettings.Items.Add("Address");
+                    groupSettings.Items.Add("Notes");
+                });
+
+                groupEmployeeInformation.Items.Add(item => {
+                    item.ShowCaption = DefaultBoolean.False;
+                    item.ColumnSpan = 2;
+                    item.SetTemplateContent(c => {
+                        Html.DevExpress().HyperLink(hlSettings => {
+                            hlSettings.Name = "hlShowHideInfo";
+                            hlSettings.Properties.Text = "Show Details...";
+                            hlSettings.ControlStyle.Cursor = "pointer";
+                            hlSettings.Width = Unit.Pixel(100);
+                            hlSettings.Properties.ClientSideEvents.Click = "onShowHideInfoClick";
+                        }).Render();
+                    });
+                });
+            });
+            tabbedGroupSettings.Items.AddGroupItem(groupDismissalInformation => {
+                groupDismissalInformation.Caption = "Dismissal Information";
+                groupDismissalInformation.Name = "DismissalInformation";
+                groupDismissalInformation.Items.AddGroupItem(groupSettings => {
+                    groupSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+                    groupSettings.Items.Add("FireReason").Caption = "Reason for Dismissal";
+                    groupSettings.Items.Add("NewCompany").Caption="New Employer";
+                    groupSettings.Items.Add("References");
+                });
+            });
+        });
+        settings.EditFormLayoutProperties.Items.AddCommandItem(commandItem => {
+            commandItem.Width = Unit.Percentage(100);
+            commandItem.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+			commandItem.Paddings.PaddingBottom = Unit.Pixel(0);
+        });
+
+        settings.CellEditorInitialize = (sender, evargs) => {
+            MVCxGridView gridView = sender as MVCxGridView;
+            if(evargs.Column.FieldName == "FireDate") {
+                ASPxDateEdit fireDateEditor = evargs.Editor as ASPxDateEdit;
+                fireDateEditor.ClientEnabled = !gridView.IsNewRowEditing;
+                fireDateEditor.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
+                fireDateEditor.ClientSideEvents.ValueChanged = "onDismissalDateChanged";
+            }
+        };
+
+        settings.EditFormLayoutCreated = (sender, evargs) => {
+            MVCxGridView gridView = sender as MVCxGridView;
+            LayoutGroup layoutGroupDismissal = (LayoutGroup)evargs.FindLayoutItemOrGroup("DismissalInformation");
+
+            if(layoutGroupDismissal == null) return;
+
+            if(gridView.IsNewRowEditing) {
+                layoutGroupDismissal.Visible = false;
+                return;
+            }
+            var fireDate = gridView.GetRowValues(evargs.RowVisibleIndex, "FireDate");
+            layoutGroupDismissal.ClientVisible = fireDate != null && (DateTime)fireDate != DateTime.MinValue;
+        };
+
+        settings.PreRender = (sender, e) => {
+            ((MVCxGridView)sender).StartEdit(1);
+        };
+
+        DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+    });
+    if(ViewData["EditError"] != null) {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

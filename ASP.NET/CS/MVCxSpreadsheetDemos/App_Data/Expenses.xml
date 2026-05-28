@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Expenses>
+  <Info Purpose="HR-Conference" StatementNumber="534084310" EmployeeID="9547320" EmployeeName="Tom Nilson" EmployeePosition="HR-manager" 
+               SSN="078-05-1120" EmployeeDepartment="HR" Manager="Nick Ellison" />
+  
+  <Expense Date="2013-01-16T00:00:00" Account="212340" Description="Business trip" Hotel="250" Transport="130" Fuel="12.42" Meals="50" Phone="8" Misc="19.2" />
+  <Expense Date="2013-02-17T00:00:00" Account="289043" Description="Business trip" Hotel="250" Fuel="16.62" Meals="45" Phone="6.8" Misc="29.35" />
+  <Expense Date="2013-01-18T00:00:00" Account="212340" Description="Holiday" Transport="10" Meals="58" Phone="2.89" Entertainment="90" Misc="12.3" />
+  <Expense Date="2013-12-19T00:00:00" Account="216049" Description="Holiday" Transport="30" Meals="60" Phone="9.79" Entertainment="120" Misc="110.2" />
+  <Expense Date="2013-02-20T00:00:00" Account="292352" Description="Business trip" Hotel="295.5" Transport="150" Fuel="10.48" Meals="45" Phone="9.32" Misc="59.89" />
+  <Expense Date="2013-04-21T00:00:00" Account="567384" Description="Business trip" Hotel="289" Transport="30" Fuel="20.14" Meals="50" Phone="5.56" Misc="30.7" />
+  <Expense Date="2013-05-22T00:00:00" Account="890733" Description="Business trip" Hotel="349" Transport="70" Fuel="15.07" Meals="45" Phone="14.05" Misc="100.93" />
+  <Expense Date="2013-11-03T00:00:00" Account="578292" Description="Business trip" Hotel="349" Fuel="33.42" Meals="60" Phone="2" Misc="320.2" />
+  <Expense Date="2013-11-03T00:00:00" Account="199123" Description="Business trip" Hotel="349" Transport="90" Fuel="13.82" Meals="50" Phone="2.6" Misc="23" />
+  <Expense Date="2013-07-25T00:00:00" Account="423509" Description="Holiday" Fuel="37.5" Meals="60" Phone="2.04" Entertainment="104.06" Misc="19.2" />
+  <Expense Date="2013-03-26T00:00:00" Account="543288" Description="Holiday" Transport="90" Fuel="14.2" Meals="70" Phone="0.25" Entertainment="60.4" Misc="12" />
+  <Expense Date="2013-10-27T00:00:00" Account="457382" Description="Business trip" Hotel="205" Transport="125" Fuel="16" Meals="45" Phone="14" Misc="35.59" />
+  <Expense Date="2013-08-28T00:00:00" Account="584839" Description="Business trip" Hotel="205.15" Fuel="10.04" Meals="40" Phone="12.04" Misc="30" />
+  <Expense Date="2013-04-29T00:00:00" Account="483922" Description="Business trip" Hotel="205" Fuel="56.5" Meals="55" Phone="12.45" Misc="60" />
+  <Expense Date="2013-10-30T00:00:00" Account="890763" Description="Business trip" Hotel="220" Transport="125" Fuel="1.42" Meals="55.45" Phone="1.05" Misc="148.28" />
+</Expenses>

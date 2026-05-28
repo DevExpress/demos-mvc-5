@@ -1,0 +1,55 @@
+﻿@model PivotGridFieldsCustomizationDemoOptions
+
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(70);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(350);}
+
+<script>
+    function onSelectedIndexChanged(s, e) {
+        if(s.GetValue() == "Simple")
+            CustomizationFormSettings.GetItemByName("CustomizationFormLayout").SetVisible(false);
+        else
+            CustomizationFormSettings.GetItemByName("CustomizationFormLayout").SetVisible(true);
+        sendCallbackPivotGrid(s, e)
+    }
+
+    function onShow(s, e) {
+        pivotGrid.ChangeCustomizationFieldsVisibility();
+    }
+
+    function onCustomizationFieldsVisibleChanged(s, e) {
+        if(pivotGrid.GetCustomizationFieldsVisibility())
+            btnShow.SetText('Hide Customization Window')
+        else
+            btnShow.SetText('Show Customization Window')
+    }
+
+    function sendCallbackPivotGrid(s, e) {
+        pivotGrid.PerformCallback();
+    }
+
+    function onBeginCallback(s, e) {
+        e.customArgs['options'] = {
+            CustomizationFormStyle: CustomizationFormStyle.GetValue(),
+            CustomizationFormLayout: CustomizationFormLayout.GetValue(),
+            AllowDragFields: AllowDragFields.GetValue(),
+            AllowDragFieldsInCustomizationForm: AllowDragFieldsInCustomizationForm.GetValue()
+        }
+    }
+</script>
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("FieldsCustomizationPartial", Model)
+
+@section DemoOptions {
+
+    @Html.Partial("FieldsCustomizationSettingsPartial", Model)
+
+}
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

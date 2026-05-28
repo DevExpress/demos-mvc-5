@@ -1,0 +1,51 @@
+﻿@model SettingsDemoOptions
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "FormLayoutSettings";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.Items.AddGroupItem(m => m.DocumentCapabilitiesSettings, g => {
+        g.Caption = "Document Capabilities";
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.CharacterFormatting);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.CharacterStyle);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.Fields);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.Hyperlinks);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.InlinePictures);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.Numbering.Bulleted);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.Numbering.MultiLevel);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.Numbering.Simple);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.ParagraphFormatting);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.Paragraphs);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.ParagraphStyle);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.ParagraphTabs);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.Sections);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.TabSymbol);
+        g.Items.Add(m => m.DocumentCapabilitiesSettings.Undo);
+    });
+    settings.Items.AddGroupItem(m => m.BehaviorSettings, g => {
+        g.Caption = "Behavior";
+        g.Items.Add(m => m.BehaviorSettings.Copy);
+        g.Items.Add(m => m.BehaviorSettings.CreateNew);
+        g.Items.Add(m => m.BehaviorSettings.Cut);
+        g.Items.Add(m => m.BehaviorSettings.Drag);
+        g.Items.Add(m => m.BehaviorSettings.Drop);
+        g.Items.Add(m => m.BehaviorSettings.FullScreen);
+        g.Items.Add(m => m.BehaviorSettings.Open);
+        g.Items.Add(m => m.BehaviorSettings.PageBreakInsertMode);
+        g.Items.Add(m => m.BehaviorSettings.Paste);
+        g.Items.Add(m => m.BehaviorSettings.Printing);
+        g.Items.Add(m => m.BehaviorSettings.Save);
+        g.Items.Add(m => m.BehaviorSettings.SaveAs);
+        g.Items.Add(m => m.BehaviorSettings.TabMarker);
+    });
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 350,
+        ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+    });
+}).GetHtml()
+<div class="apply-button-container">
+    @Html.DevExpress().Button(s => {
+        s.Name = "ApplyButton";
+        s.Text = "Apply Changes";
+        s.Theme = DemoHelper.Instance.Theme;
+        s.UseSubmitBehavior = true;
+    }).GetHtml()
+</div>

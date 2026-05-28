@@ -1,0 +1,25 @@
+﻿@section AdditionalResources{
+    <script>
+        function performMouseOver(element) {
+            if(document.createEvent) {
+                var event = document.createEvent('Event');
+                event.initEvent('mouseover', true, true);
+                element.dispatchEvent(event);
+            }
+            else
+                element.dispatchEvent(new Event("mouseover"));
+        }
+        window.addEventListener('load', function() {
+            window.setTimeout(function() {
+                performMouseOver(document.querySelector('.hintArea'));
+            }, 400);
+        });
+    </script>
+}
+
+@Html.DevExpress().Hint(settings => {
+    settings.Name = "Hint";
+    settings.TargetSelector = ".hintArea";
+    settings.Content = "Hint control";
+}).GetHtml()
+<div class="hintArea" style="display: table; margin: 0 auto">Move mouse over here to invoke a hint</div>

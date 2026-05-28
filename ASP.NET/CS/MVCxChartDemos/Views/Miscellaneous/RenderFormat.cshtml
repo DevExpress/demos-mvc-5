@@ -1,0 +1,86 @@
+﻿@model ChartRenderFormatOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(420);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartRenderFormatOptions options = Model;
+    settings.Name = "chart";
+    settings.Width = 920;
+    settings.Height = 500;
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.CrosshairEnabled = DefaultBoolean.False;
+    settings.RenderFormat = options.RenderFormat;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Border.Visibility = DefaultBoolean.False;
+        l.Direction = LegendDirection.LeftToRight;
+    });
+
+    settings.Series.Template(t => {
+        t.ChangeView(options.SeriesView);
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        if (options.DataType == DevExpress.XtraCharts.Demos.SeriesDataType.Bubble)
+            t.SetBubbleDataMembers("Argument", "Value", "Weight");
+        else if (options.DataType == DevExpress.XtraCharts.Demos.SeriesDataType.Range)
+            t.SetRangeDataMembers("Argument", "Value", "Value2");
+        else if (options.DataType == DevExpress.XtraCharts.Demos.SeriesDataType.Financial)
+            t.SetFinancialDataMembers("Argument", "Low", "High", "Open", "Close");
+        else
+            t.SetDataMembers("Argument", "Value");
+        
+    });
+
+}).Bind(Model.Data, seriesDataMember: "Series").GetHtml()
+
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Image Format Settings";
+            group.Items.Add(model => model.RenderFormat);
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.SeriesView, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ViewTypesItemsHelper.CreateItems());
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 400,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+

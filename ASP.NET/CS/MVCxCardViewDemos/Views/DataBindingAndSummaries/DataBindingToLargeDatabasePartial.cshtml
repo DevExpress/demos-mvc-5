@@ -1,0 +1,44 @@
+﻿@Html.DevExpress().CardView(
+    settings => {
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "DataBindingAndSummaries", Action = "DataBindingToLargeDatabasePartial" };
+        settings.KeyFieldName = "ID";
+        settings.Width = Unit.Percentage(100);
+        
+        settings.SettingsPager.EnableAdaptivity = true;
+
+        settings.Columns.Add("From").Width = Unit.Pixel(200);
+        settings.Columns.Add("Subject");
+        settings.Columns.Add(column => {
+            column.FieldName = "Sent";
+            column.ColumnType = MVCxCardViewColumnType.DateEdit;
+            column.Width = Unit.Pixel(100);
+        });
+        settings.Columns.Add("Size");
+        settings.Columns.Add(c => {
+            c.FieldName = "HasAttachment";
+            c.EditorProperties().CheckBox(p => {
+                p.DisplayImageChecked.IconID = DevExpress.Web.ASPxThemes.IconID.MailAttachmentobject16x16gray;
+                p.DisplayImageChecked.ToolTip = "Has attachment";
+                p.DisplayImageUnchecked.Url = Url.Content("~/Content/1x1.gif");
+            });
+        });
+
+        settings.CardLayoutProperties.Items.Add(i => {
+            i.ColumnName = "HasAttachment";
+            i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+            i.ShowCaption = DefaultBoolean.False;
+        });
+        settings.CardLayoutProperties.Items.Add("From");
+        settings.CardLayoutProperties.Items.Add("Size");
+        settings.CardLayoutProperties.Items.Add("Sent");
+        settings.CardLayoutProperties.Items.Add("Subject");
+
+        settings.Settings.ShowHeaderPanel = true;
+
+        settings.ClientSideEvents.Init = "function(s, e) { s.PerformCallback(); }";
+        settings.ClientSideEvents.BeginCallback = "function(s, e) { OnStartCallback(s, e); }";
+        settings.ClientSideEvents.EndCallback = "function(s, e) { OnEndCallback(s, e); }";
+    }).BindToEF(string.Empty, string.Empty, (s, e) => {
+        e.QueryableSource = LargeDatabaseDataProvider.DB.Emails;
+    }).GetHtml()

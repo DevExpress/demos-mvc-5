@@ -1,0 +1,84 @@
+﻿@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+@Html.DevExpress().GridView(settings => {
+    settings.Name = "GridView";
+    settings.CallbackRouteValues = new { Controller = "Adaptivity", Action = "AdaptiveLayoutPagePartial" };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Adaptivity", Action = "AdaptiveLayoutAddNewPartial" };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Adaptivity", Action = "AdaptiveLayoutUpdatePartial" };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Adaptivity", Action = "AdaptiveLayoutDeletePartial" };
+    settings.Width = Unit.Percentage(100);
+    settings.EnableRowsCache = false;
+
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = 500;
+
+    settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 2;
+    settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCellsWindowLimit;
+    settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 780;
+    settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+    settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.EditForm;
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.CommandColumn.ShowDeleteButton = true;
+    settings.CommandColumn.ShowEditButton = true;
+    settings.CommandColumn.MinWidth = 100;
+    settings.CommandColumn.MaxWidth = 150;
+    settings.CommandColumn.Width = Unit.Percentage(12);
+
+    settings.KeyFieldName = "ProductID";
+    settings.Columns.Add(c => {
+        c.FieldName = "ProductName";
+        c.MinWidth = 280;
+        c.MaxWidth = 450;
+        c.Width = Unit.Percentage(36);
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "CategoryID";
+        c.Caption = "Category Name";
+        c.AdaptivePriority = 1;
+        c.MinWidth = 150;
+        c.MaxWidth = 250;
+        c.Width = Unit.Percentage(20);
+        c.EditorProperties().ComboBox(cb => {
+            cb.DataSource = NorthwindDataProvider.GetCategories();
+            cb.TextField = "CategoryName";
+            cb.ValueField = "CategoryID";
+            cb.ValueType = typeof(int);
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "QuantityPerUnit";
+        c.AdaptivePriority = 1;
+        c.MinWidth = 150;
+        c.MaxWidth = 250;
+        c.Width = Unit.Percentage(20);
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "UnitPrice";
+        c.MinWidth = 100;
+        c.MaxWidth = 150;
+        c.Width = Unit.Percentage(12);
+        c.EditorProperties().SpinEdit(sp => {
+            sp.DisplayFormatString = "c";
+            sp.DisplayFormatInEditMode = true;
+            sp.MinValue = 0;
+            sp.MaxValue = 60000;
+        });
+    });
+
+    settings.SettingsPager.PageSize = 30;
+    settings.SettingsPager.NumericButtonCount = 6;
+    settings.ControlStyle.CssClass = "grid";
+    settings.Styles.Cell.Wrap = DefaultBoolean.False;
+    settings.ClientSideEvents.BeginCallback = "Grid_BeginCallback";
+
+    settings.CellEditorInitialize = (s, e) => {
+        ((ASPxEdit)e.Editor).ValidationSettings.Display = Display.Dynamic;
+    };
+}).SetEditErrorText(ViewData["EditError"] as string).Bind(Model).GetHtml()

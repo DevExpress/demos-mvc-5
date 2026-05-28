@@ -1,0 +1,60 @@
+﻿@Html.DevExpress().CardView(settings => {
+    settings.Name = "cardView";
+    settings.CallbackRouteValues = new { Controller = "Exporting", Action = "ExportPartial" };
+    settings.SettingsExport.EnableClientSideExportAPI = true;
+    settings.SettingsExport.CardWidth = 300;
+
+    settings.Columns.Add("ProductName");
+    settings.Columns.Add(column => {
+        column.FieldName = "UnitPrice";
+        column.PropertiesEdit.DisplayFormatString = "c";
+    });
+    settings.Columns.Add("QuantityPerUnit");
+    settings.Columns.Add(column => {
+        column.FieldName = "CategoryID";
+        column.Caption = "Category Name";
+
+        column.ColumnType = MVCxCardViewColumnType.ComboBox;
+        var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+        comboBoxProperties.DataSource = NorthwindDataProvider.GetCategories();
+        comboBoxProperties.TextField = "CategoryName";
+        comboBoxProperties.ValueField = "CategoryID";
+        comboBoxProperties.ValueType = typeof(int);
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "Discontinued";
+        column.ColumnType = MVCxCardViewColumnType.CheckBox;
+    });
+    var productGroup = settings.CardLayoutProperties.Items.AddGroupItem(group => {
+        group.Caption = "Product";
+        group.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+    });
+    productGroup.Items.Add(item => {
+        item.ColumnName = "ProductName";
+        item.Caption = "Name";
+    });
+    productGroup.Items.Add("CategoryID");
+    var detailsGroup = settings.CardLayoutProperties.Items.AddGroupItem(group => {
+        group.Caption = "Details";
+        group.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+    });
+    detailsGroup.Items.Add("UnitPrice");
+    detailsGroup.Items.Add("QuantityPerUnit");
+    detailsGroup.Items.Add("Discontinued");
+
+    settings.Toolbars.Add(tb => {
+        tb.SettingsAdaptivity.Enabled = true;
+        tb.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+        tb.Items.Add(CardViewToolbarCommand.ExportToPdf);
+        tb.Items.Add(CardViewToolbarCommand.ExportToXls);
+        tb.Items.Add(CardViewToolbarCommand.ExportToXlsx);
+        tb.Items.Add(CardViewToolbarCommand.ExportToDocx);
+        tb.Items.Add(CardViewToolbarCommand.ExportToRtf);
+    });
+
+    settings.SettingsPager.SettingsTableLayout.ColumnCount = 2;
+    settings.SettingsPager.SettingsTableLayout.RowsPerPage = 2;
+    settings.SettingsPager.EnableAdaptivity = true;
+
+    settings.Styles.Card.Height = 1;
+}).Bind(Model).GetHtml()

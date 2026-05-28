@@ -1,0 +1,29 @@
+﻿<script type="text/javascript">
+    function filterControl_Applied(s, e) {
+        grid.ApplyFilter(e.filterExpression);
+    }
+    function applyButton_Click(s, e) {
+        filterControl.Apply();
+    }
+</script>
+
+@Html.DevExpress().RoundPanel(settings => {
+    settings.Name = "roundPanel";
+    settings.HeaderText = "Filter";
+    settings.Width = 500;
+    settings.SetContent(() => {
+        Html.RenderPartial("FilterControlPartial");
+        ViewContext.Writer.Write("<div style=\"padding: 12px; text-align: right;\">");
+        Html.DevExpress().Button(s => {
+            s.Name = "applyButton";
+            s.Text = "Apply";
+            s.UseSubmitBehavior = false;
+            s.ClientSideEvents.Click = "applyButton_Click";
+        }).Render();
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+
+<br />
+
+@Html.Action("FilterControl_GridPartial")

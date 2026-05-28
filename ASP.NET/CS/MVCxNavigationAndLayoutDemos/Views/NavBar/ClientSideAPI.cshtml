@@ -1,0 +1,240 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(450);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = 332;
+}
+@section AdditionalResources {
+    <script>
+        window.addEventListener('load', function() {
+            ASPx.GetControlCollection().ControlsInitialized.AddHandler(function() {
+                FillComboBoxGroups();
+                UpdateItemsCombo(cbGroups.GetValue());
+                ShowProperties();
+            });
+        });
+        function GetNavBarGroup() {
+            return NavBar.GetGroupByName(cbGroups.GetValue());
+        }
+        function GetNavBarItem() {
+            return NavBar.GetItemByName(cbItems.GetValue());
+        }
+        function ToggleItemEnabled() {
+            var item = GetNavBarItem();
+            item.SetEnabled(chbItemEnabled.GetChecked());
+            ShowProperties();
+        }
+        function ToggleItemVisible() {
+            var item = GetNavBarItem();
+            item.SetVisible(chbItemVisible.GetChecked());
+            ShowProperties();
+        }
+        function ToggleItemSelected() {
+            var item = GetNavBarItem();
+            if(!item.GetVisible())
+                chbItemSelected.SetChecked(false);
+            else {
+                NavBar.SetSelectedItem(chbItemSelected.GetChecked() ? GetNavBarItem() : null);
+                ShowProperties();
+            }
+        }
+        function ToggleGroupVisible() {
+            GetNavBarGroup().SetVisible(chbGroupVisible.GetChecked());
+        }
+        function ToggleGroupExpanded() {
+            GetNavBarGroup().SetExpanded(chbGroupExpanded.GetChecked());
+        }
+        function ChangeActiveGroup() {
+            UpdateItemsCombo(GetNavBarGroup().name);
+            ShowProperties();
+        }
+        function ChangeSelectedItem() {
+            ShowProperties();
+        }
+        function GroupExpandedChanged(e) {
+            if(e.group.GetExpanded())
+                UpdateItemsCombo(e.group.name);
+            else
+                ShowProperties();
+        }
+        function GroupExpandedChanging(e) {
+            if(!e.group.GetExpanded())
+                NavBar.CollapseAll();
+        }
+        function SelectedItemChanged(e) {
+            cbItems.SetValue(e.item.name);
+            ShowProperties();
+        }
+        function UpdateItemsCombo(groupName) {
+            cbGroups.SetValue(groupName);
+
+            cbItems.ClearItems();
+            var group = GetNavBarGroup();
+            for(var i = 0; i < group.GetItemCount() ; i++) {
+                var item = group.GetItem(i);
+                cbItems.AddItem(ASPxClientUtils.Trim(item.name), ASPxClientUtils.Trim(item.name));
+            }
+            cbItems.SetSelectedIndex(0);
+
+            ShowProperties();
+        }
+
+        function ShowProperties() {
+            chbGroupVisible.SetChecked(!GetNavBarGroup() ? false : GetNavBarGroup().GetVisible());
+            chbGroupExpanded.SetChecked(!GetNavBarGroup() ? false : GetNavBarGroup().GetExpanded());
+            chbItemEnabled.SetChecked(!GetNavBarItem() ? false : GetNavBarItem().GetEnabled());
+            chbItemVisible.SetChecked(!GetNavBarItem() ? false : GetNavBarItem().GetVisible());
+            chbItemSelected.SetChecked(GetNavBarItem() && GetNavBarItem() == NavBar.GetSelectedItem() ? true : false);
+        }
+        
+        function FillComboBoxGroups() {
+            for(var i = 0; i < NavBar.GetGroupCount() ; i++) {
+                var group = NavBar.GetGroup(i);
+                cbGroups.AddItem(group.GetText(), group.name);
+            }
+            cbGroups.SetSelectedIndex(0);
+        }
+    </script>
+    <style>
+        .custom-nav-bar {
+            width: 100%!important;
+            padding: 0!important;
+        }
+    </style>
+}
+
+@Html.DevExpress().NavBar(
+    settings =>
+    {
+        settings.Name = "NavBar";
+        settings.AllowSelectItem = true;
+        settings.EnableClientSideAPI = true;
+        settings.ControlStyle.CssClass = "custom-nav-bar";
+
+        settings.Groups.Add(group => {
+            group.Text = "Platform";
+            group.Name = "Platform";
+
+            group.Items.Add("Windows", "Windows");
+            group.Items.Add("Linux", "Linux");
+            group.Items.Add("Mac OS", "Mac OS");
+        });
+        settings.Groups.Add(group => {
+            group.Text = "SQL Server";
+            group.Name = "SQL";
+            group.Expanded = false;
+
+            group.Items.Add("MSSQL Server", "MSSQL Server");
+            group.Items.Add("Oracle", "Oracle");
+            group.Items.Add("InterBase", "InterBase");
+            group.Items.Add("MySql", "MySql");
+            group.Items.Add("DB2", "DB2");
+            group.Items.Add("Sybase", "Sybase");
+        });
+        settings.Groups.Add(group => {
+            group.Text = "Browser";
+            group.Name = "Browser";
+            group.Expanded = false;
+
+            group.Items.Add("Internet Explorer", "Internet Explorer");
+            group.Items.Add("Firefox", "Firefox");
+            group.Items.Add("Opera", "Opera");
+            group.Items.Add("Safari", "Safari");
+            group.Items.Add("Google Chrome", "Google Chrome");
+        });
+        settings.Groups.Add(group => {
+            group.Text = "Language";
+            group.Name = "Language";
+            group.Expanded = false;
+
+            group.Items.Add("C#", "C#");
+            group.Items.Add("Visual Basic", "Visual Basic");
+            group.Items.Add("Object Pascal", "Object Pascal");
+            group.Items.Add("J#", "J#");
+            group.Items.Add("C++", "C++");
+        });
+
+        settings.ClientSideEvents.ExpandedChanging = "function(s, e) { GroupExpandedChanging(e); }";
+        settings.ClientSideEvents.ExpandedChanged = "function(s, e) { GroupExpandedChanged(e); }";
+        settings.ClientSideEvents.ItemClick = "function(s, e) { SelectedItemChanged(e); }";
+    }).GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+    settings.Name = "FormLayoutSettings";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.Items.AddGroupItem(group => {
+        group.Caption = "Options";
+        group.Items.Add(item => {
+            item.Caption = "Client Visible";
+            item.Name = "chbClientVisible";
+            item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+            CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+            checkBoxSettings.Checked = true;
+            checkBoxSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { NavBar.SetVisible(chbClientVisible.GetChecked()) }";
+        });
+    });
+
+    settings.Items.AddGroupItem(group => {
+        group.Caption = "Group settings";
+        group.Items.Add(item => {
+            item.Caption = "Choose group:";
+            item.Name = "cbGroups";
+            item.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+            ComboBoxSettings comboBoxSettings = (ComboBoxSettings)item.NestedExtensionSettings;
+            comboBoxSettings.SelectedIndex = 0;
+            comboBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e) { ChangeActiveGroup(); }";
+        });
+        group.Items.Add(item => {
+            item.Caption = "Visible";
+            item.Name = "chbGroupVisible";
+            item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+            CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+            checkBoxSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { ToggleGroupVisible(); }";
+        });
+        group.Items.Add(item => {
+            item.Caption = "Expanded";
+            item.Name = "chbGroupExpanded";
+            item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+            CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+            checkBoxSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { ToggleGroupExpanded(); }";
+        });
+    });
+
+    settings.Items.AddGroupItem(group => {
+        group.Caption = "Item settings";
+        group.Items.Add(item => {
+            item.Caption = "Choose item:";
+            item.Name = "cbItems";
+            item.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+            ComboBoxSettings comboBoxSettings = (ComboBoxSettings)item.NestedExtensionSettings;
+            comboBoxSettings.SelectedIndex = 0;
+            comboBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e) { ChangeSelectedItem(); }";
+        });
+        group.Items.Add(item => {
+            item.Caption = "Enabled";
+            item.Name = "chbItemEnabled";
+            item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+            CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+            checkBoxSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { ToggleItemEnabled(); }";
+        });
+        group.Items.Add(item => {
+            item.Caption = "Visible";
+            item.Name = "chbItemVisible";
+            item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+            CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+            checkBoxSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { ToggleItemVisible(); }";
+        });
+        group.Items.Add(item => {
+            item.Caption = "Select";
+            item.Name = "chbItemSelected";
+            item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+            CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+            checkBoxSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { ToggleItemSelected(); }";
+        });
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 300,
+        ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+    });
+}).GetHtml()
+}

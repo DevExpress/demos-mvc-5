@@ -1,0 +1,15 @@
+﻿@{
+    ViewDataDictionary viewData = new ViewDataDictionary();
+    viewData["Controller"] = "FloatingActionButton";
+    viewData["Action"] = "FloatingActionButtonForGridViewPage";
+}
+
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@this.GetUrlContentWithVersionSuffix("~/Content/DeviceViewer.css")" />
+}
+
+@section DeviceViewerRegion {
+    @{
+        Html.RenderPartial("DeviceViewer", viewData);
+    }
+}

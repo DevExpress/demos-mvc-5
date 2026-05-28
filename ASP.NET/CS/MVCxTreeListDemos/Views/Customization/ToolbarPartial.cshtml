@@ -1,0 +1,84 @@
+﻿@using DevExpress.Web.ASPxThemes;
+
+@Html.DevExpress().TreeList(settings => {
+    settings.Name = "Mailbox";
+    settings.CallbackRouteValues = new { Action = "ToolbarPartial", Controller = "Customization" };
+    settings.SettingsEditing.AddNewNodeRouteValues = new { Action = "ToolbarAddNewPostPartial", Controller = "Customization" };
+    settings.SettingsEditing.DeleteNodeRouteValues = new { Action = "ToolbarDeletePostPartial", Controller = "Customization" };
+
+
+    settings.Toolbars.Add(t => {
+        t.SettingsAdaptivity.Enabled = true;
+        t.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+
+        t.ItemAlign = GridToolbarItemAlign.Justify;
+        t.Items.Add(i => {
+            i.Name = "Title";
+            i.ItemStyle.Width = Unit.Percentage(100);
+            i.SetTemplateContent(@"
+                <div class=""title"">
+                    <span>Mailbox</span>
+                </div>
+            ");
+        });
+        t.Items.Add(TreeListToolbarCommand.NewRoot, true).Image.IconID = IconID.MailNewmail16x16office2013;
+        t.Items.Add(TreeListToolbarCommand.New).Image.IconID = IconID.MailSend16x16office2013;
+        t.Items.Add(TreeListToolbarCommand.Update).Visible = false;
+        t.Items.Add(TreeListToolbarCommand.Cancel).Visible = false;
+        t.Items.Add(TreeListToolbarCommand.Delete, true).Image.IconID = IconID.EditDelete16x16office2013;
+        t.Items.Add(TreeListToolbarCommand.Refresh, true).Image.IconID = IconID.ActionsRefresh16x16office2013;
+    });
+
+    settings.KeyFieldName = "PostID";
+    settings.ParentFieldName = "ParentID";
+    settings.Columns.Add(c => {
+        c.FieldName = "From";
+        c.EditFormSettings.Visible = DefaultBoolean.False;
+    });
+    settings.Columns.Add("Subject");
+    settings.Columns.Add(c => {
+        c.FieldName = "Text";
+        c.Caption = "Message";
+        c.AllowEllipsisInText = DefaultBoolean.True;
+        c.EditFormSettings.VisibleIndex = 2;
+        c.EditorProperties().Memo(p => {
+            p.Rows = 6;
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "PostDate";
+        c.Caption = "Date Created";
+        c.CellStyle.HorizontalAlign = HorizontalAlign.Right;
+        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        c.EditFormSettings.Visible = DefaultBoolean.False;
+        c.EditorProperties().DateEdit(p => {
+            p.DisplayFormatString = "t";
+        });
+    });
+
+    settings.SettingsText.ToolbarNew = "Reply";
+    settings.SettingsText.ToolbarNewRoot = "New Email";
+    settings.SettingsEditing.Mode = TreeListEditMode.EditFormAndDisplayNode;
+    settings.SettingsEditing.EditFormColumnCount = 1;
+    settings.SettingsEditing.ConfirmDelete = true;
+    settings.SettingsBehavior.AllowFocusedNode = true;
+
+    settings.ControlStyle.CssClass = "mailbox";
+    settings.Width = Unit.Percentage(100);
+    settings.ClientSideEvents.BeginCallback = "TreeList_BeginCallback";
+
+    settings.BeforeGetCallbackResult = (s, e) => {
+        var treeList = (MVCxTreeList)s;
+        bool displayUpdateCancelButtons = treeList.EditingNodeKey != null || treeList.IsNewNodeEditing;
+        foreach(TreeListToolbarItem item in treeList.Toolbars[0].Items) {
+            if(item.Name == "Title")
+                continue;
+            item.Visible = !(displayUpdateCancelButtons ^ (item.Command == TreeListToolbarCommand.Update || item.Command == TreeListToolbarCommand.Cancel));
+        }
+    };
+    settings.PreRender = (sender, e) => {
+        var treeList = (MVCxTreeList)sender;
+        treeList.ExpandToLevel(3);
+    };
+
+}).SetEditErrorText(ViewBag.EditNodeError).Bind(Model).GetHtml()

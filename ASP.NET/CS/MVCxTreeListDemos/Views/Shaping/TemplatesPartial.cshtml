@@ -1,0 +1,32 @@
+﻿@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "Shaping", Action = "TemplatesPartial" };
+    settings.CustomDataActionRouteValues = new { Controller = "Shaping", Action = "LoadNotes" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.KeyFieldName = "ID";
+    settings.ParentFieldName = "ParentID";
+
+    settings.Columns.Add(c => {
+        c.Caption = "Fish Catalog";
+        c.AllowSort = DefaultBoolean.False;
+    });
+
+    settings.SetDataCellTemplateContent(c => {
+        var fish = c.TreeList.FindNodeByKeyValue(c.NodeKey).DataItem as BioLife;
+        Html.RenderPartial("TemplatesContentPartial", fish);
+    });
+
+    settings.ClientSideEvents.CustomDataCallback = "ShowNotes";
+
+    settings.SettingsPager.Mode = TreeListPagerMode.ShowPager;
+    settings.SettingsPager.PageSize = 5;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+    settings.SettingsPager.EnableAdaptivity = true;
+
+    settings.Styles.Cell.Paddings.PaddingTop = Unit.Pixel(2);
+    settings.Styles.Cell.Paddings.PaddingBottom = Unit.Pixel(2);
+    settings.Styles.Cell.Wrap = DefaultBoolean.True;
+
+}).Bind(Model).GetHtml()

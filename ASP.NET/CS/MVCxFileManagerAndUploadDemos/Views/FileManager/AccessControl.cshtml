@@ -1,0 +1,61 @@
+﻿@model string
+@{ DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(350); }
+<script type="text/javascript">
+    function Roles_SelectedIndexChanged(s, e) {
+        $('form').submit();
+    }
+</script>
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "FormLayoutSettings";
+    settings.ColCount = 5;
+    settings.ShowItemCaptionColon = false;
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.Items.AddGroupItem(g =>
+    {
+        g.Caption = "Roles";
+        g.Width = Unit.Percentage(100);
+        g.Items.Add(i =>
+        {
+            i.Caption = "Current Role";
+            i.SetNestedContent(() =>
+            {
+                Html.DevExpress().RadioButtonList(rbSettings =>
+                {
+                    rbSettings.Name = "securityRole";
+                    rbSettings.Theme = DemoHelper.Instance.Theme;
+                    rbSettings.Width = Unit.Percentage(100);
+                    rbSettings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    rbSettings.Properties.CaptionStyle.Font.Bold = true;
+                    rbSettings.Properties.CaptionCellStyle.Paddings.Padding = 0;
+                    rbSettings.ControlStyle.Border.BorderWidth = 0;
+                    rbSettings.Properties.RootStyle.CssClass = "OptionsBottomMargin";
+                    rbSettings.Properties.ClientSideEvents.SelectedIndexChanged = "Roles_SelectedIndexChanged";
+                }).BindList(FileManagerDemoHelper.GetSecurityRoles()).Bind(Session["SecurityRole"]).Render();
+
+            });
+        });
+    });
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings
+    {
+        ColumnMinWidth = 330,
+        ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+    });
+}).GetHtml()
+}
+@Html.Partial("AccessControlPartial", Model)
+<br />
+<p class="Note">
+    <b>Allowed Extensions</b>: .jpg, .jpeg, .gif, .rtf, .txt, .avi, .png, .mp3, .xml, .doc, .pdf
+</p>
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

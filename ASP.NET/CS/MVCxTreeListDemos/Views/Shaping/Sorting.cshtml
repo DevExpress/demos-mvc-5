@@ -1,0 +1,40 @@
+﻿@model IEnumerable
+
+@section AdditionalResources {
+    <script>
+        function onbtnClick(s, e) {
+            var colName = s.GetText() === "Department" ? "DepartmentName" : s.GetText();
+            treeList.SortBy(colName);
+        }
+        function onSelectedIndexChanged(s, e) {
+            treeList.SortBy(s.GetSelectedItem().text);
+        }
+    </script>
+}
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().Label(settings => {
+                settings.Name = "lblSortText";
+                settings.Text = "Sort by: ";
+                settings.Theme = DemoHelper.Instance.Theme;
+            }).GetHtml()
+            @RenderButton("btnDepartment", "Department")
+            @RenderButton("btnLocation", "Location")
+            @RenderButton("btnBudget", "Budget")
+        </div>
+    </div>
+}
+@Html.Partial("SortingPartial", Model)
+
+@functions {
+    MvcHtmlString RenderButton(string name, string Text) {
+        return Html.DevExpress().Button(settings => {
+            settings.Name = name;
+            settings.Text = Text;
+            settings.Theme = DemoHelper.Instance.Theme;
+            settings.ClientSideEvents.Click = "onbtnClick";
+        }).GetHtml();
+    }
+}

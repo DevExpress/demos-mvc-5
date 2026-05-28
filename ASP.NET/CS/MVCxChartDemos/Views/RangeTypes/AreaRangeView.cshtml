@@ -1,0 +1,185 @@
+﻿@model ChartRangeDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(325);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartRangeDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.CrosshairEnabled = DefaultBoolean.True;
+    settings.ToolTipEnabled = DefaultBoolean.False;
+    
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+        l.AlignmentVertical = LegendAlignmentVertical.Top;
+        l.Direction = LegendDirection.LeftToRight;
+    });    
+
+    settings.Series.Add(s => {
+        s.Name = SourceOfEnergy.EuropeBrent;
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetRangeDataMembers("Date", "Min", "Max");
+        s.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        s.CrosshairLabelPattern = "Month: {A:MMMM}<br/>Min Price: ${V1:0.00}<br/>Max Price: ${V2:0.00}";
+        s.Views().RangeAreaSeriesView(v => {
+            v.Transparency = 140;
+            v.Border1.Color = System.Drawing.ColorTranslator.FromHtml("#1BAE49");
+            v.Border1.Thickness = 2;
+            v.Border2.Color = System.Drawing.ColorTranslator.FromHtml("#D80079");
+            v.Border2.Thickness = 2;
+
+            v.Marker1Visibility = options.ShowMarkers ? DefaultBoolean.True : DefaultBoolean.False;
+            v.Marker1.Size = options.MarkerSize;
+            v.Marker1.Kind = options.MarkerKind;
+            if (v.Marker1.Kind == MarkerKind.Star)
+                v.Marker1.StarPointCount = options.StarPointCount;
+
+            v.Marker2Visibility = options.ShowMarkers2 ? DefaultBoolean.True : DefaultBoolean.False;
+            v.Marker2.Size = options.Marker2Size;
+            v.Marker2.Kind = options.Marker2Kind;
+            if (v.Marker2.Kind == MarkerKind.Star)
+                v.Marker2.StarPointCount = options.StarPoint2Count;
+            
+            v.SeriesLabel(l => {
+                l.Kind = options.LabelKind;
+            });
+        });
+    });
+
+    settings.XYDiagram(d => {
+        d.AxisY.Title.Text = "$ per barrel";
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+        d.AxisY.GridLines.MinorVisible = true;
+        d.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Month;
+        d.AxisX.DateTimeScaleOptions.GridAlignment = DateTimeGridAlignment.Month;
+        d.AxisX.DateTimeScaleOptions.AutoGrid = true;
+        d.AxisX.WholeRange.AutoSideMargins = false;
+        d.AxisX.Label.TextPattern = "{A:MMMM}";
+        d.AxisY.WholeRange.AlwaysShowZeroLevel = false;
+        d.AxisY.WholeRange.AutoSideMargins = true;
+        d.AxisY.Interlaced = true;
+        d.AxisY.Label.TextPattern = "{V:N0}";
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Crude Oil Prices in 2015"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.eia.gov"
+    });
+}).Bind(Model.Data).GetHtml()
+
+<script type="text/javascript">
+    function UpdateMarkerOptionsState() {
+        var showMarkers = ShowMarkers.GetChecked();
+        MarkerSize.SetEnabled(showMarkers);
+        MarkerKindString.SetEnabled(showMarkers);
+    }
+    function UpdateMarker2OptionsState() {
+        var showMarkers = ShowMarkers2.GetChecked();
+        Marker2Size.SetEnabled(showMarkers);
+        Marker2KindString.SetEnabled(showMarkers);
+    }
+    function UpdateLabelOptionState() {
+        LabelKind.SetEnabled(ShowLabels.GetChecked());
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Value1 Series Settings";
+            group.Items.Add(model => model.ShowMarkers, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateMarkerOptionsState(); }";
+                });
+            });
+            group.Items.Add(model => model.MarkerSize, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowMarkers;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerSizes());
+                });
+            });
+            group.Items.Add(model => model.MarkerKindString, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowMarkers;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerKinds());
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Value2 Series Settings";
+            group.Items.Add(model => model.ShowMarkers2, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateMarker2OptionsState(); }";
+                });
+            });
+            group.Items.Add(model => model.Marker2Size, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowMarkers2;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerSizes());
+                });
+            });
+            group.Items.Add(model => model.Marker2KindString, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowMarkers2;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerKinds());
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateLabelOptionState(); }";
+                });
+            });
+            group.Items.Add(model => model.LabelKind, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowLabels;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetLabelKinds());
+                });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 305,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

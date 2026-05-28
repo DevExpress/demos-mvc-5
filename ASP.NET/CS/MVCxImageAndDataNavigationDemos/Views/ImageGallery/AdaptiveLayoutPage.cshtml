@@ -1,0 +1,89 @@
+﻿@using DevExpress.Web.Demos
+@{ Layout = null; }
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head runat="server">
+        <title>ImageGallery Fullscreen demo - Adaptive layout - ASP.NET MVC ImageGallery Extension</title>
+        <meta id="IECompatibilityMeta" http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        @Html.DevExpress().GetStyleSheets(
+            new StyleSheet { ExtensionType = ExtensionType.ImageGallery }
+        )
+        <style type="text/css">
+            body, html {
+                margin: 0;
+                padding: 0;
+                font-family: 'Segoe UI Light', 'HelveticaNeue-Light', Tahoma, Geneva, sans-serif;
+                background-color: white;
+            }
+
+            h1 {
+                font-weight: normal;
+                font-size: 38px;
+                margin: 0;
+                padding: 10px;
+                padding-top: 26px;
+            }
+
+            .container {
+                margin: 0 auto;
+                align-content: center;
+            }
+
+            .topmenu {
+                background-image: url('@(Url.Content("~/Content/ImageGallery/sky_bk.jpg"))');
+                background-color: #162747;
+                color: #ffffff;
+                padding: 0px;
+            }
+
+            .menu {
+                font-size: 18pt;
+                background-color: rgba(0, 1, 9, 0.5);
+                padding: 10px;
+                padding-top: 6px;
+                padding-bottom: 8px;
+            }
+
+            .menu > a {
+                color: #fff;
+                cursor: pointer;
+                margin-right: 12px;
+                text-decoration: none;
+            }
+
+            .content {
+                padding: 8px;
+            }
+        </style>
+        
+        @Html.DevExpress().GetScripts(new Script { ExtensionType = ExtensionType.ImageGallery })
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $(window).bind('touchmove', function (e) {
+                    if (imageGallery.GetPopup().IsVisible())
+                        e.preventDefault();
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="topmenu">
+                <h1>ImageGallery</h1>
+                <div class="menu">
+                    <a href="javascript:void(1);">Home</a>
+                    <a href="javascript:void(2);">Portfolio</a>
+                    <a href="javascript:void(3);">Contacts</a>
+                </div>
+            </div>
+            <div class="content">
+                @Html.Partial("AdaptiveLayoutPagePartial")
+            </div>
+        </div>
+    </body>
+</html>

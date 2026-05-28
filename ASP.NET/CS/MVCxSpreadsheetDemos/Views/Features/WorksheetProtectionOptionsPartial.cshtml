@@ -1,0 +1,26 @@
+﻿@model SpreadsheetWorksheetProtectionOptions
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "OptionsFormLayout";
+	settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+
+	settings.Items.AddGroupItem(groupSettings => {
+		groupSettings.Caption = "Options";
+		groupSettings.Items.Add(i => i.FormatCells);
+		groupSettings.Items.Add(i => i.FormatColumns);
+		groupSettings.Items.Add(i => i.FormatRows);
+		groupSettings.Items.Add(i => i.InsertColumns);
+		groupSettings.Items.Add(i => i.InsertRows);
+		groupSettings.Items.Add(i => i.InsertHyperlinks);
+		groupSettings.Items.Add(i => i.DeleteColumns);
+		groupSettings.Items.Add(i => i.DeleteRows);
+		groupSettings.Items.Add(i => i.Sort);
+		groupSettings.Items.Add(i => i.UseAutoFilter);
+		groupSettings.Items.Add(i => i.EditObjects);
+	});
+	
+	DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 210,
+        ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+    });
+}).Bind(Model).GetHtml()

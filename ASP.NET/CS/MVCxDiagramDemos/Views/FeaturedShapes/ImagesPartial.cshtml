@@ -1,0 +1,33 @@
+﻿@model DevExpress.Web.Demos.Models.OrgItemsModel
+
+@Html.DevExpress().Diagram(settings => {
+    settings.Name = "Diagram";
+    settings.Width = Unit.Percentage(100);
+    settings.Height = 700;
+
+    settings.SettingsToolbox.Groups.Add(g => {
+        g.Category = DevExpress.Web.ASPxDiagram.DiagramShapeCategory.General;
+    });
+    settings.SettingsToolbox.Groups.Add(g => {
+        g.Category = DevExpress.Web.ASPxDiagram.DiagramShapeCategory.OrgChart;
+    });
+
+    settings.BatchUpdateRouteValues = new { Controller = "FeaturedShapes", Action = "NodesAndEdgesUpdate" };
+    settings.CallbackRouteValues = new { Controller = "FeaturedShapes", Action = "ImagesPartial" };
+
+    settings.Mappings.Node.Key = "ID";
+    settings.Mappings.Node.Type = "Type";
+    settings.Mappings.Node.Text = "Text";
+    settings.Mappings.Node.ImageUrl = "Picture";
+
+    settings.Mappings.Edge.Key = "ID";
+    settings.Mappings.Edge.FromKey = "FromID";
+    settings.Mappings.Edge.ToKey = "ToID";
+
+    settings.SimpleView = true;
+    settings.SettingsGrid.Visible = false;
+    settings.Units = DevExpress.Web.ASPxDiagram.DiagramUnit.Px;
+    settings.SettingsAutoLayout.Type = DevExpress.Web.ASPxDiagram.DiagramAutoLayout.Tree;
+    settings.SettingsAutoLayout.Orientation = Orientation.Horizontal;
+
+}).Bind(Model.Items, Model.Links).GetHtml()

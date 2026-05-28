@@ -1,0 +1,20 @@
+﻿@model SettingsDemoOptions
+
+@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "DocumentManagement", Action = "SettingsPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(600);
+
+    settings.Settings.Behavior.Assign(Model.BehaviorSettings);
+    settings.Settings.DocumentCapabilities.Assign(Model.DocumentCapabilitiesSettings);
+    
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ActiveTabIndex = 0;
+    
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        richEdit.Focus();
+    };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "AlbertEinstein.docx")).GetHtml()

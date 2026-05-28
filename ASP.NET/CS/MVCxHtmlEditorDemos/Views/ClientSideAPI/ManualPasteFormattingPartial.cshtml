@@ -1,0 +1,35 @@
+﻿@Html.DevExpress().HtmlEditor(
+    settings =>
+    {
+        settings.Name = "heManualPasteFormatting";
+        settings.CallbackRouteValues = new { Controller = "ClientSideAPI", Action = "ManualPasteFormattingPartial" };
+        settings.Height = Unit.Pixel(380);
+        settings.Width = Unit.Percentage(100);
+
+        string htmlContentPath = HttpContext.Current.Server.MapPath("~/Content/HtmlEditor/DemoHtml/MobileApp.html");
+        settings.Html = System.IO.File.ReadAllText(htmlContentPath);
+
+        settings.ClientSideEvents.BeforePaste = "BeforePasteHandler";
+        settings.SettingsHtmlEditing.EnablePasteOptions = true;
+        
+        HtmlEditorToolbar toolbar = new HtmlEditorToolbar();
+        toolbar.Items.Add(new ToolbarUndoButton());
+        toolbar.Items.Add(new ToolbarRedoButton());
+        ToolbarFontNameEdit fontNameEdit = new ToolbarFontNameEdit(true);
+        fontNameEdit.CreateDefaultItems();
+        toolbar.Items.Add(fontNameEdit);
+        ToolbarFontSizeEdit fontSizeEdit = new ToolbarFontSizeEdit(true);
+        fontSizeEdit.CreateDefaultItems();
+        toolbar.Items.Add(fontSizeEdit);
+        toolbar.Items.Add(new ToolbarBoldButton());
+        toolbar.Items.Add(new ToolbarItalicButton());
+        toolbar.Items.Add(new ToolbarUnderlineButton());
+        toolbar.Items.Add(new ToolbarStrikethroughButton());
+        toolbar.Items.Add(new ToolbarJustifyLeftButton(true));
+        toolbar.Items.Add(new ToolbarJustifyCenterButton());
+        toolbar.Items.Add(new ToolbarJustifyRightButton());
+        toolbar.Items.Add(new ToolbarInsertImageDialogButton(true));
+        settings.Toolbars.Add(toolbar);
+
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }).GetHtml()

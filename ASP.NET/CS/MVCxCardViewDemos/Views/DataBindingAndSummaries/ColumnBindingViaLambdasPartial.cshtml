@@ -1,0 +1,19 @@
+﻿@(
+    Html.DevExpress().CardView<EditableCustomer>(settings => {
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "DataBindingAndSummaries", Action = "ColumnBindingViaLambdasPartial" };
+        settings.Width = Unit.Percentage(100);
+        
+        settings.SettingsPager.EnableAdaptivity = true;
+
+        settings.KeyFields(m => m.CustomerID);
+        settings.Columns.Add(m => m.ContactName, column =>  {
+            column.SortIndex = 0;
+            column.SortOrder = ColumnSortOrder.Ascending;
+        });
+        settings.Columns.Add(m => m.CompanyName);
+        settings.Columns.Add(m => m.Country);
+        settings.Columns.Add(m => m.City);
+        settings.Columns.Add(m => m.Region);
+    }).Bind(Model).GetHtml()
+)

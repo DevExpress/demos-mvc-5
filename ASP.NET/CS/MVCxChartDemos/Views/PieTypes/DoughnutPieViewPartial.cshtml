@@ -1,0 +1,80 @@
+﻿@model ChartPieDoughnutDemoOptions
+
+@{
+    ChartPieDoughnutDemoOptions options = Model;
+    if(options != null) {
+        @Html.DevExpress().Chart(settings => {
+       settings.Name = "chart";
+       settings.BorderOptions.Visibility = DefaultBoolean.False;
+       settings.Height = 500;
+       settings.Width = 920;
+       settings.PaletteName = "Office";
+       settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+
+       settings.Legends.Default(l => {
+           l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+           l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+           l.Direction = LegendDirection.LeftToRight;
+           l.MaxHorizontalPercentage = 50;
+           l.Border.Visibility = DefaultBoolean.False;
+       });
+
+       settings.Series.Add(s => {
+           s.Name = "Counties";
+           s.ArgumentDataMember = "Name";
+           s.ValueDataMembers[0] = "Area";
+           s.LegendTextPattern = options.ValueAsPercent ? "{A} : {VP:P0}" : "{A} : {V}";
+           s.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+           s.Views().DoughnutSeriesView(v => {
+               v.HoleRadiusPercent = options.HoleRadiusPercent;
+               v.TotalLabel.Visible = options.ShowTotalLabel;
+               v.TotalLabel.TextPattern = "Total\r\n{TV:#.##}M km²";
+               v.SeriesLabel(l => {
+                   l.Position = options.LabelPosition;
+                   l.TextPattern = options.ValueAsPercent ? "{VP:P0}" : "{V}";
+                   l.TextColor = Color.Black;
+                   l.BackColor = Color.Transparent;
+                   l.DXFont = new DXFont("Tahoma", 8, DXFontStyle.Bold);
+                   l.LineVisibility = DefaultBoolean.True;
+                   l.Border.Visibility = DefaultBoolean.False;
+               });
+           });
+       });
+
+       settings.ClientSideEvents.ObjectSelected = "UpdatePieSliseState";
+       settings.ClientSideEvents.ObjectHotTracked = "UpdateCursor";
+
+       settings.BoundDataChanged = (s, e) => {
+           MVCxChartControl chart = (MVCxChartControl)s;
+           chart.Series[0].Views().DoughnutSeriesView(v => {
+               if(options.ExplodePoint != null) {
+                   SeriesPoint explodedPoint = null;
+                   foreach(SeriesPoint point in chart.Series[0].Points) {
+                       if(point.Argument == options.ExplodePoint) {
+                           explodedPoint = point;
+                           break;
+                       }
+                   }
+                   if(explodedPoint != null)
+                       v.ExplodedPoints.Add(explodedPoint);
+               }
+               else
+                   v.ExplodeMode = options.ExplodeMode;
+           });
+       };
+
+       settings.Titles.Add(new ChartTitle() {
+           DXFont = new DXFont("Tahoma", 18),
+           Text = "Area of Countries"
+       });
+
+       settings.Titles.Add(new ChartTitle() {
+           Alignment = StringAlignment.Far,
+           Dock = ChartTitleDockStyle.Bottom,
+           DXFont = new DXFont("Tahoma", 8),
+           TextColor = Color.Gray,
+           Text = "From www.nationmaster.com"
+       });
+   }).Bind(Model.Data).GetHtml()
+        }
+    }

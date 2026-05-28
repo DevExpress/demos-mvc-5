@@ -1,0 +1,127 @@
+﻿@model ChartStackedBarDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(340);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartStackedBarDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.Width = 920;
+    settings.Height = 500;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+    });
+
+
+    settings.Series.Template(t => {
+        t.Views().StackedBarSeriesView(v => {
+            v.SeriesLabel(l => {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+                l.TextPattern = "{V:0,,.0}";
+                l.DXFont = new DXFont("Tahoma", 8, DXFontStyle.Bold);
+                l.Position = options.LabelPosition;
+                l.TextOrientation = options.TextOrientation;
+                l.Indent = options.LabelIndent;
+            });
+        });
+        t.SetDataMembers("Country", "Population");
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    });
+
+    settings.XYDiagram(d => {
+        d.Rotated = true;
+        d.AxisY.Interlaced = true;
+        d.AxisY.Title.Text = "Millions";
+        d.AxisY.GridLines.MinorVisible = true;
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+        d.AxisY.Label.TextPattern = "{V:0,,}";
+        d.DefaultPane.StackedBarTotalLabel.Visible = options.ShowTotalLabels;
+        d.DefaultPane.StackedBarTotalLabel.TextPattern = "Total\r\n{TV: 0,,.0}";
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Male Age Structure"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.cia.gov"
+    });
+}).Bind(Model.Data, seriesDataMember: "Age").GetHtml()
+
+<script type="text/javascript">
+    function UpdateLabelOptionsState() {
+        var showLabels = ShowLabels.GetChecked();
+        LabelPosition.SetEnabled(showLabels);
+        var labelPosition = LabelPosition.GetValue();
+        LabelIndent.SetEnabled(showLabels && (labelPosition.indexOf('Inside') > 0));
+        TextOrientation.SetEnabled(showLabels);
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateLabelOptionsState(); }";
+                });
+            });
+            group.Items.Add(model => model.LabelPosition, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowLabels;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetBarLabelPositions(true));
+                    comboBox.Properties.ClientSideEvents.ValueChanged = "function(s, e) { UpdateLabelOptionsState(); }";
+                });
+            });
+            group.Items.Add(model => model.LabelIndent, item => {
+                item.NestedExtension().SpinEdit(spinEdit => {
+                    spinEdit.Properties.MinValue = 1;
+                    spinEdit.Properties.MaxValue = 10000;
+                    spinEdit.ClientEnabled = Model.ShowLabels && (Model.LabelPosition == BarSeriesLabelPosition.BottomInside || Model.LabelPosition == BarSeriesLabelPosition.TopInside);
+                });
+            });
+            
+            group.Items.Add(model => model.TextOrientation, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowLabels;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                });
+            });
+            group.Items.Add(model => model.ShowTotalLabels);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings { ColumnMinWidth = 320 });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

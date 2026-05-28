@@ -1,0 +1,13 @@
+﻿@model SpreadsheetDocument
+
+@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "SpreadsheetAPI", Action = "CellValueChangedPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.ShowConfirmOnLosingChanges = false;
+        settings.RibbonMode = SpreadsheetRibbonMode.None;
+        settings.ShowFormulaBar = false;
+        settings.ShowSheetTabs = false;
+    }
+).Open(Model.DocumentId, Model.DocumentFormat, () => { return Model.Document; }).GetHtml()

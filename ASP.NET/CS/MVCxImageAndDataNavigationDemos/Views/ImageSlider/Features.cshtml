@@ -1,0 +1,106 @@
+﻿@model ImageSliderFeaturesDemoOptions
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(660);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(510);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+<script type="text/javascript">
+    function onPredefinedScenarioChanged() {
+        if(PredefinedScenario.GetValue())
+            $('form').submit();
+    };
+    function onEditorsChanged() {
+        PredefinedScenario.SetValue(null);
+    }
+    MVCxClientGlobalEvents.AddControlsInitializedEventHandler(function() {
+        ASPxClientEdit.AttachEditorModificationListener(onEditorsChanged, function(control) {
+            return control.GetParentControl() === SettingsFormLayout
+        });
+    });
+</script>
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(s => {
+                s.Name = "PredefinedScenario";
+                s.Properties.Caption = "Predefined Scenarios";
+                s.Theme = DemoHelper.Instance.Theme;
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "function() { onPredefinedScenarioChanged(); }";
+            }).BindList(ImageSliderDemoHelper.GetPredefinedScenarios(Model.PredefinedScenario)).Bind(Model.PredefinedScenario).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.DevExpress().ImageSlider(
+    settings => {
+        settings.Name = "imageSlider";
+        settings.EnableTheming = false;
+        settings.Width = Unit.Percentage(100);
+
+        settings.ShowNavigationBar = Model.ShowNavigationBar;
+        settings.SettingsImageArea.Assign(Model.SettingsImageArea);
+        settings.SettingsNavigationBar.Assign(Model.SettingsNavigationBar);
+        settings.SettingsBehavior.Assign(Model.SettingsBehavior);
+
+        settings.ClientSideEvents.Init = "function(s, e) { s.Focus(); }";
+    }
+).BindToXML(Server.MapPath("~/App_Data/people.xml"), "//items/*").GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(g => {
+            g.Caption = "Image Area Settings";
+            g.Items.Add(m => m.SettingsImageArea.EnableLoopNavigation);
+            g.Items.Add(m => m.SettingsImageArea.ImageSizeMode);
+            g.Items.Add(m => m.SettingsImageArea.AnimationType);
+            g.Items.Add(m => m.SettingsImageArea.NavigationDirection);
+            g.Items.Add(m => m.SettingsImageArea.ItemTextVisibility);
+            g.Items.Add(m => m.SettingsImageArea.NavigationButtonVisibility);
+        });
+        s.Items.AddGroupItem(g => {
+            g.Caption = "Navigation Bar Settings";
+            g.Items.Add(m => m.SettingsNavigationBar.Position);
+            g.Items.Add(m => m.SettingsNavigationBar.Mode);
+            g.Items.Add(m => m.SettingsNavigationBar.ThumbnailsModeNavigationButtonVisibility);
+            g.Items.Add(m => m.SettingsNavigationBar.ThumbnailsNavigationButtonPosition);
+            g.Items.Add(m => m.SettingsNavigationBar.PagingMode);
+        });
+        s.Items.AddGroupItem(g => {
+            g.Caption = "Behavior Settings";
+            g.Items.Add(m => m.SettingsBehavior.AllowMouseWheel);
+            g.Items.Add(m => m.SettingsBehavior.EnablePagingGestures);
+            g.Items.Add(m => m.SettingsBehavior.EnablePagingByClick);
+            g.Items.Add(m => m.SettingsBehavior.ImageLoadMode);
+            g.Items.Add(m => m.SettingsBehavior.ExtremeItemClickMode);
+        });
+        s.Items.AddGroupItem(g => {
+            g.Caption = "Appearance";
+            g.Items.Add(m => m.ShowNavigationBar);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 480,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

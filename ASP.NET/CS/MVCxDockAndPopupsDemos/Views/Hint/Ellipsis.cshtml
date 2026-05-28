@@ -1,0 +1,16 @@
+﻿@model IEnumerable
+
+@section AdditionalResources {
+    <style type="text/css">
+        .dxgv[title] {
+            background-color: #fff2c0;
+        }
+    </style>
+}
+
+@Html.DevExpress().Hint(settings => {
+    settings.Name = "Hint";
+    settings.TargetSelector = ".dx-ellipsis";
+}).GetHtml()
+
+@Html.Partial("EllipsisPartial", Model)

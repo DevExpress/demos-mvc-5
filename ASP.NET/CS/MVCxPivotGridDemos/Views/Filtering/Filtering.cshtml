@@ -1,0 +1,39 @@
+﻿@section DemoOptionsTop {
+    <script>
+        function onShowClick(s, e) {
+            pivotGridWithFilter.ShowFilterEditor();
+        }
+        function onClearClick(s, e) {
+            pivotGridWithFilter.ClearFilter();
+        }
+        function onEnableChanged(s, e) {
+            pivotGridWithFilter.ChangeFilterEnabled();
+        }
+    </script>
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().Button(s => {
+                s.Name = "ShowFilter";
+                s.Text = "Show Filter Editor";
+                s.ClientSideEvents.Click = "onShowClick";
+            }).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().Button(s => {
+                s.Name = "ClearFilter";
+                s.Text = "Clear Filter";
+                s.ClientSideEvents.Click = "onClearClick";
+            }).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(s => {
+                s.Name = "EnableFilter";
+                s.Text = "Enable Filter";
+                s.Properties.ClientSideEvents.CheckedChanged = "onEnableChanged";
+                //s.Theme = DemoHelper.Instance.Theme;
+            }).Bind(true).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.Action("FilteringPartial")

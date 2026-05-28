@@ -1,0 +1,19 @@
+﻿@model IEnumerable
+@section DemoOptionsTop {
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="options">
+            <div class="options-item">
+                @Html.DevExpress().CheckBox(settings => {
+                    settings.Name = "EnableMergingGroups";
+                    settings.Text = "Enable Merging Groups";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.Checked = (bool)ViewBag.EnableMergingGroups;
+                    settings.Properties.ClientSideEvents.CheckedChanged = "function(s,e) { $('form').submit(); }";
+                }).GetHtml()
+            </div>
+        </div>
+    }
+}
+@Html.Partial("MergingGroupsPartial", Model)

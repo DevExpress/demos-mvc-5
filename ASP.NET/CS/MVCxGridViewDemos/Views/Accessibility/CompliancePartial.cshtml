@@ -1,0 +1,56 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "Accessibility", Action = "CompliancePartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.AccessibilityCompliant = true;
+    settings.Caption = "Products";
+
+    settings.KeyFieldName = "ProductID";
+    settings.CommandColumn.VisibleIndex = 0;
+    settings.CommandColumn.ShowSelectCheckbox = true;
+    settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.Page;
+    settings.CommandColumn.Width = Unit.Pixel(50);
+    settings.Columns.Add("ProductName").Width = Unit.Pixel(200);
+
+    settings.Columns.Add(c => {
+        c.FieldName = "CategoryID";
+        c.Caption = "Category";
+        c.Width = Unit.Pixel(100);
+        c.EditorProperties().ComboBox(cb => {
+            cb.DataSource = NorthwindDataProvider.GetCategories();
+            cb.TextField = "CategoryName";
+            cb.ValueField = "CategoryID";
+            cb.ValueType = typeof(int);
+            cb.DropDownStyle = DropDownStyle.DropDown;
+        });
+    });
+
+    settings.Columns.Add("UnitsOnOrder").Width = Unit.Pixel(100);
+
+    settings.Columns.Add(c => {
+        c.FieldName = "Discontinued";
+        c.ColumnType = MVCxGridViewColumnType.CheckBox;
+        c.Width = Unit.Pixel(100);
+    });
+
+    settings.Columns.Add("ReorderLevel").Width = Unit.Pixel(100);
+
+    settings.Columns.Add(c => {
+        c.FieldName = "UnboundDate";
+        c.ColumnType = MVCxGridViewColumnType.DateEdit;
+        c.UnboundType = DevExpress.Data.UnboundColumnType.DateTime;
+        c.UnboundExpression = "AddMonths(AddDays(Today(), [ReorderLevel]), -1)";
+        c.Caption = "Order Date";
+        c.Width = Unit.Pixel(100);
+    });
+
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowFilterRowMenu = true;
+    settings.SettingsPager.AllButton.Visible = true;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

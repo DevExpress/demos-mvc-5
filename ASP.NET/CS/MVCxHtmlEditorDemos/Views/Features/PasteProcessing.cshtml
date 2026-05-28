@@ -1,0 +1,50 @@
+﻿@model PasteProcessingOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(350);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("PasteProcessingPartial", Model)
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+    settings.Name = "FormLayoutSettings";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+
+    settings.Items.AddGroupItem(group => {
+        group.Caption = "Settings";
+        group.SettingsItems.ShowCaption = DefaultBoolean.False;
+
+        group.Items.Add(x => x.AllowSaveBinaryImageToServer).NestedExtension().CheckBox(x => { x.Text = "AllowSaveBinaryImageToServer"; });
+        group.Items.Add(x => x.ProcessRtfContentPastingOnServer).NestedExtension().CheckBox(x => { x.Text = "ProcessRtfContentPastingOnServer"; });
+    });
+    settings.Items.AddGroupItem(group => {
+        group.Caption = "Paste Filtering";
+        group.SettingsItemCaptions.Location = LayoutItemCaptionLocation.Top;
+        group.Items.Add(x => x.StyleAttributes).NestedExtensionType = FormLayoutNestedExtensionItemType.TokenBox;
+        group.Items.Add(x => x.StyleAttributeFilterMode);
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 350,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+       s.Name = "ApplyButton";
+       s.Text = "Apply Changes";
+       s.Theme = DemoHelper.Instance.Theme;
+       s.UseSubmitBehavior = true;
+   }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

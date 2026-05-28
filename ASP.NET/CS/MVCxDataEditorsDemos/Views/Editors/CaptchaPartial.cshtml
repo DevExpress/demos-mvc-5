@@ -1,0 +1,11 @@
+﻿@{
+    var options = Session["CaptchaOptions"] != null ? (CaptchaDemoOptions)Session["CaptchaOptions"] : CaptchaDemoOptions.Default;
+}
+
+@Html.DevExpress().Captcha(settings => {
+    settings.Name = "captcha";
+    settings.CallbackRouteValues = new { Controller = "Editors", Action = "CaptchaPartial" };
+    settings.TextBox.Position = DevExpress.Web.Captcha.ControlPosition.Bottom;
+    settings.CodeLength = options.CodeLength;
+    settings.CharacterSet = options.CharacterSet;
+}).GetHtml()

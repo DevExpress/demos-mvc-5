@@ -1,0 +1,32 @@
+﻿@model IEnumerable
+
+<script type="text/javascript">
+    var isResetRequired = false;
+
+    function OnSelectedCountryChanged() {
+        isResetRequired = true;
+        GridView.GetEditor("CityId").PerformCallback();
+    }
+
+    function CityComboBox_BeginCallback(s, e) {
+        e.customArgs["countryID"] = GridView.GetEditor("CountryId").GetValue();
+    }
+
+    function CityComboBox_EndCallback(s, e) {
+        if (isResetRequired) {
+            isResetRequired = false;
+            s.SetSelectedIndex(0);            
+        }
+    }
+
+    function Grid_BeginCallback(s, e) {
+        DXDemo.LoadAntiForgeryTokenInputValue(e.customArgs);
+    }
+
+</script>
+
+@using(Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    @Html.Partial("CascadingComboBoxesPartial", Model)
+}

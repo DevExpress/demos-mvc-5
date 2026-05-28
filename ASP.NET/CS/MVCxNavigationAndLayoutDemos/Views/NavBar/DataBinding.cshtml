@@ -1,0 +1,18 @@
+﻿@model DevExpress.Web.Demos.CategoriesData
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(450); }
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.DevExpress().NavBar(
+    settings =>
+    {
+        settings.Name = "nbDataBindingToModel";
+        settings.AutoCollapse = true;
+        settings.Width = Unit.Parse("100%");
+    }).Bind(Model).GetHtml()
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

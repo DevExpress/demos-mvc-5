@@ -1,0 +1,66 @@
+﻿@model MaskedData
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+@section AdditionalResources {
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+}
+@using(Html.BeginForm("TextBox", "Editors", FormMethod.Post, new { id = "validationForm" })) {
+<div>
+    <div class="container">
+        <div class="editor">
+            @Html.DevExpress().TextBox(settings => {
+                settings.Name = "textBox1";
+                settings.Width = Unit.Percentage(100);
+                settings.Properties.DisplayFormatString = "[ 00 - 00 - 00 ]";
+                settings.Text = "123456";
+            }).GetHtml()
+        </div>
+        <div class="content">
+            DisplayFormatString = "[ 00 - 00 - 00 ]"
+        </div>
+    </div>
+    <div class="container">
+        <div class="editor">
+            @Html.DevExpress().TextBox(settings => {
+                settings.Name = "textBox2";
+                settings.Width = Unit.Percentage(100);
+                settings.Properties.NullText = "Enter your name...";
+            }).GetHtml()
+        </div>
+        <div class="content">
+            NullText = "Enter your name..." 
+        </div>
+    </div>
+    <div class="container">
+        <div class="editor">
+            @Html.DevExpress().TextBox(settings => {
+                settings.Name = "textBox3";
+                settings.Width = Unit.Percentage(100);
+                settings.Properties.MaskSettings.Mask = "+1 (999) 000-0000";
+                settings.Properties.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.None;
+                settings.Properties.MaskSettings.ErrorText = "Invalid Phone Number";
+                settings.Properties.ValidationSettings.Display = Display.Dynamic;
+            }).GetHtml()
+        </div>
+        <div class="content">
+            MaskSettings.Mask = "+1 (999) 000-0000" 
+        </div>
+    </div>
+    <div class="container">
+        <div class="editor">
+            @Html.DevExpress().TextBoxFor(m => m.Phone, settings => {
+                settings.Name = "textBox4";
+                settings.Width = Unit.Percentage(100);
+                settings.Properties.ValidationSettings.Display = Display.Dynamic;
+            }).GetHtml()
+        </div>
+        <div class="content">
+            [Mask("+1 (999) 000-0000")]
+        </div>
+    </div>
+</div>
+}

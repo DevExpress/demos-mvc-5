@@ -1,0 +1,57 @@
+﻿@model bool
+
+@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        function onCheckedChanged(s, e) {
+            $("form").submit();
+        }
+    </script>
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(
+                settings => {
+                    settings.Name = "DisplayOverPanel";
+                    settings.Checked = Model;
+                    settings.Text = "Display the Loading Panel over a specific control";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.Properties.ClientSideEvents.CheckedChanged = "onCheckedChanged";
+                }
+            ).GetHtml()
+            @*@Html.CheckBox("DisplayOverPanel", Model, new { style = "vertical-align: middle" })*@
+            @*<label class="checkBox" for="DisplayOverPanel" style="vertical-align: middle">Display the Loading Panel over a specific control</label>*@
+        </div>
+    </div>
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("ExamplePartial")
+<div id="Panel" class="horizontal-center-aligned" style="max-width: 600px; border: Dashed 1px Gray; padding: 40px 0;">
+    <div style="display:table" class="horizontal-center-aligned">
+        @Html.DevExpress().Button(
+            settings => {
+                settings.Name = "Button";
+                settings.Text = "Show Loading Panel";
+                settings.ClientSideEvents.Click = "function(s, e) { CallbackPanel.PerformCallback(); }";
+                settings.Width = 160;
+            }
+        ).GetHtml()
+    </div>
+</div>
+@Html.DevExpress().LoadingPanel(
+    settings => {
+        settings.Name = "LoadingPanel";
+        settings.Modal = true;
+        settings.ContainerElementID = Model ? "Panel" : "";
+    }
+).GetHtml()
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

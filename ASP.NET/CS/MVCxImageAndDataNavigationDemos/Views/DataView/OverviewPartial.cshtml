@@ -1,0 +1,11 @@
+﻿@Html.DevExpress().DataView(settings => {
+    settings.Name = "dataView";
+    settings.CallbackRouteValues = new { Controller = "DataView", Action = "OverviewPartial" };
+    settings.SettingsTableLayout.RowsPerPage = 1;
+    settings.Styles.Item.Height = Unit.Percentage(100);
+    settings.SetItemTemplateContent(c => {
+        ViewContext.Writer.Write(
+            "<img style=\"width: 140px; height: 140px;\" src=\"" + Url.Content(DataBinder.Eval(c.DataItem, "PhotoUrl").ToString()) + "\" alt=\"\" />"
+        );
+    });
+}).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/Contacts.xml"), "//Contact").GetHtml()

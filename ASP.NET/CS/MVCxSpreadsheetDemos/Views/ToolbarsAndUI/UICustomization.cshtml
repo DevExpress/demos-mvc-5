@@ -1,0 +1,103 @@
+﻿@section AdditionalResources {
+    <style type="text/css">
+        .externalRibbon {
+            padding-bottom: 20px;
+            border-bottom: solid 1px #d1d1d1;
+        }
+        .dx-ribbonMode {
+            min-width: 130px;
+        }
+    </style>
+}
+<script type="text/javascript">
+    var elementName = "";
+    function ApplyVisibilitySettings(parameter) {
+        elementName = parameter;
+        CallbackPanel.PerformCallback();
+    }
+
+    function CallbackPanel_OnBeginCallback(s, e) {
+        e.customArgs["RibbonMode"] = RibbonMode.GetValue();
+        e.customArgs["ShowFormulaBar"] = ShowFormulaBar.GetValue();
+        e.customArgs["ShowSheetTabs"] = ShowSheetTabs.GetValue();
+        e.customArgs["ElementName"] = elementName;
+        elementName = "";
+    }
+</script>
+
+@{ RibbonCustomizationDemoOptions options = (RibbonCustomizationDemoOptions)Session["RibbonCustomizationOptions"]; }
+
+@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+@using (Html.BeginForm("UICustomization", "ToolbarsAndUI")) {
+	@Html.Partial("UICustomizationCallbackPartial")
+
+	@section DemoOptions  {
+		@Html.DevExpress().FormLayout(settings => {
+		   settings.Name = "OptionsFormLayout";
+		   settings.Items.AddGroupItem(group => {
+			   group.GroupBoxDecoration = GroupBoxDecoration.None;
+			   group.Items.Add(i => {
+				   i.Caption = "Ribbon mode";
+				   i.NestedExtension().ComboBox(c => {
+					   c.Name = "RibbonMode";
+					   c.Width = Unit.Percentage(100);
+					   c.Properties.IncrementalFilteringMode = IncrementalFilteringMode.None;
+                       c.ControlStyle.CssClass = "dx-ribbonMode";
+
+					   c.Properties.Items.Add("Ribbon", "Ribbon");
+					   c.Properties.Items.Add("OneLineRibbon", "OneLineRibbon");
+					   c.Properties.Items.Add("Auto", "Auto");
+					   c.Properties.Items.Add("None", "None");
+					   c.Properties.Items.Add("ExternalRibbon", "ExternalRibbon");
+
+
+					   c.Properties.ClientSideEvents.ValueChanged = "function (s, e) { ApplyVisibilitySettings(''); }";
+					   c.PreRender = (s, e) => {
+						   MVCxComboBox comboBox = s as MVCxComboBox;
+						   comboBox.SelectedItem = comboBox.Items.FindByValue(options.RibbonMode.ToString());
+					   };
+				   });
+			   });
+			   group.Items.Add(i => {
+				   i.Caption = "Show formula bar";
+				   i.NestedExtension().CheckBox(c => {
+					   c.Name = "ShowFormulaBar";
+					   c.Checked = options.ShowFormulaBar;
+					   c.Properties.ClientSideEvents.ValueChanged = "function (s, e) { ApplyVisibilitySettings(''); }";
+				   });
+			   });
+			   group.Items.Add(i => {
+				   i.Caption = "Show sheet tabs";
+				   i.NestedExtension().CheckBox(c => {
+					   c.Name = "ShowSheetTabs";
+					   c.Checked = options.ShowSheetTabs;
+					   c.Properties.ClientSideEvents.ValueChanged = "function (s, e) { ApplyVisibilitySettings(''); }";
+				   });
+			   });
+			   group.Items.Add(i => {
+				   i.ShowCaption = DefaultBoolean.False;
+				   i.NestedExtension().Button(b => {
+					   b.Name = "ToggleGridLinesVisibility";
+					   b.Text = "Show/hide grid lines";
+					   b.Width = Unit.Percentage(100);
+					   b.ClientSideEvents.Click = "function (s, e) { ApplyVisibilitySettings('grid'); }";
+				   });
+			   });
+			   group.Items.Add(i => {
+				   i.ShowCaption = DefaultBoolean.False;
+				   i.NestedExtension().Button(b => {
+					   b.Name = "ToggleHeadingsVisibility";
+					   b.Text = "Show/hide headings";
+					   b.Width = Unit.Percentage(100);
+					   b.ClientSideEvents.Click = "function (s, e) { ApplyVisibilitySettings('headings'); }";
+				   });
+			   });
+		   });
+			DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+				ColumnMinWidth = 320,
+				ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+			});
+	   }).GetHtml()
+	}
+}

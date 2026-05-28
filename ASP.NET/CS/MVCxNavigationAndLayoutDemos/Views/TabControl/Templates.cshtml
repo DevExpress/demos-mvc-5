@@ -1,0 +1,191 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);
+}
+@section AdditionalResources {
+    <style type="text/css">
+        .tabContent
+        {
+            background-color: #FDFEFF; 
+            background-image: url(../Content/TabControl/ContentCenter.gif);
+            background-repeat: repeat-x; 
+            background-position: left top;
+            color: #333333; 
+            height: 170px;
+            width: 100%;
+        }
+        .tabContent td
+        {
+            vertical-align: top;
+            padding: 8px 8px 8px 3px;
+        }
+        .tabContent td:first-child
+        {
+            vertical-align: top;
+            width: unset !important;
+            padding: 18px 8px 8px 10px;
+        }
+        .tabTemplate,
+        .tabTemplate .label
+        {
+            border-collapse: collapse;
+            font: 12px Tahoma;
+            color: #333333;
+        }
+        .tabTemplate img
+        {
+            margin: 0;
+            display: block;
+        }
+        .pcTemplates .dxtc-leftIndent,
+        .pcTemplates .dxtc-tab,
+        .pcTemplates .dxtc-activeTab,
+        .pcTemplates .dxtc-rightIndent
+        {
+            border-width: 0px!important;
+            background-color: white!important;
+        }
+        .pcTemplates .dxtc-leftIndent,
+        .pcTemplates .dxtc-tab,
+        .pcTemplates .dxtc-rightIndent
+        {
+            border-bottom-width: 1px!important;
+        }
+    </style>
+}
+
+@Html.DevExpress().PageControl(
+    settings =>
+    {
+        settings.Name = "pcTemplates";
+        settings.SkinID = "None";
+        settings.ControlStyle.CssClass = "pcTemplates";
+        settings.Width = Unit.Percentage(100);
+        settings.ControlStyle.TabSpacing = 0;
+        settings.ControlStyle.Paddings.Padding = 0;
+        settings.ControlStyle.Paddings.PaddingLeft = 12;
+        settings.EnableTabScrolling = true;
+        settings.Styles.Content.Font.Name = "Tahoma";
+        settings.Styles.Content.Font.Overline = false;
+        settings.Styles.Content.Font.Size = FontUnit.Parse("11px");
+        settings.Styles.Content.Paddings.Padding = 0;
+        settings.Styles.Content.Border.BorderColor = Color.FromArgb(0x6DA0E7);
+        settings.Styles.Content.Border.BorderStyle = BorderStyle.Solid;
+        settings.Styles.Content.Border.BorderWidth = 1;
+
+        settings.TabPages.Add("Episode I").SetContent(() =>
+        {
+            ViewContext.Writer.Write(
+                "<table class=\"tabContent\">" +
+                    "<tr>" +
+                        "<td style=\"width: 100px;\"><img alt=\"\" src=\"" + Url.Content("~/Content/TabControl/StarWars/1.jpg") + "\" /></td>" +
+                        "<td>" +
+                            "<b>Title</b>: The Phantom Menace<br />" +
+                            "<b>Release Date</b>: 1999<br />" +
+                            "<b>Directed by</b>: George Lucas<br />" +
+                            "<br />" +
+                            "<b>Tagline</b>: Every generation has a legend. Every journey has a first step. Every saga has a beginning.<br />" +
+                            "<b>Plot Outline</b>: This First Episode follows the young years of Anakin Skywalker (Darth Vader). The friendship of Obi-wan Kenobi...<br />" +
+                        "</td>" +
+                    "</tr>" +
+                "</table>"
+            );
+        });
+        settings.TabPages.Add("Episode II").SetContent(() =>
+        {
+            ViewContext.Writer.Write(
+                "<table class=\"tabContent\">" +
+                    "<tr>" +
+                        "<td style=\"width: 100px;\"><img alt=\"\" src=\"" + Url.Content("~/Content/TabControl/StarWars/2.jpg") + "\" /></td>" +
+                        "<td>" +
+                            "<b>Title</b>: Attack of the Clones<br />" +
+                            "<b>Release Date</b>: 2002<br />" +
+                            "<b>Directed by</b>: George Lucas<br />" +
+                            "<br />" +
+                            "<b>Tagline</b>: A Jedi Shall Not Know Anger. Nor Hatred. Nor Love.<br />" +
+                            "<b>Plot Outline</b>: Anakin Skywalker shares a forbidden romance with Padmé Amidala while his teacher, Obi-Wan Kenobi, makes an investigation of a separatist assassination attempt on Padmé which leads to the discovery of a secret Republican clone army.<br />" +
+                        "</td>" +
+                    "</tr>" +
+                "</table>"
+            );
+        });
+        settings.TabPages.Add("Episode III").SetContent(() =>
+        {
+            ViewContext.Writer.Write(
+                "<table class=\"tabContent\">" +
+                    "<tr>" +
+                        "<td style=\"width: 100px;\"><img alt=\"\" src=\"" + Url.Content("~/Content/TabControl/StarWars/3.jpg") + "\" /></td>" +
+                        "<td>" +
+                            "<b>Title</b>: Revenge of the Sith<br />" +
+                            "<b>Release Date</b>: 2005<br />" +
+                            "<b>Directed by</b>: George Lucas<br />" +
+                            "<br />" +
+                            "<b>Tagline</b>: The saga is complete.<br />" +
+                            "<b>Plot Outline</b>: After three years of fighting in the Clone Wars, Anakin Skywalker concludes his journey towards the Dark Side of the Force, putting his friendship with Obi Wan Kenobi and his marriage at risk.<br />" +
+                        "</td>" +
+                    "</tr>" +
+                "</table>"
+            );
+        });
+        settings.TabPages.Add("Episode IV").SetContent(() =>
+        {
+            ViewContext.Writer.Write(
+                "<table class=\"tabContent\">" +
+                    "<tr>" +
+                        "<td style=\"width: 100px;\"><img alt=\"\" src=\"" + Url.Content("~/Content/TabControl/StarWars/4.jpg") + "\"/></td>" +
+                        "<td>" +
+                            "<b>Title</b>: Star Wars<br />" +
+                            "<b>Release Date</b>: 1977<br />" +
+                            "<b>Directed by</b>: George Lucas<br />" +
+                            "<br />" +
+                            "<b>Tagline</b>: A long time ago in a galaxy far, far away...<br />" +
+                            "<b>Plot Outline</b>: Luke Skywalker leaves his home planet, teams up with other rebels, and tries to save Princess Leia from the evil clutches of Darth Vader.<br />" +
+                        "</td>" +
+                    "</tr>" +
+                "</table>"
+            );
+        });
+        settings.TabPages.Add("Episode V").SetContent(() =>
+        {
+            ViewContext.Writer.Write(
+                "<table class=\"tabContent\">" +
+                    "<tr>" +
+                        "<td style=\"width: 100px;\"><img alt=\"\" src=\"" + Url.Content("~/Content/TabControl/StarWars/5.jpg") + "\" /></td>" +
+                        "<td>" +
+                            "<b>Title</b>: The Empire Strikes Back<br />" +
+                            "<b>Release Date</b>: 1980<br />" +
+                            "<b>Directed by</b>: Irvin Kershner<br />" +
+                            "<br />" +
+                            "<b>Tagline</b>: The Adventure Continues...<br />" +
+                            "<b>Plot Outline</b>: While Luke takes advanced Jedi training from Yoda, his friends are relentlessly pursued by Darth Vader as part of his plan to capture Luke.<br />" +
+                        "</td>" +
+                    "</tr>" +
+                "</table>"
+            );
+        });
+        settings.TabPages.Add("Episode VI").SetContent(() =>
+        {
+            ViewContext.Writer.Write(
+                "<table class=\"tabContent\">" +
+                    "<tr>" +
+                        "<td style=\"width: 100px;\"><img alt=\"\" src=\"" + Url.Content("~/Content/TabControl/StarWars/6.jpg") + "\" /></td>" +
+                        "<td>" +
+                            "<b>Title</b>: Return of the Jedi<br />" +
+                            "<b>Release Date</b>: 1983<br />" +
+                            "<b>Directed by</b>: Richard Marquand<br />" +
+                            "<br />" +
+                            "<b>Tagline</b>: Coming May 25, 1983 to your galaxy. [Second Advance poster]<br />" +
+                            "<b>Plot Outline</b>: After rescuing Han Solo from the palace of Jabba the Hutt, the Rebels attempt to destroy the Second Death Star, while Luke Skywalker tries to bring his father back to the Light Side of the Force.<br />" +
+                        "</td>" +
+                    "</tr>" +
+                "</table>"
+            );
+        });
+        settings.SetActiveTabTemplateContent(c =>
+        {
+            Html.RenderPartial("TemplatesActiveTab", c.TabPage);
+        });
+        settings.SetTabTemplateContent(c =>
+        {
+            Html.RenderPartial("TemplatesTab", c.TabPage);
+        });
+    }).GetHtml()

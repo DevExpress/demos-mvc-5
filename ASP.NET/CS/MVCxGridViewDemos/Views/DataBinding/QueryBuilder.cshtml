@@ -1,0 +1,35 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Query Builder</title>
+    <link href="@Url.Content("~/Content/QueryBuilder.css")" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/QueryBuilder.js")"></script>
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.QueryBuilder }
+    )
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.QueryBuilder }
+    )
+    <script>
+        function onSaveCommandExecuted(s, e) {
+            var result = JSON.parse(e.Result);
+            if (result.queryValidationError) {
+                DevExpress.Designer.NotifyAboutWarning(result.queryValidationError, true);
+            }
+        }
+    </script>
+</head>
+<body>
+    @Html.DevExpress().QueryBuilder(settings => {
+        settings.Name = "QueryBuilder";
+        settings.ControlStyle.CssClass = "QueryBuilder";
+        settings.Height = Unit.Empty;
+        settings.ParametersMode = DevExpress.XtraReports.Web.QueryBuilder.QueryBuilderParametersMode.Disabled;
+        settings.SaveCallbackRouteValues = new { Controller = "DataBinding", Action = "SaveQuery" };
+        settings.ClientSideEvents.SaveCommandExecuted = "onSaveCommandExecuted";
+    }).Bind(Model.ConnectionParameters, Model.SelectQuery).GetHtml()
+</body>
+</html>

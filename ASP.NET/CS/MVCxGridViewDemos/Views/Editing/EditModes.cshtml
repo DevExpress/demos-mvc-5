@@ -1,0 +1,27 @@
+﻿@model IEnumerable
+<script>
+    function onBeginCallback(s, e) {
+        e.customArgs["editMode"] = editMode.GetValue();
+
+        DXDemo.LoadAntiForgeryTokenInputValue(e.customArgs);
+    }
+</script>
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(s => {
+               s.Name = "editMode";
+               s.Width = 200;
+               s.Properties.Caption = "Edit Mode:";
+               s.Theme = DemoHelper.Instance.Theme;
+               s.Properties.ValueType = typeof(DevExpress.Web.GridViewEditingMode);
+               s.Properties.ClientSideEvents.SelectedIndexChanged = "function(s) { gvEditing.PerformCallback({ editMode: s.GetValue() }) }";
+           }).BindList(GridViewEditingDemosHelper.AvailableEditModesList).Bind(ViewBag.EditMode).GetHtml()
+        </div>
+    </div>
+}
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    @Html.Partial("EditModesPartial", Model)
+}

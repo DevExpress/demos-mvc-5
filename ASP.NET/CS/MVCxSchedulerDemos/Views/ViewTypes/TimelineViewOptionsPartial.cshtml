@@ -1,0 +1,81 @@
+﻿@model SchedulerTimelineViewDemoOptions
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "SettingsFormLayout";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "View Layout options";
+
+        g.Items.Add(m => m.IntervalCount).NestedExtension().ComboBox(s => {
+            s.Properties.Items.Add("1", 1);
+            s.Properties.Items.Add("2", 2);
+            s.Properties.Items.Add("3", 3);
+            s.Properties.Items.Add("4", 4);
+            s.Properties.Items.Add("5", 5);
+            s.Properties.Items.Add("6", 6);
+            s.Properties.Items.Add("7", 7);
+            s.Properties.Items.Add("8", 8);
+            s.Properties.Items.Add("9", 9);
+            s.Properties.Items.Add("10", 10);
+        });
+        g.Items.Add(m => m.VisibleIntervalCount).NestedExtension().ComboBox(s => {
+            s.Properties.Items.Add("1", 1);
+            s.Properties.Items.Add("2", 2);
+            s.Properties.Items.Add("3", 3);
+            s.Properties.Items.Add("4", 4);
+            s.Properties.Items.Add("5", 5);
+        });
+    });
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Appointment Layout";
+
+        g.Items.Add(m => m.SnapToCellsMode).NestedExtension().ComboBox(s => {
+            s.Properties.Items.Add("Auto", 0);
+            s.Properties.Items.Add("Always", 1);
+            s.Properties.Items.Add("Never", 2);
+        });
+        g.Items.Add(m => m.AppointmentHeight).NestedExtension().ComboBox(s => {
+            s.Properties.Items.Add("20px", 20);
+            s.Properties.Items.Add("25px", 25);
+            s.Properties.Items.Add("30px", 30);
+            s.Properties.Items.Add("35px", 35);
+            s.Properties.Items.Add("40px", 40);
+        });
+        g.Items.Add(m => m.AutoHeight);
+    });
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Common options";
+
+        g.Items.Add(m => m.TimeIndicatorVisibility).NestedExtension().ComboBox(s => {
+            s.Properties.Items.Add("Never", 0);
+            s.Properties.Items.Add("Always", 1);
+            s.Properties.Items.Add("TodayView", 2);
+            s.Properties.Items.Add("CurrentDate", 3);
+        });
+        g.Items.Add(m => m.AppointmentSelectionAppearanceMode).NestedExtension().ComboBox(s => {
+            s.Properties.Items.Add("Auto", 0);
+            s.Properties.Items.Add("BackgroundOpacity", 1);
+            s.Properties.Items.Add("BoundaryFrame", 2);
+        });
+        g.Items.Add(m => m.ShowViewNavigator);
+        g.Items.Add(m => m.ShowViewVisibleInterval);
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 480,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+
+}).Bind(Model).GetHtml()
+
+<div class="apply-button-container">
+    @Html.DevExpress().Button(s => {
+        s.Name = "ApplyButton";
+        s.Text = "Apply Changes";
+        s.Theme = DemoHelper.Instance.Theme;
+        s.UseSubmitBehavior = true;
+    }).GetHtml()
+</div>

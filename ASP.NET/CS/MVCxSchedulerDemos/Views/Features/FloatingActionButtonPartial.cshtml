@@ -1,0 +1,75 @@
+﻿@functions{
+    FABActionItem CreateFABActionItem(string actionName, string imageUrl) {
+        FABActionItem item = new FABActionItem(actionName, imageUrl);
+        item.Image.Width = Unit.Pixel(32);
+        item.Image.Height = Unit.Pixel(32);
+        return item;
+    }
+}
+@{
+    var scheduler = Html.DevExpress().Scheduler(
+        settings => {
+            settings.Name = "scheduler";
+            settings.CallbackRouteValues = new { Controller = "Features", Action = "FloatingActionButtonPartial" };
+            settings.EditAppointmentRouteValues = new { Controller = "Features", Action = "FloatingActionButtonPartialEditAppointment" };
+            settings.Start = new DateTime(2016, 10, 10);
+            settings.GroupType = SchedulerGroupType.Resource;
+            settings.ActiveViewType = SchedulerViewType.FullWeek;
+            settings.OptionsToolTips.ShowAppointmentToolTip = false;
+            settings.OptionsToolTips.ShowSelectionToolTip = false;
+
+            settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+            settings.ClientSideEvents.CellClick = "OnCellClick";
+            settings.ClientSideEvents.Init = "OnInit";
+
+            settings.OptionsBehavior.ShowFloatingActionButton = true;
+            settings.FloatingActionButton.ClientSideEvents.ActionItemClick = "OnActionItemClick";
+            settings.FloatingActionButton.Items.Add(new FABCreateAppointmentActionGroup());
+            settings.FloatingActionButton.Items.Add(new FABEditAppointmentActionGroup());
+
+            FABActionGroup scaleGroup = new FABActionGroup() { ContextName = "Scale" };
+            scaleGroup.Items.Add(CreateFABActionItem("Scale15Minutes", "~/Content/Scheduler/FAB/15m.svg"));
+            scaleGroup.Items.Add(CreateFABActionItem("Scale30Minutes", "~/Content/Scheduler/FAB/30m.svg"));
+            scaleGroup.Items.Add(CreateFABActionItem("Scale1Hour", "~/Content/Scheduler/FAB/1h.svg"));
+            settings.FloatingActionButton.Items.Add(scaleGroup);
+
+            SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.DayView);
+            SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.WorkWeekView);
+            SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.FullWeekView);
+
+            settings.Views.DayView.ResourcesPerPage = 4;
+            settings.Views.DayView.Styles.TimeRulerHoursItem.CssClass = "timeRulerHour";
+            settings.Views.DayView.Styles.TimeRulerMinuteItem.CssClass = "timeRulerMinute";
+            settings.Views.FullWeekView.Enabled = true;
+            settings.Views.FullWeekView.Styles.TimeRulerHoursItem.CssClass = "timeRulerHour";
+            settings.Views.FullWeekView.Styles.TimeRulerMinuteItem.CssClass = "timeRulerMinute";
+
+            settings.Views.WorkWeekView.Enabled = false;
+            settings.Views.WeekView.Enabled = false;
+            settings.Views.MonthView.ResourcesPerPage = 1;
+            settings.Views.MonthView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
+            settings.Views.MonthView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
+            settings.Views.MonthView.AppointmentDisplayOptions.StatusDisplayType = AppointmentStatusDisplayType.Bounds;
+            settings.Views.MonthView.AppointmentDisplayOptions.ShowRecurrence = true;
+            settings.Views.MonthView.MonthViewStyles.DateCellBody.Height = Unit.Pixel(170);
+
+            TimeScale[] timeScales = new TimeScale[] {
+        new TimeScaleYear() { Enabled = false },
+        new TimeScaleQuarter() { Enabled = false },
+        new TimeScaleMonth(),
+        new TimeScaleFixedInterval() { Enabled = false },
+        new TimeScaleDay(),
+        new TimeScaleHour() { Enabled = false },
+            };
+            settings.Views.TimelineView.Scales.AddRange(timeScales);
+            settings.Views.TimelineView.ResourcesPerPage = 2;
+
+            settings.Storage.EnableReminders = false;
+            settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+            settings.Storage.Appointments.Assign(SchedulerDemoHelper.DefaultAppointmentStorage);
+        });
+    if (ViewData["SchedulerErrorText"] != null) {
+        scheduler.SetErrorText((string)ViewData["SchedulerErrorText"]);
+    }
+}
+@scheduler.Bind(Model.Appointments, Model.Resources).GetHtml()

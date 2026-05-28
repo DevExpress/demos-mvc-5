@@ -1,0 +1,54 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "gvExport";
+    settings.CallbackRouteValues = new { Controller = "Exporting", Action = "ExportPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.Settings.ShowFooter = true;
+    settings.Settings.ShowGroupPanel = true;
+    settings.SettingsExport.EnableClientSideExportAPI = true;
+    settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+
+    settings.Columns.Add("CompanyName");
+    settings.Columns.Add("City").GroupIndex = 1;
+    settings.Columns.Add("Country").GroupIndex = 0;
+    settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+    settings.Columns.Add("Quantity");
+    settings.Columns.Add(c => {
+        c.FieldName = "Total";
+        c.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+        c.PropertiesEdit.DisplayFormatString = "c";
+    });
+
+    settings.Toolbars.Add(t => {
+        t.SettingsAdaptivity.Enabled = true;
+        t.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+        t.Items.Add(GridViewToolbarCommand.ExportToPdf);
+        t.Items.Add(GridViewToolbarCommand.ExportToXls);
+        t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+        t.Items.Add(GridViewToolbarCommand.ExportToDocx);
+        t.Items.Add(GridViewToolbarCommand.ExportToRtf);
+        t.Items.Add(GridViewToolbarCommand.ExportToCsv);
+    });
+
+    settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "CompanyName");
+    settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
+    settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
+    settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Count, "CompanyName");
+
+    settings.CustomUnboundColumnData = (sender, e) => {
+        if (e.Column.FieldName == "Total") {
+            decimal price = (decimal)e.GetListSourceFieldValue("UnitPrice");
+            int quantity = Convert.ToInt32(e.GetListSourceFieldValue("Quantity"));
+            e.Value = price * quantity;
+        }
+    };
+    settings.SettingsExport.RenderBrick = (sender, e) => {
+        if (e.RowType == GridViewRowType.Data && e.VisibleIndex % 2 == 0)
+            e.BrickStyle.BackColor = System.Drawing.Color.FromArgb(0xEE, 0xEE, 0xEE);
+    };
+    settings.PreRender = (sender, e) => {
+        ((MVCxGridView)sender).ExpandAll();
+    };
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

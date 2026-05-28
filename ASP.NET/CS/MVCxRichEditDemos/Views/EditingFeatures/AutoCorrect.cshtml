@@ -1,0 +1,24 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+<script type="text/javascript">
+    function OnAutoCorrect(s, e) {
+        switch(e.text) {
+            case "dxlogo":
+                s.selection.intervals = [e.interval];
+                s.commands.insertPicture.execute("../../Content/logo.png");
+                e.handled = true;
+                break;
+            case "bldtxt":
+                s.selection.intervals = [e.interval];
+                s.commands.changeFontBold.execute(true);
+                s.commands.insertText.execute("Bold Text");
+                s.commands.changeFontBold.execute(false);
+                e.handled = true;
+                break;
+        }
+    }
+</script>
+
+@using(Html.BeginForm()) {
+    @Html.Partial("AutoCorrectPartial")
+}

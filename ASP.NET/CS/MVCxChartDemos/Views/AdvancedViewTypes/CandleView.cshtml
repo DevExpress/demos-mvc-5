@@ -1,0 +1,135 @@
+﻿@model ChartCandleDemoOptions
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(300);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartCandleDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+    });
+
+    settings.Series.Add(s => { 
+        s.Name = "Google Inc.";
+        s.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        s.Views().CandleStickSeriesView(v => {
+            v.ReductionOptions.Level = options.ReductionLevel;
+            v.SeriesLabel(l => {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.HideOverlapped;
+                switch (options.LabelLevel) {
+                    case StockLevel.Low:
+                        l.TextPattern = "{LV}";
+                        break;
+                    case StockLevel.High:
+                        l.TextPattern = "{HV}";
+                        break;
+                    case StockLevel.Open:
+                        l.TextPattern = "{OV}";
+                        break;
+                    default: l.TextPattern = "{CV}";
+                        break;
+                }
+            });
+        });
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetFinancialDataMembers("Date", "LowValue", "HighValue", "OpenValue", "CloseValue");
+    });
+
+    settings.XYDiagram(d => {
+        d.AxisX.Label.Staggered = true;
+        d.AxisX.GridLines.Visible = true;
+        d.AxisX.WholeRange.AutoSideMargins = true;
+        d.AxisX.Interlaced = true;
+        d.AxisX.DateTimeScaleOptions.SkipRangesWithoutPoints = options.SkipRangesWithoutPoints;
+        d.AxisX.WholeRange.Auto = false;
+        d.AxisX.WholeRange.SetMinMaxValues(new DateTime(2016, 05, 01), new DateTime(2016, 09, 01));
+        d.AxisX.WholeRange.AutoSideMargins = false;
+        d.AxisX.WholeRange.SideMarginsValue = 0;
+
+        d.AxisY.Title.Text = "US Dollars";
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+        d.AxisY.WholeRange.Auto = false;
+        d.AxisY.WholeRange.SetMinMaxValues(655, 855);
+        d.AxisY.WholeRange.AutoSideMargins = false;
+        d.AxisY.WholeRange.SideMarginsValue = 0;
+        d.AxisY.GridLines.MinorVisible = true;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Stock Prices"
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.quandl.com"
+    });
+}).Bind(Model.Data).GetHtml()
+
+<script type="text/javascript">
+    function UpdateLabelOptionState() {
+        LabelLevel.SetEnabled(ShowLabels.GetChecked());
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.ReductionLevel);
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateLabelOptionState(); }";
+                });
+            });
+            group.Items.Add(model => model.LabelLevel, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowLabels;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Axis Settings";
+            group.Items.Add(model => model.SkipRangesWithoutPoints);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 310,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

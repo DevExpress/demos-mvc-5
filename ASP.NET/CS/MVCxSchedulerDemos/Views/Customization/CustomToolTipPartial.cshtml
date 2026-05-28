@@ -1,0 +1,38 @@
+﻿@{ string errorText = ViewData["SchedulerErrorText"] != null ? (string)ViewData["SchedulerErrorText"] : null; }
+@Html.DevExpress().Scheduler(
+    settings => {
+        settings.Name = "Scheduler";
+        settings.CallbackRouteValues = new { Controller = "Customization", Action = "CustomToolTipPartial" };
+        settings.EditAppointmentRouteValues = new { Controller = "Customization", Action = "CustomToolTipEditAppointment" };
+        settings.ActiveViewType = SchedulerViewType.WorkWeek;
+        settings.GroupType = SchedulerGroupType.Resource;
+        settings.Start = new DateTime(2016, 10, 10);
+
+        SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.DayView);
+        SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.WorkWeekView);
+        SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.FullWeekView); 
+        
+        settings.Views.DayView.ResourcesPerPage = 3;
+        settings.Views.FullWeekView.Enabled = true;
+        settings.Views.WeekView.Enabled = false;
+        settings.Views.MonthView.ResourcesPerPage = 1;
+        settings.Views.MonthView.AppointmentDisplayOptions.ShowRecurrence = true;
+        settings.Views.TimelineView.ResourcesPerPage = 2;
+
+        settings.Storage.EnableReminders = false;
+        settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+        settings.Storage.Appointments.Assign(SchedulerDemoHelper.DefaultAppointmentStorage);
+
+        settings.ClientSideEvents.ToolTipDisplaying = "OnToolTipDisplaying";
+        settings.OptionsToolTips.SetAppointmentToolTipTemplateContent(() => {
+            Html.RenderPartial("CustomAppointmentToolTip");
+        });
+        settings.OptionsToolTips.SetAppointmentDragToolTipTemplateContent(() => {
+            Html.RenderPartial("CustomAppointmentDragToolTip");
+        });
+        settings.OptionsToolTips.SetSelectionToolTipTemplateContent(() => {
+            Html.RenderPartial("CustomSelectionToolTip");
+        });
+        settings.OptionsToolTips.AppointmentToolTipCornerType = ToolTipCornerType.None;
+        settings.OptionsToolTips.SelectionToolTipCornerType = ToolTipCornerType.None;
+    }).Bind(Model.Appointments, Model.Resources).SetErrorText(errorText).GetHtml()

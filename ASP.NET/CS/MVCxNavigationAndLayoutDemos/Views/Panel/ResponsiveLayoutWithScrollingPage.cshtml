@@ -1,0 +1,51 @@
+﻿@model IEnumerable
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>Responsive Layout with Scrolling - ASP.NET Panel Control</title>
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionType = ExtensionType.DataView },
+        new StyleSheet { ExtensionType = ExtensionType.Panel }        
+    )
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Panel/ResponsiveLayoutWithScrolling.css")" />    
+    <script src="@Url.Content("~/Scripts/jquery.min.js")" type="text/javascript"></script>
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionType = ExtensionType.DataView },
+        new Script { ExtensionType = ExtensionType.Panel }
+    )
+    <script type="text/javascript">
+        function UpdateHeaderMenuOrientation() {
+            var orientation = topPanel.IsExpandable() ? 'Vertical' : 'Horizontal';
+            if(orientation !== headerMenu.GetOrientation())
+                headerMenu.SetOrientation(orientation);
+        }
+    </script>
+</head>
+<body>
+    @Html.DevExpress().Panel(settings => {
+        settings.Name = "topPanel";
+        settings.FixedPosition = PanelFixedPosition.WindowTop;
+        settings.Collapsible = true;
+        settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 624;
+        settings.ControlStyle.CssClass = "topPanel";
+        settings.Styles.ExpandButton.CssClass = "btn";
+        settings.Styles.ExpandedPanel.CssClass = "expandedPanel";
+        settings.SetContent(() => {
+            ViewContext.Writer.Write("<div class='titleContainer'>");
+                ViewContext.Writer.Write("<div class='title'>Contacts</div>");
+                Html.RenderPartial("ResponsiveLayoutMainMenuPartial");
+            ViewContext.Writer.Write("</div>");            
+        });
+        settings.SetExpandBarTemplateContent(c => {
+            ViewContext.Writer.Write("<div class='title'>Contacts</div>");
+        });
+    }).GetHtml()
+    @Html.Action("ResponsiveLayoutWithScrollingDataViewPartial")
+    <script type="text/javascript">
+        ASPxClientControl.GetControlCollection().ControlsInitialized.AddHandler(UpdateHeaderMenuOrientation);
+        ASPxClientControl.GetControlCollection().BrowserWindowResized.AddHandler(UpdateHeaderMenuOrientation);
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+﻿@model decimal
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(300);
+}
+
+<script type="text/javascript">
+    var titles = ["Very bad", "Bad", "Normal", "Good", "Very good"];
+    var prevTitle;
+    function myRating_Init(s, e) {
+        var value = s.GetValue();
+        $("#lbMyVote").html(value > 0 ? titles[value - 1] : "Vote here");
+    }
+    function myRating_ItemClick(s, e) {        
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateRating", "RatingControl")',
+            data: { value: s.GetValue() },
+            beforeSend: function() {
+                $("#lbAllVotes").html("(Updating...)");
+                prevTitle = titles[e.index];
+            },
+            success: function(response) {
+                var ratingValues = response.split(' ');
+                allRating.SetValue(ratingValues[1]);
+                var labelText = ratingValues[0] + " votes (" + ratingValues[2] + ")";
+                $("#lbAllVotes").html(labelText);
+            }
+        });
+    }
+    function myRating_ItemMouseOver(s, e) {
+        prevTitle = $("#lbMyVote").html();
+        $("#lbMyVote").html(titles[e.index]);
+    }
+    function myRating_ItemMouseOut(s, e) {
+        $("#lbMyVote").html(prevTitle);
+    }
+</script>
+
+@using(Html.BeginForm()) {
+
+    @Html.AntiForgeryToken()
+
+    <div class="options BottomMargin">
+		<div class="options-item">
+			@Html.DevExpress().ComboBox(s => {
+               s.Name = "fillPrecision";
+               s.Width = Unit.Parse("100%");
+               s.Properties.Caption = "Fill Precision";
+               s.Theme = DemoHelper.Instance.Theme;
+               s.Properties.ClientSideEvents.SelectedIndexChanged ="function() { $('form').submit(); }";
+           }).BindList(System.Enum.GetValues(typeof(RatingControlItemFillPrecision))).Bind(Session["FillPrecision"].ToString()).GetHtml()
+		</div>
+	</div>
+
+    @Html.DevExpress().RoundPanel(
+        rpSettings => {
+            rpSettings.Name = "ratingPanel";
+            rpSettings.Width = Unit.Parse("100%");
+            rpSettings.ShowHeader = false;
+            rpSettings.ControlStyle.HorizontalAlign = HorizontalAlign.Center;
+            rpSettings.SetContent(() => {
+                ViewContext.Writer.Write("<div style=\"margin-bottom: 5px\">");
+                Html.DevExpress().RatingControl(
+                    settings => {
+                        settings.Name = "allRating";
+                        settings.ReadOnly = true;
+                        settings.FillPrecision = (RatingControlItemFillPrecision)Session["FillPrecision"];
+                    }
+                )
+                .Bind(Model)
+                .Render();
+                ViewContext.Writer.Write("</div>" +
+                    "<label id=\"lbAllVotes\">" +
+                        string.Format("{0} votes ({1})", VotingDemoHelper.VotingValues.Count, Model.ToString("0.##")) +
+                    "</label>"
+                );
+                ViewContext.Writer.Write("<div style=\"margin: 14px 0 5px\">");
+                Html.DevExpress().RatingControl(
+                    settings => {
+                        settings.Name = "myRating";
+                        settings.ClientSideEvents.Init = "myRating_Init";
+                        settings.ClientSideEvents.ItemClick = "myRating_ItemClick";
+                        settings.ClientSideEvents.ItemMouseOver = "myRating_ItemMouseOver";
+                        settings.ClientSideEvents.ItemMouseOut = "myRating_ItemMouseOut";
+                    }
+                )
+                .Bind(0)
+                .Render();
+                ViewContext.Writer.Write("</div>" +
+                    "<label id=\"lbMyVote\"></label>"
+                );
+            });
+        }
+    ).GetHtml()
+}

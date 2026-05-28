@@ -1,0 +1,46 @@
+﻿@model HtmlEditorPlaceholdersDemoOptions
+@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "HtmlEditor";
+        settings.Width = Unit.Pixel(690);
+        settings.Height = Unit.Pixel(360);
+        settings.Settings.AllowPreview = false;
+
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "PlaceholdersHtmlEditorPartial" };
+
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("FirstName"));
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("LastName"));
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("Title"));
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("TitleOfCourtesy"));
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("BirthDate"));
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("HireDate"));
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("Address"));
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("City"));
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("Region"));
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("Country"));
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("HomePhone"));
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("Notes"));
+        settings.Placeholders.Add(new HtmlEditorPlaceholderItem("Photo"));
+
+        HtmlEditorToolbar toolbar = new HtmlEditorToolbar();
+        toolbar.Items.Add(new ToolbarUndoButton());
+        toolbar.Items.Add(new ToolbarRedoButton());
+        toolbar.Items.Add(new ToolbarBoldButton(true));
+        toolbar.Items.Add(new ToolbarItalicButton());
+        toolbar.Items.Add(new ToolbarUnderlineButton());
+        toolbar.Items.Add(new ToolbarStrikethroughButton());
+        toolbar.Items.Add(new ToolbarJustifyLeftButton(true));
+        toolbar.Items.Add(new ToolbarJustifyCenterButton());
+        toolbar.Items.Add(new ToolbarJustifyRightButton());
+        toolbar.Items.Add(new ToolbarBackColorButton(true));
+        toolbar.Items.Add(new ToolbarFontColorButton());
+
+        ToolbarTableOperationsDropDownButton tableOperationsButton = new ToolbarTableOperationsDropDownButton(true);
+        tableOperationsButton.CreateDefaultItems();
+        toolbar.Items.Add(tableOperationsButton);
+
+        toolbar.Items.Add(new ToolbarInsertPlaceholderDialogButton(true));
+        settings.Toolbars.Add(toolbar);
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }
+).Bind(Model.TemplateDocumentHtml).GetHtml()

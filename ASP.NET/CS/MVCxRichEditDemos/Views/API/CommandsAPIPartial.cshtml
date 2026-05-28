@@ -1,0 +1,15 @@
+﻿@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "DemoRichEdit";
+    settings.CallbackRouteValues = new { Controller = "API", Action = "CommandsAPIPartial" };
+    settings.Width = Unit.Percentage(100);
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ClientSideEvents.EndCallback = "startDemo";
+    settings.ClientSideEvents.Init = "startDemo";
+
+    settings.RibbonMode = RichEditRibbonMode.OneLineRibbon;
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        RichEditDemoUtils.HideFileTab(richEdit);
+        richEdit.Focus();
+    };
+}).GetHtml()

@@ -1,0 +1,27 @@
+﻿@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "heSpellChecking";
+        settings.CallbackRouteValues = new { Controller = "Dialogs", Action = "SpellCheckingPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Pixel(525);
+
+        string htmlContentPath = Server.MapPath("~/Content/HtmlEditor/DemoHtml/CheckSpelling.htm");
+        settings.Html = System.IO.File.ReadAllText(htmlContentPath);
+
+        settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.FileSystemSettings.Assign(HtmlEditorDialogsDemosHelper.FileSaveSettings.FileSystemSettings);
+        settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.ValidationSettings.Assign(HtmlEditorDialogsDemosHelper.ImageUploadValidationSettings);
+
+        settings.Toolbars.CreateDefaultToolbars();
+        settings.Toolbars[0].Items.Add(new ToolbarCheckSpellingButton(true));
+                        
+        settings.SettingsSpellChecker.Culture = new System.Globalization.CultureInfo("en-us");
+        ASPxSpellCheckerISpellDictionary dictionary = new ASPxSpellCheckerISpellDictionary();
+        dictionary.GrammarPath = "~/Dictionaries/english.aff";
+        dictionary.DictionaryPath = "~/Dictionaries/american.xlg";
+        dictionary.AlphabetPath = "~/Dictionaries/EnglishAlphabet.txt";
+        dictionary.CacheKey = "hunspellDic";
+        dictionary.Culture = new System.Globalization.CultureInfo("en-us");
+        settings.SettingsSpellChecker.Dictionaries.Add(dictionary);
+
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }).GetHtml()

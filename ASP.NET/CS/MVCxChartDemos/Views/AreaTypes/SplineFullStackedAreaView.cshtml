@@ -1,0 +1,101 @@
+﻿@model ChartAreaFullStckedDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(215);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartAreaFullStckedDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.Width = 920;
+    settings.Height = 500;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.RightToLeft;
+        l.Border.Visibility = DefaultBoolean.False;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Market Share Over Time"
+    });
+
+    settings.Series.Template(t => {
+        t.Views().FullStackedSplineAreaSeriesView(v => {
+            v.SeriesLabel(l => {
+                l.TextPattern = options.ValueAsPercent ? "{VP:P0}" : "${V}M";
+                l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+            });
+        });
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        t.SetDataMembers("Year", "Sales");
+    });
+
+    settings.XYDiagram(d => {
+        d.AxisX.Title.Text = "Country";
+        d.AxisX.WholeRange.AutoSideMargins = false;
+        d.AxisX.WholeRange.SideMarginsValue = 0;
+
+        d.AxisY.Label.TextPattern = "{V:P0}";
+        d.AxisY.Title.Text = "Percent";
+        d.AxisY.VisualRange.Auto = false;
+        d.AxisY.VisualRange.AutoSideMargins = false;
+        d.AxisY.VisualRange.MaxValue = 1;
+        d.AxisY.VisualRange.MinValue = 0;
+        d.AxisY.VisualRange.SideMarginsValue = 0;
+        d.AxisY.WholeRange.Auto = false;
+        d.AxisY.WholeRange.AutoSideMargins = false;
+        d.AxisY.WholeRange.MaxValue = 1;
+        d.AxisY.WholeRange.MinValue = 0;
+        d.AxisY.WholeRange.SideMarginsValue = 0;
+    });
+}).Bind(Model.Data, seriesDataMember: "Company").GetHtml()
+
+<script type="text/javascript">
+    function UpdateLabelOptionState() {
+        ValueAsPercent.SetEnabled(ShowLabels.GetChecked());
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateLabelOptionState(); }";
+                });
+            });
+            group.Items.Add(model => model.ValueAsPercent, item => {
+                item.NestedExtension().CheckBox(checkBox => { checkBox.ClientEnabled = Model.ShowLabels; });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings { ColumnMinWidth = 195 });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

@@ -1,0 +1,29 @@
+﻿@model IEnumerable
+@{
+    var enableCheckedListMode = (bool)Session["EnableCheckedListMode"];
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1316);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(s => {
+                s.Name = "EnableCheckedListMode";
+                s.Theme = DemoHelper.Instance.Theme;
+                s.Text = "Enable CheckedList mode";
+                s.Properties.ClientSideEvents.CheckedChanged = "function(s,e) { $('form').submit(); }";
+            }).Bind(Session["EnableCheckedListMode"]).GetHtml()
+        </div>
+    </div>
+}
+@Html.Partial("HeaderFilterPartial", Model)
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

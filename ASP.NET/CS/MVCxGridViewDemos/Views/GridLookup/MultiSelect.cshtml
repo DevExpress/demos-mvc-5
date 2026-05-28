@@ -1,0 +1,10 @@
+﻿@{ DemoHelper.Instance.ControlAreaMinHeight = Unit.Pixel(180); }
+<script type="text/javascript">
+    function CloseGridLookup() {
+        gridLookup.ConfirmCurrentSelection();
+        gridLookup.HideDropDown();
+    }
+</script>
+
+@Html.Partial("MultiSelectPartial")
+

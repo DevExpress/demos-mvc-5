@@ -1,0 +1,236 @@
+﻿@functions{
+    T CreateButtonItem<T>(string name, string text, string iconID) where T : RibbonButtonItem {
+        return CreateButtonItem<T>(name, text, RibbonItemSize.Small, iconID);
+    }
+    T CreateButtonItem<T>(string name, string text, RibbonItemSize size, string iconID) where T : RibbonButtonItem {
+        var item = Activator.CreateInstance<T>();
+        item.Name = name;
+        item.Text = text;
+        item.Size = size;
+        if (size == RibbonItemSize.Large)
+            item.LargeImage.IconID = iconID;
+        else
+            item.SmallImage.IconID = iconID;
+        return item;
+    }
+    RibbonGalleryItem CreateGalleryItem(string text, string imageSpriteCssClass) {
+        var galleryItem = new RibbonGalleryItem {
+            Text = text,
+            Value = text,
+            ToolTip = text
+        };
+        galleryItem.Image.SpriteProperties.CssClass = imageSpriteCssClass;
+        return galleryItem;
+    }
+}
+@Html.DevExpress().Ribbon(
+    settings => {
+        settings.Name = "Ribbon";
+        settings.AllowMinimize = true;
+        settings.ShowFileTab = false;
+        settings.ShowTabs = true;
+        settings.ShowGroupLabels = true;
+        
+        settings.ClientSideEvents.CommandExecuted = "onCommandExecuted";
+        
+        var homeTab = settings.Tabs.Add("Home");
+        homeTab.Groups.Add(g => {
+            g.Text = "Clipboard";
+            g.Name = "Clipboard";
+
+            g.Image.IconID = IconID.ReportsReport32x32;
+
+            var pasteItem = CreateButtonItem<RibbonDropDownButtonItem>("Paste", "Paste", RibbonItemSize.Large, IconID.ActionsInsert32x32);
+            pasteItem.Items.Add(
+                CreateButtonItem<RibbonDropDownButtonItem>("Paste", "Paste", IconID.ActionsInsert16x16),
+                CreateButtonItem<RibbonDropDownButtonItem>("Paste special", "Paste special", IconID.ActionsInsert16x16)
+            );
+            g.Items.Add(pasteItem);
+
+            g.Items.Add(CreateButtonItem<RibbonButtonItem>("Cut", "Cut", IconID.EditCut16x16));
+            g.Items.Add(CreateButtonItem<RibbonButtonItem>("Copy", "Copy", IconID.ActionsMerge16x16));
+            g.Items.Add(CreateButtonItem<RibbonButtonItem>("Clear", "Clear", IconID.ActionsClear16x16));
+        });
+
+        homeTab.Groups.Add(g => {
+            g.Text = "Font";
+            g.Name = "Font";
+
+            g.Image.IconID = IconID.AlignmentContentautoarrange32x32;
+
+            var fontGallery = (RibbonGalleryBarItem)g.Items.Add(MVCxRibbonItemType.GalleryBarItem, "Font");
+            fontGallery.ImageWidth = 150;
+            fontGallery.ImageHeight = 32;
+            fontGallery.ShowText = false;
+            fontGallery.MaxColumnCount = 1;
+            fontGallery.PropertiesDropDownGallery.RowCount = 6;
+            fontGallery.Groups.Add(new RibbonGalleryGroup("All Fonts", 
+                CreateGalleryItem("Arial", "fontArial"),
+                CreateGalleryItem("ArialBold", "fontArialBold"),
+                CreateGalleryItem("Comic Sans MS", "fontComicSansMs"),
+                CreateGalleryItem("Courier New", "fontCourierNew"),
+                CreateGalleryItem("Georgia", "fontGeorgia"),
+                CreateGalleryItem("Lucida Sans", "fontLucidaSans"),
+                CreateGalleryItem("Times New Roman", "fontTimesNewRoman"),
+                CreateGalleryItem("Verdana", "fontVerdana")));
+
+            g.Items.Add(CreateButtonItem<RibbonToggleButtonItem>("Bold", null, IconID.FormatBold16x16));
+            g.Items.Add(CreateButtonItem<RibbonToggleButtonItem>("Italic", null, IconID.FormatItalic16x16));
+
+            var underlineGallery = (RibbonGalleryDropDownItem)g.Items.Add(MVCxRibbonItemType.GalleryDropDownItem, "Underline");
+            underlineGallery.Size = RibbonItemSize.Small;
+            underlineGallery.PropertiesDropDownGallery.ShowText = false;
+            underlineGallery.PropertiesDropDownGallery.ImageWidth = 150;
+            underlineGallery.PropertiesDropDownGallery.ImageHeight = 25;
+            underlineGallery.PropertiesDropDownGallery.RowCount = 6;
+            underlineGallery.PropertiesDropDownGallery.ShowGroupText = false;
+            underlineGallery.SmallImage.IconID = IconID.FormatUnderline16x16;
+            underlineGallery.Groups.Add(new RibbonGalleryGroup("",
+                CreateGalleryItem("Underline", "underlineSolid"),
+                CreateGalleryItem("Double underline", "underlineDouble"),
+                CreateGalleryItem("Thick underline", "underlineBold"),
+                CreateGalleryItem("Dotted underline", "underlineDotted"),
+                CreateGalleryItem("Dashed underline", "underlineWideDotted"),
+                CreateGalleryItem("Dot-dash underline", "underlineDashDot"),
+                CreateGalleryItem("Dot-dot-dash underline", "underlineDashDoubleDot")));
+        });
+
+        homeTab.Groups.Add(g => {
+            g.Text = "Paragraph";
+            g.Name = "Paragraph";
+            
+            g.Image.IconID = IconID.FormatShowhidden32x32;
+
+            var bulletsGallery = (RibbonGalleryDropDownItem)g.Items.Add(MVCxRibbonItemType.GalleryDropDownItem, "Bullets");
+            bulletsGallery.Size = RibbonItemSize.Small;
+            bulletsGallery.SmallImage.IconID = IconID.FormatListbullets16x16;
+            bulletsGallery.PropertiesDropDownGallery.ColumnCount = 4;
+            bulletsGallery.PropertiesDropDownGallery.RowCount = 2;
+            bulletsGallery.PropertiesDropDownGallery.ImageHeight = 32;
+            bulletsGallery.PropertiesDropDownGallery.ImageWidth = 32;
+            bulletsGallery.PropertiesDropDownGallery.ShowText = false;
+            bulletsGallery.Groups.Add(new RibbonGalleryGroup("Bullet Library",
+                CreateGalleryItem("Black dot", "bulletBlackDot"),
+                CreateGalleryItem("Square", "bulletSquare"),
+                CreateGalleryItem("White dot", "bulletWhiteDot"),
+                CreateGalleryItem("Arrow", "bulletArrow"),
+                CreateGalleryItem("White diamond", "bulletWhiteLozenge"),
+                CreateGalleryItem("Black diamond", "bulletBlackLozenge"),
+                CreateGalleryItem("Check", "bulletCheck")));
+
+            g.Items.Add(CreateButtonItem<RibbonButtonItem>("Numbering", null, IconID.FormatListnumbers16x16));
+            g.Items.Add(CreateButtonItem<RibbonButtonItem>("Multilevel List", null, IconID.FormatListmultilevel16x16));
+            g.Items.Add(CreateButtonItem<RibbonButtonItem>("Decrease Indent", null, IconID.FormatIndentdecrease16x16));
+        });
+
+        homeTab.Groups.Add(g => {
+            g.Text = "Styles";
+            g.Name = "Styles";
+
+            g.Image.IconID = IconID.FormatChangefontstyle32x32;
+
+            var stylesGallery = (RibbonGalleryBarItem)g.Items.Add(MVCxRibbonItemType.GalleryBarItem, "Styles");
+            stylesGallery.ImageHeight = 32;
+            stylesGallery.ImageWidth = 64;
+            stylesGallery.MaxColumnCount = 10;
+            stylesGallery.MaxTextWidth = 67;
+            stylesGallery.PropertiesDropDownGallery.ShowGroupText = false;
+            stylesGallery.PropertiesDropDownGallery.RowCount = 6;
+            stylesGallery.Groups.Add(new RibbonGalleryGroup("",
+                CreateGalleryItem("¶ Normal", "styleNormal"),
+                CreateGalleryItem("¶ No Spacing", "styleNoSpacing"),
+                CreateGalleryItem("Heading 1", "styleHeading1"),
+                CreateGalleryItem("Heading 2", "styleHeading2"),
+                CreateGalleryItem("Title", "styleTitle"),
+                CreateGalleryItem("Subtitle", "styleSubtitle"),
+                CreateGalleryItem("Emphasis", "styleEmphasis"),
+                CreateGalleryItem("Intense Emphasis", "styleIntenseEmphasis"),
+                CreateGalleryItem("Strong", "styleStrong"),
+                CreateGalleryItem("Quote", "styleQuote"),
+                CreateGalleryItem("Intense Quote", "styleIntenseQuote"),
+                CreateGalleryItem("Subtle Reference", "styleSubtleReference"),
+                CreateGalleryItem("Intense Reference", "styleIntenseReference"),
+                CreateGalleryItem("Book Title", "styleBookTitle")));
+        });
+        
+        var insertTab = settings.Tabs.Add("Insert");
+        insertTab.Groups.Add(g => {
+            g.Text = "Illustrations";
+            g.Name = "Illustrations";
+
+            g.Image.IconID = IconID.ContentImage32x32;
+
+            g.Items.Add(CreateButtonItem<RibbonButtonItem>("Picture", "Picture", RibbonItemSize.Large, IconID.ContentImage32x32));
+
+            var shapesGallery = (RibbonGalleryBarItem)g.Items.Add(MVCxRibbonItemType.GalleryBarItem, "Shapes");
+            shapesGallery.ImageWidth = 16;
+            shapesGallery.ImageHeight = 16;
+            shapesGallery.ShowText = false;
+            shapesGallery.MaxColumnCount = 6;
+            shapesGallery.RowCount = 2;
+            shapesGallery.AllowSelectItem = false;
+            shapesGallery.PropertiesDropDownGallery.RowCount = 6;
+            shapesGallery.Groups.Add(new RibbonGalleryGroup("Basic",
+                CreateGalleryItem("Rectangle", "shapesRectangle"),
+                CreateGalleryItem("Rounded Rectangle", "shapesRoundedRectangle"),
+                CreateGalleryItem("Ellipse", "shapesEllipse"),
+                CreateGalleryItem("Diamond", "shapesDiamond"),
+                CreateGalleryItem("Trapezoid", "shapesTrapezoid"),
+                CreateGalleryItem("Parallelogram", "shapesParallelogram"),
+                CreateGalleryItem("Triangle", "shapesTriangle"),
+                CreateGalleryItem("Right Triangle", "shapesRightTriangle")));
+            shapesGallery.Groups.Add(new RibbonGalleryGroup("Polygons and stars",
+                CreateGalleryItem("Pentagon", "shapesPentagon"),
+                CreateGalleryItem("Hexagon", "shapesHexagon"),
+                CreateGalleryItem("Three-point Star", "shapesThreePointStar"),
+                CreateGalleryItem("Four-point Star", "shapesFourPointStar"),
+                CreateGalleryItem("Five-point Star", "shapesFivePointStar"),
+                CreateGalleryItem("Six-point Star", "shapesSixPointStar")));
+            shapesGallery.Groups.Add(new RibbonGalleryGroup("Arrows",
+                CreateGalleryItem("Arrow", "shapesArrow"),
+                CreateGalleryItem("Notched Arrow", "shapesNotchedArrow"),
+                CreateGalleryItem("Pentagon Arrow", "shapesPentagonArrow"),
+                CreateGalleryItem("Chevron Arrow", "shapesChevronArrow")));
+            shapesGallery.Groups.Add(new RibbonGalleryGroup("Callouts",
+                CreateGalleryItem("Rectangular Callout", "shapesRectangularCallout"),
+                CreateGalleryItem("Rounded Rectangular Callout", "shapesRoundedRectangularCallout"),
+                CreateGalleryItem("Elliptical Callout", "shapesEllipticalCallout"),
+                CreateGalleryItem("Cloud Callout", "shapesCloudCallout")));
+            shapesGallery.Groups.Add(new RibbonGalleryGroup("Symbols",
+                CreateGalleryItem("Lightning Bolt", "shapesLightningBolt"),
+                CreateGalleryItem("Check Mark", "shapesCheckMark"),
+                CreateGalleryItem("Multiply", "shapesMultiply"),
+                CreateGalleryItem("Gear", "shapesGear"),
+                CreateGalleryItem("Heart", "shapesHeart")));
+        });
+
+        insertTab.Groups.Add(g => {
+            g.Text = "Other";
+            g.Name = "Other";
+
+            g.Image.IconID = IconID.ContentWatermark32x32;
+
+            var watermarkGallery = (RibbonGalleryDropDownItem)g.Items.Add(MVCxRibbonItemType.GalleryDropDownItem, "Watermark", "Watermark");
+            watermarkGallery.Size = RibbonItemSize.Large;
+            watermarkGallery.LargeImage.IconID = IconID.ContentWatermark32x32;
+            watermarkGallery.PropertiesDropDownGallery.ColumnCount = 3;
+            watermarkGallery.PropertiesDropDownGallery.RowCount = 3;
+            watermarkGallery.PropertiesDropDownGallery.ImageWidth = 120;
+            watermarkGallery.PropertiesDropDownGallery.ImageHeight = 150;
+            watermarkGallery.Groups.Add(new RibbonGalleryGroup("Confidential",
+                CreateGalleryItem("CONFIDENTIAL1", "watermarkConfidential1"),
+                CreateGalleryItem("CONFIDENTIAL2", "watermarkConfidential2"),
+                CreateGalleryItem("DO NOT COPY 1", "watermarkDontcopy1"),
+                CreateGalleryItem("DO NOT COPY 2", "watermarkDontcopy2")));
+            watermarkGallery.Groups.Add(new RibbonGalleryGroup("Disclaimers",
+                CreateGalleryItem("DRAFT 1", "watermarkDraft1"),
+                CreateGalleryItem("DRAFT 2", "watermarkDraft2"),
+                CreateGalleryItem("SAMPLE 1", "watermarkSample1"),
+                CreateGalleryItem("SAMPLE 2", "watermarkSample2")));
+            watermarkGallery.Groups.Add(new RibbonGalleryGroup("Urgent",
+                CreateGalleryItem("ASAP 1", "watermarkAsap1"),
+                CreateGalleryItem("ASAP 2", "watermarkAsap2"),
+                CreateGalleryItem("URGENT 1", "watermarkUrgent1"),
+                CreateGalleryItem("URGENT 2", "watermarkUrgent2")));
+        });
+    }).GetHtml()

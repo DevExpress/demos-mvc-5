@@ -1,0 +1,6 @@
+﻿@Html.DevExpress().ImageGallery(settings => {
+    settings.Name = "imageGallery";
+    settings.CallbackRouteValues = new { Controller = "ImageGallery", Action = "DataBindingPartial" };
+    settings.FullscreenViewerThumbnailUrlField = "ThumbnailUrl";
+    settings.ThumbnailUrlField = "MediumImageUrl";
+}).BindToXML(Server.MapPath("~/App_Data/cities.xml"), "//items/*").GetHtml()

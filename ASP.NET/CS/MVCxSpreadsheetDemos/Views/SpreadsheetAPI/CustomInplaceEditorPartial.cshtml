@@ -1,0 +1,20 @@
+﻿
+
+@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "SpreadsheetAPI", Action = "CustomInplaceEditorPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 580;
+        settings.ActiveTabIndex = 0;
+        settings.ShowConfirmOnLosingChanges = false;
+        settings.RibbonMode = SpreadsheetRibbonMode.OneLineRibbon;
+        settings.ShowFormulaBar = false;
+        settings.ClientSideEvents.CellBeginEdit = "onSpreadsheetCellBeginEdit";
+
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideFileTab(spreadsheet);
+        };
+    }
+).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "CarRepairTracker.xlsx")).GetHtml()

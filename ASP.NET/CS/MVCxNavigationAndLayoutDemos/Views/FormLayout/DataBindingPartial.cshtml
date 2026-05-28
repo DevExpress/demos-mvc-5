@@ -1,0 +1,76 @@
+﻿@model EditableEmployee
+           
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "formLayout";
+    settings.UseDefaultPaddings = false;
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+    settings.Items.AddGroupItem(g => {
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.UseDefaultPaddings = false;
+        g.Items.Add(m => m.EmployeeID, i => {
+            i.Caption = "Select record";
+            i.Width = Unit.Percentage(33);
+            i.RequiredMarkDisplayMode = FieldRequiredMarkMode.Hidden;
+            i.NestedExtension().ComboBox(s => {
+                s.Properties.ClientSideEvents.ValueChanged = "UpdateLayoutForm";
+                s.Properties.ValueType = typeof(int);
+                for (var j = 1; j <= 5; j++) {
+                    s.Properties.Items.Add("Employee #" + j, j);
+                }
+            });
+        });
+    });
+
+    settings.Items.AddEmptyItem();
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Personal Information";
+        g.ColCount = 2;
+        g.Items.Add(m => m.FirstName, i => {
+            i.NestedExtension().TextBox(tb => {
+                tb.Width = Unit.Percentage(100);
+                tb.ShowModelErrors = true;
+                tb.Properties.ValidationSettings.Display = Display.Dynamic;
+                tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+            });
+        });
+        g.Items.Add(m => m.LastName, i => {
+            i.NestedExtension().TextBox(tb => {
+                tb.Width = Unit.Percentage(100);
+                tb.ShowModelErrors = true;
+                tb.Properties.ValidationSettings.Display = Display.Dynamic;
+                tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+            });
+        });
+        g.Items.Add(m => m.BirthDate);
+    });
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Work Information";
+        g.ColCount = 2;
+        g.Items.Add(m => m.Title, i => i.NestedExtensionSettings.Width = Unit.Percentage(100));
+        g.Items.Add(m => m.HireDate, i => i.NestedExtensionSettings.Width = Unit.Percentage(100));
+        g.Items.Add(m => m.Notes, i => {
+            i.Width = Unit.Percentage(100);
+            i.NestedExtension().Memo(memo => {
+                memo.Width = Unit.Percentage(100);
+                memo.Properties.Rows = 8;
+            });
+        });
+    });
+
+    settings.Items.Add(i => {
+        i.ShowCaption = DefaultBoolean.False;
+        i.CssClass = "buttonAlign";
+        i.Width = Unit.Percentage(100);
+        i.NestedExtension().Button(s => {
+            s.Name = "applyButton";
+            s.Text = "Update Record";
+            s.UseSubmitBehavior = true;
+            s.Width = Unit.Pixel(150);
+        });
+    });
+}).GetHtml()

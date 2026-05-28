@@ -1,0 +1,19 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "ApplicationScenarios", Action = "CustomDocumentManagementPartial" };
+        settings.CustomActionRouteValues = new { Controller = "ApplicationScenarios", Action = "OpenFile" };
+        
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 700;
+        settings.ActiveTabIndex = 0;
+        settings.ShowConfirmOnLosingChanges = false;
+        settings.WorkDirectory = DirectoryManagmentUtils.DocumentBrowsingFolderPath;
+        settings.PreRender = (s, e) => {
+            SpreadsheetDemoUtils.HideFileTab((MVCxSpreadsheet)s);
+        };
+
+        settings.ClientSideEvents.BeginCallback = "OnSpreadsheetBeginCallback";
+        settings.ClientSideEvents.EndCallback = "OnSpreadsheetEndCallback";
+    }
+).Open(Path.Combine(DirectoryManagmentUtils.DocumentBrowsingFolderPath, "BreakevenAnalysis.xlsx")).GetHtml()

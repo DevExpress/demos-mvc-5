@@ -1,0 +1,52 @@
+﻿@{
+    List<string> columnsToRemove = new List<string>() { 
+        "CategoryID", 
+        "ProductID", 
+        "SupplierID", 
+        "Supplier.SupplierID", 
+        "Supplier.HomePage", 
+        "Category.CategoryID", 
+        "EAN13" 
+    };
+}
+
+@Html.DevExpress().CardView(
+    settings =>
+    {
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "Filtering", Action = "FilterBuilderPartial" };
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Visible;
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.SettingsTableLayout.RowsPerPage = 2;
+
+        settings.Columns.Add("ProductName", MVCxCardViewColumnType.TextBox);
+        settings.Columns.Add("Category.CategoryName", MVCxCardViewColumnType.TextBox);
+        settings.Columns.Add("Supplier.CompanyName", MVCxCardViewColumnType.TextBox);
+        settings.Columns.Add("Supplier.ContactName", MVCxCardViewColumnType.TextBox);
+        settings.Columns.Add("UnitPrice", MVCxCardViewColumnType.SpinEdit).PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("UnitsInStock", MVCxCardViewColumnType.SpinEdit);
+
+        var columnTotal = settings.Columns.Add("Total", MVCxCardViewColumnType.SpinEdit);
+        columnTotal.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+        columnTotal.UnboundExpression = "UnitPrice*UnitsInStock";
+        columnTotal.PropertiesEdit.DisplayFormatString = "c";
+
+        settings.SettingsFilterControl.ViewMode = FilterBuilderDemoHelper.Options.EnableTextTab ? FilterControlViewMode.VisualAndText : FilterControlViewMode.Visual;
+        settings.SettingsFilterControl.AllowHierarchicalColumns = FilterBuilderDemoHelper.Options.AllowHierarchicalColumns;
+        settings.SettingsFilterControl.ShowAllDataSourceColumns = FilterBuilderDemoHelper.Options.ShowAllDataSourceColumns;
+        settings.SettingsFilterControl.MaxHierarchyDepth = 1;
+
+        settings.FilterControlColumnsCreated = (sender, e) => {
+            foreach(string col in columnsToRemove)
+                e.Columns.Remove(col);
+        };
+
+        settings.PreRender = (sender, e) => {
+            MVCxCardView cardView = sender as MVCxCardView;
+            if(cardView != null)
+                cardView.FilterExpression = "Category.CategoryName = 'Beverages'";
+
+        };
+
+        settings.SettingsPager.EnableAdaptivity = true;
+    }).Bind(Model).GetHtml()

@@ -1,0 +1,42 @@
+﻿@model EditableEmployee
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+@section AdditionalResources {
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <style type="text/css">
+            .buttonAlign {
+                text-align: right !important;
+            }
+    
+            @@media(max-width:600px) {
+                .buttonAlign {
+                    text-align: center !important;
+                }
+            }
+    </style>
+}
+
+<script type="text/javascript">
+    function UpdateLayoutForm(s, e) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DataBindingPartial", "FormLayout")',
+            data: { employeeID: s.GetValue() },
+            success: function(response) {
+                $("#editableContainer").html(response);
+            }
+        });
+    }
+</script>
+
+@using (Html.BeginForm("DataBindingApplyChanges", "FormLayout")) {
+    @Html.AntiForgeryToken()
+
+    <div id="editableContainer" style="max-width: 700px">
+        @Html.Partial("DataBindingPartial", Model)
+    </div>
+}

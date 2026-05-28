@@ -1,0 +1,16 @@
+﻿@model SettingsDemoOptions
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("SettingsPartial", Model)
+@section DemoOptions {
+    @Html.Partial("SettingsFormLayoutPartial", Model)
+}
+@section EndDemoRegion { 
+    @{ Html.EndForm(); }
+}

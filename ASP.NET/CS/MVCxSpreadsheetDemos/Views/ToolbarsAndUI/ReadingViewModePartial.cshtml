@@ -1,0 +1,19 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "Spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "ToolbarsAndUI", Action = "ReadingViewModePartial" };
+
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 700;
+        settings.ShowConfirmOnLosingChanges = false;
+        settings.SettingsView.Mode = SpreadsheetViewMode.Reading;
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetViewModeDemoHelper.PrepareSpreadsheetControl(spreadsheet, SpreadsheetViewMode.Reading);
+        };
+        settings.ViewModeChanging = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetViewModeDemoHelper.PrepareSpreadsheetControl(spreadsheet, e.NewMode);
+        };
+    }
+).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "ViewMode.xlsx")).GetHtml()

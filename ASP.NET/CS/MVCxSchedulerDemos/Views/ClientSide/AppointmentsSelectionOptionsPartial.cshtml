@@ -1,0 +1,45 @@
+﻿@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "SettingsFormLayout";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Appointment Details";
+
+        g.Items.Add(i => {
+            i.Caption = "Subject";
+            i.NestedExtension().Label(s => {
+                s.Name = "subject";
+            });
+        });
+        g.Items.Add(i => {
+            i.Caption = "Location";
+            i.NestedExtension().Label(s => {
+                s.Name = "location";
+            });
+        });
+        g.Items.Add(i => {
+            i.Caption = "Start time";
+            i.NestedExtension().Label(s => {
+                s.Name = "startTime";
+            });
+        });
+        g.Items.Add(i => {
+            i.Caption = "End time";
+            i.NestedExtension().Label(s => {
+                s.Name = "endTime";
+            });
+        });
+        g.Items.Add(i => {
+            i.Caption = "Description";
+            i.NestedExtension().Label(s => {
+                s.Name = "description";
+            });
+        });
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 480,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+
+}).GetHtml()

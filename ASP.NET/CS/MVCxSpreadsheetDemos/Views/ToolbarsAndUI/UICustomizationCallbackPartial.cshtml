@@ -1,0 +1,15 @@
+﻿@{ RibbonCustomizationDemoOptions options = (RibbonCustomizationDemoOptions)Session["RibbonCustomizationOptions"]; }
+
+@Html.DevExpress().CallbackPanel(
+    settings => {
+        settings.Name = "CallbackPanel";
+        settings.CallbackRouteValues = new { Controller = "ToolbarsAndUI", Action = "ApplySpreadsheetSettings" };
+        settings.SetContent(() => {
+            if (options.IsExternalRibbonMode)
+                Html.RenderPartial("UICustomizationExternalRibbonPartial");
+            Html.RenderPartial("UICustomizationSpreadsheetPartial");
+        });
+
+        settings.ClientSideEvents.BeginCallback = "CallbackPanel_OnBeginCallback";
+    }
+).GetHtml()  

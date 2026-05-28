@@ -1,0 +1,29 @@
+﻿@{
+    Html.DevExpress().GridView<Product>(settings => {
+        settings.Name = "grid";
+        settings.CallbackRouteValues = new { Controller = "Editors", Action = "FilterControl_GridPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add(c => c.ProductName);
+        settings.Columns.Add(c => {
+            c.FieldName = "CategoryID";
+            c.Caption = "CategoryName";
+            c.EditorProperties().ComboBox(s => {
+                s.DataSource = DevExpress.Web.Demos.Mvc.NorthwindDataProvider.GetCategories();
+                s.TextField = "CategoryName";
+                s.ValueField = "CategoryID";
+                s.ValueType = typeof(int);
+            });
+        });
+        
+        settings.Columns.Add(c => c.Supplier.CompanyName);
+        settings.Columns.Add(c => c.Supplier.ContactName);
+        settings.Columns.Add(c => c.UnitPrice).EditorProperties().SpinEdit(s => { s.DisplayFormatString = "c"; });
+        settings.Columns.Add(c => c.UnitsInStock).EditorProperties().SpinEdit(s => { });
+
+        settings.PreRender = (sender, e) => {
+            var grid = (MVCxGridView)sender;
+            grid.FilterExpression = "[Category.CategoryName] = 'Beverages'";
+        };
+    }).Bind(Model).GetHtml();
+}

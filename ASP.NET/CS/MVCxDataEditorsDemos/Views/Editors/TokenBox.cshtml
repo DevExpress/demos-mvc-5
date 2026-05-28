@@ -1,0 +1,53 @@
+﻿@model TokenBoxOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(600);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(400);
+}
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().TokenBox(settings => {
+    settings.Name = "tokenBox";
+    settings.Width = Unit.Percentage(100);
+    settings.Properties.AllowCustomTokens = Model.AllowCustomTokens;
+    settings.Properties.IncrementalFilteringMode = Model.IncrementalFilteringMode;
+    settings.Properties.ShowDropDownOnFocus = Model.ShowDropDownOnFocus;
+    settings.Properties.TextField = "Name";
+    settings.Properties.ValueField = "Email";
+    settings.Properties.Tokens.Add("Julia Evans");
+    settings.Properties.Tokens.Add("Kevin Collins");
+    settings.Properties.Tokens.Add("Diana Martin");
+}).BindToXML("~/App_Data/Contacts.xml", "//Contacts/*").GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+        settings.Name = "FormLayoutSettings";
+        settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    
+        settings.Items.AddGroupItem(g => {
+            g.Caption = "Options";
+            g.Items.Add(m => m.AllowCustomTokens);
+            g.Items.Add(m => m.ShowDropDownOnFocus);
+            g.Items.Add(m => m.IncrementalFilteringMode);       
+        });
+        DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+            ColumnMinWidth = 360,
+            ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+        });
+    }).Bind(Model).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

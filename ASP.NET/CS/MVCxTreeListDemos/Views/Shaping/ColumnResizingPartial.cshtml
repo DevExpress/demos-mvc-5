@@ -1,0 +1,31 @@
+﻿@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "Shaping", Action = "ColumnResizingPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.SettingsResizing.ColumnResizeMode = DemoOptions.ColumnResizeMode;
+    settings.SettingsResizing.Visualization = DemoOptions.Visualization;
+
+    settings.Settings.GridLines = GridLines.Both;
+    settings.SettingsBehavior.AllowEllipsisInText = true;
+    settings.SettingsBehavior.AutoExpandAllNodes = true;
+
+    settings.KeyFieldName = "ID";
+    settings.ParentFieldName = "ParentID";
+
+    settings.Columns.Add(c => {
+        c.FieldName = "DepartmentName";
+        c.Caption = "Departments";
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "Budget";
+        c.PropertiesEdit.DisplayFormatString = "{0:C}";
+    });
+    settings.Columns.Add("Location");
+    settings.Columns.Add("Phone1");
+    settings.Columns.Add("Phone2");
+}).Bind(Model).GetHtml()
+
+@functions {
+    ColumnResizingDemoOptions DemoOptions { get { return ViewBag.ResizingOptions; } }
+}

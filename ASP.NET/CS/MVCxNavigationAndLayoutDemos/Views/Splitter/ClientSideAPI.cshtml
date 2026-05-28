@@ -1,0 +1,142 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1200);
+}
+
+@section AdditionalResources {
+    <script type="text/javascript">
+            function AllowResize(value) {
+                splitter.SetAllowResize(value);
+            }
+
+            var selectedPane = "First";
+            function ComboBoxValueChanged(newValue) {
+                selectedPane = newValue;
+                UpdateButtonState();
+            }
+
+            var isCollapseButton = true;
+            function CollapseExpandButtonClick(button) {
+                var pane = splitter.GetPaneByName(selectedPane);
+                var secondPane = splitter.GetPaneByName((selectedPane == "First") ? "Second" : "First");
+
+                var allowCollapse = !pane.IsCollapsed() && !secondPane.IsCollapsed();
+                var allowExpand = pane.IsCollapsed();
+                if(isCollapseButton && allowCollapse)
+                    pane.Collapse(secondPane);
+                else if(!isCollapseButton && allowExpand)
+                    pane.Expand();
+            }
+
+            function UpdateButtonState() {
+                var pane = splitter.GetPaneByName(selectedPane);
+                var secondPane = splitter.GetPaneByName((selectedPane == "First") ? "Second" : "First");
+
+                if(secondPane.IsCollapsed()) {
+                    isCollapseButton = true;
+                    collapseExpandButton.SetEnabled(false);
+                }
+                else {
+                    isCollapseButton = !pane.IsCollapsed();
+                    collapseExpandButton.SetEnabled(true);
+                }
+
+                if(isCollapseButton)
+                    collapseExpandButton.SetText("Collapse pane");
+                else
+                    collapseExpandButton.SetText("Expand pane");
+            }
+
+            function UpdateContentUrl(s, e) {
+                splitter.GetPaneByName('Second').SetContentUrl(s.GetValue());
+                e.processOnServer = false;
+            }
+
+            function UpdatePaneWidth(s, e) {
+                splitter.GetPaneByName('First').SetSize(s.GetValue());
+                e.processOnServer = false;
+            }
+    </script>
+}
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+    settings.Name = "FormLayoutSettings";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.Items.AddGroupItem(group => {
+        group.Caption = "Options";
+        group.Items.Add(i => {
+            i.Caption = "Allow sizing";
+            i.NestedExtension().CheckBox(ch => {
+                ch.Name = "cbAllowResize";
+                ch.Checked = true;
+                ch.Properties.ClientSideEvents.ValueChanged = "function(s, e) { AllowResize(s.GetValue()); }";
+            });
+        });
+        group.Items.Add(i => {
+            i.Caption = "ContentUrl for the second pane:";
+            i.NestedExtension().ComboBox(cb => {
+                cb.Name = "cmbSecondPaneUrl";
+                cb.SelectedIndex = 0;
+                cb.Width = 200;
+                cb.Properties.Items.Add("SamplePage1", DevExpressHelper.GetUrl(new { Controller = "Splitter", Action = "SamplePage1" }));
+                cb.Properties.Items.Add("SamplePage2", DevExpressHelper.GetUrl(new { Controller = "Splitter", Action = "SamplePage2" }));
+                cb.Properties.Items.Add("SamplePage3", DevExpressHelper.GetUrl(new { Controller = "Splitter", Action = "SamplePage3" }));
+                cb.Properties.ClientSideEvents.ValueChanged = "UpdateContentUrl";
+            });
+        });
+        group.Items.Add(i => {
+            i.Caption = "Width of the first pane:";
+            i.NestedExtension().ComboBox(cb => {
+                cb.Name = "cmbFirstPaneWidth";
+                cb.SelectedIndex = 0;
+                cb.Width = 200;
+                cb.Properties.Items.Add("15%", "15%");
+                cb.Properties.Items.Add("300px", "300px");
+                cb.Properties.Items.Add("400px", "400px");
+                cb.Properties.ClientSideEvents.ValueChanged = "UpdatePaneWidth";
+            });
+        });
+        group.Items.Add(i => {
+            i.Caption = "Collapse/Expand panes:";
+            i.NestedExtension().ComboBox(cb => {
+                cb.Name = "cmbPane";
+                cb.Width = 200;
+                cb.SelectedIndex = 0;
+                cb.Properties.Items.Add("First pane", "First");
+                cb.Properties.Items.Add("Second pane", "Second");
+                cb.Properties.ClientSideEvents.ValueChanged = "function(s, e) { ComboBoxValueChanged(s.GetValue()); }";
+            });
+        });
+        group.Items.Add(i => {
+            i.NestedExtension().Button(b => {
+                b.Name = "collapseExpandButton";
+                b.Text = "Collapse pane";
+                b.Width = 200;
+                b.ClientSideEvents.Click = "CollapseExpandButtonClick";
+            });
+        });
+    });
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 300,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+    }).GetHtml()
+}
+@Html.DevExpress().Splitter(
+    settings => {
+        settings.Name = "splitter";
+        settings.Height = 400;
+        settings.Width = Unit.Percentage(100);
+        settings.ShowCollapseBackwardButton = true;
+        settings.ShowCollapseForwardButton = true;
+
+        settings.Panes.Add(pane => {
+            pane.Name = "First";
+                
+            pane.Size = Unit.Percentage(20);
+            pane = settings.Panes.Add("Second");
+            pane.ContentUrl = DevExpressHelper.GetUrl(new { Controller = "Splitter", Action = "SamplePage1" });
+        });
+                
+        settings.ClientSideEvents.PaneCollapsed = "UpdateButtonState";
+        settings.ClientSideEvents.PaneExpanded = "UpdateButtonState";
+    }).GetHtml()

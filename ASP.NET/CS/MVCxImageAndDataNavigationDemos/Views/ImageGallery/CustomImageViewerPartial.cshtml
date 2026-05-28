@@ -1,0 +1,14 @@
+﻿@Html.DevExpress().ImageGallery(settings => {
+    settings.Name = "imageGallery";
+    settings.CallbackRouteValues = new { Controller = "ImageGallery", Action = "CustomImageViewerPartial" };
+    settings.TextVisibility = ElementVisibilityMode.None;
+    settings.ImageCacheFolder = ImageGalleryDemoHelper.DefaultImageCacheFolder;
+
+    settings.SettingsFullscreenViewer.Visible = false;
+    settings.ClientSideEvents.FullscreenViewerShowing = "OnFullscreenViewerShowing";
+
+    settings.DataBound = (sender, e) => {
+        MVCxImageGallery imageGallery = (MVCxImageGallery)sender;
+        imageGallery.JSProperties["cpCount"] = imageGallery.Items.Count;
+    };
+}).BindToFolder(ImageGalleryDemoHelper.LandscapeImageFolder).GetHtml()

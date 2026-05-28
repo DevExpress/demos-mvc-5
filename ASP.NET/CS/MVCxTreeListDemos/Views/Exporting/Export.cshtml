@@ -1,0 +1,40 @@
+﻿@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@section DemoOptionsTop {
+    <script>
+        function onTreeBeginCallback(s, e) {
+            e.customArgs = MVCxClientUtils.GetSerializedEditorValuesInContainer("options");
+        }
+    </script>
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(s => {
+                s.Name = "EnableAutoWidth";
+                s.Text = "Auto-width";
+                s.Theme = DemoHelper.Instance.Theme;
+           }).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(s => {
+               s.Name = "ExpandAllNodes";
+               s.Text = "Expand all nodes";
+               s.Theme = DemoHelper.Instance.Theme;
+           }).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(s => {
+               s.Name = "ShowTreeButtons";
+               s.Text = "Show treelist buttons";
+               s.Theme = DemoHelper.Instance.Theme;
+           }).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.Action("ExportPartial")
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

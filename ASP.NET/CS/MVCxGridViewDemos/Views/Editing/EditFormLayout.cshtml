@@ -1,0 +1,30 @@
+﻿@model IEnumerable<CompanyEmployee>
+
+<script>
+    function onDismissalDateChanged(s, e) {
+        var dismissalLayoutGroup = gvEditing.GetEditFormLayoutItemOrGroup("DismissalInformation");
+        dismissalLayoutGroup.SetVisible(s.GetValue() != null);
+        if (s.GetValue() == null) {
+            gvEditing.SetEditValue("FireReason", "");
+            gvEditing.SetEditValue("NewCompany", "");
+            gvEditing.SetEditValue("References", "");
+        }
+    }
+
+    function onShowHideInfoClick(s, e) {
+        var contactLayoutGroup = gvEditing.GetEditFormLayoutItemOrGroup("groupContactInfo");
+        var isContactLayoutGroupVisible = contactLayoutGroup.GetVisible();
+        s.SetText(isContactLayoutGroupVisible ? "Show Details..." : "Hide Details");
+        contactLayoutGroup.SetVisible(!isContactLayoutGroupVisible);
+    }
+
+    function Grid_BeginCallback(s, e) {
+        DXDemo.LoadAntiForgeryTokenInputValue(e.customArgs);
+    }
+</script>
+
+@using (Html.BeginForm()){
+    @Html.AntiForgeryToken()
+
+    @Html.Partial("EditFormLayoutPartial", Model)
+}

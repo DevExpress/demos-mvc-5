@@ -1,0 +1,51 @@
+﻿@model LoanAmortizationScheduleParameters
+
+@Html.DevExpress().FormLayout(
+    settings => {
+        settings.Name = "options";
+        settings.Width = Unit.Percentage(100);
+        
+        settings.Items.AddGroupItem(g => {
+            g.Caption = "Report parameters";
+            g.GroupBoxStyle.Caption.Font.Size = 12;
+            
+            g.Items.Add(m => m.LoanAmount, i => {
+                i.NestedExtension().SpinEdit(s => {
+                    s.Properties.DecimalPlaces = 2;
+                    s.Properties.DisplayFormatString = "{0:C}";
+                    s.Properties.Increment = 0.1M;
+                    s.Properties.LargeIncrement = 1;
+                    s.Properties.SpinButtons.ShowIncrementButtons = true;
+                });
+            });
+            g.Items.Add(m => m.AnnualInterestRate, i => {
+                i.NestedExtension().SpinEdit(s => {
+                    s.Properties.DecimalPlaces = 3;
+                    s.Properties.DisplayFormatString = "{0:P}";
+                    s.Properties.MinValue = 0;
+                    s.Properties.MaxValue = 1;
+                    s.Properties.Increment = 0.1M;
+                });
+            });
+            g.Items.Add(m => m.LoanPeriodInYears);
+            g.Items.Add(m => m.NumberOfPayments);
+            g.Items.Add(m => m.StartDate, i => i.NestedExtension().DateEdit(s => s.Properties.AllowNull = false));                
+            g.Items.Add(m => m.OptionalExtraPayments, i => {
+                i.NestedExtension().SpinEdit(s => {
+                    s.Properties.DecimalPlaces = 2;
+                    s.Properties.DisplayFormatString = "{0:C}";
+                    s.Properties.MinValue = 0;
+                    s.Properties.Increment = 0.1M;
+                    s.Properties.LargeIncrement = 1;
+                    s.Properties.SpinButtons.ShowIncrementButtons = true;
+                });
+            });
+        });
+		DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+			ColumnMinWidth = 430,
+			ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+		});
+    }
+
+
+).GetHtml()

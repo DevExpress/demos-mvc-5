@@ -1,0 +1,36 @@
+﻿@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "DemoRichEdit";
+    settings.CallbackRouteValues = new { Controller = "API", Action = "ClientSideEventsPartial" };
+
+    settings.ClientSideEvents.ActiveSubDocumentChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'ActiveSubDocumentChanged') }";
+    settings.ClientSideEvents.BeginSynchronization = "function(s, e) { DXEventMonitor.Trace(s, e, 'BeginSynchronization') }";
+    settings.ClientSideEvents.CharacterPropertiesChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'CharacterPropertiesChanged') }";
+    settings.ClientSideEvents.DocumentChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'DocumentChanged') }";
+    settings.ClientSideEvents.DocumentLoaded = "function(s, e) { DXEventMonitor.Trace(s, e, 'DocumentLoaded') }";
+    settings.ClientSideEvents.EndSynchronization = "function(s, e) { DXEventMonitor.Trace(s, e, 'EndSynchronization') }";
+    settings.ClientSideEvents.HyperlinkClick = "function(s, e) { DXEventMonitor.Trace(s, e, 'HyperlinkClick') }";
+    settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init') }";
+    settings.ClientSideEvents.KeyDown = "function(s, e) { DXEventMonitor.Trace(s, e, 'KeyDown') }";
+    settings.ClientSideEvents.KeyUp = "function(s, e) { DXEventMonitor.Trace(s, e, 'KeyUp') }";
+    settings.ClientSideEvents.PointerDown = "function(s, e) { DXEventMonitor.Trace(s, e, 'PointerDown') }";
+    settings.ClientSideEvents.PointerUp = "function(s, e) { DXEventMonitor.Trace(s, e, 'PointerUp') }";
+    settings.ClientSideEvents.LostFocus = "function(s, e) { DXEventMonitor.Trace(s, e, 'LostFocus') }";
+    settings.ClientSideEvents.GotFocus = "function(s, e) { DXEventMonitor.Trace(s, e, 'GotFocus') }";
+    settings.ClientSideEvents.ParagraphPropertiesChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'ParagraphPropertiesChanged') }";
+    settings.ClientSideEvents.PopupMenuShowing = "function(s, e) { DXEventMonitor.Trace(s, e, 'PopupMenuShowing') }";
+    settings.ClientSideEvents.SelectionChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'SelectionChanged') }";
+    settings.ClientSideEvents.DocumentFormatted = "function(s, e) { DXEventMonitor.Trace(s, e, 'DocumentFormatted') }";
+    settings.ClientSideEvents.ContentInserted = "function(s, e) { DXEventMonitor.Trace(s, e, 'ContentInserted') }";
+    settings.ClientSideEvents.ContentRemoved = "function(s, e) { DXEventMonitor.Trace(s, e, 'ContentRemoved') }";
+
+    settings.Width = Unit.Percentage(100);
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ActiveTabIndex = 0;
+    settings.RibbonMode = RichEditRibbonMode.OneLineRibbon;
+
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        RichEditDemoUtils.HideFileTab(richEdit);
+        richEdit.Focus();
+    };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "Hyperlinks.rtf")).GetHtml()

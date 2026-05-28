@@ -1,0 +1,13 @@
+﻿@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1450);}
+@if(!DatabaseGenerator.IsReady("GeneratedEmailTable")) {
+    @Html.Partial("CreateDatabasePartial", "GeneratedEmailTable")
+} else {
+    @section DemoOptionsTop {
+        <div class="options">
+            <div class="options-item">
+                @Html.Partial("PerformanceTestPartial")
+            </div>
+        </div>
+    }
+    @Html.Partial("DataBindingToLargeDatabasePartial")
+}

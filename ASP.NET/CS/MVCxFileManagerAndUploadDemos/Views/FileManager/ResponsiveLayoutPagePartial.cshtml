@@ -1,0 +1,46 @@
+﻿@Html.DevExpress().FileManager(
+    settings => {
+        settings.Name = "fileManager";
+        settings.CallbackRouteValues = new { Controller = "FileManager", Action = "ResponsiveLayoutPagePartial" };
+        settings.DownloadRouteValues = new { Controller = "FileManager", Action = "ResponsiveLayoutPageDownloadFiles" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Percentage(100);
+
+        settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+        settings.Settings.AllowedFileExtensions = FileManagerDemoHelper.DocumentsAllowedFileExtensions;
+        settings.SettingsAdaptivity.Enabled = true;
+
+        settings.SettingsEditing.Assign(FileManagerDemoHelper.CreateFileManagerEditingSettings());
+
+        settings.SettingsUpload.UseAdvancedUploadMode = true;
+        settings.SettingsUpload.ShowUploadPanel = false;
+        settings.SettingsUpload.AdvancedModeSettings.EnableMultiSelect = true;
+
+        settings.SettingsToolbar.Items.Add(new FileManagerToolbarPathBox());
+        settings.SettingsToolbar.Items.Add(new FileManagerToolbarCreateButton());
+        settings.SettingsToolbar.Items.Add(new FileManagerToolbarRenameButton());
+        settings.SettingsToolbar.Items.Add(new FileManagerToolbarMoveButton());
+        settings.SettingsToolbar.Items.Add(new FileManagerToolbarCopyButton());
+        settings.SettingsToolbar.Items.Add(new FileManagerToolbarDeleteButton());
+        settings.SettingsToolbar.Items.Add(new FileManagerToolbarDownloadButton());
+        settings.SettingsToolbar.Items.Add(new FileManagerToolbarUploadButton());
+        settings.SettingsToolbar.Items.Add(new FileManagerToolbarRefreshButton());
+        settings.SettingsToolbar.Items.Add(new FileManagerToolbarSpacer());
+        
+        var filterBox = new FileManagerToolbarFilterBox();
+        filterBox.Caption = "";
+        filterBox.NullText = "Search...";
+        filterBox.NullTextDisplayMode = NullTextDisplayMode.UnfocusedAndFocused;
+        settings.SettingsToolbar.Items.Add(filterBox);
+        
+        settings.SettingsBreadcrumbs.Visible = true;
+        settings.SettingsFileList.ShowFolders = true;
+
+        settings.FileUploading = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.FolderCreating = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemRenaming = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemDeleting = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemMoving = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemCopying = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+    }
+).BindToFolder(Model).GetHtml()

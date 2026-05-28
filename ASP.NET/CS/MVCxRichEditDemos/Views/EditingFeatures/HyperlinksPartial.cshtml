@@ -1,0 +1,20 @@
+﻿@model HyperlinksAndBookmarksDemoOptions          
+@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "EditingFeatures", Action = "HyperlinksPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(600);
+
+    settings.Settings.Bookmarks.Visibility = Model.ShowBookmarks ? RichEditBookmarkVisibility.Visible : RichEditBookmarkVisibility.Hidden;
+    settings.Settings.Bookmarks.Color = Model.BookmarkColor;
+    
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ActiveTabIndex = 0;
+    
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        RichEditDemoUtils.HideFileTab(richEdit);
+        richEdit.Focus();
+    };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "Hyperlinks.rtf")).GetHtml()

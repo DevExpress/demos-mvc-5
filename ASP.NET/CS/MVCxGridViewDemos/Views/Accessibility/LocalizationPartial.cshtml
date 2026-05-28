@@ -1,0 +1,44 @@
+﻿@using Resources.Accessibility
+@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "Accessibility", Action = "LocalizationPartial" };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Accessibility", Action = "LocalizationUpdatePartial" };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Accessibility", Action = "LocalizationAddNewPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.KeyFieldName = "EmployeeID";
+    settings.SettingsEditing.EditFormColumnCount = 3;
+
+    settings.CommandColumn.VisibleIndex = 0;
+    settings.CommandColumn.ShowEditButton = true;
+    settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.Columns.Add("FirstName", Localization.FirstName);
+    settings.Columns.Add("LastName", Localization.LastName);
+    settings.Columns.Add("HomePhone", Localization.HomePhone);
+    settings.Columns.Add(c => {
+        c.FieldName = "BirthDate";
+        c.Caption = Localization.BirthDate;
+        c.EditorProperties().DateEdit(de => {
+            de.DisplayFormatString = "d";
+            de.DisplayFormatInEditMode = true;
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "HireDate";
+        c.Caption = Localization.HireDate;
+        c.EditorProperties().DateEdit(de => {
+            de.DisplayFormatString = "d";
+            de.DisplayFormatInEditMode = true;
+        });
+    });
+
+    settings.Settings.ShowGroupPanel = true;
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowFilterRowMenu = true;
+    settings.SettingsPager.PageSize = 5;
+    settings.SettingsPager.PageSizeItemSettings.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.ShowAllItem = true;
+    settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).SetEditErrorText(ViewData["EditError"] as string).Bind(Model).GetHtml()

@@ -1,0 +1,14 @@
+﻿@model ToolbarModeOptions
+           
+@Html.DevExpress().HtmlEditorFor(m => m.Html, settings =>
+{
+    settings.CallbackRouteValues = new { Controller = "ToolbarsAndUI", Action = "ToolbarModePartial" };
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(440);
+
+    settings.ToolbarMode = Model.ToolbarMode;
+    settings.Settings.SettingsRibbonToolbar.OneLineMode = Model.IsRibbonOneLineMode;
+
+    Model.PrepareHtmlEditorSettings(settings);
+    DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+}).GetHtml()

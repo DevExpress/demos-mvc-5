@@ -1,0 +1,45 @@
+﻿@model BatchEditingDemoOptions
+@{ DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(410); }
+
+<script type="text/javascript">    
+    function OnBeginGridCallback(s, e) {
+        e.customArgs = MVCxClientUtils.GetSerializedEditorValuesInContainer("options");
+    }
+</script>
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "options";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(g => {
+            g.Caption = "Options";
+            g.Items.Add(m => m.PagerMode);
+            g.Items.Add(m => m.EditMode);
+            g.Items.Add(m => m.StartEditAction);
+            g.Items.Add(m => m.HighlightDeletedRows);
+            g.Items.Add(m => m.KeepChangesOnCallbacks);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 380,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()    
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@Html.Action("BatchEditingPartial", new { options = Model })
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

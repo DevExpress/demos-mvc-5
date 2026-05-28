@@ -1,0 +1,11 @@
+﻿@model IEnumerable
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">            
+                <strong>Note:</strong> If you export grouped data to RTF, be sure to open the resulting file with an editor that fully supports RTF, including tables. For instance, Microsoft WordPad does not support this feature, and thus the file may appear corrupt.            
+        </div>
+    </div>    
+}
+@using (Html.BeginForm()) {
+    @Html.Partial("ExportPartial", Model)
+}

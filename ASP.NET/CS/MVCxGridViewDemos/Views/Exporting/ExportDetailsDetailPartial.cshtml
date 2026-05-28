@@ -1,0 +1,15 @@
+﻿@Html.DevExpress().GridView(settings => {
+	settings.Name = "detailGrid" + ViewBag.CategoryID;
+	settings.CallbackRouteValues = new { Action = "ExportDetailsDetailPartial", Controller = "Exporting", CategoryID = ViewBag.CategoryID };
+	settings.Width = Unit.Percentage(100);
+
+	settings.KeyFieldName = "ProductID";
+	settings.Columns.Add("ProductID");
+	settings.Columns.Add("ProductName");
+	settings.Columns.Add("UnitPrice");
+	settings.Columns.Add("QuantityPerUnit");
+
+	settings.SettingsDetail.MasterGridName = "masterGrid";
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

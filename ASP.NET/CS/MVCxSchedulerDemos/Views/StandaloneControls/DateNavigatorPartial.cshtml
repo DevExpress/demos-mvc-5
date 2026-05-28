@@ -1,0 +1,11 @@
+﻿@model DateNavigatorDemoOptions
+
+@Html.DevExpress().SchedulerStorageControl(settings => {
+    settings.Name = "storageControl";
+    settings.CallbackRouteValues = new { Controller = "StandaloneControls", Action = "DateNavigatorPartial" };
+
+    settings.Storage.EnableReminders = false;
+    settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+    settings.Storage.Appointments.Assign(SchedulerDemoHelper.DefaultAppointmentStorage);
+
+}).Bind(Model.Appointments, Model.Resources).GetHtml()

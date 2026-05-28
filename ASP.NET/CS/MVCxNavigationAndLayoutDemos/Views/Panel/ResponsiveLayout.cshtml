@@ -1,0 +1,16 @@
+﻿@{
+    ViewDataDictionary viewData = new ViewDataDictionary();
+    viewData["Controller"] = "Panel";
+    viewData["Action"] = "ResponsiveLayoutPage";
+    viewData["EnableAnimation"] = false;
+}
+
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@this.GetUrlContentWithVersionSuffix("~/Content/DeviceViewer.css")" />
+}
+
+@section DeviceViewerRegion {
+    @{
+        Html.RenderPartial("DeviceViewer", viewData);
+    }
+}

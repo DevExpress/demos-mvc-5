@@ -1,0 +1,26 @@
+﻿@model IEnumerable
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(settings => {
+                settings.Name = "EnableCheckedListMode";
+                settings.Text = "Enable CheckedList Mode";
+                settings.Theme = DemoHelper.Instance.Theme;
+                settings.ControlStyle.Wrap = DefaultBoolean.False;
+                settings.Properties.ClientSideEvents.CheckedChanged = "function(s, e){ $('form').submit(); }";
+            }).Bind((bool)ViewBag.EnableCheckedListMode).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.Partial("HeaderFilterPartial", Model)
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+

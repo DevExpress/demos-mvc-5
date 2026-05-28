@@ -1,0 +1,30 @@
+﻿@model LoanAmortizationScheduleParameters
+
+@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+    @Html.Partial("DynamicSheetGenerationPartial")
+
+@section DemoOptions  {
+
+	@Html.Partial("DynamicSheetGenerationOptionsPartial", Model)
+
+	<div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

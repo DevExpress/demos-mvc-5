@@ -1,0 +1,49 @@
+﻿@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+<script type="text/javascript">
+    function onPopupShown(s, e) {
+        var windowInnerWidth = window.innerWidth;
+        if(s.GetWidth() > windowInnerWidth) {
+            s.SetWidth(windowInnerWidth - 4);
+            s.UpdatePosition();
+        }
+    }
+</script>
+
+<div style="width: 100%; height: 215px; padding-top: 100px" id="popupArea">
+    <div style="text-align: center">
+        <img src="@Url.Content("~/Content/PopupControl/ContentUrl/mail32x32.gif")"
+            style="height: 32px; width: 32px; background-color: transparent; cursor: pointer" alt="" />
+        <br />
+        Click here to send us a message...
+    </div>
+    @Html.DevExpress().PopupControl(
+        settings => {
+            settings.Name = "feedPopupControl";
+            settings.PopupElementID = "popupArea";
+            settings.ContentUrl = "ContentUrlFeedForm";
+            settings.HeaderText = "Feedback form";
+            settings.FooterText = "Try to resize the control using the resize grip or the control's edges";
+            
+            settings.AllowDragging = true;
+            settings.AllowResize = true;
+            settings.ShowFooter = true;
+            settings.ShowOnPageLoad = true;  
+            settings.CloseAction = CloseAction.CloseButton;
+            
+            settings.PopupHorizontalAlign = PopupHorizontalAlign.Center;
+            settings.PopupVerticalAlign = PopupVerticalAlign.Middle;
+            settings.Styles.Footer.Paddings.Padding = 8;
+            settings.Styles.Footer.SizeGripSpacing = 0;
+            settings.Styles.Footer.Wrap = DefaultBoolean.True;
+            settings.Styles.Content.Paddings.Padding = 0;
+
+            settings.Height = 325;
+            settings.Width = 400;
+            settings.MinWidth = 310;
+            settings.MinHeight = 280;
+
+            settings.ClientSideEvents.Shown = "onPopupShown";
+        }
+    ).GetHtml()
+</div>

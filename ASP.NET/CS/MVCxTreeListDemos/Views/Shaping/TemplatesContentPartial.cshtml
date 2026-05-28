@@ -1,0 +1,31 @@
+﻿@model BioLife
+@{ 
+    ViewContext.ViewData.TemplateInfo.HtmlFieldPrefix = Model.ID.ToString();
+}
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "fl" + Model.ID;
+    settings.Width = Unit.Percentage(100);
+    settings.ColumnCount = 2;
+    settings.AlignItemCaptions = true;
+
+    settings.Items.Add(m => m.Species_No, i => ConfigureLabel(i, colSpan: 1));
+    settings.Items.Add(m => m.Length, i => ConfigureLabel(i, colSpan: 1));
+    settings.Items.Add(m => m.Common_Name, i => ConfigureLabel(i, colSpan: 2));
+    settings.Items.Add(m => m.Species_Name, i => ConfigureLabel(i, colSpan: 2));
+    settings.Items.Add(i => {
+        i.ShowCaption = DefaultBoolean.False;
+        i.NestedExtension().HyperLink(hl => {
+            hl.Properties.Text = "Show notes...";
+            hl.Properties.ClientSideEvents.Click = "function(s, e) { LoadNotes(" + Model.ID + ", s.name); }";
+        });
+    });
+}).GetHtml()
+
+
+@functions {
+    void ConfigureLabel(MVCxFormLayoutItem i, int colSpan = 2) {
+        i.ColumnSpan = colSpan;
+        i.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+    }
+}

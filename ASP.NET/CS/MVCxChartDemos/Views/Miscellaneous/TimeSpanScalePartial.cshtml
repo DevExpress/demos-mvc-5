@@ -1,0 +1,47 @@
+﻿@model ChartTimeSpanScaleDemoOptions
+
+@{
+    ChartTimeSpanScaleDemoOptions options = Model;
+    if (options != null) {
+    @Html.DevExpress().Chart(settings => {
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.CallbackRouteValues = new { controller = "Miscellaneous", action = "TimeSpanScalePartial" };
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Boston Marathon Winners"
+    });
+
+    settings.Series.Template(t => {
+        t.Views().PointSeriesView(v => {
+        });
+        t.ArgumentDataMember = "Year";
+        t.ValueDataMembers[0] = "Time";
+        t.ValueScaleType = DevExpress.XtraCharts.ScaleType.TimeSpan;
+        t.ToolTipEnabled = DefaultBoolean.True;
+        t.CrosshairEnabled = DefaultBoolean.False;
+        t.ToolTipPointPattern="<table><tr><td>{Year}</td><td>{Name}</td></tr><tr><td><img src='data:image/gif;base64,{Image}' alt='Flag'></td><td>{Time}</td></tr><tr><td>{Country}</td><td></td></tr></table>";
+    });
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Left;
+        l.MarkerMode = LegendMarkerMode.CheckBoxAndMarker;
+        l.Border.Visibility = DefaultBoolean.False;
+    });
+
+    settings.XYDiagram(d => {
+        d.AxisX.Title.Text = "Year";
+        d.AxisY.Title.Text = "Time";
+        d.AxisX.Title.Visibility = DefaultBoolean.True;
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+        d.AxisY.Reverse = true;
+        d.AxisY.WholeRange.AlwaysShowZeroLevel = false;
+    });
+}).Bind(Model.Data, seriesDataMember: "Category").GetHtml()
+   }
+}

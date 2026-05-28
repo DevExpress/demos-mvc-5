@@ -1,0 +1,14 @@
+﻿@model MailMergeViaDocumentServerOptions
+
+@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "MailMerge", Action = "MailMergeViaDocumentServerPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(500);
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ReadOnly = true;
+    settings.RibbonMode = RichEditRibbonMode.None;
+    settings.ShowStatusBar = false;
+    settings.Settings.HorizontalRuler.Visibility = RichEditRulerVisibility.Hidden;
+}).Open("mailMergeDocId", DocumentFormat.OpenXml, () => (Stream)ViewBag.Document).GetHtml()

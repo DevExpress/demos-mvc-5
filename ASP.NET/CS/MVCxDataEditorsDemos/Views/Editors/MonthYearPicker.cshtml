@@ -1,0 +1,80 @@
+﻿@section AdditionalResources {
+    <style type="text/css">
+        .dateContainer {
+            display: table;
+            width: 100%;
+            padding-bottom: 24px;
+        }
+
+        .dateEditor {
+            max-width: 350px;
+            padding-bottom: 10px;
+        }
+
+        .description {
+            line-height:22px;
+        }
+
+        @@media (min-width:800px) {
+            .dateContainer {
+                padding-bottom: 30px;
+            }
+
+            .dateContainer > div {
+                display: table-cell;
+            }
+
+            .dateEditor {
+                padding-right: 100px;
+                width: 150px;
+            }
+
+            .description {
+                vertical-align: top;
+            }
+        }
+    </style>
+}
+
+<div class="dateContainer">
+    <div class="dateEditor">
+        @Html.DevExpress().DateEdit(settings => {
+           settings.Name = "dateEdit1";
+           settings.Properties.PickerType = DatePickerType.Months;
+           settings.Date = DateTime.Today;
+        }).GetHtml()
+    </div>
+    <div class="description">
+        PickerType="Months"
+    </div>
+</div>
+<div class="dateContainer">
+    <div class="dateEditor">
+        @Html.DevExpress().DateEdit(settings => {
+           settings.Name = "dateEdit2";
+           settings.Properties.PickerType = DatePickerType.Months;
+           settings.Properties.CalendarProperties.FastNavProperties.InitialView = DatePickerType.Years;
+           settings.Properties.CalendarProperties.FastNavProperties.MaxView = DatePickerType.Years;
+           settings.Date = DateTime.Today;
+        }).GetHtml()
+    </div>
+    <div class="description">
+        PickerType="Months"<br />
+        InitialView="Years"<br />
+        MaxView="Years"<br />
+    </div>
+</div>
+<div class="dateContainer">
+    <div class="dateEditor">
+       @Html.DevExpress().DateEdit(settings => {
+          settings.Name = "dateEdit3";
+          settings.Properties.PickerType = DatePickerType.Years;
+          settings.Date = DateTime.Today;
+       }).GetHtml()
+    </div>
+    <div class="description">
+        PickerType="Years"
+    </div>
+</div>
+
+

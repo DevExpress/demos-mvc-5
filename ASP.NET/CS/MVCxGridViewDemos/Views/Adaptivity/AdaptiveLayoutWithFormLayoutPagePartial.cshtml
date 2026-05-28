@@ -1,0 +1,167 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "GridView";
+    settings.CallbackRouteValues = new { Controller = "Adaptivity", Action = "AdaptiveLayoutWithFormLayoutPagePartial" };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Adaptivity", Action = "AdaptiveLayoutWithFormLayoutPageAddNewPartial" };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Adaptivity", Action = "AdaptiveLayoutWithFormLayoutPageUpdatePartial" };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Adaptivity", Action = "AdaptiveLayoutWithFormLayoutPageDeletePartial" };
+    settings.SettingsBehavior.ConfirmDelete = true;
+
+    settings.Width = Unit.Percentage(100);
+    settings.EnableRowsCache = false;
+
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = 500;
+    settings.Settings.ShowGroupPanel = true;
+    settings.Settings.ShowFooter = true;
+
+    settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCellsWindowLimit;
+    settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 800;
+    settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+
+    var mainLayoutGroup = new GridViewLayoutGroup();
+    mainLayoutGroup.Width = Unit.Percentage(100);
+    mainLayoutGroup.GroupBoxDecoration = GroupBoxDecoration.None;
+    mainLayoutGroup.GridSettings.StretchLastItem = DefaultBoolean.True;
+    mainLayoutGroup.GridSettings.Breakpoints.Add(new LayoutBreakpoint() { MaxWidth = 600, ColumnCount = 4, Name = "S" });
+    mainLayoutGroup.GridSettings.Breakpoints.Add(new LayoutBreakpoint() { MaxWidth = 800, ColumnCount = 4, Name = "M" });
+
+
+    var commandColumnGroup = new GridViewLayoutGroup();
+    commandColumnGroup.Name = "commandColumnsGroup";
+    commandColumnGroup.Width = Unit.Percentage(100);
+    commandColumnGroup.GroupBoxDecoration = GroupBoxDecoration.None;
+    commandColumnGroup.ColumnCount = 2;
+    commandColumnGroup.UseDefaultPaddings = false;
+
+    commandColumnGroup.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 2, RowSpan = 1 });
+    commandColumnGroup.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 1, RowSpan = 1 });
+
+    commandColumnGroup.Items.AddCommandItem("commandColumnEdit");
+    commandColumnGroup.Items.AddCommandItem("commandColumnDelete");
+
+    mainLayoutGroup.Items.Add(commandColumnGroup);
+
+    var dataColumnsGroup = new GridViewLayoutGroup();
+    dataColumnsGroup.Name = "dataColumnsGroup";
+    dataColumnsGroup.Width = Unit.Percentage(100);
+    dataColumnsGroup.GroupBoxDecoration = GroupBoxDecoration.None;
+    dataColumnsGroup.ColumnCount = 2;
+    dataColumnsGroup.UseDefaultPaddings = false;
+    dataColumnsGroup.AlignItemCaptions = true;
+
+    dataColumnsGroup.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 4, RowSpan = 1 });
+    dataColumnsGroup.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 4, RowSpan = 1 });
+
+    dataColumnsGroup.GridSettings.Breakpoints.Add(new LayoutBreakpoint() { MaxWidth = 600, ColumnCount = 1, Name = "S" });
+    dataColumnsGroup.GridSettings.Breakpoints.Add(new LayoutBreakpoint() { MaxWidth = 800, ColumnCount = 2, Name = "M" });
+
+    var productNameItem = dataColumnsGroup.Items.AddColumnItem("ProductName");
+    productNameItem.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 1, RowSpan = 1 });
+    productNameItem.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 2, RowSpan = 1 });
+
+    var categoryItem = dataColumnsGroup.Items.AddColumnItem("CategoryID");
+    categoryItem.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 1, RowSpan = 1 });
+    categoryItem.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 2, RowSpan = 1 });
+
+
+    dataColumnsGroup.Items.AddColumnItem("QuantityPerUnit");
+    dataColumnsGroup.Items.AddColumnItem("UnitPrice");
+    dataColumnsGroup.Items.AddColumnItem("UnitsInStock");
+    dataColumnsGroup.Items.AddColumnItem("Discontinued").NestedControlCellStyle.CssClass = "checkBoxStyle";
+
+    mainLayoutGroup.Items.Add(dataColumnsGroup);
+
+    settings.SettingsAdaptivity.AdaptiveDetailLayoutProperties.Items.AddGroup(mainLayoutGroup);
+
+    settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+    settings.KeyFieldName = "ProductID";
+    settings.Columns.Add(new MVCxGridViewCommandColumn() {
+        Name = "commandColumnEdit",
+        ShowEditButton = true,
+        ShowNewButtonInHeader = true,
+        Visible = true,
+        Width = Unit.Pixel(70)
+    });
+
+    settings.Columns.Add(c => {
+        c.FieldName = "ProductName";
+        c.MinWidth = 230;
+        c.MaxWidth = 450;
+        c.Width = Unit.Percentage(30);
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "CategoryID";
+        c.Caption = "Category Name";
+        c.AdaptivePriority = 1;
+        c.MinWidth = 150;
+        c.MaxWidth = 200;
+        c.EditorProperties().ComboBox(cb => {
+            cb.DataSource = NorthwindDataProvider.GetCategories();
+            cb.TextField = "CategoryName";
+            cb.ValueField = "CategoryID";
+            cb.ValueType = typeof(int);
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "QuantityPerUnit";
+        c.AdaptivePriority = 1;
+        c.MinWidth = 150;
+        c.MaxWidth = 200;
+        c.Width = Unit.Percentage(20);
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "UnitPrice";
+        c.MinWidth = 100;
+        c.MaxWidth = 150;
+        c.Width = Unit.Percentage(16);
+        c.EditorProperties().SpinEdit(sp => {
+            sp.DisplayFormatString = "c";
+            sp.DisplayFormatInEditMode = true;
+            sp.MinValue = 0;
+            sp.MaxValue = 60000;
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "UnitsInStock";
+        c.MinWidth = 100;
+        c.MaxWidth = 150;
+        c.Width = Unit.Percentage(16);
+        c.EditorProperties().SpinEdit(sp => {
+            sp.MinValue = 0;
+            sp.MaxValue = 10000;
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "Discontinued";
+        c.MinWidth = 100;
+        c.MaxWidth = 150;
+        c.Width = Unit.Percentage(18);
+        c.AdaptivePriority = 2;
+        c.ColumnType = MVCxGridViewColumnType.CheckBox;
+    });
+    settings.Columns.Add(new MVCxGridViewCommandColumn() {
+        Name = "commandColumnDelete",
+        ShowDeleteButton = true,
+        Visible = true,
+        VisibleIndex = settings.Columns.Count,
+        Width = Unit.Pixel(70)
+    });
+
+    settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "ProductName");
+    settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Min, "UnitPrice");
+    settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Max, "UnitPrice");
+
+    settings.SettingsPager.PageSize = 16;
+    settings.SettingsPager.NumericButtonCount = 6;
+    settings.ControlStyle.CssClass = "grid";
+    settings.Styles.Cell.Wrap = DefaultBoolean.False;
+    settings.ClientSideEvents.BeginCallback = "Grid_BeginCallback";
+
+    settings.PreRender = (sender, e) => {
+        MVCxGridView grid = (MVCxGridView)sender;
+        ((GridViewDataColumn)grid.Columns["CategoryID"]).GroupBy();
+        grid.ExpandRow(0);
+    };
+}).Bind(Model).GetHtml()

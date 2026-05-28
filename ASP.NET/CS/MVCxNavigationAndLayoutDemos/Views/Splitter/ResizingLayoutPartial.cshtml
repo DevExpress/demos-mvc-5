@@ -1,0 +1,31 @@
+﻿@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "formLayout";
+    settings.ControlStyle.CssClass = "custom-form-layout";
+    settings.Items.AddGroupItem(g => {
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.Items.Add(i => {
+            i.Caption = "Customer name:";
+            i.NestedExtension().TextBox(tb => {
+                tb.Name = "tbContactName";
+                tb.Width = Unit.Parse("100%");
+            });
+        });
+        g.Items.Add(i => {
+            i.Caption = "Company name:";
+            i.NestedExtension().TextBox(tb => {
+                tb.Name = "tbCompanyName";
+                tb.Width = Unit.Parse("100%");
+            });
+        });
+        g.Items.Add(i => {
+            i.Caption = "Contacts:";
+            i.CssClass = "custom-group";
+            i.Height = Unit.Parse("100%");
+            i.NestedExtension().Memo(m => {
+                m.Name = "mContacts";
+                m.Width = Unit.Parse("100%");
+                m.Height = Unit.Parse("100%");
+            });
+        });
+    });
+}).GetHtml()

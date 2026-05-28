@@ -1,0 +1,16 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+<script type="text/javascript">
+    function onDemoHtmlEditorActiveTabChanged(s, e) {
+        if (e.name === "HTML")
+            s.ExecuteCommand(ASPxClientCommandConsts.FORMATDOCUMENT_COMMAND, null);
+    }
+</script>
+@Html.Partial("FullPageEditModePartial")
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewDataDictionary viewData = new ViewDataDictionary();
+    viewData["Controller"] = "Adaptivity";
+    viewData["Action"] = "ScrollPickerPage";
+    viewData["DefaultMobile"] = true;
+    viewData["HideRotate"] = true;
+}
+
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@this.GetUrlContentWithVersionSuffix("~/Content/DeviceViewer.css")" />
+}
+
+@section DeviceViewerRegion {
+    @{
+        Html.RenderPartial("DeviceViewer", viewData);
+    }
+}

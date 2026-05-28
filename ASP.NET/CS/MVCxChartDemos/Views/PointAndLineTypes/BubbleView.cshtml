@@ -1,0 +1,165 @@
+﻿@model ChartBubbleDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(340);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartBubbleDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.CrosshairEnabled = DefaultBoolean.False;
+    settings.ToolTipEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.Border.Visibility = DefaultBoolean.False;
+        l.HorizontalIndent = 12;
+        l.Margins.Left = 60;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Highest-Grossing Films by Year"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.boxofficemojo.com"
+    });
+
+    settings.Series.Add(s => {
+        s.Name = "Top 10 Films by Worldwide Grosses";
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetBubbleDataMembers("Year", "Budget", "Grosses");
+        s.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        s.ToolTipPointPattern = "Production budget: ${V}M<br/>Worldwide grosses: ${W}B";
+        s.Views().BubbleSeriesView(v => {
+            v.Transparency = options.Transparency;
+            v.ColorEach = true;
+            v.AutoSize = false;
+            v.MaxSize = (double)options.MaxBubbleSize;
+            v.MinSize = (double)options.MinBubbleSize;
+            v.BubbleMarkerOptions.Kind = options.MarkerKind;
+            if (v.BubbleMarkerOptions.Kind == MarkerKind.Star)
+                v.BubbleMarkerOptions.StarPointCount = options.StarPointCount;
+            v.SeriesLabel(l => {
+                l.Position = options.LabelPosition;
+                l.TextPattern = "${W}B";
+                l.LineVisibility = DefaultBoolean.True;
+            });
+        });
+    });
+
+    settings.XYDiagram(d => {
+        d.AxisX.DateTimeScaleOptions.GridAlignment = DateTimeGridAlignment.Year;
+        d.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Year;
+        d.AxisX.DateTimeScaleOptions.AggregateFunction = AggregateFunction.None;
+        d.AxisX.Tickmarks.MinorVisible = false;
+        d.AxisX.GridLines.Visible = true;
+        d.AxisX.WholeRange.AutoSideMargins = true;
+        d.AxisX.Label.TextPattern = "{A:yyyy}";
+        d.AxisY.Title.Text = "Production Budget";
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+        d.AxisY.Label.TextPattern = "${V}M";
+        d.AxisY.WholeRange.SetMinMaxValues(130, 310);
+        d.AxisY.WholeRange.AutoSideMargins = true;
+    });
+
+    settings.CustomDrawSeriesPoint = (sender, e) => {
+        e.LegendText = ((BubbleDataItem)e.SeriesPoint.Tag).Title;
+    };
+}).Bind(Model.Data).GetHtml()
+
+<script type="text/javascript">
+    function UpdateLabelOptionState() {
+        LabelPosition.SetEnabled(ShowLabels.GetChecked());
+    }
+    function UpdateMinMaxBubbleSizeState() {
+        MaxBubbleSize.SetMinValue(MinBubbleSize.GetNumber() + 0.1);
+        MinBubbleSize.SetMaxValue(MaxBubbleSize.GetNumber() - 0.1);
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.MinBubbleSize, item => {
+                item.NestedExtension().SpinEdit(spinEdit => {
+                    spinEdit.Properties.MinValue = 0.1M;
+                    spinEdit.Properties.MaxValue = 5M;
+                    spinEdit.Properties.Increment = 0.1M;
+                    spinEdit.Properties.ClientSideEvents.Init = "function(s, e) { UpdateMinMaxBubbleSizeState(); }";
+                    spinEdit.Properties.ClientSideEvents.ValueChanged = "function(s, e) { UpdateMinMaxBubbleSizeState(); }";
+                });
+            });
+            group.Items.Add(model => model.MaxBubbleSize, item => {
+                item.NestedExtension().SpinEdit(spinEdit => {
+                    spinEdit.Properties.MinValue = 0.1M;
+                    spinEdit.Properties.MaxValue = 5M;
+                    spinEdit.Properties.Increment = 0.1M;
+                    spinEdit.Properties.ClientSideEvents.Init = "function(s, e) { UpdateMinMaxBubbleSizeState(); }";
+                    spinEdit.Properties.ClientSideEvents.ValueChanged = "function(s, e) { UpdateMinMaxBubbleSizeState(); }";
+                });
+            });
+            group.Items.Add(model => model.MarkerKindString, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerKinds());
+                });
+            });
+            group.Items.Add(model => model.Transparency, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetTransparency());
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateLabelOptionState(); }";
+                });
+            });
+            group.Items.Add(model => model.LabelPosition, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowLabels;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 320,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

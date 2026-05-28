@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<items>
+  <item Id="1" Text="1 68063914 1" ImageUrl="~/Content/Images/photo_gallery/1_68063914_1.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/1_68063914_1.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/1_68063914_1.jpg" />
+  <item Id="2" Text="2 68063914 11" ImageUrl="~/Content/Images/photo_gallery/2_68063914_11.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/2_68063914_11.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/2_68063914_11.jpg" />
+  <item Id="3" Text="4 68063914 4" ImageUrl="~/Content/Images/photo_gallery/4_68063914_4.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/4_68063914_4.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/4_68063914_4.jpg" />
+  <item Id="4" Text="5 93995416" ImageUrl="~/Content/Images/photo_gallery/5_93995416.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/5_93995416.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/5_93995416.jpg" />
+  <item Id="5" Text="61537165" ImageUrl="~/Content/Images/photo_gallery/61537165.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/61537165.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/61537165.jpg" />
+  <item Id="6" Text="68063914 10" ImageUrl="~/Content/Images/photo_gallery/68063914_10.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/68063914_10.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/68063914_10.jpg" />
+  <item Id="7" Text="68063914 12" ImageUrl="~/Content/Images/photo_gallery/68063914_12.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/68063914_12.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/68063914_12.jpg" />
+  <item Id="8" Text="68063914 14" ImageUrl="~/Content/Images/photo_gallery/68063914_14.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/68063914_14.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/68063914_14.jpg" />
+  <item Id="9" Text="68063914 15" ImageUrl="~/Content/Images/photo_gallery/68063914_15.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/68063914_15.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/68063914_15.jpg" />
+  <item Id="10" Text="68063914 3" ImageUrl="~/Content/Images/photo_gallery/68063914_3.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/68063914_3.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/68063914_3.jpg" />
+  <item Id="11" Text="68063914 6" ImageUrl="~/Content/Images/photo_gallery/68063914_6.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/68063914_6.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/68063914_6.jpg" />
+  <item Id="12" Text="68063914 7" ImageUrl="~/Content/Images/photo_gallery/68063914_7.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/68063914_7.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/68063914_7.jpg" />
+  <item Id="13" Text="68063914 9" ImageUrl="~/Content/Images/photo_gallery/68063914_9.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/68063914_9.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/68063914_9.jpg" />
+  <item Id="14" Text="6 68063914 2" ImageUrl="~/Content/Images/photo_gallery/6_68063914_2.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/6_68063914_2.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/6_68063914_2.jpg" />
+  <item Id="15" Text="96 25968844" ImageUrl="~/Content/Images/photo_gallery/96_25968844.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/96_25968844.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/96_25968844.jpg" />
+  <item Id="16" Text="99935720" ImageUrl="~/Content/Images/photo_gallery/99935720.jpg" MediumImageUrl="~/Content/Images/photo_gallery/Medium/99935720.jpg" ThumbnailUrl="~/Content/Images/photo_gallery/Small/99935720.jpg" />
+</items>

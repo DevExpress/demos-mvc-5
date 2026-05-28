@@ -1,0 +1,35 @@
+﻿@Html.DevExpress().CardView(
+    settings =>
+    {
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "Templates", Action = "CardPartial" };
+        settings.SettingsPager.SettingsTableLayout.RowsPerPage = 2;
+        settings.EnableCardsCache = false;
+        settings.Width = Unit.Percentage(100);
+        
+        settings.Columns.Add("Photo");
+        settings.Columns.Add("FirstName");
+        settings.Columns.Add("LastName");
+        settings.Columns.Add("Title");
+        settings.Columns.Add("City");
+        settings.Columns.Add("Address");
+
+        settings.Styles.Card.CssClass = "card";
+        settings.SetCardTemplateContent(c => {
+            Html.DevExpress().BinaryImage(s => {
+                s.Name = "Image" + DataBinder.Eval(c.DataItem, "EmployeeID");
+            }).Bind(DataBinder.Eval(c.DataItem, "Photo"))
+            .Render();
+            ViewContext.Writer.Write(
+                "<div class='info'>" +
+                    "<p>" + DataBinder.Eval(c.DataItem, "FirstName") + " " + DataBinder.Eval(c.DataItem, "LastName") + "</p>" +
+                    "<span>" + DataBinder.Eval(c.DataItem, "Title") + "</span>" +
+                    "<div class='address'>" +
+                        "<span>" + DataBinder.Eval(c.DataItem, "Country") + " " + DataBinder.Eval(c.DataItem, "City") + "</span>" +
+                        "<br />" +
+                        "<span>" + DataBinder.Eval(c.DataItem, "Address") + "</span>" +
+                    "</div>" +
+                "</div>"
+            );
+        });
+    }).Bind(Model).GetHtml()

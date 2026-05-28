@@ -1,0 +1,97 @@
+﻿@functions{
+        public void AddGroupSummarySortInfo(MVCxGridView gridView, string sortColumnName, string groupColumnName, DevExpress.Data.ColumnSortOrder sortOrder) {
+            var sortInfo = new ASPxGroupSummarySortInfo();
+            sortInfo.SortOrder = sortOrder;
+
+            sortInfo.SummaryItem = gridView.GroupSummary[sortColumnName];
+            sortInfo.GroupColumn = groupColumnName;
+            gridView.GroupSummarySortInfo.AddRange(sortInfo);
+        }
+
+        public void FillGroupSummarySortInfo(MVCxGridView gridView) {
+            gridView.GroupSummarySortInfo.Clear();
+            var sortedColumns = gridView.GetSortedColumns();
+            var groupedColumns = gridView.GetGroupedColumns();
+
+            foreach(var sortColumn in sortedColumns) {
+                if(sortColumn.GroupIndex < 0 && gridView.GroupSummary[sortColumn.FieldName] != null) {
+                    foreach(var groupColumn in groupedColumns) {
+                        AddGroupSummarySortInfo(gridView, sortColumn.FieldName, groupColumn.FieldName, sortColumn.SortOrder);
+                    }
+                }
+            }
+        }
+
+        public string SerializeGroupInfoSortState(List<ASPxGroupSummarySortInfo> sortInfo) {
+            List<string> serializedSortInfoValues = new List<string>();
+            foreach(var item in sortInfo) {
+                serializedSortInfoValues.Add(String.Format("{0},{1},{2}", item.GroupColumn, item.SummaryItem.FieldName, item.SortOrder));
+            }
+            return String.Join("|", serializedSortInfoValues);
+        }
+
+        public void RestoreGroupInfoSortState(MVCxGridView gridView, string serializedString) {
+            string[] serializedSortInfoCollection = serializedString.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            for(int i = 0; i < serializedSortInfoCollection.Length; i++) {
+                string[] serializedSortInfoParams = serializedSortInfoCollection[i].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if(serializedSortInfoParams.Length > 2) {
+                    AddGroupSummarySortInfo(gridView, serializedSortInfoParams[1], serializedSortInfoParams[0], serializedSortInfoParams[2] == "Ascending" ? DevExpress.Data.ColumnSortOrder.Ascending : DevExpress.Data.ColumnSortOrder.Descending);
+                }
+            }
+        }
+    }
+
+    @Html.DevExpress().GridView(settings => {
+        settings.Name = "gvSummary";
+        settings.CallbackRouteValues = new { Controller = "Summary", Action = "GroupSortBySummaryPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.KeyFieldName = "OrderID";
+        settings.Columns.Add("CompanyName");
+        settings.Columns.Add("City").GroupIndex = 1;
+        settings.Columns.Add("Region");
+        settings.Columns.Add("Country").GroupIndex = 0;
+        settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("Quantity");
+        settings.Columns.Add(c => {
+            c.FieldName = "Total";
+            c.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            c.PropertiesEdit.DisplayFormatString = "c";
+            c.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+        });
+
+        settings.CustomUnboundColumnData = (sender, e) => {
+            if (e.Column.FieldName == "Total") {
+                decimal price = (decimal)e.GetListSourceFieldValue("UnitPrice");
+                int quantity = Convert.ToInt32(e.GetListSourceFieldValue("Quantity"));
+                e.Value = price * quantity;
+            }
+        };
+
+        settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total").DisplayFormat= "c";
+
+        settings.PreRender = (sender, e) => {
+            var gridView = (MVCxGridView)sender;
+            FillGroupSummarySortInfo(gridView);
+            gridView.JSProperties["cpGroupInfoSortState"] = SerializeGroupInfoSortState(gridView.GroupSummarySortInfo.ToList());
+        };
+
+        settings.ClientSideEvents.BeginCallback = "function (s, e) { e.customArgs['GroupInfoSortState'] = s.cpGroupInfoSortState; }";
+
+        settings.AfterPerformCallback = (sender, e) => {
+            if(e.CallbackName == "SORT") {
+                var gridView = (MVCxGridView)sender;
+                FillGroupSummarySortInfo(gridView);
+                gridView.JSProperties["cpGroupInfoSortState"] = SerializeGroupInfoSortState(gridView.GroupSummarySortInfo.ToList());
+            }
+        };
+
+        settings.Init = (sender, e) => {
+            var gridView = (MVCxGridView)sender;
+            if(ViewData["GroupSummarySortState"] != null) {
+                RestoreGroupInfoSortState(gridView, ViewData["GroupSummarySortState"].ToString());
+            }
+        };
+
+        DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+    }).Bind(Model).GetHtml()

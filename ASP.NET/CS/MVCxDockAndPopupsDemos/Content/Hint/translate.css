@@ -1,0 +1,8 @@
+﻿.wordPart {
+    font-size: 26px;
+    font-style: oblique;
+}
+.wordPart[title]:hover {
+    background-color: highlight;
+    border-radius: 5px;
+}

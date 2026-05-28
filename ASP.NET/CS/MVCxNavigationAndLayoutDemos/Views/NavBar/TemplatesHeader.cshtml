@@ -1,0 +1,11 @@
+﻿<div class="group-title expanded">
+    <span class="text">
+        @((NavBarGroup)Model).Text
+    </span>
+    <span class="button">
+        <a href="@Url.Content(((NavBarGroup)Model).NavigateUrl)" target="_blank" class="clickable">
+            <img src="@Url.Content("~/Content/NavBar/Lessons/bWatchCollapsed.gif")" alt="">
+        </a>
+        <img src="@Url.Content("~/Content/NavBar/Lessons/bExpand.gif")" alt="" />
+    </span>
+</div>

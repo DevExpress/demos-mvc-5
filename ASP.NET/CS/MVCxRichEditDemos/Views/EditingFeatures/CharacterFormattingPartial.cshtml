@@ -1,0 +1,16 @@
+﻿@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "EditingFeatures", Action = "CharacterFormattingPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(700);
+    
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ActiveTabIndex = 0;
+    
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        RichEditDemoUtils.HideFileTab(richEdit);
+        richEdit.Focus();
+    };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "CharacterFormatting.rtf")).GetHtml()

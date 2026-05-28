@@ -1,0 +1,112 @@
+﻿@using DevExpress.Web.Demos
+@{ Layout = null; }
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Fullscreen Mode - ASP.NET MVC ImageSlider Extension</title>
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionType = ExtensionType.ImageSlider, Theme = "Default" }
+    )
+
+    <style type="text/css">
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .header {
+            top: 0;
+            position: absolute;
+            z-index: 3;
+            width: 100%;
+            background-color: #4d4d4d;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            color: #ffd215;
+            float: left;
+            margin-left: 10px;
+        }
+
+        .text {
+            font-size: 25px;
+            font-family: Helvetica, Arial;
+            margin: 15px 8px;
+        }
+
+        .navigation {
+            float: right;
+            margin-right: 10px;
+        }
+
+            .navigation > .text {
+                color: #fff;
+                float: right;
+                cursor: pointer;
+            }
+
+        /* ImageSlider styles */
+
+        .dxWeb_isDot,
+        .dxWeb_isDotSelected {
+            background-image: url();
+        }
+
+        .dxisControl .dxis-nbDotItem {
+            width: 50px;
+            height: 5px;
+            background-color: #fff;
+            filter: progid:DXImageTransform.Microsoft.Alpha(Style=0, Opacity=45);
+            opacity: 0.45;
+        }
+
+        .dxisControl .dxis-nbDotItemSelected {
+            filter: progid:DXImageTransform.Microsoft.Alpha(Style=0, Opacity=100) !important;
+            opacity: 1 !important;
+        }
+
+        .dxisControl .dxis-nbDotsBottom {
+            margin-top: -75px;
+        }
+    </style>
+
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionType = ExtensionType.ImageSlider }
+    )
+    <script type="text/javascript">
+        function OnInit(s, e) {
+            $(window).resize(function () {
+                imageSlider.AdjustControl();
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="text">Logo</div>
+        </div>
+        <div class="navigation">
+            <div class="text">Home</div>
+            <div class="text">News</div>
+            <div class="text">Gallery</div>
+            <div class="text">Contacts</div>
+        </div>
+    </div>
+    @Html.DevExpress().ImageSlider(settings => {
+        settings.Name = "imageSlider";
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Percentage(100);
+        settings.EnableTheming = false;
+
+        settings.SettingsImageArea.ImageSizeMode = ImageSizeMode.FillAndCrop;
+        settings.SettingsImageArea.NavigationButtonVisibility = ElementVisibilityMode.Always;
+        settings.SettingsNavigationBar.Mode = NavigationBarMode.Dots;
+        settings.SettingsNavigationBar.ItemSpacing = 0;
+
+        settings.ClientSideEvents.Init = "OnInit";
+    }).BindToFolder(Model).GetHtml()
+</body>
+</html>

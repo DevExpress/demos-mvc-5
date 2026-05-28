@@ -1,0 +1,43 @@
+﻿@model string
+
+@section AdditionalResources{
+<style type="text/css">
+    .tmplThumb
+    {
+        float: left;
+        width: 50px;
+        height: 50px;
+    }
+    .tmplTextContainer
+    {
+        height: 100%;
+        overflow: hidden;
+        line-height: 17px;
+        padding-left: 6px;
+        text-align: left;
+        text-overflow: ellipsis;
+    }
+    .tmplTextContainer .additionalInfo
+    {
+        color: #818284;
+    }
+    .selectedFile .tmplTextContainer .additionalInfo
+    {
+        color: inherit;
+    }
+</style>
+<script type="text/javascript">
+    onHighlightItemTemplate = function(s, e) {
+        var startIndex = e.itemName.toLowerCase().indexOf(e.filterValue.toLowerCase()),
+            textStart = e.itemName.substr(0, startIndex),
+            textMiddle = e.itemName.substr(startIndex, e.filterValue.length),
+            textEnd = e.itemName.substr(startIndex + e.filterValue.length),
+            highlightedText = textStart + "<span class='" + e.highlightCssClassName + "'>" + textMiddle +"</span>" + textEnd;
+        $(e.templateElement).find(".tmplTextContainer span:first-child").html(highlightedText);
+    }
+</script>
+}
+
+@using(Html.BeginForm()) { 
+    @Html.Partial("TemplatesPartial", Model)
+}

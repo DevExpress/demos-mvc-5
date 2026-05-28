@@ -1,0 +1,43 @@
+﻿@model IEnumerable
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+<script type="text/javascript">
+    function OnFocusedCardChanged(){
+        CardView.GetCardValues(CardView.GetFocusedCardIndex(), 'FirstName;LastName;HomePhone;Title;Notes', OnGetCardValues);
+    }
+    function OnGetCardValues(values){
+        var editors = [FirstName, LastName, Phone, Title, Notes];
+        for (var i = 0; i < editors.length; i++){
+            var editor = editors[i];
+            editor.SetValue(values[i]);
+        }
+    }
+</script>
+@Html.Partial("FocusingPartial", Model)
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "flDetails";
+    settings.Width = Unit.Percentage(100);
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Details";
+        g.ColCount = 2;
+        g.Items.Add(i => PrepareLayoutItem(i, "FirstName", "First Name"));
+        g.Items.Add(i => PrepareLayoutItem(i, "LastName", "Last Name"));
+        g.Items.Add(i => PrepareLayoutItem(i, "Phone", "Home Phone"));
+        g.Items.Add(i => PrepareLayoutItem(i, "Title", "Title"));
+        g.Items.Add(i => {
+            PrepareLayoutItem(i, "Notes", "Notes");
+            i.ColSpan = 2;
+        });
+    });
+    settings.Styles.LayoutItem.Caption.Font.Bold = true;
+}).GetHtml()
+
+@functions{
+    void PrepareLayoutItem(MVCxFormLayoutItem item, string name, string caption) {
+        item.Name = name;
+        item.Caption = caption;
+        item.NestedExtension().Label(s=>{
+            s.Properties.EnableClientSideAPI = true;
+        });
+    }
+}

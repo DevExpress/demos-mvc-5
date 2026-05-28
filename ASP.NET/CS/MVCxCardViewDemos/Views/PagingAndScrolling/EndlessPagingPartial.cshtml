@@ -1,0 +1,45 @@
+﻿@Html.DevExpress().CardView(
+    settings =>
+    {
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "PagingAndScrolling", Action = "EndlessPagingPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.KeyFieldName = "ID";
+        settings.EnableCardsCache = false;
+        
+        settings.Settings.VerticalScrollableHeight = 600;
+        settings.SettingsPager.SettingsTableLayout.ColumnCount = 2;
+        settings.SettingsPager.Mode = GridViewPagerMode.EndlessPaging;
+        settings.SettingsPager.EndlessPagingMode = PagingAndScrollingHelper.Options.EndlessPagingMode;
+        settings.Settings.VerticalScrollBarMode = PagingAndScrollingHelper.Options.VerticalScrollBarMode;
+
+        settings.ClientSideEvents.BeginCallback = "OnCardViewBeginCallback";
+        
+        settings.Columns.Add("Address");
+        settings.Columns.Add("Baths");
+        settings.Columns.Add("Beds");
+        settings.Columns.Add("HouseSize");
+        settings.Columns.Add(c => {
+            c.FieldName = "Price";
+            c.PropertiesEdit.DisplayFormatString = "c";
+        });
+        settings.Columns.Add(c => {
+            c.FieldName = "PhotoUrl";
+            c.ColumnType = MVCxCardViewColumnType.Image;
+            ((ImageEditProperties)c.PropertiesEdit).ImageWidth = 200;
+        });
+
+        settings.CardLayoutProperties.ColumnCount = 2;
+        settings.CardLayoutProperties.Items.Add(i => {
+            i.ColumnName = "PhotoUrl";
+            i.RowSpan = 6;
+            i.ShowCaption = DefaultBoolean.False;
+            i.VerticalAlign = FormLayoutVerticalAlign.Top;
+        });
+        settings.CardLayoutProperties.Items.Add("Baths");
+        settings.CardLayoutProperties.Items.Add("Beds");
+        settings.CardLayoutProperties.Items.Add("HouseSize");
+        settings.CardLayoutProperties.Items.Add("Price");
+        settings.CardLayoutProperties.Items.Add("Address");
+        settings.Styles.Card.Width = Unit.Pixel(450);
+    }).Bind(Model).GetHtml()

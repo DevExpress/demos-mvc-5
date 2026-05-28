@@ -1,0 +1,17 @@
+﻿@model ListBoxFilteringOptions
+@Html.DevExpress().ListBox(settings => {
+    settings.Name = "listBox";
+    settings.Width = 285;
+    settings.Height = 200;
+    settings.Properties.TextField = "ContactName";
+    settings.Properties.ValueField = "CustomerID";
+    settings.Properties.FilteringSettings.ShowSearchUI = true;
+    settings.Properties.CallbackPageSize = 15;
+    settings.Properties.FilteringSettings.CustomEditorID = Model.UseCustomFilteringEditor.Value ? "customFilteringEditor" : "";
+    settings.Properties.SelectionMode = Model.SelectionMode.Value;
+    settings.Properties.EnableSelectAll = Model.EnableSelectAll.Value;
+    if(Model.EnableCallbackMode.Value && Model.SelectionMode == ListEditSelectionMode.Single)
+        settings.CallbackRouteValues = new { Controller = "Editors", Action = "ListBoxFilteringPartial" };
+
+    settings.Properties.ClientSideEvents.BeginCallback = "onListBoxBeginCallback";
+}).BindList(Model.Customers).GetHtml()

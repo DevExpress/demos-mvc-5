@@ -1,0 +1,32 @@
+﻿@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "MailMerge", Action = "DocVariablePartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(700);
+    
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ActiveTabIndex = 4;
+    
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        RichEditDemoUtils.HideFileTab(richEdit);
+        richEdit.Focus();
+    };
+
+    settings.CalculateDocumentVariable = (s, e) => {
+        switch(e.VariableName) {
+            case "Chart":
+                e.Value = DocVariableDemoHelper.GetDocumentWithChart(e.Arguments[0].Value);
+                e.Handled = true;
+                break;
+            case "CommonSales":
+                decimal commonSales = DocVariableDemoHelper.GetCommonSales(e.Arguments[0].Value);
+                e.Value = commonSales.ToString("C");
+                e.Handled = true;
+                break;
+            default:
+                break;
+        }
+    };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "NORTHWIND.docx")).GetHtml()

@@ -1,0 +1,35 @@
+﻿@Html.DevExpress().ComboBox(settings => {
+    settings.Name = "ComboBox";
+	settings.Width = Unit.Pixel(285);
+    settings.SelectedIndex = 0;
+    settings.CallbackRouteValues = new { Controller = "Editors", Action = "ComboBoxItemTemplatePartial" };
+    settings.SetItemTemplateContent((container) => {
+        ViewContext.Writer.Write(
+            "<table>" +
+                "<tr>" +
+                    "<td rowspan='2'><div class='frame'><img class='photo' alt='photo' src='" + Url.Content(DataBinder.Eval(container.DataItem, "PhotoUrl").ToString()) + "' /></div></td>" +
+                    "<td class='name'>" +
+                        DataBinder.Eval(container.DataItem, "Name") +
+                    "</td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td class='description'>" +
+                        "<div class='contactInfo'>" +
+                            DataBinder.Eval(container.DataItem, "Address") + "<br />" +
+                            DataBinder.Eval(container.DataItem, "Phone") +
+                        "</div>" +
+                        DataBinder.Eval(container.DataItem, "Email") +
+                    "</td>" +
+                "</tr>" +
+            "</table>"
+        );
+    });
+
+    var properties = settings.Properties;
+    properties.TextField = "Name";
+    properties.DropDownRows = 4;
+    properties.CallbackPageSize = 5;
+	// The selected and hovered styles are set in CSS classes defining the text color for the description section
+    properties.ItemStyle.SelectedStyle.CssClass = "selectedItem";
+    properties.ItemStyle.HoverStyle.CssClass = "hoveredItem";
+}).BindToXML("~/App_Data/Contacts.xml", "//Contacts/*").GetHtml()

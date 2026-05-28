@@ -1,0 +1,23 @@
+﻿@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "htmlEditor";
+        settings.Width = Unit.Pixel(750);
+        settings.Height = Unit.Pixel(370);
+
+        settings.ToolbarMode = HtmlEditorToolbarMode.ExternalRibbon;
+        settings.AssociatedRibbonName = "ribbon";
+
+        settings.CallbackRouteValues = new { Controller = "ToolbarsAndUI", Action = "ExternalRibbonPartial" };
+        settings.CustomDataActionRouteValues = new { Controller = "ToolbarsAndUI", Action = "ExternalRibbonHtmlContentLoad" };
+        settings.ClientSideEvents.Init = "HtmlEditorInitHandler";
+        settings.ClientSideEvents.CustomDataCallback = "CustomDataCallbackHandler";
+        settings.ClientSideEvents.HtmlChanged = "HtmlChangedHandler";
+        settings.ClientSideEvents.Validation = "ValidationHandler";
+        settings.ClientSideEvents.BeginCallback = "BeginCallbackHandler";
+        settings.ClientSideEvents.EndCallback = "EndCallbackHandler";
+
+        settings.SettingsLoadingPanel.Enabled = false;
+
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }
+).GetHtml()

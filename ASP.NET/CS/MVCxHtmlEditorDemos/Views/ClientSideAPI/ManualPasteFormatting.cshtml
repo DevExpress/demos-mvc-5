@@ -1,0 +1,28 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+    HtmlEditorManualPasteFormattingDemoOptions options = Session["Options"] as HtmlEditorManualPasteFormattingDemoOptions;
+    if (options == null) {
+        options = new HtmlEditorManualPasteFormattingDemoOptions();
+    }
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section AdditionalResources {
+    <script type="text/javascript" src="@Url.Content("~/Scripts/ManualPasteFormatting.js")"></script>
+}
+@Html.Partial("ManualPasteFormattingPartial")
+<div class="Note">
+    Copy a part of the editor content and paste it with the specified formatting.
+</div>
+
+@section DemoOptions {
+    @Html.Partial("ManualPasteFormattingOptionsPartial", options)
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

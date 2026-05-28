@@ -1,0 +1,15 @@
+﻿@Html.DevExpress().Menu(settings => {
+    settings.Name = "menuViewSelector";
+    settings.SettingsAdaptivity.Enabled = true;
+
+    settings.Items.Add("Day", "Day");
+    settings.Items.Add("Work Week", "WorkWeek");
+    settings.Items.Add("Time Line (Week)", "TimeLineWeek");
+    settings.Items.Add("Time Line (Year)", "TimeLineYear");
+    settings.Items.Add("Agenda", "Agenda");
+
+    settings.ClientSideEvents.ItemClick = "onMenuViewItemClick";
+
+    settings.ControlStyle.Border.BorderStyle = BorderStyle.None;
+}).GetHtml()
+

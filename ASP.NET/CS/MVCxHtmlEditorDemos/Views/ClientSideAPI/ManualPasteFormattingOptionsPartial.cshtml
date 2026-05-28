@@ -1,0 +1,51 @@
+﻿@functions{
+    public void AssignSettingsToCheckBoxItem(MVCxFormLayoutItem itemSettings, string caption) {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+        itemSettings.CaptionSettings.Location = LayoutItemCaptionLocation.Right;
+        itemSettings.CaptionSettings.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        var cbSettings = (CheckBoxSettings)itemSettings.NestedExtensionSettings;
+        cbSettings.Text = caption;
+    }
+}
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "demoOptions";
+    settings.ShowItemCaptionColon = false;
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.ColCount = 2;
+
+    var settingsFlashSelectorGroupItem = settings.Items.AddGroupItem(itemSettings => {
+        itemSettings.Caption = "Trace BeforePaste Event";
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+    });
+    settingsFlashSelectorGroupItem.Items.Add(itemSettings => {
+        itemSettings.ShowCaption = DefaultBoolean.False;
+    })
+    .SetNestedContent(() => {
+        @Html.RenderPartial("EventMonitor");
+    });
+    var contentFilteringGroupItem = settings.Items.AddGroupItem(itemSettings => {
+        itemSettings.Caption = "Formatting Settings";
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        itemSettings.ParentContainerStyle.Paddings.PaddingRight = Unit.Pixel(20);
+        itemSettings.ColCount = 3;
+    });
+    contentFilteringGroupItem.Items.Add(itemSettings => {
+        itemSettings.FieldName = "cbBold";
+        AssignSettingsToCheckBoxItem(itemSettings, "Bold");
+    });
+    contentFilteringGroupItem.Items.Add(itemSettings => {
+        itemSettings.FieldName = "cbItalic";
+        AssignSettingsToCheckBoxItem(itemSettings, "Italic");
+    });
+    contentFilteringGroupItem.Items.Add(itemSettings => {
+        itemSettings.FieldName = "cbUnderline";
+        AssignSettingsToCheckBoxItem(itemSettings, "Underline");
+    });
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 360,
+        ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+    });
+}).Bind(Model).GetHtml()
+
+ 

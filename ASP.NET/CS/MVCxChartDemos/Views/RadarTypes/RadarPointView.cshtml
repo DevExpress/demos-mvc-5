@@ -1,0 +1,112 @@
+﻿@model ChartRadarDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(784);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(320);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartRadarDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 720;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.ToolTipEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.Border.Visibility = DefaultBoolean.False;
+        l.HorizontalIndent = 12;
+    });
+
+    settings.Series.Template(t => {
+        t.ArgumentScaleType = ScaleType.DateTime;
+        t.ArgumentDataMember = "Date";
+        t.ValueDataMembers[0] = "Temperature";
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        t.Views().RadarPointSeriesView(v => {
+            v.PointMarkerOptions.Size = options.MarkerSize;
+            v.PointMarkerOptions.Kind = options.MarkerKind;
+            if (v.PointMarkerOptions.Kind == MarkerKind.Star)
+                v.PointMarkerOptions.StarPointCount = options.StarPointCount;
+        });
+    });
+
+    settings.RadarDiagram(d => {
+        d.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Month;
+        d.AxisX.DateTimeScaleOptions.GridAlignment = DateTimeGridAlignment.Month;
+        d.AxisX.Label.TextPattern = "{A:MMMM}";
+        d.AxisX.Label.TextDirection = options.TextDirection;
+        d.DrawingStyle = options.DiagramType;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Average temperature in London"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.weather.com"
+    });
+}).Bind(Model.Data, "DayPart").GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.MarkerSize, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerSizes());
+                });
+            });
+            group.Items.Add(model => model.MarkerKindString, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerKinds());
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels);
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Diagram Settings";
+            group.Items.Add(model => model.DiagramType);
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Axis Label Settings";
+            group.Items.Add(model => model.TextDirection);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 300,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

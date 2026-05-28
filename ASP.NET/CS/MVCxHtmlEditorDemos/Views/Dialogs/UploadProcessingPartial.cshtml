@@ -1,0 +1,25 @@
+﻿@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "heUploadProcessing";
+        settings.CallbackRouteValues = new { Controller = "Dialogs", Action = "UploadProcessingPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Pixel(520);
+
+        settings.Html = HtmlEditorFeaturesDemosHelper.GeHtmlContentByFileName("UploadProcessing.html");
+
+        settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.UploadCallbackRouteValues = new { Controller = "Dialogs", Action = "UploadProcessingImageUpload" };
+        settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.FileSystemSettings.Assign(HtmlEditorDialogsDemosHelper.FileSaveSettings.FileSystemSettings);
+        settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.ValidationSettings.Assign(HtmlEditorDialogsDemosHelper.ImageUploadValidationSettings);
+
+        settings.Settings.AllowInsertDirectImageUrls = false;
+        
+        HtmlEditorToolbar toolbar = new HtmlEditorToolbar();
+        toolbar.Items.Add(new ToolbarUndoButton());
+        toolbar.Items.Add(new ToolbarRedoButton());
+        toolbar.Items.Add(new ToolbarBoldButton(true));
+        toolbar.Items.Add(new ToolbarItalicButton());
+        toolbar.Items.Add(new ToolbarUnderlineButton());
+        toolbar.Items.Add(new ToolbarStrikethroughButton());
+        toolbar.Items.Add(new ToolbarInsertImageDialogButton(true));
+        settings.Toolbars.Add(toolbar);
+}).GetHtml()

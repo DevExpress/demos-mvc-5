@@ -1,0 +1,74 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/UICustomization/Css/TaskTemplate.css")" />
+}
+
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        function onShowTask(s, e) {
+            var resource = e.item.taskResources[0];
+            var img = getImagePath(e.item.taskData["ID"]);
+            var color = e.item.taskData["ID"] % 6;
+            var customContainer = document.createElement("div");
+            customContainer.classList.add("custom-task");
+            customContainer.setAttribute("style", "width:" + e.item.taskSize.width + "px;");
+            customContainer.classList.add("custom-task-color-" + color);
+
+            var imgWrapper = document.createElement("div");
+            imgWrapper.setAttribute("class", "custom-task-img-wrapper");
+            customContainer.appendChild(imgWrapper);
+
+            var imgContainer = document.createElement("img");
+            imgContainer.setAttribute("class", "custom-task-img");
+            imgContainer.setAttribute("src", img);
+            imgContainer.setAttribute("alt", resource.text);
+            imgWrapper.appendChild(imgContainer);
+
+
+            var wrapper = document.createElement("div");
+            wrapper.setAttribute("class", "custom-task-wrapper");
+            customContainer.appendChild(wrapper);
+
+            var taskTitle = document.createElement("div");
+            taskTitle.setAttribute("class", "custom-task-title");
+            taskTitle.textContent = e.item.taskData["Subject"];
+            wrapper.appendChild(taskTitle);
+
+            var taskResource = document.createElement("div");
+            taskResource.setAttribute("class", "custom-task-row");
+            taskResource.textContent = resource ? resource.text : "";
+            wrapper.appendChild(taskResource);
+
+            var taskProgress = document.createElement("div");
+            taskProgress.setAttribute("class", "custom-task-progress");
+            taskProgress.setAttribute("style", "width:" + (parseFloat(e.item.taskData["PercentComplete"])) + "%;");
+            customContainer.appendChild(taskProgress);
+
+            e.container.appendChild(customContainer);
+        }
+        function getImagePath(taskId) {
+            var imgPath = getBasePath() + "/Content/images/employees/";
+            var img = taskId < 10 ? "0" + taskId : taskId;
+            img = imgPath + img + ".jpg";
+            return img;
+        }
+        function getBasePath() {
+            return window.location.href.split('/').slice(0, -2).join('/');
+        }
+    </script>
+}
+
+@Html.Partial("TaskTemplatePartial")
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+
+@functions {
+    GanttDemoOptions DemoOptions { get { return ViewBag.GanttDemoOptions; } }
+}

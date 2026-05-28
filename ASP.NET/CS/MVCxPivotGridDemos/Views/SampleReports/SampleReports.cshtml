@@ -1,0 +1,98 @@
+﻿@model PivotGridReportsDemoOptions
+
+@section AdditionalResources{
+    <script type="text/javascript">
+        function onSubmit(s, e) {
+            if(s.name == 'DemoKind' && s.GetValue() == "Filtered") {
+                FilterYearIndex.SetVisible(true);
+                FilterQuarterIndex.SetVisible(true);
+            }
+            else if(s.name == 'DemoKind') {
+                FilterYearIndex.SetVisible(false);
+                FilterQuarterIndex.SetVisible(false);
+            }
+            pivotGrid.PerformCallback({
+                options: {
+                    DemoKind: DemoKind.GetValue(),
+                    FilterQuarterIndex: FilterQuarterIndex.GetValue(),
+                    FilterYearIndex: FilterYearIndex.GetValue(),
+                    ReloadLayout: 'true'
+                }
+            });
+        }
+    </script>
+}
+
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(90); }
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section DemoOptionsTop {
+    <div class="options">
+
+        <div class="options-item">
+            @Html.DevExpress().RadioButtonListFor(
+             m => Model.DemoKind,
+             s => {
+                 s.Name = "DemoKind";
+                 s.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                 s.ControlStyle.Border.BorderColor = Color.Transparent;
+                 s.Properties.Items.Add("Customers", 0);
+                 s.Properties.Items.Add("Products (Filtering)", 1);
+                 s.Properties.Items.Add("Top 2 Products", 2);
+                 s.Properties.Items.Add("Top 10 Customers", 3);
+                 s.Theme = DemoHelper.Instance.Theme;
+                 s.Properties.ClientSideEvents.ValueChanged = "onSubmit";
+             }
+             ).GetHtml()
+        </div>
+        @if (Model.DemoKind == CustomerReportKind.Filtered) {
+            <br />
+            <div class="options-item">
+                @Html.DevExpress().ComboBoxFor(
+           m => Model.FilterYearIndex,
+           s => {
+               s.Name = "FilterYearIndex";
+               s.Theme = DemoHelper.Instance.Theme;
+               s.Properties.Caption = "Year";
+               s.Properties.Items.Add("All", 0);
+               Action<int> addItem = (offset) => {
+                   int year = DateTime.Today.Year - offset;
+                   s.Properties.Items.Add(year.ToString(), year);
+               };
+               addItem(2);
+               addItem(1);
+               addItem(0);
+               s.ClientVisible = true;
+               s.Properties.ClientSideEvents.ValueChanged = "onSubmit";
+           }).GetHtml()
+            </div>
+            <div class="options-item">
+                @Html.DevExpress().ComboBoxFor(
+           m => Model.FilterQuarterIndex,
+           s => {
+               s.Name = "FilterQuarterIndex";
+               s.Theme = DemoHelper.Instance.Theme;
+               s.Properties.Caption = "Quarter";
+               s.Properties.Items.Add("All", 0);
+               s.Properties.Items.Add("Qtr 1", 1);
+               s.Properties.Items.Add("Qtr 2", 2);
+               s.Properties.Items.Add("Qtr 3", 3);
+               s.Properties.Items.Add("Qtr 4", 4);
+               s.ClientVisible = true;
+               s.Properties.ClientSideEvents.ValueChanged = "onSubmit";
+           }).GetHtml()
+            </div>
+        }
+    </div>
+}
+
+@Html.Partial("SampleReportsPartial", Model)
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

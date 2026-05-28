@@ -1,0 +1,35 @@
+﻿@{
+    var excludeColumnList = new List<string>() {
+        "CategoryID", "ProductID", "SupplierID", "Supplier.SupplierID", "Supplier.HomePage",
+        "Category.CategoryID", "Category.CategoryName", "EAN13"
+    };
+
+    Html.DevExpress().FilterControl<Product>(settings => {
+        settings.Name = "filterControl";
+        settings.Width = Unit.Percentage(100);
+        settings.CallbackRouteValues = new { Controller = "Editors", Action = "FilterControlPartial" };
+        settings.ClientSideEvents.Applied = "filterControl_Applied";
+        settings.ViewMode = FilterControlViewMode.VisualAndText;
+        settings.AllowHierarchicalColumns = true;
+        settings.MaxHierarchyDepth = 1;
+
+        settings.Init = (sender, e) => {
+            var filterControl = (MVCxFilterControl)sender;
+            excludeColumnList.ForEach(c => filterControl.Columns.Remove(c));
+
+            var categoryNameColumn = new MVCxFilterControlColumn("CategoryName");
+            categoryNameColumn.EditorProperties().ComboBox(p => {
+                p.DataSource = DevExpress.Web.Demos.Mvc.NorthwindDataProvider.GetCategories();
+                p.TextField = "CategoryName";
+                p.ValueField = "CategoryName";
+                p.ValueType = typeof(string);
+            });
+            var categoryColumn = (FilterControlComplexTypeColumn)filterControl.Columns["Category"];
+            categoryColumn.Columns.Insert(0, categoryNameColumn);
+        };
+        settings.PreRender = (sender, e) => {
+            var filterControl = (MVCxFilterControl)sender;
+            filterControl.FilterExpression = "[Category.CategoryName] = 'Beverages'";
+        };
+    }).GetHtml();
+}

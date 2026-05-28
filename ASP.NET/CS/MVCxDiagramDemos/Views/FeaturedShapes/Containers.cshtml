@@ -1,0 +1,13 @@
+﻿@model string
+
+@Html.DevExpress().Diagram(settings => {
+    settings.Name = "Diagram";
+    settings.Width = Unit.Percentage(100);
+    settings.Height = 600;
+    settings.SettingsToolbox.Groups.Add(g => {
+        g.Category = DevExpress.Web.ASPxDiagram.DiagramShapeCategory.General;
+    });
+    settings.SettingsToolbox.Groups.Add(g => {
+        g.Category = DevExpress.Web.ASPxDiagram.DiagramShapeCategory.Containers;
+    });
+}).Import(Model).GetHtml()

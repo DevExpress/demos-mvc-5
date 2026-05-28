@@ -1,0 +1,22 @@
+﻿@Html.DevExpress().Scheduler(
+    settings => {
+        settings.Name = "scheduler";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "AlternativeWeekViewPartial" };
+        settings.ActiveViewType = SchedulerViewType.Week;
+        settings.Start = new DateTime(2016, 10, 10);
+        settings.Width = Unit.Percentage(100);
+
+        settings.Views.DayView.Styles.ScrollAreaHeight = Unit.Pixel(400);
+        
+        settings.Views.WorkWeekView.Enabled = false;
+        settings.Views.MonthView.Enabled = false;
+        settings.Views.TimelineView.Enabled = false;
+
+        settings.Storage.EnableReminders = false;
+        settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+        settings.Storage.Appointments.Assign(SchedulerDemoHelper.DefaultAppointmentStorage);
+        settings.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.None;
+        settings.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.None;
+        settings.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.None;
+        settings.OptionsToolTips.ShowSelectionToolTip = false;
+    }).Bind(Model.Appointments, Model.Resources).GetHtml()

@@ -1,0 +1,15 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "SpreadsheetAPI", Action = "CellStylePartial" };
+        settings.RibbonMode = DevExpress.Web.ASPxSpreadsheet.SpreadsheetRibbonMode.None;
+        settings.ShowSheetTabs = false;
+        settings.ShowFormulaBar = false;
+        settings.ClientSideEvents.Init = "onSpreadsheetInit";
+        settings.Width = Unit.Percentage(100);
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            spreadsheet.WorksheetDisplayArea.SetSize(0, 10, 30);
+        };
+    }
+).GetHtml()

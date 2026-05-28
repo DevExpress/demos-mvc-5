@@ -1,0 +1,17 @@
+﻿.FormLayoutOptions {
+    border: 1px solid #e8e8e8;
+    box-shadow: 0px 2px 10px 0 rgba(0,0,0,0.1);
+    padding: 6px 0px;
+}
+
+.GroupFormLayout {
+    padding: 6px 0 0 0;
+}
+
+.OptionsGroupFormLayout {
+    padding: 0px;
+}
+
+.GroupFormLayout .OptionsGroupBox .dxflHLSys {
+    height: 21px;
+}

@@ -1,0 +1,43 @@
+﻿@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+<script src="@Url.Content("~/Scripts/CustomInplaceEditor.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    function onSpreadsheetCellBeginEdit(spreadsheet, args) {
+        var isDateEditCell = args.columnIndex === 1 && args.rowIndex > 4,
+            isDropDownEditCell = args.columnIndex === 4 && args.rowIndex > 4;
+
+        if (isDateEditCell)
+            ASPxClientSpreadsheetInplaceEditorHelper.AssignEditor(spreadsheet, CustomDateEditor, args);
+        else if (isDropDownEditCell)
+            ASPxClientSpreadsheetInplaceEditorHelper.AssignEditor(spreadsheet, VehiclePartsCustomComboBox, args);
+    }
+</script>
+
+@using(Html.BeginForm()) {
+    @Html.DevExpress().DateEdit(
+        settings => {
+            settings.Name = "CustomDateEditor";
+            settings.ClientEnabled = true;
+            settings.ClientVisible = false;
+        }
+     ).GetHtml()
+
+    @Html.DevExpress().ComboBox(
+        settings => {
+            settings.Name = "VehiclePartsCustomComboBox";
+            settings.ClientEnabled = true;
+            settings.ClientVisible = false;
+            settings.Properties.IncrementalFilteringMode = DevExpress.Web.IncrementalFilteringMode.Contains;
+
+            settings.Properties.Items.Add("Dealer");
+            settings.Properties.Items.Add("Tyre Shop");
+            settings.Properties.Items.Add("Body Shop");
+            settings.Properties.Items.Add("Engine Parts");
+            settings.Properties.Items.Add("Breaking System");
+            settings.Properties.Items.Add("Cables");
+            settings.Properties.Items.Add("Suspension Systems");
+        }
+    ).GetHtml()
+
+    @Html.Partial("CustomInplaceEditorPartial")
+}

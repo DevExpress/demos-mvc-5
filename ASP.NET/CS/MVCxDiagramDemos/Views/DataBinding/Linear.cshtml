@@ -1,0 +1,19 @@
+﻿@model IEnumerable<DevExpress.Web.Demos.EditableDepartment>
+
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);
+}
+
+@Html.DevExpress().Diagram(settings => {
+    settings.Name = "Diagram";
+    settings.Height = 600;
+
+    settings.BatchUpdateRouteValues = new { Controller = "DataBinding", Action = "LinearUpdate" };
+
+    settings.Mappings.Node.Key = "ID";
+    settings.Mappings.Node.Text = "DepartmentName";
+    settings.Mappings.Node.ParentKey = "ParentID";
+
+    settings.SettingsAutoLayout.Type = DevExpress.Web.ASPxDiagram.DiagramAutoLayout.Tree;
+
+}).Bind(Model).GetHtml()

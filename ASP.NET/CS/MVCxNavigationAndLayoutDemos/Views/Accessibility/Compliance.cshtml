@@ -1,0 +1,77 @@
+﻿@section AdditionalResources {
+    <style type="text/css">
+        .wrapper {
+            width: 30%;
+            max-width: 300px;
+            min-width: 240px;
+            float: left;
+            vertical-align: top;
+            padding-right: 36px;
+        }
+        main .dxnbLite {
+            padding: 0;
+        }
+        main .dx-acc-r {
+            display: block;
+            padding: 13px 0;
+        }
+        main .control-section {
+            padding-bottom: 0!important;
+        }
+    </style>
+}
+
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+@section CustomTopAreaHolder {
+    @Html.Partial("SkipRepetitiveNavigationLinks")
+}
+
+<div class="control-section-margin-bottom">
+    @Html.DevExpress().Menu(menu => {
+        menu.Name = "menu";
+        menu.ShowPopOutImages = DefaultBoolean.True;
+        menu.AccessibilityCompliant = true;
+    }).BindToXML(Server.MapPath("~/App_Data/SimpleMenu.xml"), "/mainmenu/item").GetHtml()
+</div>
+
+<div class="control-section-margin-bottom wrapper">
+    @Html.DevExpress().NavBar(navBar => {
+        navBar.Name = "navBar";
+        navBar.AccessibilityCompliant = true;
+    }).BindToXML(Server.MapPath("~/App_Data/SimpleNavBar.xml"), "/groups/group").GetHtml()
+</div>
+
+<div class="control-section-margin-bottom wrapper">
+    @Html.DevExpress().TreeView(treeView => {
+        treeView.Name = "treeView";
+        treeView.AllowCheckNodes = true;
+        treeView.AccessibilityCompliant = true;
+        treeView.PreRender = (s, e) => {
+            ASPxTreeView tree = (ASPxTreeView)s;
+            tree.ExpandAll();
+        };
+    }).BindToXML(Server.MapPath("~/App_Data/SimpleTreeView.xml"), "/nodes/node").GetHtml()
+</div>
+
+<div class="control-section-margin-bottom wrapper">
+      @Html.DevExpress().Button(button => {
+        button.Name = "button";
+        button.Text = "Click to open popup menu";
+        button.ClientSideEvents.Click = "function(s, e) { popupMenu.Show(); }";
+        button.AccessibilityCompliant = true;
+    }).GetHtml()
+</div>
+
+@Html.DevExpress().PopupMenu(settings => {
+    settings.Name = "popupMenu";
+    settings.Width = Unit.Percentage(100);
+    settings.ShowPopOutImages = DefaultBoolean.True;
+    settings.PopupElementID = "button";
+    settings.PopupAction = PopupAction.LeftMouseClick;
+    settings.AccessibilityCompliant = true;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.OutsideRight;
+    settings.PopupVerticalAlign = PopupVerticalAlign.TopSides;
+}).BindToXML(Server.MapPath("~/App_Data/SimpleMenu.xml"), "/mainmenu/item").GetHtml()
+
+@Html.Partial("AccessibilityValidatorLink")

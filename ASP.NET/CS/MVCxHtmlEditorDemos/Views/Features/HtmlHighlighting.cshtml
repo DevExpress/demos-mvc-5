@@ -1,0 +1,20 @@
+﻿@model HtmlHighlightingOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(360);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("HtmlHighlightingPartial", Model)
+
+@section DemoOptions {
+    @Html.Partial("HtmlHighlightingOptionsPartial", Model)
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

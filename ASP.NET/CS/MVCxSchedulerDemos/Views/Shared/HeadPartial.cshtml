@@ -1,0 +1,19 @@
+﻿@Html.DevExpress().GetStyleSheets( 
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout }, 
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Scheduler },
+    new StyleSheet { ExtensionType = ExtensionType.ReportToolbar },
+    new StyleSheet { ExtensionType = ExtensionType.ReportViewer },
+    new StyleSheet { ExtensionType = ExtensionType.Icons16x16 },
+    // Metropolis theme for ICalendar demo
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout, Theme = "Metropolis" },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors, Theme = "Metropolis" },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors, Theme = DemoHelper.Instance.Theme },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors, Theme = "Default" }
+) 
+
+@Html.DevExpress().GetScripts( 
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout }, 
+    new Script { ExtensionSuite = ExtensionSuite.Scheduler },
+    new Script { ExtensionType = ExtensionType.ReportToolbar },
+    new Script { ExtensionType = ExtensionType.ReportViewer }
+) 

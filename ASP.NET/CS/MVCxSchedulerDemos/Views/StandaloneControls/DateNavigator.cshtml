@@ -1,0 +1,44 @@
+﻿@model DateNavigatorDemoOptions
+
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Scheduler/StandaloneControls/styles.css")" />
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        function OnDayCellCustomHighlight(s, e) {
+            if(e.appointments.length > 0)
+                e.htmlElement.className = e.htmlElement.className + " customStyle";
+        }
+        function OnSelectionChanged(s, e) {
+            scheduler.GotoDate(e.selectedDates[0]);
+        }
+    </script>
+    <div class="options">
+        <div class="options-item">
+            @Html.Partial("DateNavigatorOptionsPartial")
+        </div>
+    </div>
+}
+
+@Html.AntiForgeryToken()
+
+<div style="float: left; padding-right: 33px">
+    @Html.DevExpress().DateNavigator(SchedulerDemoHelper.CreateStandaloneDateNavigatorSettings()).Bind(Model.Appointments, Model.Resources).GetHtml()
+
+    @Html.Partial("DateNavigatorPartial", Model)
+</div>
+<div class="agenda-demo" style="float: left;">
+    @Html.Partial("DateNavigatorAgendaPartial", Model)
+</div>
+
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

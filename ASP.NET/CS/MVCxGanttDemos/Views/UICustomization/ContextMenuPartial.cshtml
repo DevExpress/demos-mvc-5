@@ -1,0 +1,38 @@
+﻿@Html.DevExpress().Gantt(settings =>
+{
+    settings.Name = "gantt";
+    settings.CallbackRouteValues = new { Controller = "UICustomization", Action = "ContextMenuPartial" };
+    settings.BatchUpdateRouteValues = new { Controller = "UICustomization", Action = "GanttBatchUpdate" };
+
+    settings.Height = Unit.Pixel(700);
+    settings.Width = Unit.Percentage(100);
+
+    settings.SettingsGanttView.ViewType = GanttViewType.Days;
+    settings.SettingsTaskList.Width = Unit.Percentage(45);
+
+    settings.SettingsTaskList.Columns.Add(new GanttTextColumn() { FieldName = "Subject", Caption = "Title", Width = Unit.Pixel(360) });
+    settings.SettingsTaskList.Columns.Add(new GanttDateTimeColumn() { FieldName = "StartDate", Caption = "Start Date", Width = Unit.Pixel(100) });
+    settings.SettingsTaskList.Columns.Add(new GanttDateTimeColumn() { FieldName = "EndDate", Caption = "Due Date", Width = Unit.Pixel(100) });
+
+    settings.Mappings.Task.Key = "ID";
+    settings.Mappings.Task.ParentKey = "ParentID";
+    settings.Mappings.Task.Title = "Subject";
+    settings.Mappings.Task.Start = "StartDate";
+    settings.Mappings.Task.End = "EndDate";
+    settings.Mappings.Task.Progress = "PercentComplete";
+
+    settings.Mappings.Dependency.Key = "ID";
+    settings.Mappings.Dependency.PredecessorKey = "ParentID";
+    settings.Mappings.Dependency.SuccessorKey = "DependentID";
+    settings.Mappings.Dependency.DependencyType = "Type";
+
+    settings.Mappings.Resource.Key = "ID";
+    settings.Mappings.Resource.Name = "Name";
+
+    settings.Mappings.ResourceAssignment.Key = "ID";
+    settings.Mappings.ResourceAssignment.TaskKey = "TaskID";
+    settings.Mappings.ResourceAssignment.ResourceKey = "ResourceID";
+
+    settings.ClientSideEvents.ContextMenuCustomization = "ContextMenuCustomization";
+    settings.ClientSideEvents.CustomCommand = "CustomCommand";
+}).Bind(GanttDataProvider.Tasks, GanttDataProvider.Dependencies, GanttDataProvider.Resources, GanttDataProvider.ResourceAssignments).GetHtml()

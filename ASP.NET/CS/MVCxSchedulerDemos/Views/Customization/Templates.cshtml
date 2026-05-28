@@ -1,0 +1,20 @@
+﻿@model SchedulerDataObject
+
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Scheduler/AppointmentTemplates/styles.css")" />
+}
+
+<script>
+    function onMenuViewItemClick(s, e) {
+        if (e.item.name.indexOf("TimeLine") > -1) {
+            scheduler.PerformCallback({ callbackParam: e.item.name });
+        }
+        else {
+            scheduler.SetActiveViewType(e.item.name);
+        }
+    }
+</script>
+
+@Html.Partial("TemplatesPartial", Model)

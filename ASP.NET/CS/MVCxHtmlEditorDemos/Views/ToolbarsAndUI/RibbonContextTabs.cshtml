@@ -1,0 +1,12 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+<script type="text/javascript" src="@Url.Content("~/Scripts/RibbonContextTabs.js")"></script>
+@Html.Partial("RibbonContextTabsPartial")
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

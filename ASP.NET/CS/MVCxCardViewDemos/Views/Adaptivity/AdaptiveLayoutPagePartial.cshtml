@@ -1,0 +1,60 @@
+﻿@Html.DevExpress().CardView(settings => {
+    settings.Name = "cardView";
+    settings.CallbackRouteValues = new { Controller = "Adaptivity", Action = "AdaptiveLayoutPagePartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.KeyFieldName = "ID";
+    settings.Columns.Add("Address");
+    settings.Columns.Add("Baths");
+    settings.Columns.Add("Beds");
+    settings.Columns.Add("HouseSize");
+    settings.Columns.Add("Price").PropertiesEdit.DisplayFormatString = "c";
+    settings.Columns.Add(c => {
+        c.FieldName = "PhotoUrl";
+        c.ColumnType = MVCxCardViewColumnType.BinaryImage;
+        c.EditorProperties().Image(i => i.ImageWidth = Unit.Percentage(100));
+    });
+
+    settings.CardLayoutProperties.SettingsItems.ShowCaption = DefaultBoolean.False;
+    settings.CardLayoutProperties.Items.Add(i => {
+        i.ColumnName = "PhotoUrl";
+        i.Width = Unit.Percentage(100);
+    });
+
+    settings.CardLayoutProperties.Items.Add(i => {
+        i.ColumnName = "Address";
+        i.Height = Unit.Pixel(40);
+        i.ParentContainerStyle.Font.Bold = true;
+        i.ParentContainerStyle.Font.Underline = true;
+    });
+
+    settings.CardLayoutProperties.Items.Add("HouseSize").ShowCaption = DefaultBoolean.True;
+
+    settings.CardLayoutProperties.Items.Add(i => {
+        i.ColumnName = "Baths";
+        i.ShowCaption = DefaultBoolean.True;
+    });
+    settings.CardLayoutProperties.Items.Add(i => {
+        i.ColumnName = "Beds";
+        i.ShowCaption = DefaultBoolean.True;
+    });
+    settings.CardLayoutProperties.Items.Add(i => {
+        i.ColumnName = "Price";
+        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+        i.ParentContainerStyle.Font.Bold = true;
+        i.Paddings.PaddingTop = Unit.Pixel(14);
+    });
+
+    settings.Settings.LayoutMode = DevExpress.Web.Layout.Breakpoints;
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.CardsPerRow = 6;
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(BreakpointsLayoutDeviceSizes.XLarge, 5);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(BreakpointsLayoutDeviceSizes.Large, 4);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(BreakpointsLayoutDeviceSizes.Medium, 3);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(BreakpointsLayoutDeviceSizes.Small, 2);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(450, 1);
+    settings.SettingsPager.Mode = GridViewPagerMode.EndlessPaging;
+    settings.SettingsPager.EndlessPagingMode = CardViewEndlessPagingMode.OnScroll;
+    settings.SettingsPager.SettingsBreakpointsLayout.ItemsPerPage = 18;
+    settings.Styles.BreakpointsCard.Height = Unit.Percentage(100);
+
+}).Bind(Model).GetHtml()

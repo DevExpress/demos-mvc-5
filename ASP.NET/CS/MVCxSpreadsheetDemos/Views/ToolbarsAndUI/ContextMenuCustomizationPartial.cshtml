@@ -1,0 +1,23 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "Spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "ToolbarsAndUI", Action = "ContextMenuCustomizationPartial" };
+
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 550;
+        settings.ActiveTabIndex = 0;
+
+        settings.ShowFormulaBar = false;
+        settings.RibbonMode = SpreadsheetRibbonMode.None;
+
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideFileTab(spreadsheet);
+        };
+
+        settings.ShowConfirmOnLosingChanges = false;
+
+        settings.ClientSideEvents.PopupMenuShowing = "function (s, e) { SpreadsheetPopupMenuShowing(s, e); }";
+        settings.ClientSideEvents.CustomCommandExecuted = "function(s, e) { SpreadsheetCustomCommandExecuted(s, e); }";
+    }
+).Open(ContextMenuCustomizationDemoOptions.PathToDocument).GetHtml()

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+<Features>
+  <Feature ID="TG"            Name="3G"></Feature>
+  <Feature ID="Bluetooth"     Name="Bluetooth"></Feature>
+  <Feature ID="Infrared"      Name="Infrared"></Feature>
+  <Feature ID="MemoryCardSlot" Name="Memory Card Slot"></Feature>
+  <Feature ID="QWERTY"        Name="QWERTY keyboard"></Feature>
+  <Feature ID="TouchScreen"   Name="Touch screen"></Feature>
+  <Feature ID="USB"           Name="USB"></Feature>
+  <Feature ID="VoiceDialing"  Name="Voice Dialing"></Feature>
+  <Feature ID="WiFi"          Name="Wi-Fi"></Feature>
+</Features>
+
+<PhoneModels>
+  <Model ID="1"  Name="Model1"  Price="$100" TouchScreen="false" QWERTY="false" WiFi="false" TG="false" USB="false" Infrared="false" Bluetooth="true" VoiceDialing="false" MemoryCardSlot="false"></Model>
+  <Model ID="2"  Name="Model2"  Price="$100" TouchScreen="false" QWERTY="false" WiFi="false" TG="false" USB="false" Infrared="true"  Bluetooth="true" VoiceDialing="false" MemoryCardSlot="false"></Model>
+  <Model ID="3"  Name="Model3"  Price="$150" TouchScreen="false" QWERTY="false" WiFi="false" TG="false" USB="true"  Infrared="false" Bluetooth="true" VoiceDialing="false" MemoryCardSlot="false"></Model>
+  <Model ID="4"  Name="Model4"  Price="$200" TouchScreen="false" QWERTY="false" WiFi="false" TG="false" USB="false" Infrared="false" Bluetooth="true" VoiceDialing="true"  MemoryCardSlot="true"></Model>
+  <Model ID="5"  Name="Model5"  Price="$200" TouchScreen="false" QWERTY="false" WiFi="true"  TG="false" USB="false" Infrared="false" Bluetooth="true" VoiceDialing="true"  MemoryCardSlot="true"></Model>
+  <Model ID="6"  Name="Model6"  Price="$250" TouchScreen="false" QWERTY="false" WiFi="true"  TG="false" USB="true"  Infrared="false" Bluetooth="true" VoiceDialing="true"  MemoryCardSlot="true"></Model>
+  <Model ID="7"  Name="Model7"  Price="$300" TouchScreen="true"  QWERTY="false" WiFi="true"  TG="false" USB="true"  Infrared="false" Bluetooth="true" VoiceDialing="false" MemoryCardSlot="true"></Model>
+  <Model ID="8"  Name="Model8"  Price="$350" TouchScreen="false" QWERTY="true"  WiFi="false" TG="false" USB="false" Infrared="false" Bluetooth="true" VoiceDialing="true"  MemoryCardSlot="true"></Model>
+  <Model ID="9"  Name="Model9"  Price="$350" TouchScreen="true"  QWERTY="false" WiFi="true"  TG="false" USB="true"  Infrared="false" Bluetooth="true" VoiceDialing="true"  MemoryCardSlot="true"></Model>
+  <Model ID="10" Name="Model10" Price="$400" TouchScreen="true"  QWERTY="false" WiFi="true"  TG="true"  USB="true"  Infrared="false" Bluetooth="true" VoiceDialing="true"  MemoryCardSlot="true"></Model>
+  <Model ID="11" Name="Model11" Price="$400" TouchScreen="false" QWERTY="false" WiFi="true"  TG="true"  USB="true"  Infrared="true"  Bluetooth="true" VoiceDialing="true"  MemoryCardSlot="true"></Model>
+  <Model ID="12" Name="Model12" Price="$400" TouchScreen="false" QWERTY="true"  WiFi="true"  TG="true"  USB="false" Infrared="false" Bluetooth="true" VoiceDialing="false" MemoryCardSlot="true"></Model>
+  <Model ID="13" Name="Model13" Price="$450" TouchScreen="true"  QWERTY="true"  WiFi="true"  TG="true"  USB="true"  Infrared="false" Bluetooth="true" VoiceDialing="false" MemoryCardSlot="true"></Model>
+  <Model ID="14" Name="Model14" Price="$450" TouchScreen="true"  QWERTY="true"  WiFi="true"  TG="true"  USB="true"  Infrared="false" Bluetooth="true" VoiceDialing="true"  MemoryCardSlot="true"></Model>
+  <Model ID="15" Name="Model15" Price="$500" TouchScreen="true"  QWERTY="true"  WiFi="true"  TG="true"  USB="true"  Infrared="false" Bluetooth="true" VoiceDialing="true"  MemoryCardSlot="true"></Model>
+  <Model ID="16" Name="Model16" Price="$700" TouchScreen="true"  QWERTY="true"  WiFi="true"  TG="true"  USB="true"  Infrared="true" Bluetooth="true" VoiceDialing="true"  MemoryCardSlot="true"></Model>
+</PhoneModels>
+</data>
+

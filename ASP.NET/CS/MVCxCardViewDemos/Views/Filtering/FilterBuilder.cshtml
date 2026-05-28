@@ -1,0 +1,52 @@
+﻿@model IEnumerable
+
+@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        function Submit(s, e) {
+            $("form").submit();
+        }
+    </script><div class="options">
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(settings =>
+            {
+                settings.Name = "EnableTextTab";
+                settings.Theme = DemoHelper.Instance.Theme;
+                settings.Text = "Enable text tab";
+                settings.Checked = FilterBuilderDemoHelper.Options.EnableTextTab;
+                settings.Properties.ClientSideEvents.CheckedChanged = "Submit";
+            }).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(settings =>
+            {
+                settings.Name = "AllowHierarchicalColumns";
+                settings.Theme = DemoHelper.Instance.Theme;
+                settings.Text = "Allow hierarchical columns";
+                settings.Checked = FilterBuilderDemoHelper.Options.AllowHierarchicalColumns;
+                settings.Properties.ClientSideEvents.CheckedChanged = "Submit";
+            }).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(settings =>
+            {
+                settings.Name = "ShowAllDataSourceColumns";
+                settings.Theme = DemoHelper.Instance.Theme;
+                settings.Text = "Show all datasource columns";
+                settings.Checked = FilterBuilderDemoHelper.Options.ShowAllDataSourceColumns;
+                settings.Properties.ClientSideEvents.CheckedChanged = "Submit";
+            }).GetHtml()
+        </div>
+    </div>
+}
+@Html.Partial("FilterBuilderPartial", Model)
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

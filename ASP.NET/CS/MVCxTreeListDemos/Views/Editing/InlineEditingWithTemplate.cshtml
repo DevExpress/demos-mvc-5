@@ -1,0 +1,11 @@
+﻿@model IEnumerable
+
+<script type="text/javascript">
+    function TreeList_BeginCallback(s, e) {
+        DXDemo.LoadAntiForgeryTokenInputValue(e.customArgs);
+    }
+</script>
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("InlineEditingWithTemplatePartial", Model)

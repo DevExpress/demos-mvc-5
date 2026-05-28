@@ -1,0 +1,160 @@
+﻿@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(732);
+}
+@section AdditionalResources {
+<style type="text/css">
+    .dxisControl .dxis-passePartout {
+        background-color: transparent !important;
+    }
+    .dxisControl .dxis-nextBtnHorWrapper, .dxisControl .dxis-prevBtnHorWrapper {
+        background-color: transparent !important;
+    }
+    .dxisControl .dxis-nbBottom {
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+</style>
+}
+
+<script type="text/javascript">
+// <![CDATA[
+    $(document).ready(function() {
+        $(window).keydown(function(e) {
+            if(e.keyCode == 27)
+                popup.Hide();
+            if(e.keyCode == 32)
+                imageSlider.SetActiveItemIndex(imageSlider.GetActiveItemIndex() + 1);
+            return true;
+        });
+        $(window).resize(UpdatePopupPosition());
+    });
+
+    function UpdatePopupPosition() {
+        if(popup.IsVisible())
+            popup.UpdatePosition();
+    }
+    function UpdateText() {
+        $("#itemText").html((imageSlider.GetActiveItemIndex() + 1) + " / " + imageSlider.GetItemCount());
+    }
+    function OnImageClick(name) {
+        var imageSliderItem = imageSlider.GetItemByName(name);
+        if(!imageSliderItem)
+            return;
+        window.location.hash = name;
+        popup.Show();
+        window.setTimeout(function() { UpdatePopupPosition(); }, 0);
+        imageSlider.SetActiveItem(imageSliderItem, true);
+        UpdateText();
+    }
+    function OnActiveItemChanged(s, e) {
+        window.location.hash = e.item.name;
+        UpdateText();
+    }
+    function OnInit(s, e) {
+        if(window.location.hash)
+            OnImageClick(window.location.hash.substring(1));
+    }
+    function OnPopupCloseUp() {
+        if (history.pushState)
+            history.pushState("", "", location.pathname + location.search);
+        else
+            location.hash = "";
+    }
+    function OnPopupUp() {
+        imageSlider.Focus();
+    }
+// ]]>
+</script>
+
+<p>Click a photo to enlarge it.</p>
+
+@Html.DevExpress().DataView(
+    settings => {
+        settings.Name = "dataView";
+        settings.Width = Unit.Percentage(100);
+        
+        settings.AllowPaging = false;
+        settings.Layout = DevExpress.Web.Layout.Flow;
+        settings.SettingsFlowLayout.ItemsPerPage = 4;
+        settings.PageIndex = -1;
+
+        settings.EnableTheming = false;
+        settings.ControlStyle.ItemSpacing = 4;
+        settings.ControlStyle.Paddings.Padding = 0;
+        settings.Styles.Item.Height = Unit.Pixel(152);
+        settings.Styles.Item.Width = Unit.Pixel(152);
+        settings.Styles.Item.BackColor = Color.Transparent;
+        settings.Styles.Item.Border.BorderStyle = BorderStyle.None;
+        settings.Styles.Item.Paddings.Padding = 0;
+        settings.Styles.Item.Border.BorderWidth = Unit.Pixel(1);
+
+        settings.SetItemTemplateContent(
+            c => {
+                ViewContext.Writer.Write(
+                    "<a href=\"javascript:void(0);\" onclick='" + string.Format("OnImageClick(\"{0}\")", DataBinder.Eval(c.DataItem, "Id")) + "'>" +
+                        "<img src='" + Url.Content((string)DataBinder.Eval(c.DataItem, "MediumImageUrl")) + "' alt='" + DataBinder.Eval(c.DataItem, "Text") + "' />" +
+                    "</a>"
+                );
+            }
+        );
+    }
+).BindToXML(Server.MapPath("~/App_Data/photo_gallery.xml"), "//items/*").GetHtml()
+
+@Html.DevExpress().PopupControl(
+    settings => {
+        settings.Name = "popup";
+        settings.Modal = true;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        
+        settings.ControlStyle.BackColor = Color.Transparent;
+        settings.ControlStyle.Border.BorderStyle = BorderStyle.None;
+        settings.Styles.ModalBackground.Opacity = 100;
+        settings.Styles.ModalBackground.BackColor = Color.FromArgb(0x1A1A1A);
+        settings.Styles.Content.Paddings.Padding = 0;
+        settings.Styles.Content.Border.BorderWidth = 0;
+        
+        settings.ShowHeader = false;
+        settings.ShowShadow = false;
+        settings.ShowPageScrollbarWhenModal = false;
+        settings.EnableTheming = false;
+
+        settings.ClientSideEvents.CloseUp = "OnPopupCloseUp";
+        settings.ClientSideEvents.PopUp = "OnPopupUp";
+        settings.ClientSideEvents.Init = "OnInit";
+
+        settings.SetContent(() => {
+            ViewContext.Writer.Write(
+                "<div style=\"padding-right: 11px; padding-bottom: 21px; text-align: right\">" +
+                    "<a href=\"javascript:void(0);\" onclick=\"popup.Hide();\" style=\"padding: 20px; margin-right: -20px;\">" +
+						"<img alt=\"Close\" src=\"" + Url.Content("~/Content/ImageSlider/close.png") + "\" style=\"width: 10px; height: 10px\" title=\"Press Esc to close\" />" +
+					"</a>" +
+				"</div>" +
+				"<div style=\"padding-bottom: 36px;\">"
+            );
+            Html.DevExpress().ImageSlider(
+                imageSliderSettings => {
+                    imageSliderSettings.Name = "imageSlider";
+                    imageSliderSettings.Width = Unit.Pixel(860);
+                    imageSliderSettings.EnableTheming = false;
+                    imageSliderSettings.NameField = "Id";
+                    imageSliderSettings.ThumbnailUrlField = "ThumbnailUrl";
+                    imageSliderSettings.ShowNavigationBar = false;
+                    imageSliderSettings.SettingsImageArea.ItemTextVisibility = ElementVisibilityMode.None;
+                    imageSliderSettings.SettingsImageArea.NavigationButtonVisibility = ElementVisibilityMode.Always;
+                    imageSliderSettings.SettingsBehavior.EnablePagingByClick = AutoBoolean.True;
+                    imageSliderSettings.Styles.ImageArea.Width = Unit.Pixel(660);
+                    imageSliderSettings.Styles.ImageArea.Height = Unit.Pixel(660);
+                    imageSliderSettings.ClientSideEvents.ActiveItemChanged = "OnActiveItemChanged";
+                }
+            ).BindToXML(Server.MapPath("~/App_Data/photo_gallery.xml"), "//items/*").Render();
+            ViewContext.Writer.Write(     
+				"</div>" +
+                "<div style=\"padding-bottom: 36px; text-align: center\">" +
+					"<span style=\"color: #ffffff; font-size: 9pt; font-family: 'Segoe UI', 'Helvetica Neue', Tahoma;\" id=\"itemText\"></span>" +
+				"</div>"
+            );
+        });
+}).GetHtml()
+
+

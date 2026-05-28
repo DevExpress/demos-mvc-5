@@ -1,0 +1,27 @@
+﻿@model IEnumerable
+
+<script type="text/javascript">
+    function TreeList_BeginCallback(s, e) {
+        DXDemo.LoadAntiForgeryTokenInputValue(e.customArgs);
+    }
+</script>
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("ToolbarPartial", Model)
+
+@section AdditionalResources {
+<style>
+    .title
+    {
+        width: 100%;
+        text-align: left;
+        font-size: 1.2em;
+        margin-right: 30px;
+    }
+    .mailbox .dxm-item:first-child
+    {
+        vertical-align: middle;
+    }
+</style>
+}

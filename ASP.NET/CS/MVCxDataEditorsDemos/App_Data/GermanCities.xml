@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Cities>
+  <City Name="Berlin"></City>
+  <City Name="Hamburg"></City>
+  <City Name="München"></City>
+  <City Name="Köln"></City>
+  <City Name="Düsseldorf"></City>
+  <City Name="Bremen"></City>
+  <City Name="Nürnberg"></City>
+  <City Name="Münster"></City>
+  <City Name="Mannheim"></City>
+  <City Name="Lübeck"></City>
+  <City Name="Saarbrücken"></City>
+  <City Name="Osnabrück"></City>
+  <City Name="Fürth"></City>
+</Cities>

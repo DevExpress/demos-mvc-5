@@ -1,0 +1,75 @@
+﻿@model IEnumerable
+
+          
+
+@section DemoOptionsTop {
+    <script type="text/javascript">
+            function PerformCallback(s, e) {
+                CardView.PerformCallback();
+            }
+
+            function OnCardViewBeginCallback(s, e) {
+                e.customArgs["EndlessPagingMode"] = EndlessPagingMode.GetValue();
+                e.customArgs["EnableScrolling"] = EnableScrolling.GetValue();
+            }
+    </script> 
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(s => {
+               s.Name = "EnableScrolling";
+               s.Text = "Enable scrolling";
+               s.Theme = DemoHelper.Instance.Theme;
+               s.Checked = PagingAndScrollingHelper.Options.EnableScrolling;
+               s.Properties.ClientSideEvents.CheckedChanged = "PerformCallback";
+           }).GetHtml()
+        </div>
+
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(s => {
+               s.Name = "EndlessPagingMode";
+               s.Properties.Caption = "Endless paging mode:";
+               s.Theme = DemoHelper.Instance.Theme;
+               s.Properties.DataSource = Enum.GetValues(typeof(CardViewEndlessPagingMode));
+               s.SelectedIndex = 0;
+               s.Properties.ClientSideEvents.ValueChanged = "PerformCallback";
+           }).BindList(Enum.GetValues(typeof(CardViewEndlessPagingMode))).Bind(PagingAndScrollingHelper.Options.EndlessPagingMode.ToString()).GetHtml()
+        </div>
+    </div>
+}
+@*<table class="OptionsTable BottomMargin">
+    <tr>
+        <td>
+            @Html.DevExpress().Label(settings => {
+                settings.Name = "EndlessPagingModeLabel";
+                settings.Text = "Endless paging mode:";
+                settings.AssociatedControlName = "EndlessPagingMode";
+            }).GetHtml()
+        </td>
+        <td>
+            @Html.DevExpress().ComboBox(settings => {
+                settings.Name = "EndlessPagingMode";
+                settings.Properties.DataSource = Enum.GetValues(typeof(CardViewEndlessPagingMode));
+                settings.SelectedIndex = 0;
+                settings.Properties.ClientSideEvents.ValueChanged = "PerformCallback";
+            }).BindList(Enum.GetValues(typeof(CardViewEndlessPagingMode))).Bind(PagingAndScrollingHelper.Options.EndlessPagingMode.ToString()).GetHtml()
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.DevExpress().Label(settings => {
+                settings.Name = "EnableScrollingLabel";
+                settings.Text = "Enable scrolling:";
+                settings.AssociatedControlName = "EnableScrolling";
+            }).GetHtml()
+        </td>
+        <td>
+            @Html.DevExpress().CheckBox(settings => {
+                settings.Name = "EnableScrolling";
+                settings.Checked = PagingAndScrollingHelper.Options.EnableScrolling;
+                settings.Properties.ClientSideEvents.CheckedChanged = "PerformCallback";
+            }).GetHtml()
+        </td>
+    </tr>
+</table>*@
+
+@Html.Partial("EndlessPagingPartial", Model)

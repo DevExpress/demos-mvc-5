@@ -1,0 +1,17 @@
+﻿.category
+{
+	font-weight: bold !important;
+}
+.category .group
+{
+	margin: 0 !important;
+	border-style: none;
+}
+.group table.dxflGroupSys:first-child
+{
+	padding-top: 0 !important;
+}
+.category .itemGroupCell
+{
+	padding: 0 !important;
+}

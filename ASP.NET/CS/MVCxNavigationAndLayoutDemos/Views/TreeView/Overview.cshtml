@@ -1,0 +1,33 @@
+﻿@Html.DevExpress().TreeView(settings => {
+    settings.Name = "tvOverview";
+
+    settings.Nodes.Add(node => {
+        node.Text = "Music";
+        node.Expanded = true;
+        node.Image.Url = "~/Content/TreeView/MediaContent/music.png";
+        node.Nodes.Add(subNode => {
+            subNode.Text = "Andy McKee";
+            subNode.Nodes.Add("Rylynn");
+            subNode.Nodes.Add("Drifting");
+        });
+        node.Nodes.Add(subNode => {
+            subNode.Text = "Antoine Dufour";
+            subNode.Nodes.Add("Reality");
+        });
+    });
+    settings.Nodes.Add(node => {
+        node.Text = "Video";
+        node.Image.Url = "~/Content/TreeView/MediaContent/video.png";
+        node.Nodes.Add("Inception - Official trailer");
+        node.Nodes.Add("MythBusters Top 25 Moments");
+        node.Nodes.Add("Richard Feynman - Ode on a Flower");
+    });
+    settings.Nodes.Add(node => {
+        node.Text = "Pictures";
+        node.Expanded = true;
+        node.Image.Url = "~/Content/TreeView/MediaContent/pictures.png";
+        node.Nodes.Add("Desert");
+        node.Nodes.Add("Me & Kate");
+        node.Nodes.Add("Party 03.08");
+    });
+}).GetHtml()

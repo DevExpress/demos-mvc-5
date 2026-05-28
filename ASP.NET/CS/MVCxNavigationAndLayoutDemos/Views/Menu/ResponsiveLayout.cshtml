@@ -1,0 +1,34 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@using(Html.BeginForm()) {
+<div style="width:100%; padding-bottom: 10px">
+    @Html.DevExpress().Label(settings => {
+        settings.Name = "Description";
+        settings.Text = "Drag the horizontal slider to resize the menu and see how it adapts to different width values.";
+        settings.Width = Unit.Percentage(100);
+    }).GetHtml()
+</div>
+    @Html.DevExpress().Splitter(settings => {
+        settings.Name = "Splitter";
+        settings.ControlStyle.CssClass = "dxs-splitter";
+        settings.Height = Unit.Pixel(330);
+        settings.Styles.Pane.Paddings.Padding = Unit.Pixel(0);
+        settings.Styles.Pane.Paddings.PaddingRight = Unit.Pixel(15);
+        settings.Styles.Pane.Border.BorderWidth = Unit.Pixel(0);
+        settings.Styles.Separator.BackColor = Color.FromArgb(208, 208, 208);
+        settings.Styles.Separator.HoverStyle.BackColor = Color.FromArgb(160, 160, 160);
+        settings.ResizingMode = DevExpress.Web.ResizingMode.Live;
+        settings.Images.VerticalSeparatorButton.ToolTip = "Drag the slider to resize the menu";
+
+        settings.Panes.Add(pane => {
+            pane.Size = Unit.Percentage(90);
+            pane.MinSize = Unit.Pixel(230);
+            pane.PaneStyle.CssClass = "dxs-contentPane";
+            pane.ContentUrl = DevExpressHelper.GetUrl(new { Controller = "Menu", Action = "ResponsiveLayoutPage" });
+        });
+        settings.Panes.Add(pane => {
+            pane.PaneStyle.CssClass = "dxs-resizePane";
+            pane.SetContent(() => {});
+        });
+    }).GetHtml()
+}

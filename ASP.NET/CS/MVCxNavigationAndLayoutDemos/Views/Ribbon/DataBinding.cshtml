@@ -1,0 +1,4 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(800);}
+@Html.DevExpress().Ribbon(settings => {
+    settings.Name = "Ribbon";
+}).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/MathInterface.xml"), "/MathInterface/*").GetHtml()

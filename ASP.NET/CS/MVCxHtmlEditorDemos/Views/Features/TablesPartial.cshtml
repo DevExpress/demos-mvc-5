@@ -1,0 +1,16 @@
+﻿@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "heTables";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "TablesPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Pixel(480);
+
+        string htmlContentPath = Server.MapPath("~/Content/HtmlEditor/DemoHtml/Tables.htm");
+        settings.Html = System.IO.File.ReadAllText(htmlContentPath);
+        settings.CssFiles.Add("~/Content/HtmlEditor/DemoCss/Tables.css");
+
+        settings.Toolbars.CreateDefaultToolbars();
+        settings.Toolbars[0].Items.RemoveAll(item => item.GetType() == typeof(ToolbarTableOperationsDropDownButton));
+        settings.Toolbars.Add(MVCxHtmlEditorToolbar.CreateTableToolbar());
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }).GetHtml()

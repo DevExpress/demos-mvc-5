@@ -1,0 +1,14 @@
+﻿@Html.DevExpress().SpellChecker(settings => {
+    settings.Name = "spellChecker";
+    settings.CallbackRouteValues = new { Action = "ContainerSpellCheckerPartial", Controller = "Features" };
+
+    settings.Culture = new CultureInfo("en-US");
+    ASPxSpellCheckerISpellDictionary dictionary = new ASPxSpellCheckerISpellDictionary();
+    dictionary.GrammarPath = "~/Dictionaries/english.aff";
+    dictionary.DictionaryPath = "~/Dictionaries/american.xlg";
+    dictionary.CacheKey = "hunspellDic";
+    dictionary.Culture = new System.Globalization.CultureInfo("en-us");
+    settings.Dictionaries.Add(dictionary);
+    settings.ClientSideEvents.BeforeCheck = "OnSpellCheckerBeforeCheck";
+    settings.ClientSideEvents.AfterCheck = "OnSpellCheckerAfterCheck";
+}).GetHtml()

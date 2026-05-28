@@ -1,0 +1,12 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "DocumentManagementPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 700;
+        settings.ActiveTabIndex = 0;
+        settings.ShowConfirmOnLosingChanges = false;
+        settings.WorkDirectory = DirectoryManagmentUtils.DocumentBrowsingFolderPath;
+        settings.SettingsDocumentSelector.UploadSettings.Enabled = !Utils.IsSiteMode;
+    }
+).Open(Path.Combine(DirectoryManagmentUtils.DocumentBrowsingFolderPath, "BreakevenAnalysis.xlsx")).GetHtml()

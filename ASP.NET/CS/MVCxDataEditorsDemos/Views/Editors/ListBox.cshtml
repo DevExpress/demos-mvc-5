@@ -1,0 +1,90 @@
+﻿@section AdditionalResources {
+    <style type="text/css">
+        .mainContainer {
+            display: table;
+        }
+
+        .leftEditor {
+            padding: 0 0 30px 0;
+        }
+        @@media (min-width:620px) {
+            .contentEditor {
+                width:310px;
+                display: table-cell;
+            }
+
+            .leftEditor {
+                padding:0 2% 0 0;
+            }
+        }
+    </style>
+}
+<script type="text/javascript">
+    MVCxClientGlobalEvents.AddControlsInitializedEventHandler(InitializeOptionEditors);
+
+    function InitializeOptionEditors() {
+        SelectionMode.ValueChanged.AddHandler(OnChangeDemoOptions);
+        EnableSelectAll.ValueChanged.AddHandler(OnChangeDemoOptions);
+        if(SelectionMode.GetValue() !== "CheckColumn") {
+            EnableSelectAll.SetEnabled(false);
+            EnableSelectAll.SetValue(false);
+        }
+    }
+    function OnChangeDemoOptions() {
+        $("form").submit();
+    }
+    function FeaturesSelectionChanged(s, e) {
+        var selectedFeatures = s.GetSelectedValues();
+        lbModels.PerformCallback({ "selectedFeatures": selectedFeatures ? selectedFeatures.join() : null });
+    }
+</script>
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+    @section DemoOptionsTop {
+    <div id="options" class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(s => {
+                s.Name = "SelectionMode";
+                s.Properties.Caption = "Selection Mode";
+                s.Theme = DemoHelper.Instance.Theme;
+                s.Properties.ValueType = typeof(ListEditSelectionMode);
+            }).BindList(Enum.GetNames(typeof(ListEditSelectionMode))).Bind(ListBoxDemoHelper.SelectionMode).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(s => {
+                s.Name = "EnableSelectAll";
+                s.Text = "Enable Select All";
+                s.Theme = DemoHelper.Instance.Theme;
+            }).Bind(ListBoxDemoHelper.EnableSelectAll).GetHtml()
+        </div>
+    </div>
+    }
+
+    <div class="mainContainer">
+        <div class="leftEditor contentEditor">
+            @Html.DevExpress().ListBox(settings => {
+                settings.Name = "lbFeatures";
+                settings.Width = 285;
+                settings.Height = 210;
+                settings.Properties.Caption = "Phone features:";
+                settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                settings.Properties.SelectionMode = ListBoxDemoHelper.SelectionMode;
+                settings.Properties.EnableSelectAll = ListBoxDemoHelper.EnableSelectAll;
+                settings.Properties.ValueField = "ID";
+                settings.Properties.ValueType = typeof(string);
+                settings.Properties.TextField = "Name";
+                settings.Properties.ClientSideEvents.SelectedIndexChanged = "FeaturesSelectionChanged";
+            }).BindList(Model).GetHtml()
+        </div>
+        <div class="contentEditor">
+            @Html.Action("ListBoxPartial")
+        </div>
+    </div>    
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

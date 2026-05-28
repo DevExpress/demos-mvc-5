@@ -1,0 +1,49 @@
+﻿@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "Filtering", Action = "DateRangeHeaderFilterPartial", HeaderFilterMode = HeaderFilterMode };
+
+    settings.KeyFieldName = "PostID";
+    settings.ParentFieldName = "ParentID";
+    settings.Width = Unit.Percentage(100);
+
+    settings.Columns.Add(c => {
+        c.FieldName = "From";
+        c.Width = 200;
+        c.AllowHeaderFilter = DefaultBoolean.False;
+    });
+
+    settings.Columns.Add(c => {
+        c.FieldName = "Subject";
+        c.Width = 250;
+        c.AllowHeaderFilter = DefaultBoolean.False;
+    });
+
+    settings.Columns.Add(c => {
+        c.FieldName = "PostDate";
+        c.Width = 250;
+        c.PropertiesEdit.DisplayFormatString = "d";
+        c.AllowHeaderFilter = DefaultBoolean.True;
+        c.SettingsHeaderFilter.Mode = HeaderFilterMode;
+    });
+
+    settings.Columns.Add("HasAttachment", MVCxTreeListColumnType.CheckBox);
+
+    settings.SettingsBehavior.AutoExpandAllNodes = true;
+
+    settings.SettingsPopup.HeaderFilter.Height = Unit.Pixel(440);
+    settings.SettingsPopup.HeaderFilter.Width = GetHeaderFilterPopupWidth();
+    settings.SettingsPager.EnableAdaptivity = true;
+    settings.SettingsPopup.HeaderFilter.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.OnWindowInnerWidth;
+    settings.SettingsPopup.HeaderFilter.SettingsAdaptivity.SwitchAtWindowInnerWidth = 768;
+
+}).Bind(Model).GetHtml()
+
+@functions {
+    static string[] WideThemes = new string[] { "iOS", "Material", "Metropolis", "MetropolisBlue", "Moderno", "Mulberry", "SoftOrange" };
+
+    GridHeaderFilterMode HeaderFilterMode { get { return ViewBag.HeaderFilterMode; } }
+
+    int GetHeaderFilterPopupWidth() {
+        return HeaderFilterMode == GridHeaderFilterMode.DateRangeCalendar && WideThemes.Contains(Utils.CurrentTheme) ? 360 : 300;
+    }
+}

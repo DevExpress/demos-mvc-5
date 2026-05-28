@@ -1,0 +1,48 @@
+﻿@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/ImageSlider/NavigationBarMode.css")" />
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(s => {
+                s.Name = "visibleItemsCount";
+                s.Properties.Caption = "VisibleItemCount:";
+                s.Theme = DemoHelper.Instance.Theme;
+                s.Properties.ClientSideEvents.ValueChanged = "function(){ $('form').submit(); }";
+            }).BindList(ImageSliderDemoHelper.GetVisibleItemsCount()).Bind(ViewData["VisibleItemsCount"]).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.DevExpress().ImageSlider(settings => {
+    settings.Name = "imageSlider";
+    settings.EnableTheming = false;
+    settings.ShowImageArea = false;
+
+    settings.SettingsBehavior.ExtremeItemClickMode = ExtremeItemClickMode.Select;
+    settings.SettingsNavigationBar.VisibleItemsCount = (int)ViewData["VisibleItemsCount"];
+    settings.SettingsNavigationBar.ThumbnailsModeNavigationButtonVisibility = ElementVisibilityMode.Always;
+    settings.SettingsNavigationBar.PagingMode = NavigationBarPagingMode.Single;
+    settings.SettingsNavigationBar.ThumbnailsNavigationButtonPosition = ThumbnailNavigationBarButtonPosition.Outside;
+
+    settings.SetItemThumbnailTemplateContent(c => {
+        var name = c.EvalDataItem("Name");
+        ViewContext.Writer.Write(
+            "<a class=\"url\" href='" + c.EvalDataItem("Link") + "' target=\"_blank\">" +
+                "<img alt='" + name + "' src='" + Url.Content(c.EvalDataItem("ImageUrl").ToString()) + "' />" +
+                "<span class=\"name\">" + name + "</span>" +
+            "</a>"
+        );
+    });
+}).BindToXML(Server.MapPath("~/App_Data/persons.xml"), "//items/*").GetHtml()
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

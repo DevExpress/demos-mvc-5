@@ -1,0 +1,38 @@
+﻿@Html.DevExpress().CardView(
+    settings =>
+    {
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "FocusingAndSelection", Action = "FocusingPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.KeyFieldName = "EmployeeID";
+        settings.SettingsBehavior.AllowFocusedCard = true;
+        settings.SettingsPager.SettingsTableLayout.ColumnCount = 4;
+        settings.SettingsPager.SettingsTableLayout.RowsPerPage = 1;
+        settings.ClientSideEvents.FocusedCardChanged = "OnFocusedCardChanged";
+        
+        settings.Columns.Add(c => {
+            c.FieldName = "Photo";
+            c.ColumnType = MVCxCardViewColumnType.BinaryImage;
+            var imageProperties = (BinaryImageEditProperties)c.PropertiesEdit;
+            imageProperties.ImageWidth = imageProperties.ImageHeight = Unit.Pixel(150);
+        });
+        settings.Columns.Add("FirstName");
+        settings.Columns.Add("LastName");
+        settings.Columns.Add("HomePhone").Visible = false;
+        settings.Columns.Add("Title").Visible = false;
+        settings.Columns.Add("Notes").Visible = false;
+
+        settings.CardLayoutProperties.Items.Add(i => {
+            i.ColumnName = "Photo";
+            i.ShowCaption = DefaultBoolean.False;
+            i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
+        });
+        settings.CardLayoutProperties.Items.Add(i => {
+            i.ShowCaption = DefaultBoolean.False;
+            i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
+            i.SetTemplateContent(c => {
+                ViewContext.Writer.Write("<span>" + DataBinder.Eval(c.DataItem, "FirstName") + " " + DataBinder.Eval(c.DataItem, "LastName") + "</span>");
+            });
+        });
+    }).Bind(Model).GetHtml()

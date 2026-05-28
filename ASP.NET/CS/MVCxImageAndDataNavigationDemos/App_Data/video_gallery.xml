@@ -1,0 +1,10 @@
+﻿<?xml version="1.0"?>
+<items>
+  <item Id="3" Name="WhIwfpl34r4" Product="ASP.NET MVC" Text="Insert Extension Wizard" ImageUrl="~/Content/Images/video_gallery/WhIwfpl34r4.jpg" Time="3:01" />
+  <item Id="1" Name="j70nhVb0GCk" Product="DevExpress ASP.NET" Text="When &quot;Run Everywhere&quot; Matters" ImageUrl="~/Content/Images/video_gallery/j70nhVb0GCk.jpg" Time="7:41" />
+  <item Id="2" Name="QQK11oQ_r24" Product="ASP.NET Image Slider" Text="Getting Started" ImageUrl="~/Content/Images/video_gallery/QQK11oQ_r24.jpg" Time="6:02" />
+  <item Id="4" Name="_SsRalcL_58" Product="WinForms Tile Control" Text="Getting Started" ImageUrl="~/Content/Images/video_gallery/_SsRalcL_58.jpg" Time="7:05" />
+  <item Id="5" Name="wbbPrDI_Mxw" Product="WinForms Dashboard" Text="Getting Started" ImageUrl="~/Content/Images/video_gallery/wbbPrDI_Mxw.jpg" Time="7:28" />
+  <!--<item Id="6" Name="CsAo9En83Xc" Product="DXTREME Multi-Channel" Text="Creating a Native iPhone Package" ImageUrl="~/Content/Images/video_gallery/CsAo9En83Xc.jpg" Time="1:45" />-->
+  <item Id="7" Name="MO-TTO2bBPk" Product="HTML JS Chart Widget" Text="The Chart Designer" ImageUrl="~/Content/Images/video_gallery/MO-TTO2bBPk.jpg" Time="2:34" />
+</items>

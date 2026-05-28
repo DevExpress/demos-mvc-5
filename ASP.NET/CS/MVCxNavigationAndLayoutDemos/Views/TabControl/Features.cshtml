@@ -1,0 +1,72 @@
+﻿@model TabControlFeaturesDemoOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(750);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(450);
+}
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/TabControl/Features.css")" />
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().PageControl(
+    settings => {
+        settings.Name = "pcFeatures";
+        settings.ActivateTabPageAction = Model.ActivateTabPageAction;
+        settings.EnableHotTrack = Model.EnableHotTrack;
+        settings.SaveStateToCookies = Model.SaveStateToCookies;
+        settings.TabAlign = Model.TabAlign;
+        settings.TabPosition = Model.TabPosition;
+        settings.Width = Unit.Percentage(100);
+        settings.ControlStyle.CssClass = "dxtcFixed";
+        settings.TabPages.Add("London").SetContent(() => {
+            ViewContext.Writer.Write(
+                "<img class=\"dxtc-image-london\" alt=\"\" src=\"" + Url.Content("~/Content/TabControl/Images/Cities/TowerBridge.jpg") + "\"/>"
+            );
+        });
+        settings.TabPages.Add("New-York").SetContent(() => {
+            ViewContext.Writer.Write(
+                "<img class=\"dxtc-image-newyork\" alt=\"\" src=\"" + Url.Content("~/Content/TabControl/Images/Cities/BrooklynBridge.jpg") + "\"/>"
+            );
+        });
+        settings.TabPages.Add("Tokyo").SetContent(() => {
+            ViewContext.Writer.Write(
+                "<img class=\"dxtc-image-tokyo\" alt=\"\" src=\"" + Url.Content("~/Content/TabControl/Images/Cities/TokyoTower.jpg") + "\">"
+            );
+        });
+}).GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+    s.Name = "SettingsFormLayout";
+    s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    s.Items.AddGroupItem(g => {
+        g.Caption = "Layout Options";
+        g.Items.Add(i => i.FieldName = "TabAlign");
+        g.Items.Add(i => i.FieldName = "TabPosition");
+        g.Items.Add(i => i.FieldName = "ActivateTabPageAction");
+        g.Items.Add(i => i.FieldName = "EnableHotTrack");
+        g.Items.Add(i => i.FieldName = "SaveStateToCookies");
+
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 432,
+            ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+        });
+    });
+}).Bind((TabControlFeaturesDemoOptions)ViewData["Options"]).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

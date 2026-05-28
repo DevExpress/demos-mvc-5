@@ -1,0 +1,49 @@
+﻿@{ Layout = null; } 
+@model SchedulerDataObject
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>Adaptive Layout - ASP.NET MVC Scheduler Extension</title>
+     <style>
+        body, form
+        {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+
+            min-height: 200px;
+            min-width: 400px;
+        }
+    </style>
+    <script type="text/javascript">
+        function UpdateSchedulerHeight() {
+            scheduler.SetHeight(1);
+            var containerHeight = ASPxClientUtils.GetDocumentClientHeight();
+            if (document.body.scrollHeight > containerHeight)
+                containerHeight = document.body.scrollHeight;
+            scheduler.SetHeight(containerHeight);
+        }
+    </script>
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionType = ExtensionType.Scheduler }
+    )
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionType = ExtensionType.Scheduler }
+    )
+</head>
+<body>
+    @using(Html.BeginForm()) {
+        @Html.Partial("AdaptiveLayoutPagePartial", Model)
+    }
+    <script type="text/javascript">
+        ASPxClientControl.GetControlCollection().ControlsInitialized.AddHandler(function (s, e) {
+            UpdateSchedulerHeight();
+        });
+        ASPxClientControl.GetControlCollection().BrowserWindowResized.AddHandler(function (s, e) {
+            UpdateSchedulerHeight();
+        });
+    </script>
+</body>
+</html>

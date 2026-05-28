@@ -1,0 +1,17 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "DataValidationPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Pixel(700);
+        settings.ActiveTabIndex = 2;
+        settings.ShowConfirmOnLosingChanges = false;
+
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideFileTab(spreadsheet);
+            SpreadsheetDemoUtils.HidePageLayoutTab(spreadsheet);
+            SpreadsheetDemoUtils.HideFormulasTab(spreadsheet);
+        };
+    }
+    ).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "DataValidation.xlsx")).GetHtml()

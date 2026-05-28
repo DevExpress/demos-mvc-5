@@ -1,0 +1,79 @@
+﻿@model ColorEditDemoModel
+
+@section AdditionalResources {
+    <style type="text/css">
+        .caption {
+            width: 170px;
+            padding-right: 0px !important;
+        }
+
+        .colorEditor {
+            margin-top: 5px;
+        }
+    </style>
+
+    <script>
+        function onFormLayoutInit(s, e) {
+            ASPxClientControl.GetControlCollection().ForEachControl(function(control) {
+                if(control.GetParentControl() === optionsFormLayout && control instanceof (ASPxClientEdit))
+                    control.ValueChanged.AddHandler(function() { CallbackPanel.PerformCallback(); });
+            })
+        }
+        function GetEditorValues() {
+            return MVCxClientUtils.GetSerializedEditorValuesInContainer("form");
+        }
+        function onBeginCallback(s, e) {
+            e.customArgs = $.extend(e.customArgs, GetEditorValues());
+        }
+        function onColorChanged(s, e) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ColorEditorRoundPanelPartial", "Editors")',
+                data: $.extend({ }, GetEditorValues()),
+                success: function(response) {
+                    $("#roundPanelContent").html(response);
+                }
+            });
+        }
+    </script>
+}
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(400);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(400);
+}
+
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+<div id="colorSettingsContent">
+    @Html.Action("ColorEditorColorSettingsPartial")
+</div>
+<div id="roundPanelContent" style="margin-top:40px">
+    @Html.Action("ColorEditorRoundPanelPartial")
+</div>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+       s.Name = "optionsFormLayout";
+       s.Items.AddGroupItem(g => {
+           g.Caption = "Options";
+           g.Items.Add(m => m.ColorEditorDemoOptions.EnableCustomColors);
+           g.Items.Add(m => m.ColorEditorDemoOptions.ColumnCount, i => {
+               i.NestedExtension().ComboBox(settings => {
+                   settings.Properties.DataSource = ColorEditorDemoHelper.GetColumnCountList();
+               });
+           });
+           g.Items.Add(m => m.ColorEditorDemoOptions.Palettes);
+       });
+       s.ClientSideEvents.Init = "onFormLayoutInit";
+       DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+           ColumnMinWidth = 360,
+           ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+       });
+    }).Bind(Model).GetHtml()
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

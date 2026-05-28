@@ -1,0 +1,37 @@
+﻿@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "Appearance", Action = "ConditionalFormattingPartial" };
+    settings.Width = Unit.Percentage(100);
+    settings.AutoGenerateColumns = false;
+
+    settings.KeyFieldName = "ID";
+    settings.ParentFieldName = "ParentID";
+
+    settings.Columns.Add("DepartmentName", "Department");
+    settings.Columns.Add("Location");
+    settings.Columns.Add(c => {
+        c.FieldName = "Budget";
+        c.PropertiesEdit.DisplayFormatString = "{0:C}";
+    });
+    settings.Columns.Add("Phone1", "Phone");
+
+    settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+    settings.SettingsBehavior.AutoExpandAllNodes = true;
+    settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+    settings.Styles.Cell.CssClass = "treeListCell";
+    settings.Styles.Cell.Wrap = DefaultBoolean.True;
+
+    settings.HtmlDataCellPrepared = (s, e) => {
+        if(e.Column.FieldName == "Budget") {
+            decimal value = (decimal)e.CellValue;
+            e.Cell.BackColor = TreeListAppearanceDemoHelper.GetBudgetColor(value);
+            if(value > 1000000)
+                e.Cell.Font.Bold = true;
+        }
+    };
+    settings.HtmlRowPrepared = (s, e) => {
+        if(Object.Equals(e.GetValue("Location"), "Monterey"))
+            e.Row.BackColor = ASPxWebControl.GlobalTheme != "Office365Dark" ? Color.FromArgb(211, 235, 183) : Color.DarkGreen;
+    };
+}).Bind(Model).GetHtml()

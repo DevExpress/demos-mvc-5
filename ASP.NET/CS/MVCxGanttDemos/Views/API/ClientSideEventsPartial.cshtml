@@ -1,0 +1,81 @@
+﻿@Html.DevExpress().Gantt(settings =>
+{
+    settings.Name = "gantt";
+    settings.CallbackRouteValues = new { Controller = "API", Action = "ClientSideEventsPartial" };
+    settings.BatchUpdateRouteValues = new { Controller = "API", Action = "GanttBatchUpdate" };
+
+    settings.Height = Unit.Pixel(700);
+    settings.Width = Unit.Percentage(100);
+
+    settings.SettingsGanttView.ViewType = GanttViewType.Days;
+    settings.SettingsTaskList.Width = Unit.Percentage(45);
+
+    settings.SettingsTaskList.Columns.Add(new GanttTextColumn() { FieldName = "Subject", Caption = "Title", Width = Unit.Pixel(360) });
+    settings.SettingsTaskList.Columns.Add(new GanttDateTimeColumn() { FieldName = "StartDate", Caption = "Start Date", Width = Unit.Pixel(100) });
+    settings.SettingsTaskList.Columns.Add(new GanttDateTimeColumn() { FieldName = "EndDate", Caption = "Due Date", Width = Unit.Pixel(100) });
+
+    settings.Mappings.Task.Key = "ID";
+    settings.Mappings.Task.ParentKey = "ParentID";
+    settings.Mappings.Task.Title = "Subject";
+    settings.Mappings.Task.Start = "StartDate";
+    settings.Mappings.Task.End = "EndDate";
+    settings.Mappings.Task.Progress = "PercentComplete";
+
+    settings.Mappings.Dependency.Key = "ID";
+    settings.Mappings.Dependency.PredecessorKey = "ParentID";
+    settings.Mappings.Dependency.SuccessorKey = "DependentID";
+    settings.Mappings.Dependency.DependencyType = "Type";
+
+    settings.Mappings.Resource.Key = "ID";
+    settings.Mappings.Resource.Name = "Name";
+
+    settings.Mappings.ResourceAssignment.Key = "ID";
+    settings.Mappings.ResourceAssignment.TaskKey = "TaskID";
+    settings.Mappings.ResourceAssignment.ResourceKey = "ResourceID";
+
+    settings.ClientSideEvents.StartCellEditing = "onGanttStartEdit";
+    settings.ClientSideEvents.EndCellEditing = "onGanttEndEdit";
+    settings.ClientSideEvents.TaskInserting = "onGanttTaskInsert";
+    settings.ClientSideEvents.TaskInserted = "onGanttTaskInserted";
+    settings.ClientSideEvents.TaskDeleting = "onGanttTaskDelete";
+    settings.ClientSideEvents.TaskDeleted = "onGanttTaskDeleted";
+    settings.ClientSideEvents.TaskUpdating = "onGanttTaskUpdate";
+    settings.ClientSideEvents.TaskUpdated = "onGanttTaskUpdated";
+    settings.ClientSideEvents.TaskMoving = "onGanttTaskMove";
+    settings.ClientSideEvents.TaskEditDialogShowing = "onGanttTaskEditDialog";
+    settings.ClientSideEvents.FocusedTaskChanging = "onGanttTaskFocusing";
+    settings.ClientSideEvents.FocusedTaskChanged = "onGanttFocusedTaskChanged";
+    settings.ClientSideEvents.DependencyInserting = "onGanttDependencyInsert";
+    settings.ClientSideEvents.DependencyInserted = "onGanttDependencyInserted";
+    settings.ClientSideEvents.DependencyDeleting = "onGanttDependencyDelete";
+    settings.ClientSideEvents.DependencyDeleted = "onGanttDependencyDeleted";
+    settings.ClientSideEvents.ResourceInserting = "onGanttResourceInsert";
+    settings.ClientSideEvents.ResourceInserted = "onGanttResourceInserted";
+    settings.ClientSideEvents.ResourceDeleting = "onGanttResourceDelete";
+    settings.ClientSideEvents.ResourceDeleted = "onGanttResourceDeleted";
+    settings.ClientSideEvents.ResourceAssigning = "onGanttResourceAssign";
+    settings.ClientSideEvents.ResourceAssigned = "onGanttResourceAssigned";
+    settings.ClientSideEvents.ResourceUnassigning = "onGanttResourceUnassign";
+    settings.ClientSideEvents.ResourceUnassigned = "onGanttResourceUnassigned";
+    settings.ClientSideEvents.ResourceManagerDialogShowing = "onGanttResourceManagerDialog";
+    settings.ClientSideEvents.TaskClick = "onGanttTaskClick";
+    settings.ClientSideEvents.TaskDblClick = "onGanttTaskDblClick";
+    settings.ClientSideEvents.ContextMenu = "onGanttContextMenu";
+    settings.ClientSideEvents.CustomCommand = "onGanttCustomCommand";
+
+    settings.SettingsToolbar.Items.Add(new GanttUndoToolbarItem());
+    settings.SettingsToolbar.Items.Add(new GanttRedoToolbarItem());
+    settings.SettingsToolbar.Items.Add(new GanttAddTaskToolbarItem());
+    settings.SettingsToolbar.Items.Add(new GanttRemoveTaskToolbarItem());
+    settings.SettingsToolbar.Items.Add(new GanttZoomInToolbarItem());
+    settings.SettingsToolbar.Items.Add(new GanttZoomOutToolbarItem());
+    settings.SettingsToolbar.Items.AddCustomItem(i =>
+    {
+        i.CommandName = "Settings";
+        i.GroupName = "Settings";
+        i.BeginGroup = true;
+        i.Image.Url = "../Content/swt.svg";
+        i.Image.Height = Unit.Pixel(16);
+        i.Image.Width = Unit.Pixel(16);
+    });
+}).Bind(GanttDataProvider.Tasks, GanttDataProvider.Dependencies, GanttDataProvider.Resources, GanttDataProvider.ResourceAssignments).GetHtml()

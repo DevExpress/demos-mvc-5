@@ -1,0 +1,12 @@
+﻿@model IEnumerable
+
+@{ DemoHelper.Instance.ControlAreaMinHeight = Unit.Pixel(350); }
+           
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/GridView/CSS/AdvancedLookup.css")" />
+}
+
+<label>Select employee (incremental filtering is on):</label>
+<div class="TopPadding">
+    @Html.Partial("AdvancedLookupPartial", Model)
+</div>

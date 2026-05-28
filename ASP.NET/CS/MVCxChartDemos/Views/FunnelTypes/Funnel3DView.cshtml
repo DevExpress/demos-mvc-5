@@ -1,0 +1,117 @@
+﻿@model ChartFunnel3DDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(320);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartFunnel3DDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Left;
+        l.AlignmentVertical = LegendAlignmentVertical.Bottom;
+        l.HorizontalIndent = 12;
+        l.Border.Visibility = DefaultBoolean.False;
+    });
+
+    settings.Series.Add(ser => {
+        ser.Name = "WebSiteVisitors";
+        ser.Views().Funnel3DSeriesView(v => {
+            v.HeightToWidthRatio = options.HeightToWidthRatio;
+            v.HoleRadiusPercent = options.HoleRadius;
+            v.PointDistance = options.PointDistance;
+            v.SeriesLabel(l => { 
+                l.Position = options.LabelPosition;
+                l.TextPattern = options.ValueAsPercent ?  "{VP:P0}" : "{V}";
+            });
+        });
+        ser.SetDataMembers("Caption", "Count");
+        ser.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        ser.LegendTextPattern = "{A}: {V}";
+
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Website Visitors Trend"
+    });   
+}).Bind(Model.Data).GetHtml()
+
+<script type="text/javascript">
+    function UpdateLabelOptionsState() {
+        var showLabels = ShowLabels.GetChecked();
+        ValueAsPercent.SetEnabled(showLabels);
+        LabelPosition.SetEnabled(showLabels);
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.PointDistance, item => {
+                item.NestedExtension().SpinEdit(spinEdit => {
+                    spinEdit.Properties.MinValue = 0;
+                    spinEdit.Properties.MaxValue = 30;
+                });
+            });
+            group.Items.Add(model => model.HoleRadius, item => {
+                item.NestedExtension().SpinEdit(spinEdit => {
+                    spinEdit.Properties.MinValue = 0;
+                    spinEdit.Properties.MaxValue = 100;
+                });
+            });
+            group.Items.Add(model => model.HeightToWidthRatio, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetHeightToWidthRatio()); });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateLabelOptionsState(); }";
+                });
+            });
+            group.Items.Add(model => model.ValueAsPercent, item => {
+                item.NestedExtension().CheckBox(checkBox => { checkBox.ClientEnabled = Model.ShowLabels; });
+            });
+            group.Items.Add(model => model.LabelPosition, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowLabels;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetFunnelLabelPositions());
+                });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 300,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

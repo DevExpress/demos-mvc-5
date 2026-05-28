@@ -1,0 +1,115 @@
+﻿@model ChartNestedDoughnutDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(300);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+   
+@Html.DevExpress().Chart(settings => {
+    ChartNestedDoughnutDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.ToolTipEnabled = DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.Border.Visibility = DefaultBoolean.False;
+    });
+
+    string argumentDataMember = options.ShowAgeStruct ? "Gender" : "Age";
+
+    settings.Series.Template(t => {
+        t.ArgumentDataMember = argumentDataMember;
+        t.ValueDataMembers.AddRange("Population");
+        t.LabelsVisibility = DefaultBoolean.False;
+        t.ShowInLegend = false;
+        t.ToolTipPointPattern = "{S}\n{HINT} : {VP:##.##%}";
+        t.ToolTipHintDataMember = options.ShowAgeStruct ? "Gender" : "Age";
+        t.LegendTextPattern = "{A}";
+        t.FilterCriteria = new GroupOperator(
+            new BinaryOperator("Name", "United States", BinaryOperatorType.Equal),
+            new BinaryOperator("Name", "Brazil", BinaryOperatorType.Equal),
+            new BinaryOperator("Name", "Russia", BinaryOperatorType.Equal)) {
+            OperatorType = GroupOperatorType.Or
+        };
+        t.Views().NestedDoughnutSeriesView(v => {
+            v.HoleRadiusPercent = options.HoleRadiusPercent;
+            v.InnerIndent = options.InnerIndent;
+        });
+    });
+
+    settings.BoundDataChanged = (s, e) => {
+        MVCxChartControl chart = (MVCxChartControl)s;
+        chart.Series[0].ShowInLegend = true;
+        foreach (Series series in chart.Series) {
+            series.Views().NestedDoughnutSeriesView(v => {
+                AgePopulation population = series.Points[0].Tag as AgePopulation;
+                if (population != null) {
+                    string name = population.Name;
+                    v.Group = name;
+                    v.Titles.Clear();
+                    v.Titles.Add(new SeriesTitle() { Text = name });
+                }
+            });
+        }
+    };
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Population: " + argumentDataMember + " Structure"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Data estimate for mid-2016",
+        DXFont = new DXFont("Tahoma", 12.0f),
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Text = "From www.cia.gov",
+        DXFont = new DXFont("Tahoma", 8.0f),
+        TextColor = Color.Gray,
+        Dock = ChartTitleDockStyle.Bottom,
+        Alignment = StringAlignment.Far
+    });
+}).Bind(Model.Data, Model.ShowAgeStruct ? "CountryAgeKey" : "CountryGenderKey").GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.ShowAgeStruct, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetAgeStructureModes()); });
+            });
+            group.Items.Add(model => model.HoleRadiusPercent, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetPredefinedHoleRadiuses()); });
+            });
+            group.Items.Add(model => model.InnerIndent, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetPredefinedInnerIndents()); });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings { ColumnMinWidth = 280 });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

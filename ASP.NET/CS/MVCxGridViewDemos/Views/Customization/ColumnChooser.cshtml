@@ -1,0 +1,36 @@
+﻿@model IEnumerable
+<script type="text/javascript">
+	function onShowChooserClick(s, e) {
+		UpdateCustomizationWindowVisibility();
+	}
+    function grid_CustomizationWindowCloseUp(s, e) {
+        UpdateButtonText();
+    }
+    function UpdateCustomizationWindowVisibility() {
+        if (grid.IsCustomizationWindowVisible())
+            grid.HideCustomizationWindow();
+        else
+            grid.ShowCustomizationWindow();
+        UpdateButtonText();
+    }
+    function UpdateButtonText() {
+        var text = grid.IsCustomizationWindowVisible() ? "Hide" : "Show";
+		text += " Column Chooser";
+		btShowColumnChooser.SetText(text);
+    }
+</script>
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().Button(settings => {
+                settings.Name = "btShowColumnChooser";
+                settings.Text = "Show Column Chooser";
+                settings.ClientSideEvents.Click = "function (s, e) { onShowChooserClick(s,e); }";
+                settings.Theme = DemoHelper.Instance.Theme;
+            }).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.Partial("ColumnChooserPartial", Model)

@@ -1,0 +1,21 @@
+﻿@model RibbonCustomizationDemoOptions
+
+@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "BarsAndUI", Action = "RibbonCustomizationPartial" };
+
+    settings.Width = Unit.Percentage(100);
+
+    settings.ShowStatusBar = Model.ShowStatusBar;
+    settings.RibbonMode = Model.RibbonMode;
+    settings.AssociatedRibbonName = (Model.RibbonMode == RichEditRibbonMode.ExternalRibbon) ? "ExternalRibbon" : string.Empty;
+    
+    settings.ShowConfirmOnLosingChanges = false;
+
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        richEdit.Focus();
+    };
+    
+    settings.RibbonTabs.Add(RibbonCustomizationDemoHelper.GetCustomRibbonTab(false));
+}).GetHtml()

@@ -1,0 +1,55 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.KeyFieldName = "ProductID";
+    settings.CallbackRouteValues = new { Controller = "Selection", Action = "MultipleCellSelectionPartial" };
+    settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Selection", Action = "MultipleCellSelectionUpdateModel" };
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.FocusedCellClick;
+    settings.SettingsEditing.BatchEditSettings.EnableMultipleCellSelection = true;
+
+    settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+    settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+    settings.SettingsAdaptivity.AllowHideDataCellsByColumnMinWidth = true;
+
+    settings.Settings.VerticalScrollableHeight = 498;
+
+    settings.SettingsContextMenu.Enabled = true;
+    settings.SettingsContextMenu.RowMenuItemVisibility.ExportMenu.Visible = false;
+    settings.SettingsContextMenu.RowMenuItemVisibility.NewRow = false;
+    settings.SettingsContextMenu.RowMenuItemVisibility.EditRow = false;
+    settings.SettingsContextMenu.RowMenuItemVisibility.DeleteRow = false;
+    settings.SettingsContextMenu.RowMenuItemVisibility.Refresh = false;
+
+    settings.Styles.StatusBar.HorizontalAlign=HorizontalAlign.Left;
+    settings.Styles.StatusBar.CssClass = "statusbar";
+
+    settings.Width = Unit.Percentage(100);
+
+    settings.Columns.Add(c => {
+        c.FieldName = "ProductName";
+        c.Width = Unit.Pixel(220);
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "CategoryID";
+        c.Caption = "Category";
+        c.Width = Unit.Pixel(110);
+        c.EditorProperties().ComboBox(p => {
+            p.TextField = "CategoryName";
+            p.ValueField = "CategoryID";
+            p.ValueType = typeof(int);
+            p.DataSource = NorthwindDataProvider.GetCategories();
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "UnitPrice";
+        c.Width = Unit.Pixel(100);
+        c.EditorProperties().SpinEdit(p => {
+            p.DisplayFormatString = "c";
+            p.DisplayFormatInEditMode = true;
+            p.MinValue = 0;
+            p.MaxValue = 1000000;
+        });
+    });
+}).Bind(Model).GetHtml()

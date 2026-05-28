@@ -1,0 +1,85 @@
+﻿@model IEnumerable
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Responsive Layout - ASP.NET MVC Menu Extension</title>
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionType = ExtensionType.Menu }
+    )
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Menu/ResponsiveLayout.css")" />
+    <script src="@Url.Content("~/Scripts/jquery.min.js")"></script>
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionType = ExtensionType.Menu }
+    )
+</head>
+<body>
+    <div class="dx-menu-container">
+        @Html.DevExpress().Menu(settings => {
+               settings.Name = "menu";
+               settings.Width = Unit.Parse("100%");
+               settings.ShowPopOutImages = DefaultBoolean.True;
+               settings.RootItemSubMenuOffset.LastItemX = 8;
+               settings.AllowSelectItem = true;
+
+               settings.SettingsAdaptivity.Enabled = true;
+               settings.SettingsAdaptivity.EnableAutoHideRootItems = true;
+               settings.SettingsAdaptivity.EnableCollapseToSideMenu = true;
+               settings.SettingsAdaptivity.CollapseToSideMenuAtWindowInnerWidth = 300;
+               settings.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+               settings.SettingsAdaptivity.CollapseRootItemsToIconsAtWindowInnerWidth = 700;
+               settings.Styles.Item.CssClass = "dxm-menuItem";
+               settings.Styles.SubMenu.CssClass = "subMenu";
+               settings.Items.Add(item => {
+                   item.Text = "Meat & Poultry";
+                   item.ToolTip = "Meat & Poultry";
+                   item.Image.SpriteProperties.CssClass = "MeatAndPoultry";
+                   item.Image.SpriteProperties.HottrackedCssClass = "MeatAndPoultry_Hovered";
+               });
+               settings.Items.Add(item => {
+                   item.Text = "Healthy Food";
+                   item.ToolTip = "Healthy Food";
+                   item.Image.SpriteProperties.CssClass = "HealthyFood";
+                   item.Image.SpriteProperties.HottrackedCssClass = "HealthyFood_Hovered";
+               });
+               settings.Items.Add(item => {
+                   item.Text = "Baking";
+                   item.ToolTip = "Baking";
+                   item.Image.SpriteProperties.CssClass = "Baking";
+                   item.Image.SpriteProperties.HottrackedCssClass = "Baking_Hovered";
+               });
+               settings.Items.Add(item => {
+                   item.Text = "Fruits";
+                   item.ToolTip = "Fruits";
+                   item.Selected = true;
+                   item.Image.SpriteProperties.CssClass = "Fruit";
+                   item.Image.SpriteProperties.HottrackedCssClass = "Fruit_Hovered";
+
+                   item.Items.Add("Apples", "Apples");
+                   item.Items.Add("Bananas", "Bananas");
+                   item.Items.Add("Kiwis", "Kiwis");
+                   item.Items.Add("Oranges", "Oranges");
+               });
+               settings.Items.Add(item => {
+                   item.Text = "Beverages";
+                   item.ToolTip = "Beverages";
+                   item.Image.SpriteProperties.CssClass = "Beverages";
+                   item.Image.SpriteProperties.HottrackedCssClass = "Beverages_Hovered";
+               });
+               settings.Items.Add(item => {
+                   item.Text = "Juice";
+                   item.ToolTip = "Juice";
+                   item.Image.SpriteProperties.CssClass = "Juice";
+                   item.Image.SpriteProperties.HottrackedCssClass = "Juice_Hovered";
+               });
+               settings.Items.Add(item => {
+                   item.Text = "Wine";
+                   item.ToolTip = "Wine";
+                   item.Image.SpriteProperties.CssClass = "Wine";
+                   item.Image.SpriteProperties.HottrackedCssClass = "Wine_Hovered";
+               });
+        }).GetHtml()
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+﻿.controlBlock
+{
+    display: inline-block;
+    margin-right: 20px;
+}
+.controlBlock input
+{
+    vertical-align: middle;
+}
+.biClass
+{
+	background-color:#e6e6e6;
+    background-color: rgba(128, 128, 128, 0.2); 
+    margin-top: 5px;
+    display: block;
+}

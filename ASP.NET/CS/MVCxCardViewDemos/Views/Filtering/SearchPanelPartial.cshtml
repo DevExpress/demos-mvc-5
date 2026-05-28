@@ -1,0 +1,21 @@
+﻿@Html.DevExpress().CardView( 
+    settings => {
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "Filtering", Action = "SearchPanelPartial" };
+        settings.SettingsSearchPanel.Visible = true;
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add("ContactName");
+        settings.Columns.Add("CompanyName");
+        settings.Columns.Add("Address");
+        settings.Columns.Add("City");
+        settings.Columns.Add("PostalCode");
+        settings.Columns.Add("Country");
+        settings.Columns.Add("Phone");
+        
+        settings.PreRender = (sender, e) => {
+            var cardView = (MVCxCardView)sender;
+            cardView.SearchPanelFilter = "an";
+        };
+        settings.SettingsPager.EnableAdaptivity = true;
+    }).Bind(Model).GetHtml()

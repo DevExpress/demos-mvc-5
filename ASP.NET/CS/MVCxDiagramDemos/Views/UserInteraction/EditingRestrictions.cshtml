@@ -1,0 +1,145 @@
+﻿@model DevExpress.Web.Demos.Models.DevelopmentOrgItemsModel
+
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);
+}
+
+@section AdditionalResources{
+    <style type="text/css">
+        .warningHint {
+            background-color: #f87c1d !important;
+            color: #ffffff !important;
+            font-size: 10pt !important;
+        }
+    </style>
+}
+<script>
+    function onRequestEditOperation(s, e) {
+        if(e.operation === DiagramEditOperation.AddShape) {
+            if(e.args.shape.type !== "employee" && e.args.shape.type !== "team") {
+                if(e.reason !== DiagramRequestEditOperationReason.CheckUIElementAvailability)
+                    showWarning("You can add only a 'Team' or 'Employee' shape.");
+                e.allowed = false;
+            }
+        }
+        else if(e.operation === DiagramEditOperation.DeleteShape) {
+            if(e.args.shape.type === "root") {
+                if(e.reason !== DiagramRequestEditOperationReason.CheckUIElementAvailability)
+                    showWarning("You cannot delete the 'Development' shape.");
+                e.allowed = false;
+            }
+            if(e.args.shape.type === "team") {
+                for(var i = 0; i < e.args.shape.attachedConnectorIds.length; i++) {
+                    if(s.GetItemById(e.args.shape.attachedConnectorIds[i]).toId != e.args.shape.id) {
+                        if(e.reason !== DiagramRequestEditOperationReason.CheckUIElementAvailability)
+                            showWarning("You cannot delete a 'Team' shape that has a child shape.");
+                        e.allowed = false;
+                        break;
+                    }
+                }
+            }
+        }
+        else if(e.operation === DiagramEditOperation.ResizeShape) {
+            if(e.args.newSize.width < 1 || e.args.newSize.height < 0.75) {
+                if(e.reason !== DiagramRequestEditOperationReason.CheckUIElementAvailability)
+                    showWarning("The shape size is too small.");
+                e.allowed = false;
+            }
+        }
+        else if(e.operation === DiagramEditOperation.ChangeConnection) {
+            var shapeType = e.args.newShape && e.args.newShape.type;
+            if(shapeType === "root" && e.args.connectorPosition === "End") {
+                if(e.reason !== DiagramRequestEditOperationReason.CheckUIElementAvailability)
+                    showWarning("The 'Development' shape cannot have an incoming connection.");
+                e.allowed = false;
+            }
+            if(shapeType === "employee" && e.args.connectorPosition === "Start")
+                e.allowed = false;
+        }
+        else if(e.operation === DiagramEditOperation.ChangeConnectorPoints) {
+            if(e.args.newPoints.length > 2) {
+                if(e.reason !== DiagramRequestEditOperationReason.CheckUIElementAvailability)
+                    showWarning("You cannot add points to a connector.");
+                e.allowed = false;
+            }
+        }
+        else if(e.operation === DiagramEditOperation.BeforeChangeShapeText) {
+            if(e.args.shape.type === "root") {
+                if(e.reason !== DiagramRequestEditOperationReason.CheckUIElementAvailability)
+                    showWarning("You cannot change the 'Development' shape's text.");
+                e.allowed = false;
+            }
+        }
+        else if(e.operation === DiagramEditOperation.ChangeShapeText) {
+            if(e.args.text === "") {
+                if(e.reason !== DiagramRequestEditOperationReason.CheckUIElementAvailability)
+                    showWarning("A shape text cannot be empty.");
+                e.allowed = false;
+            }
+        }
+        else if(e.operation === DiagramEditOperation.BeforeChangeConnectorText) {
+            e.allowed = false;
+        }
+    }
+    function showWarning(message) {
+        ASPxClientHint.Show('.hintContainer', {
+            content: message,
+            position: 'top',
+            showCallout: false,
+            showTitle: false,
+            className: 'warningHint'
+        });
+        window.setTimeout(function () { hideWarning(); }, 3000);
+    }
+    function hideWarning() {
+        ASPxClientHint.Hide('.hintContainer');
+    }
+</script>
+
+@Html.DevExpress().Diagram(settings => {
+    settings.Name = "diagram";
+    settings.ControlStyle.CssClass = "hintContainer";
+    settings.Width = Unit.Percentage(100);
+    settings.Height = 600;
+    settings.BatchUpdateRouteValues = new { Controller = "UserInteraction", Action = "DevelopmentOrgItemsUpdate" };
+    settings.Mappings.Node.Key = "Id";
+    settings.Mappings.Node.Type = "Type";
+    settings.Mappings.Node.Text = "Text";
+    settings.Mappings.Node.ParentKey = "ParentId";
+
+    settings.ClientSideEvents.RequestEditOperation = "onRequestEditOperation";
+
+    settings.CustomShapes.Add(i => {
+        i.CategoryName = "hiddenItems";
+        i.Type = "root";
+        i.BaseType = DiagramShapeType.Octagon;
+        i.DefaultText = "Development";
+    });
+    settings.CustomShapes.Add(i => {
+        i.CategoryName = "items";
+        i.Type = "team";
+        i.BaseType = DiagramShapeType.Ellipse;
+        i.DefaultText = "Team Name";
+        i.Title = "Team";
+    });
+    settings.CustomShapes.Add(i => {
+        i.CategoryName = "items";
+        i.Type = "employee";
+        i.BaseType = DiagramShapeType.Rectangle;
+        i.DefaultText = "Employee Name";
+        i.Title = "Employee";
+    });
+    settings.SettingsToolbox.Groups.Add(g => {
+        g.CustomCategoryName = "items";
+        g.Title = "Items";
+    });
+    settings.SettingsContextToolbox.ShapeIconsPerRow = 2;
+    settings.SettingsContextToolbox.Width = 100;
+    settings.SettingsContextToolbox.Shapes.Add(s => {
+        s.CustomShapeType = "team";
+    });
+    settings.SettingsContextToolbox.Shapes.Add(s => {
+        s.CustomShapeType = "employee";
+    });
+
+}).Bind(Model.Items).GetHtml()

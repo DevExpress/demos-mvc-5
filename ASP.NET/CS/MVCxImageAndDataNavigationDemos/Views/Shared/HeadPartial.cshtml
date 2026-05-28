@@ -1,0 +1,20 @@
+﻿@{
+    List<StyleSheet> styleSheets = new List<StyleSheet>();
+    styleSheets.Add(new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout });
+    styleSheets.Add(new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout, Theme = "Default" });
+    styleSheets.Add(new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout, Theme = "Metropolis" });
+    styleSheets.Add(new StyleSheet { ExtensionSuite = ExtensionSuite.Editors, Theme = "Metropolis" });
+    styleSheets.Add(new StyleSheet { ExtensionSuite = ExtensionSuite.Editors, Theme = DemoHelper.Instance.Theme });
+
+    List<Script> scripts = new List<Script>();
+    scripts.Add(new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout });
+
+    if(ViewBag.IsRequiredVerticalGrid ?? false) {
+        styleSheets.Add(new StyleSheet() { ExtensionSuite = ExtensionSuite.VerticalGrid });
+        scripts.Add(new Script { ExtensionSuite = ExtensionSuite.VerticalGrid });
+    }
+
+    Html.DevExpress().GetStyleSheets(styleSheets.ToArray());
+    Html.DevExpress().GetScripts(scripts.ToArray());
+}
+

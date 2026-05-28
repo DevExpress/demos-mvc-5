@@ -1,0 +1,25 @@
+﻿
+@{ RibbonCustomizationDemoOptions options = (RibbonCustomizationDemoOptions)Session["RibbonCustomizationOptions"]; }
+
+@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "Spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "ToolbarsAndUI", Action = "UICustomizationSpreadsheetPartial" };
+
+        settings.Width = Unit.Percentage(100);
+        settings.Height = (options.IsExternalRibbonMode) ? 350 : 550;
+        settings.ActiveTabIndex = 0;
+
+        settings.ShowFormulaBar = options.ShowFormulaBar;
+        settings.ShowSheetTabs = options.ShowSheetTabs;
+        settings.RibbonMode = options.RibbonMode;
+        settings.AssociatedRibbonName = (options.IsExternalRibbonMode) ? "ExternalRibbon" : string.Empty;
+
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideFileTab(spreadsheet);
+        };
+
+        settings.ShowConfirmOnLosingChanges = false;
+    }
+).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "UICustomization.xlsx")).GetHtml()

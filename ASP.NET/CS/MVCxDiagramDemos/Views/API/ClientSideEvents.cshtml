@@ -1,0 +1,37 @@
+﻿@model DevExpress.Web.Demos.Models.WorkflowModel
+
+@Html.DevExpress().Diagram(settings => {
+    settings.Name = "Diagram";
+    settings.Height = 600;
+
+    settings.BatchUpdateRouteValues = new { Controller = "API", Action = "ClientSideEventsUpdate" };
+
+    settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init') }";
+    settings.ClientSideEvents.ItemClick = "function(s, e) { DXEventMonitor.Trace(s, e, 'ItemClick') }";
+    settings.ClientSideEvents.ItemDblClick = "function(s, e) { DXEventMonitor.Trace(s, e, 'ItemDblClick') }";
+    settings.ClientSideEvents.SelectionChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'SelectionChanged') }";
+    settings.ClientSideEvents.DiagramChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'DiagramChanged') }";
+    settings.ClientSideEvents.BeginSynchronization = "function(s, e) { DXEventMonitor.Trace(s, e, 'BeginSynchronization') }";
+    settings.ClientSideEvents.EndSynchronization = "function(s, e) { DXEventMonitor.Trace(s, e, 'EndSynchronization') }";
+
+    settings.Mappings.Node.Key = "ID";
+    settings.Mappings.Node.Width = "Width";
+    settings.Mappings.Node.Height = "Height";
+    settings.Mappings.Node.Type = "Type";
+    settings.Mappings.Node.Text = "Text";
+
+    settings.Mappings.Edge.Key = "ID";
+    settings.Mappings.Edge.FromKey = "FromID";
+    settings.Mappings.Edge.ToKey = "ToID";
+    settings.Mappings.Edge.Text = "Text";
+
+    settings.Units = DevExpress.Web.ASPxDiagram.DiagramUnit.Px;
+    settings.SettingsAutoLayout.Type = DevExpress.Web.ASPxDiagram.DiagramAutoLayout.Layered;
+    settings.SettingsAutoLayout.Orientation = Orientation.Vertical;
+
+}).Bind(Model.Objects, Model.Connections).GetHtml()
+<br />
+@Html.Partial("EventMonitor")
+<script type="text/javascript">
+    DiagramItem.prototype.toString = function() { return JSON.stringify(this); }
+</script>

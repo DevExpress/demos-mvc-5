@@ -1,0 +1,43 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Action = "AdvancedSelectionPartial", Controller = "Selection" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Settings.ShowFilterRow = true;
+    settings.SettingsBehavior.AllowDragDrop = false;
+
+    settings.KeyFieldName="CustomerID";
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowSelectCheckbox = true;
+    settings.CommandColumn.ShowClearFilterButton = true;
+    settings.CommandColumn.SelectAllCheckboxMode = ViewBag.SelectAllCheckBoxMode;
+    settings.Columns.Add("ContactName");
+    settings.Columns.Add("CompanyName");
+    settings.Columns.Add("City");
+    settings.Columns.Add("Region");
+    settings.Columns.Add("Country");
+
+    settings.CustomJSProperties = (s, e) => {
+        var grid = s as MVCxGridView;
+        e.Properties["cpVisibleRowCount"] = grid.VisibleRowCount;
+        e.Properties["cpFilteredRowCountWithoutPage"] = GetFilteredRowCountWithoutPage(grid);
+    };
+    
+    settings.ClientSideEvents.Init = "OnGridViewInit";
+    settings.ClientSideEvents.SelectionChanged = "OnGridViewSelectionChanged";
+    settings.ClientSideEvents.EndCallback = "OnGridViewEndCallback";
+    settings.ClientSideEvents.BeginCallback = "OnGridViewBeginCallback";
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()
+
+@functions {
+    int GetFilteredRowCountWithoutPage(MVCxGridView grid) {
+        int selectedRowsOnPage = 0;
+        foreach(var key in grid.GetCurrentPageRowValues("CustomerID")) {
+            if(grid.Selection.IsRowSelectedByKey(key))
+                selectedRowsOnPage++;
+        }
+        return grid.Selection.FilteredCount - selectedRowsOnPage;
+    }
+}

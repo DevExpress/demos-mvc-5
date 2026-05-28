@@ -1,0 +1,38 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@functions{
+    MVCxMenuItem CreateToolbarItem(string name, string iconID, string groupName, bool beginGroup) {
+        var item = new MVCxMenuItem();
+        item.Name = name;
+        item.Image.IconID = iconID;
+        item.BeginGroup = beginGroup;
+        item.GroupName = groupName;
+        return item;
+    }
+}
+@section AdditionalResources {
+    <script type="text/javascript" src="@Url.Content("~/Scripts/CustomToolbar.js")"></script>
+}
+
+@Html.DevExpress().Menu(settings => {
+    settings.Name = "DemoToolbar";
+    settings.ShowAsToolbar = true;
+    settings.AutoSeparators = AutoSeparatorMode.None;
+    settings.ClientSideEvents.ItemClick = "onToolbarItemClick";
+
+    settings.Items.Add(CreateToolbarItem("bold", DevExpress.Web.ASPxThemes.IconID.FormatBold16x16, "bold", false));
+    settings.Items.Add(CreateToolbarItem("italic", DevExpress.Web.ASPxThemes.IconID.FormatItalic16x16, "italic", false));
+    settings.Items.Add(CreateToolbarItem("underline", DevExpress.Web.ASPxThemes.IconID.FormatUnderline16x16, "underline", false));
+    settings.Items.Add(CreateToolbarItem("strikeout", DevExpress.Web.ASPxThemes.IconID.FormatStrikeout16x16, "strikeout", false));
+    settings.Items.Add(CreateToolbarItem("alignleft", DevExpress.Web.ASPxThemes.IconID.FormatAlignleft16x16, "align", true));
+    settings.Items.Add(CreateToolbarItem("aligncenter", DevExpress.Web.ASPxThemes.IconID.FormatAligncenter16x16, "align", false));
+    settings.Items.Add(CreateToolbarItem("alignright", DevExpress.Web.ASPxThemes.IconID.FormatAlignright16x16, "align", false));
+    settings.Items.Add(CreateToolbarItem("listbullets", DevExpress.Web.ASPxThemes.IconID.FormatListbullets16x16, "list", false));
+    settings.Items.Add(CreateToolbarItem("listnumbers", DevExpress.Web.ASPxThemes.IconID.FormatListnumbers16x16, "list", false));
+    settings.Items.Add(CreateToolbarItem("insertlink", DevExpress.Web.ASPxThemes.IconID.BusinessobjectsBolocalization16x16, "insertlink", true));
+    settings.Items.Add(CreateToolbarItem("insertpicture", DevExpress.Web.ASPxThemes.IconID.ContentImage16x16, string.Empty, false));
+}).GetHtml()
+
+@using (Html.BeginForm("CustomToolbar", "BarsAndUI")) {
+    @Html.Action("CustomToolbarPartial")
+}

@@ -1,0 +1,52 @@
+﻿@functions {
+    FilterBuilderDemoOptions FilterBuilderOptions { get { return ViewBag.FilterBuilderOptions; } }
+
+    List<string> columnsToRemove = new List<string>() {
+        "CategoryID",
+        "ProductID",
+        "SupplierID",
+        "Supplier.SupplierID",
+        "Supplier.HomePage",
+        "Category.CategoryID",
+        "EAN13"
+    };
+}
+
+@Html.DevExpress().GridView(settings => {
+    settings.Name = "gridView";
+    settings.CallbackRouteValues = new { Controller = "Filtering", Action = "FilterBuilderPartial" };
+    settings.Settings.ShowFilterBar = GridViewStatusBarMode.Visible;
+    settings.Width = Unit.Percentage(100);
+
+    settings.Columns.Add("ProductName", MVCxGridViewColumnType.TextBox);
+    settings.Columns.Add("Category.CategoryName", MVCxGridViewColumnType.TextBox);
+    settings.Columns.Add("Supplier.CompanyName", MVCxGridViewColumnType.TextBox);
+    settings.Columns.Add("Supplier.ContactName", MVCxGridViewColumnType.TextBox);
+    settings.Columns.Add("UnitPrice", MVCxGridViewColumnType.SpinEdit).PropertiesEdit.DisplayFormatString = "c";
+    settings.Columns.Add("UnitsInStock", MVCxGridViewColumnType.SpinEdit);
+        
+    var columnTotal = settings.Columns.Add("Total", MVCxGridViewColumnType.SpinEdit);
+    columnTotal.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+    columnTotal.UnboundExpression = "UnitPrice*UnitsInStock";
+    columnTotal.PropertiesEdit.DisplayFormatString = "c";
+
+    settings.SettingsFilterControl.ViewMode = FilterBuilderOptions.EnableTextTab ? FilterControlViewMode.VisualAndText : FilterControlViewMode.Visual;
+    settings.SettingsFilterControl.AllowHierarchicalColumns = FilterBuilderOptions.AllowHierarchicalColumns;
+    settings.SettingsFilterControl.ShowAllDataSourceColumns = FilterBuilderOptions.ShowAllDataSourceColumns;
+    settings.SettingsFilterControl.MaxHierarchyDepth = 1;
+
+    settings.ClientSideEvents.BeginCallback = "onBeginCallback";
+        
+    settings.FilterControlColumnsCreated = (sender, e) => {
+        foreach(string col in columnsToRemove)
+            e.Columns.Remove(col);
+    };
+        
+    settings.PreRender = (sender, e) => {
+        MVCxGridView gridView = sender as MVCxGridView;
+        if (gridView != null)
+            gridView.FilterExpression = "Category.CategoryName = 'Beverages'";
+    };
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

@@ -1,0 +1,94 @@
+﻿@model Chart3DDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(300);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    Chart3DDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.Border.Visibility = DefaultBoolean.False;
+        l.HorizontalIndent = 12;
+    });
+
+    settings.Series.Template(t => {
+        t.ArgumentDataMember = "Year";
+        t.ValueDataMembers[0] = "Sales";
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        t.Views().StackedLine3DSeriesView(v => {
+            v.LineWidth = 1.2;
+            v.SeriesLabel(l => {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+            });
+        });
+    });
+
+    settings.XYDiagram3D(d => {
+        d.AxisY.Interlaced = true;
+        d.AxisY.Label.TextPattern = "${V:0,,.0}M";
+        d.AxisX.NumericScaleOptions.AutoGrid = false;
+        d.AxisX.NumericScaleOptions.GridSpacing = 2;
+        d.RotationType = RotationType.UseAngles;
+        d.RotationOrder = RotationOrder.XYZ;
+        d.VerticalScrollPercent = 4;
+        d.PerspectiveAngle = options.PerspectiveAngle;
+        d.ZoomPercent = options.ZoomPercent;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "DevAV Sales"
+    });
+}).Bind(Model.Data, "Region").GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels);
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Diagram Settings";
+            group.Items.Add(model => model.PerspectiveAngle, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetPerspectiveAngles()); });
+            });
+            group.Items.Add(model => model.ZoomPercent, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetZoomPercents()); });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 280,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

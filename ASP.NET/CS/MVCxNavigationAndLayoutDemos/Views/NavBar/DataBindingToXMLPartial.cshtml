@@ -1,0 +1,17 @@
+﻿@Html.DevExpress().NavBar(
+    settings => {
+        settings.Name = "nbDataBinding";
+        settings.AllowSelectItem = true;
+        settings.AutoCollapse = true;
+        settings.EncodeHtml = false;
+
+        settings.ItemDataBound = (sender, e) => {
+            var xmlElement = (((IHierarchyData)e.Item.DataItem).Item) as System.Xml.XmlElement;
+            if(xmlElement != null) {
+                e.Item.Text = "<span class=\"text\">";
+                e.Item.Text += "<span>" + xmlElement.Attributes["Model"].Value + "</span><br />";
+                e.Item.Text += xmlElement.Attributes["Pixels"].Value + "million pixels";
+                e.Item.Text += "</span>";
+            }
+        };
+    }).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/Cameras.xml"), (string)ViewData["XPath"]).GetHtml()

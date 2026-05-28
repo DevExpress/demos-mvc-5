@@ -1,0 +1,45 @@
+﻿@{
+    var enableEllipsis = (bool)Session["EnableEllipsis"];
+    DemoHelper.Instance.ControlAreaMinWidth = Unit.Pixel(450);
+}
+
+@Html.DevExpress().CardView(settings => {
+    settings.Name = "cardView";
+    settings.CallbackRouteValues = new { Action = "EllipsisPartial", Controller = "Adaptivity" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.SettingsBehavior.AllowEllipsisInText = enableEllipsis;
+    
+    settings.Columns.Add("Title");
+    settings.Columns.Add("HireDate").PropertiesEdit.DisplayFormatString = "d";
+    settings.Columns.Add("HomePhone");
+    settings.Columns.Add("Notes");
+    settings.Columns.Add("Photo", MVCxCardViewColumnType.BinaryImage);
+    settings.Columns.Add(c => {
+        c.FieldName = "FullName";
+        c.Caption = "Name";
+        c.UnboundType = UnboundColumnType.String;
+        c.UnboundExpression = "Concat([FirstName], ' ', [LastName])";
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "FullAddress";
+        c.Caption = "Address";
+        c.UnboundType = UnboundColumnType.String;
+        c.UnboundExpression = "Concat([Address], ', ', [City], ', ', [Country])";
+    });
+
+    settings.CardLayoutProperties.ColumnCount = 2;
+    settings.CardLayoutProperties.Items.Add(i => {
+        i.ColumnName = "Photo";
+        i.ShowCaption = DefaultBoolean.False;
+        i.RowSpan = 7;
+    });
+    settings.CardLayoutProperties.Items.Add("FullName");
+    settings.CardLayoutProperties.Items.Add("Title");
+    settings.CardLayoutProperties.Items.Add("HireDate");
+    settings.CardLayoutProperties.Items.Add("FullAddress");
+    settings.CardLayoutProperties.Items.Add("HomePhone");
+    settings.CardLayoutProperties.Items.Add("Notes");
+
+    settings.SettingsPager.SettingsTableLayout.ColumnCount = 1;
+}).Bind(Model).GetHtml()

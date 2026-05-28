@@ -1,0 +1,24 @@
+﻿@model DocumentProtectionDemoOptions
+
+@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "DocumentManagement", Action = "DocumentProtectionPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(600);
+
+    settings.Settings.Authentication.UserName = Model.User;
+    settings.Settings.RangePermissions.HighlightColor = Model.Color;
+    settings.Settings.RangePermissions.HighlightBracketsColor = Model.BracketsColor;
+    settings.Settings.RangePermissions.Visibility = Model.Visibility ? RichEditRangePermissionVisibility.Visible : RichEditRangePermissionVisibility.Hidden;
+
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ActiveTabIndex = 0;
+    settings.RibbonMode = RichEditRibbonMode.OneLineRibbon;
+
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        RichEditDemoUtils.HideFileTab(richEdit);
+        richEdit.Focus();
+    };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "DocumentProtection.docx")).GetHtml()

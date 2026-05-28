@@ -1,0 +1,157 @@
+﻿@model ChartEmptyPointsOptions
+
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(340);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartEmptyPointsOptions options = Model;
+    settings.Name = "chart";
+    settings.Width = 920;
+    settings.Height = 500;
+    settings.PaletteName = "Blue Green";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Legends.Default(l => {
+        l.Visibility = DefaultBoolean.False;
+    });
+    settings.CrosshairOptions.ShowOnlyInFocusedPane = false;
+    settings.XYDiagram(d => {
+        d.Panes.Add(p => {
+            p.Name = "Pane1";
+        });
+        d.Panes.Add(p => {
+            p.Name = "Pane2";
+        });
+        d.AxisX.SetVisibilityInPane(false, d.DefaultPane);
+        d.AxisX.SetVisibilityInPane(false, d.Panes[0]);
+        d.AxisY.Title.Text = "Wind, m/s";
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+
+        d.SecondaryAxesY.Add(y => {
+            y.Alignment = AxisAlignment.Near;
+            y.Name = "SecondaryAxisY1";
+            y.GridLines.Visible = true;
+            y.Title.Text = "Pressure, mmHg";
+            y.Title.Visibility = DefaultBoolean.True;
+            y.WholeRange.AlwaysShowZeroLevel = false;
+        });
+        d.SecondaryAxesY.Add(y => {
+            y.Alignment = AxisAlignment.Near;
+            y.Name = "SecondaryAxisY2";
+            y.GridLines.Visible = true;
+            y.Title.Text = "Temperature, °C";
+            y.Title.Visibility = DefaultBoolean.True;
+            y.WholeRange.AlwaysShowZeroLevel = false;
+        });
+    });
+    settings.Series.Add(s => {
+        s.Name = "Wind";
+        s.LabelsVisibility = DefaultBoolean.True;
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetDataMembers("Date", "Wind");
+        s.CrosshairLabelPattern = "{S}: {V} mmHG";
+    });
+    settings.Series.Add(s => {
+        s.Name = "Pressure";
+        s.LabelsVisibility = DefaultBoolean.True;
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetDataMembers("Date", "Pressure");
+        s.CrosshairLabelPattern = "{S}: {V} m/s";
+        ((XYDiagramSeriesViewBase)s.View).AxisYName = "SecondaryAxisY1";
+        ((XYDiagramSeriesViewBase)s.View).PaneName = "Pane1";
+    });
+    settings.Series.Add(s => {
+        s.Name = "Wind";
+        s.LabelsVisibility = DefaultBoolean.True;
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetDataMembers("Date", "DayTemperature");
+        ((XYDiagramSeriesViewBase)s.View).AxisYName = "SecondaryAxisY2";
+        ((XYDiagramSeriesViewBase)s.View).PaneName = "Pane2";
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Weather in Washington for July",
+        Visibility = DefaultBoolean.True
+    });
+
+    Palette palette = settings.PaletteRepository[settings.PaletteName];
+    for(int i = 0; i < settings.Series.Count; i++) {
+        Series series = settings.Series[i];
+        DevExpress.XtraCharts.ViewType viewType = options.ViewTypes[i];
+        series.ChangeView(viewType);
+        if(i == settings.Series.Count - 1) {
+            if(viewType == DevExpress.XtraCharts.ViewType.RangeArea || viewType == DevExpress.XtraCharts.ViewType.RangeBar) {
+                series.ValueDataMembers.Clear();
+                series.ValueDataMembers.AddRange("DayTemperature", "NightTemperature");
+                series.CrosshairLabelPattern = "{S}: Day {V1}°C, Night {V2}°C";
+            }
+            else
+                series.CrosshairLabelPattern = "{S}: {V}°C";
+        }
+        PaletteEntry paletteEntry = palette[i];
+        XYDiagramSeriesViewBase view = (XYDiagramSeriesViewBase)series.View;
+        EmptyPointOptions emptyPointOptions = view.EmptyPointOptions;
+        emptyPointOptions.ProcessPoints = ProcessEmptyPointsMode.Interpolate;
+        if(options.DisplayEmptyPoints) {
+            emptyPointOptions.Color = Color.FromArgb(100, paletteEntry.Color);
+            if(emptyPointOptions is LineEmptyPointOptions) {
+                LineEmptyPointOptions lineOptions = (LineEmptyPointOptions)emptyPointOptions;
+                lineOptions.LineStyle.DashStyle = DashStyle.Dash;
+                lineOptions.LineStyle.Thickness = ((LineSeriesView)view).LineStyle.Thickness;
+            }
+            else if(emptyPointOptions is AreaEmptyPointOptions) {
+                AreaEmptyPointOptions areaOptions = (AreaEmptyPointOptions)emptyPointOptions;
+                areaOptions.Border.Color = paletteEntry.Color;
+            }
+        }
+        else
+            emptyPointOptions.Color = Color.Empty;
+    }
+}).Bind(Model.Data).GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+    s.Name = "SettingsFormLayout";
+    s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    s.Items.AddGroupItem(group => {
+        group.Caption = "Series Views";
+        group.Items.Add(model => model.ViewTypesName, item => {
+            item.NestedExtension().RadioButtonList(radio => {
+                radio.Properties.Items.Add(ChartEmptyPointsOptions.ViewTypesSet1Name);
+                radio.Properties.Items.Add(ChartEmptyPointsOptions.ViewTypesSet2Name);
+                radio.Properties.Items.Add(ChartEmptyPointsOptions.ViewTypesSet3Name);
+                radio.ControlStyle.Border.BorderStyle = BorderStyle.None;
+            });
+            item.ShowCaption = DefaultBoolean.False;
+        });
+    });
+    s.Items.AddGroupItem(group => {
+        group.Caption = "Empty Points";
+        group.Items.Add(model => model.DisplayEmptyPoints);
+    });
+    DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+        ColumnMinWidth = 400,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+

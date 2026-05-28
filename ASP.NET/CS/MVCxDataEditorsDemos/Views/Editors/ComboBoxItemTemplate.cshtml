@@ -1,0 +1,35 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMinHeight = Unit.Pixel(430);
+}
+@section AdditionalResources {
+<style type="text/css">
+    .name {
+        font-weight: bold;
+        padding-top: 5px;
+        padding-left: 10px;
+    }
+    .photo {
+        width: 84px;
+        height: 84px;
+        vertical-align: middle;
+    }
+    .frame {
+        border: 1px solid lightgray;
+        padding: 4px;
+    }
+    .description {
+        color: gray;
+        padding-top: 1px;
+        padding-left: 10px;
+    }
+    .contactInfo {
+        padding-bottom: 11px;
+    }
+    .selectedItem .description,
+    .hoveredItem .description {
+        color: inherit;  /* The description section's text color is taken from the applied theme's selected and hovered styles. */
+    }
+</style>
+}
+<div style="padding-bottom:16px;">Open the combo box's dropdown window to see how the layout and appearance of items are customized.</div>
+@Html.Partial("ComboBoxItemTemplatePartial")

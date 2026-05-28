@@ -1,0 +1,16 @@
+﻿<script type="text/javascript">
+    function ClearButton_Click() {
+        DXImagesVirtualPagingContainer.Clear();
+    }
+</script>
+
+<div class="ImagesVirtualPagingPanel" style="width:100%">
+    <div id="ImagesVirtualPagingLog" class="Logger" style="width:100%"></div>
+    @Html.DevExpress().Button(
+        settings => {
+            settings.Name = "ClearButton";
+            settings.Text = "Clear";
+            settings.Theme = DemoHelper.Instance.Theme;
+            settings.ClientSideEvents.Click = "ClearButton_Click";
+        }).GetHtml()
+</div>   

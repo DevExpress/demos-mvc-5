@@ -1,0 +1,12 @@
+﻿@section AdditionalResources {
+    <script src="@Url.Content("~/Scripts/SpreadsheetDemoUtils.js")" type="text/javascript"></script>
+}
+<div style="padding-bottom:5px;">
+    On the AutoComplete list, double-click on the <b>SUMIFS</b> function (or press the Tab key if SUMIFS is selected) to insert this function into the cell formula, and then press Enter to evaluate the formula.
+</div>
+
+@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+@using(Html.BeginForm()) {
+    @Html.Partial("FormulasPartial")
+}

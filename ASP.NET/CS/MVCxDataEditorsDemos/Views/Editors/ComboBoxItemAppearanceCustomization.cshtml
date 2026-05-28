@@ -1,0 +1,20 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMinHeight = Unit.Pixel(310);
+}
+@section AdditionalResources {
+    <style type="text/css">
+        .phone {
+            color: #9C0006;
+            font-style: italic;
+        }
+        .owner {
+            color: #006100;
+            background-color: #C6EFCE;
+            font-weight: bold;
+        }
+    </style>
+}
+<div style="padding-bottom:16px;">
+    Open the combo box's dropdown window to see how the appearance of items is customized. Hover an item to see a custom tooltip.
+</div>
+@Html.Action("ComboBoxItemAppearanceCustomizationPartial")

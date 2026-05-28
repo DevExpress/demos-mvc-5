@@ -1,0 +1,18 @@
+﻿@Html.DevExpress().FileManager(settings => {
+    settings.Name = "FileManager";
+    settings.Height = Unit.Pixel(360);
+    settings.CallbackRouteValues = new { Controller = "FileManager", Action = "OverviewPartial" };
+    settings.DownloadRouteValues = new { Controller = "FileManager", Action = "Download" };
+
+    settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+    settings.Settings.InitialFolder = "Images\\Product icons";
+    settings.Styles.FolderContainer.Width = Unit.Pixel(190);
+    settings.SettingsFileList.ThumbnailsViewSettings.ThumbnailWidth = Unit.Pixel(50);
+    settings.SettingsFileList.ThumbnailsViewSettings.ThumbnailHeight = Unit.Pixel(50);
+
+    settings.FileUploading = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+    settings.FolderCreating = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+    settings.ItemRenaming = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+    settings.ItemDeleting = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+    settings.ItemMoving = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+}).BindToFolder(Model).GetHtml()

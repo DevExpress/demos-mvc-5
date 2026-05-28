@@ -1,0 +1,153 @@
+﻿@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Editors/Button/Css/Appearance.css")" />
+    <style>
+        .mainContainer {
+            display: table;
+            margin-bottom: 34px;
+            width: 100%;
+        }
+
+        .innerEditor {
+            max-width: 350px;
+            padding-bottom: 16px;
+        }
+
+        .innerContent {
+            vertical-align: middle;
+            line-height: 150%;
+            word-break: break-all;
+        }
+
+        @@media(min-width:620px) {
+            .innerEditor, .innerContent {
+                display: table-cell;
+            }
+
+            .innerEditor {
+                width: 300px;
+            }
+
+            .innerContent {
+                word-break: break-word;
+            }
+        }
+    </style>
+}
+<div class="mainContainer">
+    <div class="innerEditor">
+        @Html.DevExpress().Button(settings => {
+            settings.Name = "btn";
+            settings.Width = 164;
+            settings.Text = "Button";
+        }).GetHtml()
+    </div>
+    <div class="innerContent">
+        RenderMode = ButtonRenderMode.Button<br />
+        Text = "Button"
+    </div>
+</div>
+<div class="mainContainer">
+    <div class="innerEditor">
+        @Html.DevExpress().Button(settings => {
+           settings.Name = "btnDanger";
+           settings.Width = 164;
+           settings.Text = "Delete";
+           settings.RenderMode = ButtonRenderMode.Danger;
+        }).GetHtml()
+    </div>
+    <div class="innerContent">
+        RenderMode = ButtonRenderMode.Danger<br />
+        Text = "Delete"
+    </div>
+</div>
+<div class="mainContainer">
+    <div class="innerEditor">
+        @Html.DevExpress().Button(settings => {
+           settings.Name = "btnOutline";
+           settings.Width = 164;
+           settings.Text = "Outline";
+           settings.RenderMode = ButtonRenderMode.Outline;
+        }).GetHtml()
+    </div>
+    <div class="innerContent">
+        RenderMode = ButtonRenderMode.Outline<br />
+        Text = "Outline"
+    </div>
+</div>
+<div class="mainContainer">
+    <div class="innerEditor">
+        @Html.DevExpress().Button(settings => {
+           settings.Name = "btnSecondary";
+           settings.Width = 164;
+           settings.Text = "Secondary";
+           settings.RenderMode = ButtonRenderMode.Secondary;
+        }).GetHtml()
+    </div>
+    <div class="innerContent">
+        RenderMode = "Secondary"<br />
+        Text = "Secondary"
+    </div>
+</div>
+<div class="mainContainer">
+    <div class="innerEditor">
+        @Html.DevExpress().Button(settings => {
+           settings.Name = "btnLink";
+           settings.Text = "Link";
+           settings.RenderMode = ButtonRenderMode.Link;
+        }).GetHtml()
+    </div>
+    <div class="innerContent">
+        RenderMode = ButtonRenderMode.Link<br />
+        Text = "Link"
+    </div>
+</div>
+<div class="mainContainer">
+    <div class="innerEditor">
+        @Html.DevExpress().Button(settings => {
+           settings.Name = "btnLinkWithImage";
+           settings.Text = "New Item";
+           settings.RenderMode = ButtonRenderMode.Link;
+           settings.ImagePosition = ImagePosition.Right;
+           settings.Images.Image.IconID = "actions_additem_16x16gray";
+        }).GetHtml()
+    </div>
+    <div class="innerContent">
+        RenderMode = ButtonRenderMode.Link<br />
+        Text = "New Item"<br />
+        Images.Image.IconID = "actions_additem_16x16gray"<br />
+        ImagePosition = ImagePosition.Right
+    </div>
+</div>
+<div class="mainContainer">
+    <div class="innerEditor">
+        @Html.DevExpress().Button(settings => {
+           settings.Name = "btnNative";
+           settings.Text = "Native";
+           settings.Styles.Native = true;
+           settings.Width = 164;
+       }).GetHtml()
+    </div>
+    <div class="innerContent">
+        Text = "Native"<br />
+        Styles.Native = true
+    </div>
+</div>
+<div class="mainContainer">
+    <div class="innerEditor">
+        @Html.DevExpress().Button(settings => {
+            settings.Name = "btnBlueBall";
+            settings.Text = "";
+            settings.AllowFocus = false;
+            settings.RenderMode = ButtonRenderMode.Link;
+            settings.Images.Image.SpriteProperties.CssClass = "blueBall";
+            settings.Images.Image.SpriteProperties.HottrackedCssClass = "blueBallHottracked";
+            settings.Images.Image.SpriteProperties.PressedCssClass = "blueBallPressed";
+        }).GetHtml()
+    </div>
+    <div class="innerContent">
+        RenderMode = Link<br />
+        Images.Image.SpriteProperties.CssClass = "blueBall"<br />
+        Images.Image.SpriteProperties.HottrackedCssClass = "blueBallHottracked"<br />
+        Images.Image.SpriteProperties.PressedCssClass = "blueBallPressed"
+    </div>
+</div>

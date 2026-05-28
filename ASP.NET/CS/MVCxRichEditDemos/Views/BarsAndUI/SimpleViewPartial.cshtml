@@ -1,0 +1,18 @@
+﻿@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "BarsAndUI", Action = "SimpleViewPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
+    
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ActiveTabIndex = 5;
+
+    settings.Settings.Views.ViewType = DevExpress.Web.ASPxRichEdit.RichEditViewType.Simple;
+                
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        RichEditDemoUtils.HideFileTab(richEdit);
+        richEdit.Focus();
+    };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "AlbertEinstein.docx")).GetHtml()

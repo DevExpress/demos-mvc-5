@@ -1,0 +1,19 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "PagingAndScrolling", Action = "SEOFriendlyPagingPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.Settings.ShowGroupPanel = true;
+    settings.SettingsPager.PageSize = 10;
+    settings.SettingsPager.SEOFriendly = SEOFriendlyMode.Enabled;
+    settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+    settings.KeyFieldName = "CustomerID";
+    settings.Columns.Add("ContactName").SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+    settings.Columns.Add("CompanyName");
+    settings.Columns.Add("City");
+    settings.Columns.Add("Region");
+    settings.Columns.Add("Country");
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

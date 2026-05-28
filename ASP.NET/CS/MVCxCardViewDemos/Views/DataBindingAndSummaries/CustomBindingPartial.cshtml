@@ -1,0 +1,55 @@
+﻿@Html.DevExpress().CardView(
+    settings => {
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "DataBindingAndSummaries", Action = "CustomBindingPartial" };
+        settings.CustomBindingRouteValuesCollection.Add(
+            CardViewOperationType.Paging,
+            new { Controller = "DataBindingAndSummaries", Action = "CustomBindingPagingAction" }
+        );
+        settings.CustomBindingRouteValuesCollection.Add(
+            CardViewOperationType.Sorting,
+            new { Controller = "DataBindingAndSummaries", Action = "CustomBindingSortingAction" }
+        );
+        settings.CustomBindingRouteValuesCollection.Add(
+            CardViewOperationType.Filtering,
+            new { Controller = "DataBindingAndSummaries", Action = "CustomBindingFilteringAction" }
+        );
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.EnableAdaptivity = true;
+
+        settings.Columns.Add("From");
+        settings.Columns.Add("Subject");
+        settings.Columns.Add("Sent", MVCxCardViewColumnType.DateEdit);
+        settings.Columns.Add("Size");
+        settings.Columns.Add(c => {
+            c.FieldName = "HasAttachment";
+            c.ColumnType = MVCxCardViewColumnType.CheckBox;
+            var properties = ((CheckBoxProperties)c.PropertiesEdit);
+            properties.DisplayImageChecked.IconID = DevExpress.Web.ASPxThemes.IconID.MailAttachmentobject16x16gray;
+            properties.DisplayImageChecked.ToolTip = "Has attachment";
+            properties.DisplayImageUnchecked.Url = Url.Content("~/Content/1x1.gif");
+        });
+
+        settings.CardLayoutProperties.Items.Add(i => {
+            i.ColumnName = "HasAttachment";
+            i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+            i.ShowCaption = DefaultBoolean.False;
+        });
+        settings.CardLayoutProperties.Items.Add("From");
+        settings.CardLayoutProperties.Items.Add("Size");
+        settings.CardLayoutProperties.Items.Add("Sent");
+        settings.CardLayoutProperties.Items.Add("Subject");
+
+        settings.Settings.ShowSummaryPanel = true;
+        settings.TotalSummary.Add(SummaryItemType.Sum, "Size");
+        settings.TotalSummary.Add(SummaryItemType.Count, "Subject");
+
+        settings.Settings.ShowHeaderPanel = true;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Visible;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsSearchPanel.Visible = true;
+        
+        settings.ClientSideEvents.Init = "function(s, e) { s.PerformCallback(); }";
+        settings.ClientSideEvents.BeginCallback = "function(s, e) { OnStartCallback(s, e); }";
+        settings.ClientSideEvents.EndCallback = "function(s, e) { OnEndCallback(s, e); }";
+    }).BindToCustomData(Model).GetHtml()

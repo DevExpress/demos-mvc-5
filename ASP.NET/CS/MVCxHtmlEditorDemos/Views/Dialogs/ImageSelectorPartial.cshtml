@@ -1,0 +1,26 @@
+﻿@model ImageSelectorOptions
+
+@Html.DevExpress().HtmlEditorFor(m => m.Html, settings => {
+    settings.Name = "Html";
+    settings.Width = Unit.Percentage(100);
+    settings.CallbackRouteValues = new { Controller = "Dialogs", Action = "ImageSelectorPartial" };
+
+    settings.SettingsDialogs.InsertImageDialog.ShowMoreOptionsButton = Model.ShowMoreOptions;
+    var imageSelectorSettings = settings.SettingsDialogs.InsertImageDialog.SettingsImageSelector;
+    HtmlEditorFeaturesDemosHelper.SetHtmlEditorImageSelectorSettings(imageSelectorSettings);
+    imageSelectorSettings.Enabled = true;
+
+    imageSelectorSettings.EditingSettings.AllowMove = Model.EnableEditing;
+    imageSelectorSettings.EditingSettings.AllowDelete = Model.EnableEditing;
+    imageSelectorSettings.EditingSettings.AllowRename = Model.EnableEditing;
+    imageSelectorSettings.EditingSettings.AllowCreate = Model.EnableEditing;
+    imageSelectorSettings.UploadSettings.Enabled = Model.EnableUpload;
+    imageSelectorSettings.FoldersSettings.ShowLockedFolderIcons = Model.EnableUpload;
+    imageSelectorSettings.FileListSettings.View = Model.FileListView;
+    imageSelectorSettings.ToolbarSettings.Visible = Model.ShowToolbar;
+    imageSelectorSettings.FoldersSettings.Visible = Model.ShowFoldersArea;
+    imageSelectorSettings.BreadcrumbsSettings.Visible = Model.ShowBreadcrumbs;
+
+    Model.PrepareHtmlEditorSettings(settings);
+    DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+}).GetHtml()

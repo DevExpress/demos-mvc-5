@@ -1,0 +1,111 @@
+﻿@model ChartStepLine3DDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(300);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartStepLine3DDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.Width = 920;
+    settings.Height = 500;
+    settings.PaletteName = "Office";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.Visibility = DefaultBoolean.False;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "US Gasoline Prices in 2015"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 12),
+        Text = "Dollars per Gallon"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.eia.gov"
+    });
+
+    settings.Series.Add(s => {
+        s.Name = "Gasoline Price";
+        s.ArgumentDataMember = "Date";
+        s.ValueDataMembers[0] = "Price";
+        s.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+
+        s.Views().StepLine3DSeriesView(v => {
+            v.LineWidth = 1.2;
+
+            v.InvertedStep = options.InvertedStep;
+            v.SeriesLabel(l => {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+            });
+        });
+    });
+
+    settings.XYDiagram3D(d => {
+        d.AxisX.DateTimeScaleOptions.MeasureUnit = DevExpress.XtraCharts.DateTimeMeasureUnit.Month;
+        d.AxisX.Label.TextPattern = "{A:MMMM}";
+        d.AxisY.Label.TextPattern = "{V:N1}";
+        d.AxisY.WholeRange.AlwaysShowZeroLevel = false;
+        d.AxisY.Interlaced = true;
+
+        d.RotationType = RotationType.UseAngles;
+        d.RotationOrder = RotationOrder.XYZ;
+        d.VerticalScrollPercent = 10;
+        d.PerspectiveAngle = options.PerspectiveAngle;
+        d.ZoomPercent = options.ZoomPercent;
+    });
+}).Bind(Model.Data).GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.InvertedStep);
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels);
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Diagram Settings";
+            group.Items.Add(model => model.PerspectiveAngle, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetPerspectiveAngles()); });
+            });
+            group.Items.Add(model => model.ZoomPercent, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetZoomPercents()); });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 280,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

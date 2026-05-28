@@ -1,0 +1,48 @@
+﻿@model IEnumerable
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1200); }
+@functions {
+    BatchEditingDemoOptions BatchEditingOptions { get { return ViewBag.BatchEditingOptions; } }
+}
+
+<script type="text/javascript">
+    function OnChangeDemoOptions() {
+        treeList.PerformCallback();
+    }
+
+    function OnBeginCallback(s, e) {
+        e.customArgs = MVCxClientUtils.GetSerializedEditorValuesInContainer("options");
+    }
+</script>
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(s => {
+                s.Name = "EditMode";
+                s.Properties.Caption = "Edit mode:";
+                s.Theme = DemoHelper.Instance.Theme;
+                s.Properties.ValueType = typeof(GridViewBatchEditMode);
+                s.Properties.ClientSideEvents.ValueChanged = "function(){ OnChangeDemoOptions(); }";
+            }).BindList(Enum.GetNames(typeof(GridViewBatchEditMode))).Bind(BatchEditingOptions.EditMode).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(s => {
+                s.Name = "StartEditAction";
+                s.Properties.Caption = "Start edit action:";
+                s.Theme = DemoHelper.Instance.Theme;
+                s.Properties.ValueType = typeof(GridViewBatchStartEditAction);
+                s.Properties.ClientSideEvents.ValueChanged = "function(){ OnChangeDemoOptions(); }";
+            }).BindList(Enum.GetNames(typeof(GridViewBatchStartEditAction))).Bind(BatchEditingOptions.StartEditAction).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.Partial("BatchEditingPartial", Model)
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

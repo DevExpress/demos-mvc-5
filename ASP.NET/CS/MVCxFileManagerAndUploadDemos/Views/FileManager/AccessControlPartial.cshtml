@@ -1,0 +1,34 @@
+﻿@Html.DevExpress().FileManager(
+    settings => {
+        settings.Name = "fileManager";
+        settings.CallbackRouteValues = new { Controller = "FileManager", Action = "AccessControlPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+        settings.Settings.AllowedFileExtensions = FileManagerDemoHelper.AllowedFileExtensions;
+
+        settings.SettingsEditing.AllowCreate = true;
+        settings.SettingsEditing.AllowDelete = true;
+        settings.SettingsEditing.AllowMove = true;
+        settings.SettingsEditing.AllowRename = true;
+
+        settings.SettingsPermissions.Role = (string)Session["SecurityRole"];
+        settings.SettingsPermissions.AccessRules.Add(new FileManagerFolderAccessRule { Path = "", Edit = Rights.Deny });
+        settings.SettingsPermissions.AccessRules.Add(new FileManagerFolderAccessRule { Path = "System", Browse = Rights.Deny });
+        settings.SettingsPermissions.AccessRules.Add(new FileManagerFolderAccessRule { Path = "Documents", EditContents = Rights.Allow, Role = "DocumentManager" });
+        settings.SettingsPermissions.AccessRules.Add(new FileManagerFolderAccessRule { Path = "Music", EditContents = Rights.Allow, Role = "MediaModerator" });
+        settings.SettingsPermissions.AccessRules.Add(new FileManagerFolderAccessRule { Path = "Video", EditContents = Rights.Allow, Role = "MediaModerator" });
+        settings.SettingsPermissions.AccessRules.Add(new FileManagerFolderAccessRule { Path = "", Upload = Rights.Deny, Role = "MediaModerator" });
+        settings.SettingsPermissions.AccessRules.Add(new FileManagerFolderAccessRule { Edit = Rights.Allow, Role = "Administrator" });
+        settings.SettingsPermissions.AccessRules.Add(new FileManagerFolderAccessRule { Browse = Rights.Allow, Role = "Administrator" });
+        settings.SettingsPermissions.AccessRules.Add(new FileManagerFileAccessRule { PathPattern = "*.xml", Edit = Rights.Deny });
+
+        settings.FileUploading = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.FolderCreating = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemRenaming = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemDeleting = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemMoving = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+
+        settings.SettingsAdaptivity.Enabled = true;
+    }
+).BindToFolder(Model).GetHtml()

@@ -1,0 +1,59 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(350);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+@Html.Partial("UploadProcessingPartial")
+
+@section DemoOptions {
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "formLayout";
+    settings.SettingsItemCaptions.Location = LayoutItemCaptionLocation.Top;
+
+    settings.Items.AddGroupItem(group => {
+        group.Caption = "Uploaded Image Settings";
+        group.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        group.Items.Add(i => {
+            i.Caption = "File name prefix";
+            i.NestedExtension().TextBox(s => {
+                s.Name = "fileNamePrefix";
+                s.Properties.NullText = "Without prefix";
+                s.Properties.ValidationSettings.Display = Display.Dynamic;
+                s.Properties.ValidationSettings.RegularExpression.ValidationExpression = "[^|\"]*";
+                s.Properties.ValidationSettings.RegularExpression.ErrorText = "The prefix contains invalid characters";
+            });
+        });
+        group.Items.Add(i => {
+            i.Caption = "Watermark text";
+            i.NestedExtension().TextBox(s => {
+                s.Name = "watermarkText";
+                s.Text = "MVCxHtmlEditor";
+            });
+        });
+        group.Items.Add(i => {
+            i.Caption = "Max width";
+            i.NestedExtension().SpinEdit(s => {
+                s.Number = 480;
+                s.Name = "maxWidth";
+            });
+        });
+        group.Items.Add(i => {
+            i.Caption = "Max height";
+            i.NestedExtension().SpinEdit(s => {
+                s.Number = 320;
+                s.Name = "maxHeight";
+            });
+        });
+    });
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 350,
+        ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+    });
+}).GetHtml()
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

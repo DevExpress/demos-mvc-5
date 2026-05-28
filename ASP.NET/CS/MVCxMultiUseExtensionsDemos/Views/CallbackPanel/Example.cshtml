@@ -1,0 +1,79 @@
+﻿@section AdditionalResources {
+    <style>
+        .custom-form-layout .dxflCaptionCellSys {
+            font-weight: bold;
+        }
+        .custom-image {
+            width: 160px;
+            height: 170px;
+            float: left;
+        }
+    </style>
+    <script>
+        var employeeId = null;
+        function OnListBoxIndexChanged(s, e) {
+            employeeId = lblEmployees.GetValue();
+            if (!cbpExample.InCallback())
+                cbpExample.PerformCallback();
+        }
+        function OnBeginCallback(s, e) {
+            e.customArgs["EmployeeID"] = employeeId;
+            employeeId = null;
+        }
+        function OnEndCallback(s, e) {
+            if (employeeId != null)
+                cbpExample.PerformCallback();
+        }
+    </script>
+}
+<div class="employee_form">
+  
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(660);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(400); 
+}
+        
+@Html.DevExpress().RoundPanel(settings => {
+    settings.Name = "roundPanel";
+    settings.Width = Unit.Percentage(100);
+    settings.HeaderText = "Personal Information:";
+    settings.SetContent(() => {
+        Html.RenderPartial("ExamplePartial", Model as Employee);
+    });
+}).GetHtml()
+
+      @section DemoOptions  {
+        @Html.DevExpress().FormLayout(settings => {
+            settings.Name = "OptionsFormLayout";
+            settings.Items.AddGroupItem(g => {
+              g.Caption = "Employee";
+              g.Items.Add(item => {
+                item.ShowCaption = DefaultBoolean.False;
+                item.SetNestedContent(() => {
+                    Html.DevExpress().ListBox(lbSettings => {
+                        lbSettings.Name = "lblEmployees";
+                        lbSettings.Theme = DemoHelper.Instance.Theme;
+                        lbSettings.Width = Unit.Percentage(100);
+                        lbSettings.Height = Unit.Pixel(292);
+                        lbSettings.Properties.EnableClientSideAPI = true;
+                        lbSettings.ControlStyle.Border.BorderWidth = 0;
+
+                        lbSettings.Properties.TextField = "Name";
+                        lbSettings.Properties.ValueField = "ID";
+                        lbSettings.Properties.ValueType = typeof(Int32);
+                        lbSettings.SelectedIndex = 0;
+
+                        lbSettings.Properties.ClientSideEvents.ValueChanged = "OnListBoxIndexChanged";
+                    }).BindList(ViewData["Employees"]).Render();
+                });
+              });
+            });
+          
+            DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+              ColumnMinWidth = 380,
+              ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+            });
+        }).GetHtml()
+      }
+
+</div>

@@ -1,0 +1,16 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "GroupingSorting", Action = "MergingGroupsPartial", EnableMergingGroups = ViewBag.EnableMergingGroups };
+    settings.Width = Unit.Percentage(100);
+
+    settings.SettingsBehavior.MergeGroupsMode = ViewBag.EnableMergingGroups ? GridViewMergeGroupsMode.Always : GridViewMergeGroupsMode.Disabled;
+    settings.SettingsBehavior.AutoExpandAllGroups = true;
+    settings.Settings.ShowGroupPanel = true;
+
+    settings.Columns.Add("Country").GroupIndex = 0;
+    settings.Columns.Add("City").GroupIndex = 1;
+    settings.Columns.Add("CompanyName");
+    settings.Columns.Add("ContactName");
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

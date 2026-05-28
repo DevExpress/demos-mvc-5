@@ -1,0 +1,21 @@
+﻿@Html.DevExpress().GridView(
+    settings => {
+        settings.Name = "drillDownGridView";
+        settings.CallbackRouteValues = new { Action = "DrillDownGridViewPartial", Controller = "Summary" };
+        settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.ShowOnStatusBar;
+        settings.Styles.Header.ImageSpacing = Unit.Pixel(5);
+        settings.Styles.Header.SortingImageSpacing = Unit.Pixel(5);
+        settings.ClientSideEvents.BeginCallback = "onGridViewBeginCallback";
+        settings.ClientSideEvents.EndCallback = "onGridViewEndCallback";
+
+        settings.Columns.Add("ProductName");
+        settings.Columns.Add("CompanyName");
+        settings.Columns.Add("OrderDate").ColumnType = MVCxGridViewColumnType.DateEdit;
+        settings.Columns.Add("ProductAmount").PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("Year");
+
+        settings.BeforeGetCallbackResult = (sender, e) => {
+            if (ViewBag.IsResetGridViewPageIndex != null && ViewBag.IsResetGridViewPageIndex)
+                ((MVCxGridView)sender).PageIndex = 0;
+        };
+    }).Bind(Model).GetHtml()

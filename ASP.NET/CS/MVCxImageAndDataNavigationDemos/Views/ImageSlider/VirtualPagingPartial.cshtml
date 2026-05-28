@@ -1,0 +1,42 @@
+﻿@Html.DevExpress().ImageSlider(settings => {
+    settings.Name = "imageSlider";
+    settings.CallbackRouteValues = new { Controller = "ImageSlider", Action = "VirtualPagingPartial" };
+
+    settings.SettingsBehavior.EnableVirtualPaging = true;
+    settings.SettingsBehavior.VirtualPagingItemsPerRequest = 30;
+
+    settings.ClientSideEvents.ItemLoadedOnCallback = "function(s, e) { DXImagesVirtualPagingContainer.Trace(s, e) }";
+    settings.ClientSideEvents.Init = "function(s, e) { DXImagesVirtualPagingContainer.InitTrace(s, e); }";
+
+    settings.SetItemTemplateContent(c => {
+        ViewContext.Writer.Write("<div class=\"overlay\">");
+        Html.DevExpress().Image(s => {
+            s.ImageUrl = c.EvalDataItem("ImageUrl").ToString();
+            s.ControlStyle.CssClass = "itemimg";
+        }).Render();
+        Html.DevExpress().Label(s => {
+            s.Text = c.ItemIndex.ToString();
+            s.ControlStyle.Font.Size = new FontUnit(80, UnitType.Pixel);
+            s.ControlStyle.CssClass = "itemnum";
+        }).Render();
+        ViewContext.Writer.Write("</div>");
+    });
+    settings.SetItemThumbnailTemplateContent(c => {
+        ViewContext.Writer.Write("<div class=\"overlay\">");
+        Html.DevExpress().Image(s => {
+            s.ImageUrl = c.EvalDataItem("ThumbnailUrl").ToString();
+            s.ControlStyle.CssClass = "itemimg";
+        }).Render();
+        Html.DevExpress().Label(s => {
+            s.Text = c.ItemIndex.ToString();
+            s.ControlStyle.Font.Size = new FontUnit(40, UnitType.Pixel);
+            s.ControlStyle.CssClass = "itemnum";
+        }).Render();
+        ViewContext.Writer.Write("</div>");
+    });
+
+    settings.Width = Unit.Percentage(100);
+    settings.EnableTheming = false;
+    settings.Styles.Thumbnail.ImageHeight = Unit.Pixel(90);
+
+}).Bind(Model).GetHtml()

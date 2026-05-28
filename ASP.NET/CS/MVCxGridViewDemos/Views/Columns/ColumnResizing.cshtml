@@ -1,0 +1,36 @@
+﻿@model ColumnResizingDemoOptions
+
+@section AdditionalResources{
+    <script type="text/javascript">
+        function Submit() {
+            $("form").submit();
+        }
+        function onBeginCallback(s, e) {
+            e.customArgs = MVCxClientUtils.GetSerializedEditorValuesInContainer("options");
+        }
+    </script>
+}
+
+@section DemoOptionsTop {
+    @using (Html.BeginForm()) {
+        <div id="options" class="options">
+            <div class="options-item">
+                @Html.DevExpress().ComboBoxFor(m => m.ColumnResizeMode, settings => {
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.Properties.Caption = "Column resizing mode";
+                    settings.Properties.ValueType = typeof(ColumnResizeMode);
+                    settings.Properties.ClientSideEvents.ValueChanged = "Submit";
+                }).BindList(Enum.GetValues(typeof(ColumnResizeMode))).GetHtml()
+            </div>
+            <div class="options-item">
+                @Html.DevExpress().ComboBoxFor(m => m.Visualization, settings => {
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.Properties.Caption = "Resizing visualization";
+                    settings.Properties.ValueType = typeof(ResizingMode);
+                    settings.Properties.ClientSideEvents.ValueChanged = "Submit";
+                }).BindList(Enum.GetValues(typeof(ResizingMode))).GetHtml()
+            </div>
+        </div>
+    }
+}
+@Html.Action("ColumnResizingPartial", new { options = Model })

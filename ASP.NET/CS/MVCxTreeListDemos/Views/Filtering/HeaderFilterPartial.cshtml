@@ -1,0 +1,60 @@
+﻿@{
+    bool enableCheckedListMode = (bool)ViewBag.EnableCheckedListMode;
+    var headerFilterMode = enableCheckedListMode ? GridHeaderFilterMode.CheckedList : GridHeaderFilterMode.List;
+}
+
+@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "Filtering", Action = "HeaderFilterPartial", EnableCheckedListMode = enableCheckedListMode };
+    settings.Width = Unit.Percentage(100);
+
+    settings.SettingsBehavior.AutoExpandAllNodes = true;
+    settings.Settings.ShowHeaderFilterButton = true;
+    settings.SettingsPopup.HeaderFilter.SettingsAdaptivity.MinHeight = 300;
+
+    settings.KeyFieldName = "ID";
+    settings.ParentFieldName = "ParentID";
+    settings.Columns.Add(c =>
+    {
+        c.FieldName = "DepartmentName";
+        c.Caption = "Departments";
+    });
+    settings.Columns.Add("Location");
+    settings.Columns.Add(c =>
+    {
+        c.FieldName = "Budget";
+        c.PropertiesEdit.DisplayFormatString = "{0:C}";
+    });
+    settings.Columns.Add("Phone1");
+
+    foreach(TreeListDataColumn column in settings.Columns)
+        column.SettingsHeaderFilter.Mode = headerFilterMode;
+
+    settings.HeaderFilterFillItems += HeaderFilterFillItems;
+}).Bind(Model).GetHtml()
+
+@functions {
+    void HeaderFilterFillItems(object s, ASPxTreeListHeaderFilterEventArgs e) {
+        if(e.Column.FieldName != "Budget")
+            return;
+        decimal max = 0;
+        decimal value;
+        for(int i = 0; i < e.Values.Count; i++) {
+            if(!decimal.TryParse(e.Values[i].Value, out value))
+                continue;
+            if(value > max)
+                max = value;
+        }
+        e.Values.Clear();
+        if(e.Column.SettingsHeaderFilter.Mode == GridHeaderFilterMode.List)
+            e.AddShowAll();
+        int step = 200000;
+        int start = 0;
+        int end = 0;
+        for(int i = 0; i < max / step; i++) {
+            start = step * i;
+            end = start + step - 1;
+            e.AddValue(string.Format("from {0:C} to {1:C}", start, end), "", string.Format("[Budget] >= {0} and [Budget] <= {1}", start, end));
+        }
+    }
+}

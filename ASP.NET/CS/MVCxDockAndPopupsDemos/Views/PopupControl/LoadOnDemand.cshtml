@@ -1,0 +1,11 @@
+﻿@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+<div class="horizontal-center-aligned" style="height:150px; max-width:185px;">
+    @Html.DevExpress().Button(settings => {
+    settings.Name = "ShowButton";
+    settings.Text = "Show Popup Window";
+    settings.ClientSideEvents.Click = "function(s, e){ popupControl.Show(); }";
+    settings.Theme = DemoHelper.Instance.Theme;
+}).GetHtml()</div>
+
+@Html.Partial("LoadOnDemandPartial")

@@ -1,0 +1,43 @@
+﻿@model GridHeaderFilterMode
+
+
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        function OnHeaderFilterModeChanged(){
+            loadingPanel.Show();
+            $.ajax({
+                url: '@Url.Action("DateRangeHeaderFilterPartial")',
+                data: { headerFilterMode: headerFilterMode.GetValue() },
+                success: function(response){
+                    $("#grid-wrapper").html(response);                    
+                }
+            }).done(function () {
+                    loadingPanel.Hide();
+            });
+        }
+    </script>
+    <div class="options">
+        <div class="options-item">
+            @(Html.DevExpress().ComboBox(settings => {
+                settings.Name = "headerFilterMode";
+                settings.Theme = DemoHelper.Instance.Theme;
+                settings.Properties.Caption = "Header filter mode";
+                settings.Properties.ValueType = typeof(GridHeaderFilterMode);
+                settings.Properties.ClientSideEvents.ValueChanged = "OnHeaderFilterModeChanged";
+            })
+            .BindList(new[] { GridHeaderFilterMode.DateRangePicker, GridHeaderFilterMode.DateRangeCalendar })
+            .Bind(Model)
+            .GetHtml())
+        </div>
+    </div>
+}
+<div id="grid-wrapper">
+    @Html.Action("DateRangeHeaderFilterPartial", new { headerFilterMode = Model })
+</div>
+
+@Html.DevExpress().LoadingPanel(settings => {
+    settings.Name = "loadingPanel";
+    settings.Modal = true;
+    settings.ContainerElementID = "grid-wrapper";
+    settings.Styles.LoadingDiv.BackColor = Color.White;
+}).GetHtml()

@@ -1,0 +1,22 @@
+﻿@model ContextMenuCustomizationDemoOptions
+
+@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "BarsAndUI", Action = "ContextMenuCustomizationPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(600);
+
+    settings.ClientSideEvents.PopupMenuShowing = "function(s, e) { RichEditPopupMenuShowing(s, e); }";
+    settings.ClientSideEvents.CustomCommandExecuted = "function(s, e) { RichEditCustomCommandExecuted(s, e); }";
+
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ActiveTabIndex = 0;
+    settings.RibbonMode = RichEditRibbonMode.OneLineRibbon;
+
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        RichEditDemoUtils.HideFileTab(richEdit);
+        richEdit.Focus();
+    };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "ContextMenu.docx")).GetHtml()

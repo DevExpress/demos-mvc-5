@@ -1,0 +1,133 @@
+﻿@functions{ 
+   object GetEditingProduct(ASPxGridView grid) {
+        if(grid.IsNewRowEditing)
+           return new EditableProduct();
+        return grid.GetRow(grid.EditingRowVisibleIndex);
+    }
+}
+@{
+    var grid = Html.DevExpress().GridView(settings => {
+        settings.Name = "gvEditingWithTemplate";
+        settings.KeyFieldName = "ProductID";
+        settings.CallbackRouteValues = new { Controller = "Editing", Action = "EditFormTemplatePartial" };
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Editing", Action = "EditFormTemplateAddNewPartial" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Editing", Action = "EditFormTemplateUpdatePartial" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Editing", Action = "EditFormTemplateDeletePartial" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.Width = Unit.Percentage(100);
+        settings.ClientSideEvents.BeginCallback = "Grid_BeginCallback";
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.Columns.Add("ProductName");
+        settings.Columns.Add(c => {
+            c.FieldName = "CategoryID";
+            c.Caption = "Category";
+            c.EditorProperties().ComboBox(p => {
+                p.TextField = "CategoryName";
+                p.ValueField = "CategoryID";
+                p.ValueType = typeof(int);
+                p.DataSource = NorthwindDataProvider.GetCategories();
+            });
+        });
+        settings.Columns.Add("QuantityPerUnit");
+        settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("UnitsInStock");
+        settings.Columns.Add("Discontinued", MVCxGridViewColumnType.CheckBox);
+
+        settings.SetEditFormTemplateContent(c => {
+            Html.DevExpress().FormLayout(flSettings => {
+                flSettings.Name = "FormLayoutProducts";
+                flSettings.Width = Unit.Percentage(100);
+                flSettings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+                flSettings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 700;
+                flSettings.ColCount = 2;
+                flSettings.Items.Add(i => {
+                    i.FieldName = "ProductName";
+                    i.NestedExtension().TextBox( s => {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.Display = Display.Dynamic;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                flSettings.Items.Add(i => {
+                    i.FieldName = "CategoryID";
+                    i.NestedExtension().ComboBox(s => {
+                        s.Properties.TextField = "CategoryName";
+                        s.Properties.ValueField = "CategoryID";
+                        s.Properties.ValueType = typeof(int);
+                        s.Properties.DataSource = NorthwindDataProvider.GetCategories();
+                        s.Properties.ValidationSettings.Display = Display.Dynamic;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                flSettings.Items.Add(i => {
+                    i.FieldName = "QuantityPerUnit";
+                    i.NestedExtension().TextBox(s => {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.Display = Display.Dynamic;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                flSettings.Items.Add(i => {
+                    i.FieldName = "UnitPrice";
+                    i.NestedExtension().SpinEdit(s => {
+                        s.Properties.DisplayFormatString = "C";
+                        s.Properties.MinValue = 0;
+                        s.Properties.MaxValue = 10000;
+                        s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                flSettings.Items.Add(i => {
+                    i.FieldName = "UnitsInStock";
+                    i.NestedExtension().SpinEdit(s => {
+                        s.Properties.MinValue = 0;
+                        s.Properties.MaxValue = 1000;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.ValidationSettings.Display = Display.Dynamic;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                flSettings.Items.Add().FieldName = "Discontinued";
+                flSettings.Items.AddEmptyItem();
+                flSettings.Items.Add(i => {
+                    i.ShowCaption = DefaultBoolean.False;
+                }).SetNestedContent(() => {
+                    ViewContext.Writer.Write("<div style='float:right'>");
+                    Html.DevExpress().Button(btnSettings => {
+                        btnSettings.Name = "btnUpdate";
+                        btnSettings.Text = "Update";
+                        btnSettings.ClientSideEvents.Click = "function(s, e){ gvEditingWithTemplate.UpdateEdit(); }";
+                    }).Render();
+                    Html.DevExpress().Button(btnSettings => {
+                        btnSettings.Name = "btnCancel";
+                        btnSettings.Text = "Cancel";
+                        btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                        btnSettings.ClientSideEvents.Click = "function(s, e){ gvEditingWithTemplate.CancelEdit(); }";
+                    }).Render();
+                    ViewContext.Writer.Write("</div>");
+                });
+            })
+            .Bind(ViewData["EditableProduct"] ?? GetEditingProduct(c.Grid))
+            .Render();
+        });
+        settings.PreRender = (sender, e) => {
+            ((MVCxGridView)sender).StartEdit(1);
+        };
+
+        DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+    });
+    if (ViewData["EditError"] != null) {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

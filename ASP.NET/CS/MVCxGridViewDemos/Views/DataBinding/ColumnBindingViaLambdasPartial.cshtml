@@ -1,0 +1,22 @@
+﻿@(
+    Html.DevExpress().GridView<DevExpress.Web.Demos.Mvc.EditableCustomer>(settings => {
+        settings.Name = "grid";
+        settings.CallbackRouteValues = new { Controller = "DataBinding", Action = "ColumnBindingViaLambdasPartial" };
+        settings.Width = Unit.Percentage(100);
+        
+        settings.KeyFields(m => m.CustomerID);
+        settings.Columns.Add(m => m.ContactName, column =>  {
+            column.SortIndex = 0;
+            column.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+        });
+        settings.Columns.Add(m => m.CompanyName);
+        settings.Columns.Add(m => m.Country).GroupIndex = 0;
+        settings.Columns.Add(m => m.City);
+        settings.Columns.Add(m => m.Region);
+
+        settings.Settings.ShowGroupPanel = true;
+        settings.SettingsBehavior.AutoExpandAllGroups = true;
+
+        DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+    }).Bind(Model).GetHtml()
+)

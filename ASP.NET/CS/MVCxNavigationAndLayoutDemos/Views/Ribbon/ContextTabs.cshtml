@@ -1,0 +1,98 @@
+﻿@section AdditionalResources {
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Ribbon/Galleries/Galleries.css")" /> 
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Ribbon/Common/Ribbon.css")" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/Ribbon.js")"></script>
+<style type="text/css">
+    .categoryItem {
+        height: 40px;
+        width: 40%;
+        max-width: 100px;
+        margin-right: 3px;
+    }
+    .categoryItem .dxb {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    .hintItem {
+        margin-bottom: 15px;
+    }
+</style>
+}
+<script type="text/javascript">
+    function onCheckedChanged(active, categoryName) {
+        Ribbon.SetContextTabCategoryVisible(categoryName, active);
+    }
+</script>
+@using(Html.BeginForm()) {
+    <div id="PopupPlaceHolder" style="height: 450px;"></div>
+
+    @Html.DevExpress().PopupControl(
+        settings => {
+            settings.Name = "PopupControl";
+            settings.PopupElementID = "PopupPlaceHolder";
+            settings.ShowShadow = false;
+            settings.AllowResize = true;
+            settings.AllowDragging = false;
+            settings.CloseAction = CloseAction.None;
+            settings.ShowSizeGrip = ShowSizeGrip.True;
+            settings.PopupAction = PopupAction.None;
+            settings.ShowOnPageLoad = true;
+            settings.PopupAnimationType = AnimationType.None;
+            settings.MaxWidth = Unit.Pixel(900);
+            settings.MinWidth = Unit.Pixel(288);
+            settings.MinHeight = Unit.Pixel(1);
+            settings.MaxHeight = Unit.Pixel(1);
+            settings.Height = Unit.Pixel(1);
+            settings.ShowHeader = false;
+            settings.ShowFooter = true;
+            settings.FooterText = "";
+            settings.Styles.Footer.Wrap = DefaultBoolean.True;
+            settings.Styles.Footer.HorizontalAlign = HorizontalAlign.Right;
+            settings.ControlStyle.CssClass = "editorWindow";
+            settings.PopupAlignCorrection = PopupAlignCorrection.Disabled;
+            settings.Styles.Content.Paddings.Padding = 0;
+            settings.ClientSideEvents.AfterResizing = "onWindowResize";
+            settings.ClientSideEvents.Init = "onPopupInit";
+
+            settings.SetContent(() => {
+                ViewContext.Writer.Write(
+                @"<table id=""editor"" style=""width:100%;"">
+                    <tr style=""height: 1px"">
+                        <td>"
+                );
+                Html.RenderPartial("ContextTabsPartial");
+                ViewContext.Writer.Write(
+                        @"</td>
+                    </tr>
+                    <tr>
+                        <td class=""ribbonContainer"" id=""container"">
+                            <div class=""hintItem"">Click the 'Image' and 'Table' buttons in the client region to show/hide ribbon context tabs.</div>"
+                );
+                Html.DevExpress().Button(b => {
+                    b.Name = "ImageButton";
+                    b.Text = "";
+                    b.GroupName = "G1";
+                    b.ControlStyle.CssClass = "categoryItem";
+                    b.ToolTip = "Show/Hide Image Context Tabs";
+                    b.Images.Image.IconID = IconID.ContentImage32x32;
+                    b.ClientSideEvents.CheckedChanged = "function(s, e) { onCheckedChanged(s.GetChecked(), 'Picture tools'); }";
+                    b.Checked = true;
+                }).Render();
+                Html.DevExpress().Button(b => {
+                    b.Name = "TableButton";
+                    b.Text = "";
+                    b.GroupName = "G2";
+                    b.ControlStyle.CssClass = "categoryItem";
+                    b.ToolTip = "Show/Hide Table Context Tabs";
+                    b.Images.Image.IconID = IconID.GridGrid32x32;
+                    b.ClientSideEvents.CheckedChanged = "function(s, e) { onCheckedChanged(s.GetChecked(), 'Table tools'); }";
+                    b.Checked = true;
+                }).Render();
+                ViewContext.Writer.Write(
+                        @"</td>
+                    </tr>
+                </table>"
+                );
+            });
+        }).GetHtml()
+}

@@ -1,0 +1,25 @@
+﻿@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "Accessibility", Action = "CompliancePartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.AccessibilityCompliant = true;
+    settings.Caption = "Departments";
+    
+    settings.AutoGenerateColumns = false;
+    settings.KeyFieldName = "ID";
+    settings.ParentFieldName = "ParentID";
+
+    settings.Columns.Add("DepartmentName", "Department");
+    settings.Columns.Add("Location");
+    settings.Columns.Add("Phone1");
+    settings.Columns.Add("Phone2");
+
+    settings.SettingsBehavior.AutoExpandAllNodes = true;
+    settings.SettingsSelection.Enabled = true;
+    settings.SettingsSelection.AllowSelectAll = true;
+    settings.SettingsPager.Mode = TreeListPagerMode.ShowPager;
+    settings.SettingsPager.AllButton.Visible = true;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+}).Bind(Model).GetHtml()

@@ -1,0 +1,43 @@
+﻿@Html.DevExpress().FileManager(
+    settings => {
+        settings.Name = "fileManager";
+        settings.CallbackRouteValues = new { Controller = "FileManager", Action = "CustomFilterAPIPartial" };
+        settings.CustomActionRouteValues = new { Controller = "FileManager", Action = "CustomFilterAPICustomFilterAction" };
+        settings.DownloadRouteValues = new { Controller = "FileManager", Action = "CustomFilterAPIDownloadFiles" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+        settings.Settings.AllowedFileExtensions = FileManagerDemoHelper.DocumentsAllowedFileExtensions;
+        settings.SettingsAdaptivity.Enabled = true;
+
+        settings.SettingsEditing.Assign(FileManagerDemoHelper.CreateFileManagerEditingSettings());
+
+        settings.SettingsUpload.UseAdvancedUploadMode = true;
+        settings.SettingsUpload.AdvancedModeSettings.EnableMultiSelect = true;
+
+        settings.SettingsFiltering.FilterBoxMode = FileManagerFilterBoxMode.Subfolders;
+
+        settings.SettingsToolbar.ShowPath = false;
+        settings.SettingsBreadcrumbs.Visible = true;
+        settings.SettingsFolders.Visible = false;
+        settings.SettingsFileList.ShowFolders = true;
+        settings.SettingsFileList.View = FileListView.Details;
+        settings.SettingsAdaptivity.Enabled = true;
+
+        settings.FileUploading = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.FolderCreating = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemRenaming = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemDeleting = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemMoving = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemCopying = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+
+        settings.CustomCallback = (s, e) => {
+            MVCxFileManager fileManager = s as MVCxFileManager;
+            if(ViewData["FilterName"] != null) {
+                fileManager.FilterBoxText = string.Empty;
+                fileManager.FileListCustomFilter = (string)ViewData["FilterName"];
+                fileManager.FileListCustomFilterBreadcrumbsText = (string)ViewData["FilterText"];
+            }
+        };
+    }
+).BindToFileSystemProvider(Model).GetHtml()

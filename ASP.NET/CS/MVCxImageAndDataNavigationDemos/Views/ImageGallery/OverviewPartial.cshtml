@@ -1,0 +1,10 @@
+﻿@Html.DevExpress().ImageGallery(settings => {
+    settings.Name = "imageGallery";
+    settings.CallbackRouteValues = new { Controller = "ImageGallery", Action = "OverviewPartial" };
+    settings.ImageCacheFolder = ImageGalleryDemoHelper.DefaultImageCacheFolder;
+    settings.ThumbnailHeight = Unit.Pixel(178);
+    settings.ThumbnailWidth = Unit.Pixel(178);
+    settings.SettingsTableLayout.RowsPerPage = 1;
+    settings.SettingsTableLayout.ColumnCount = 3;
+    settings.ControlStyle.Paddings.Padding = 0;
+}).BindToFolder(ImageGalleryDemoHelper.PhotoGalleryImageFolder).GetHtml()

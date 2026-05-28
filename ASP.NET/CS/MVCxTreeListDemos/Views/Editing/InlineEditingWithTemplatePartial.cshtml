@@ -1,0 +1,43 @@
+﻿@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "Editing", Action = "InlineEditingWithTemplatePartial" };
+    settings.SettingsEditing.AddNewNodeRouteValues = new { Controller = "Editing", Action = "InlineEditingWithTemplateAddNewPostPartial" };
+    settings.SettingsEditing.UpdateNodeRouteValues = new { Controller = "Editing", Action = "InlineEditingWithTemplateUpdatePostPartial" };
+    settings.SettingsEditing.NodeDragDropRouteValues = new { Controller = "Editing", Action = "InlineEditingWithTemplateMovePostPartial" };
+    settings.SettingsEditing.DeleteNodeRouteValues = new { Controller = "Editing", Action = "InlineEditingWithTemplateDeletePostPartial" };
+
+    settings.SettingsEditing.Mode = TreeListEditMode.EditFormAndDisplayNode;
+    settings.SettingsEditing.ConfirmDelete = true;
+    settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+    settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+    settings.AutoGenerateColumns = false;
+    settings.Width = Unit.Percentage(100);
+    settings.ClientSideEvents.BeginCallback = "TreeList_BeginCallback";
+
+    settings.KeyFieldName = "PostID";
+    settings.ParentFieldName = "ParentID";
+
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.CommandColumn.NewButton.Visible = true;
+    settings.CommandColumn.DeleteButton.Visible = true;
+    settings.CommandColumn.EditButton.Visible = true;
+
+    settings.Columns.Add("From");
+    settings.Columns.Add("Subject");
+    settings.Columns.Add("PostDate", "Date", MVCxTreeListColumnType.DateEdit);
+    settings.Columns.Add("IsNew", MVCxTreeListColumnType.CheckBox);
+    settings.Columns.Add("HasAttachment", MVCxTreeListColumnType.CheckBox);
+
+
+    settings.SetEditFormTemplateContent(c => {
+        Html.RenderPartial("InlineEditFormTemplatePartial", TreeListInlineEditingDemoHelper.GetEditedPost(c));
+    });
+
+    settings.PreRender = (sender, e) => {
+        MVCxTreeList treeListControl = (MVCxTreeList)sender;
+        treeListControl.ExpandToLevel(3);
+        treeListControl.StartEdit("2");
+    };
+}).SetEditErrorText(ViewData["EditNodeError"] as string).Bind(Model).GetHtml()

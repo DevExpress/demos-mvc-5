@@ -1,0 +1,38 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "Accessibility", Action = "RightToLeftPartial" };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Accessibility", Action = "RightToLeftUpdatePartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.RightToLeft = DefaultBoolean.True;
+    settings.EnableRowsCache = false;
+
+    settings.KeyFieldName = "CustomerID";
+    settings.CommandColumn.ShowEditButton = true;
+    settings.CommandColumn.VisibleIndex = 0;
+
+    settings.Columns.Add(c => {
+        c.FieldName = "ContactName";
+        c.SortIndex = 0;
+        c.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+    });
+    settings.Columns.Add("CompanyName");
+    settings.Columns.Add(c => {
+        c.FieldName = "Country";
+        c.GroupIndex = 0;
+    });
+    settings.Columns.Add("City");
+    settings.Columns.Add("Region");
+
+    settings.Settings.ShowGroupPanel = true;
+    settings.SettingsBehavior.AutoExpandAllGroups = true;
+    settings.SettingsPopup.EditForm.Width = 600;
+    settings.SettingsPager.Summary.Visible = false;
+    settings.ClientSideEvents.BeginCallback = "Grid_BeginCallback";
+
+    settings.PreRender = (sender, e) => {
+        ((MVCxGridView)sender).StartEdit(2);
+    };
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).SetEditErrorText(ViewData["EditError"] as string).Bind(Model).GetHtml()

@@ -1,0 +1,77 @@
+﻿@model SchedulerDayViewDemoOptions
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "SettingsFormLayout";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Appointment Layout";
+
+        g.Items.Add(m => m.SnapToCellsMode).NestedExtension().ComboBox(s => {
+            s.Properties.Items.Add("Auto", 0);
+            s.Properties.Items.Add("Always", 1);
+            s.Properties.Items.Add("Never", 2);
+        });
+        g.Items.Add(m => m.StartTimeVisibility).NestedExtension().ComboBox(s => {
+            s.Properties.Items.Add("Auto", 0);
+            s.Properties.Items.Add("Always", 1);
+            s.Properties.Items.Add("Never", 2);
+        });
+        g.Items.Add(m => m.EndTimeVisibility).NestedExtension().ComboBox(s => {
+            s.Properties.Items.Add("Auto", 0);
+            s.Properties.Items.Add("Always", 1);
+            s.Properties.Items.Add("Never", 2);
+        });
+        g.Items.Add(m => m.ShowRecurrence);
+    });
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "View Layout options";
+
+        g.Items.Add(m => m.DayCount).NestedExtension().ComboBox(s => {
+            s.Properties.Items.Add("1", 1);
+            s.Properties.Items.Add("2", 2);
+            s.Properties.Items.Add("3", 3);
+            s.Properties.Items.Add("4", 4);
+            s.Properties.Items.Add("5", 5);
+            s.Properties.Items.Add("6", 6);
+            s.Properties.Items.Add("7", 7);
+            s.Properties.Items.Add("8", 8);
+            s.Properties.Items.Add("9", 9);
+            s.Properties.Items.Add("10", 10);
+        });
+        g.Items.Add(m => m.ShowAllDayArea);
+        g.Items.Add(m => m.ShowDayHeaders);
+        g.Items.Add(m => m.ShowWorkTimeOnly);
+
+    });
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Common options";
+
+        g.Items.Add(m => m.AppointmentSelectionAppearanceMode).NestedExtension().ComboBox(s => {
+            s.Properties.Items.Add("Auto", 0);
+            s.Properties.Items.Add("BackgroundOpacity", 1);
+            s.Properties.Items.Add("BoundaryFrame", 2);
+        });
+
+        g.Items.Add(m => m.ShowViewNavigator);
+        g.Items.Add(m => m.ShowViewVisibleInterval);
+        g.Items.Add(m => m.HighlightSelectionHeaders);
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 480,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+
+}).Bind(Model).GetHtml()
+
+<div class="apply-button-container">
+    @Html.DevExpress().Button(s => {
+        s.Name = "ApplyButton";
+        s.Text = "Apply Changes";
+        s.Theme = DemoHelper.Instance.Theme;
+        s.UseSubmitBehavior = true;
+    }).GetHtml()
+</div>

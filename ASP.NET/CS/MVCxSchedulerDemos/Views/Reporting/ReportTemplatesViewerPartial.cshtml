@@ -1,0 +1,8 @@
+﻿@Html.DevExpress().DocumentViewer(
+    settings => {
+        settings.Name = "reportViewer";
+        settings.CallbackRouteValues = new { Controller = "Reporting", Action = "ReportTemplatesViewerPartial" };
+        settings.ExportRouteValues = new { Controller = "Reporting", Action = "ReportTemplatesViewerExportTo" };
+        settings.Width = Unit.Percentage(100);
+        settings.Report = Model;
+    }).GetHtml()

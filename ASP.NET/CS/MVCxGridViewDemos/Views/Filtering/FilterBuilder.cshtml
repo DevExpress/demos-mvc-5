@@ -1,0 +1,57 @@
+﻿@model IEnumerable
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1400); }
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        function Submit(s, e) {
+            $("form").submit();
+        }
+        function onBeginCallback(s, e) {
+            e.customArgs = MVCxClientUtils.GetSerializedEditorValuesInContainer("options");
+        }
+    </script>
+
+    @Html.AntiForgeryToken()
+
+    <div id="options" class="options">
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(settings => {
+                settings.Name = "EnableTextTab";
+                settings.Text = "Enable text tab";
+                settings.Theme = DemoHelper.Instance.Theme;
+                settings.Checked = FilterBuilderOptions.EnableTextTab;
+                settings.Properties.ClientSideEvents.CheckedChanged = "Submit";
+            }).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(settings => {
+                settings.Name = "AllowHierarchicalColumns";
+                settings.Text = "Allow hierarchical columns";
+                settings.Theme = DemoHelper.Instance.Theme;
+                settings.Checked = FilterBuilderOptions.AllowHierarchicalColumns;
+                settings.Properties.ClientSideEvents.CheckedChanged = "Submit";
+            }).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().CheckBox(settings => {
+                settings.Name = "ShowAllDataSourceColumns";
+                settings.Text = "Show all datasource columns";
+                settings.Theme = DemoHelper.Instance.Theme;
+                settings.Checked = FilterBuilderOptions.ShowAllDataSourceColumns;
+                settings.Properties.ClientSideEvents.CheckedChanged = "Submit";
+            }).GetHtml()
+        </div>
+    </div>
+}
+@Html.Partial("FilterBuilderPartial", Model)
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+
+@functions {
+    FilterBuilderDemoOptions FilterBuilderOptions { get { return ViewBag.FilterBuilderOptions; } }
+}

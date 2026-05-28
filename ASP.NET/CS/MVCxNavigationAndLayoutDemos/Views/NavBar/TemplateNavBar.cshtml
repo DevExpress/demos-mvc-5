@@ -1,0 +1,21 @@
+﻿
+@Html.DevExpress().NavBar(
+    settings => {
+        settings.Name = "nbTemplates";
+        settings.Width = Unit.Percentage(100);
+        settings.ShowExpandButtons = false;
+        settings.EnableTheming = false;
+        settings.AutoCollapse = true;
+        settings.ExpandButtonPosition = ExpandButtonPosition.Right;
+
+        settings.SetGroupHeaderTemplateContent(c => {
+            Html.RenderPartial("TemplatesHeader", c.Group);
+        });
+        settings.SetGroupHeaderTemplateCollapsedContent(c => {
+            Html.RenderPartial("TemplatesHeaderCollapsed", c.Group);
+        });
+        settings.SetGroupContentTemplateContent(c => {
+            Html.RenderPartial("TemplatesContent", c.Group);
+        });
+
+    }).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/Lessons.xml"), "//LessonGroup").GetHtml()

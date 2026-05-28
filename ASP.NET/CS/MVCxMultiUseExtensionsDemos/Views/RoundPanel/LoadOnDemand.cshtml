@@ -1,0 +1,35 @@
+﻿@section AdditionalResources {
+    <style type="text/css">
+        .wrapper {
+            max-width: 470px;
+            width: 100%;
+        }
+
+        .photoHolder {
+            padding: 6px;
+            display: inline-block;
+            border: 1px solid #e0e0e0;
+            height: 150px;
+            width: 150px;
+            float: left;
+            margin-right: 20px;
+        }
+
+        .details {
+            vertical-align: top;
+            float: left;
+        }
+
+        .details > div {
+            width: 250px;
+        }
+
+        .text {
+            padding-top: 15px;
+            clear: both;
+        }
+    </style>
+}
+
+<p>Please click the panel header to toggle the panel's expansion state.</p>
+@{ Html.RenderPartial("LoadOnDemandPartial"); }

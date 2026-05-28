@@ -1,0 +1,16 @@
+﻿@model DocumentProtectionDemoOptions
+@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("DocumentProtectionPartial", Model)
+@section DemoOptions {
+    @Html.Partial("DocumentProtectionFormLayoutPartial", Model)
+}
+@section EndDemoRegion { 
+    @{ Html.EndForm(); }
+}

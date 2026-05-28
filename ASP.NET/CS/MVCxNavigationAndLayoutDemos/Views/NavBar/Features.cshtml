@@ -1,0 +1,101 @@
+﻿@model NavBarFeaturesDemoOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(450);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = 300;
+}
+
+@section AdditionalResources {
+    <style>
+        .dxnbSys {
+            width: 100%;
+            padding: 0!important;
+        }
+    </style>
+    <script>
+        function submitForm() {
+            $("form").submit();
+        }
+    </script>
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+    @Html.DevExpress().NavBar(
+        settings => {
+            settings.Name = "nbFeatures";
+            settings.AllowExpanding = Model.AllowExpanding;
+            settings.AllowSelectItem = Model.AllowSelectItem;
+            settings.AutoCollapse = Model.AutoCollapse;
+            settings.EnableHotTrack = Model.EnableHotTrack;
+            settings.EnableAnimation = Model.EnableAnimation;
+            settings.SaveStateToCookies = Model.SaveStateToCookies;
+            settings.Width = Unit.Parse("100%");
+
+            settings.Groups.Add(group => {
+                group.Text = "Small Items";
+
+                group.Items.Add("Scheduler", "", "~/Content/NavBar/BO_Scheduler.png");
+                group.Items.Add("Clients", "", "~/Content/NavBar/BO_Organizations.png");
+                group.Items.Add("Users", "", "~/Content/NavBar/BO_Users.png");
+            });
+            settings.Groups.Add(group => {
+                group.Text = "Large Items";
+
+                group.ItemImagePosition = ImagePosition.Top;
+                group.Items.Add("Notes", "", "~/Content/NavBar/BO_Notes_Large.png");
+                group.Items.Add("Reports", "", "~/Content/NavBar/BO_Reports_Large.png");
+            });
+        }).GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+        settings.Name = "FormLayoutSettings";
+        settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        settings.Items.AddGroupItem(group => {
+            group.Caption = "Options";
+            group.Items.Add(m => m.AllowExpanding, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+            });
+            group.Items.Add(m => m.AllowSelectItem, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+            });
+            group.Items.Add(m => m.AutoCollapse, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+            });
+            group.Items.Add(m => m.EnableHotTrack, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+            });
+            group.Items.Add(m => m.EnableAnimation, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+            });
+            group.Items.Add(m => m.SaveStateToCookies, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+            ColumnMinWidth = 300,
+            ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+        });
+    }).GetHtml()
+}
+@section EndDemoRegion {
+    @{
+        Html.EndForm();
+    }
+}

@@ -1,0 +1,121 @@
+﻿@model ChartRange3DDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(330);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartRange3DDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.CrosshairEnabled = DefaultBoolean.True;
+    settings.ToolTipEnabled = DefaultBoolean.False;
+
+    settings.Legends.Default(l => {
+        l.Visibility = DefaultBoolean.False;
+    });
+
+    settings.Series.Template(t => {
+        t.ArgumentScaleType = ScaleType.DateTime;
+        t.SetRangeDataMembers("Date", "Min", "Max");
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        t.Views().RangeArea3DSeriesView(v => {
+            v.SeriesLabel(l => {
+                l.Kind = options.LabelKind;
+            });
+        });
+    });
+
+    settings.XYDiagram3D(d => {
+        d.RotationType = RotationType.UseAngles;
+        d.RotationOrder = RotationOrder.XYZ;
+        d.VerticalScrollPercent = 4;
+        d.PerspectiveAngle = options.PerspectiveAngle;
+        d.ZoomPercent = options.ZoomPercent;
+        d.AxisX.DateTimeScaleOptions.GridSpacing = 2;
+        d.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Month;
+        d.AxisX.DateTimeScaleOptions.GridAlignment = DateTimeGridAlignment.Month;
+        d.AxisX.WholeRange.AutoSideMargins = true;
+        d.AxisX.Label.TextPattern = "{A:MMMM}";
+        d.AxisY.WholeRange.AlwaysShowZeroLevel = false;
+        d.AxisY.WholeRange.AutoSideMargins = true;
+        d.AxisY.Interlaced = true;
+        d.AxisY.Label.TextPattern = "${V:N0}";
+        d.AxisY.WholeRange.Auto = false;
+        d.AxisY.WholeRange.SetMinMaxValues(30, 70);
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Crude Oil Prices in 2015"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.eia.gov"
+    });
+}).Bind(Model.Data, "Name").GetHtml()
+
+<script type="text/javascript">
+    function UpdateLabelOptionState() {
+        LabelKind.SetEnabled(ShowLabels.GetChecked());
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateLabelOptionState(); }";
+                });
+            });
+            group.Items.Add(model => model.LabelKind, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowLabels;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetLabelKinds());
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Diagram Settings";
+            group.Items.Add(model => model.PerspectiveAngle, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetPerspectiveAngles()); });
+            });
+            group.Items.Add(model => model.ZoomPercent, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetZoomPercents()); });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 310,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

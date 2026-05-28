@@ -1,0 +1,140 @@
+﻿@model Chart3DDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(300);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+    
+@Html.DevExpress().Chart(settings => {
+    Chart3DDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.Border.Visibility = DefaultBoolean.False;
+        l.HorizontalIndent = 12;
+    });
+
+    settings.Series.Add(s =>
+    {
+        s.Name = "Russia";
+        s.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetDataMembers("Date", "Russia");
+        s.Views().Line3DSeriesView(v =>
+        {
+            v.LineWidth = 3;
+            v.SeriesLabel(l =>
+            {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.HideOverlapped;
+            });
+        });
+    });
+
+    settings.Series.Add(s =>
+    {
+        s.Name = "South Africa";
+        s.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetDataMembers("Date", "SouthAfrica");
+        s.Views().Line3DSeriesView(v =>
+        {
+            v.LineWidth = 3;
+            v.SeriesLabel(l =>
+            {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.HideOverlapped;
+            });
+        });
+    });
+
+    settings.Series.Add(s =>
+    {
+        s.Name = "Poland";
+        s.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetDataMembers("Date", "Poland");
+        s.Views().Line3DSeriesView(v =>
+        {
+            v.LineWidth = 3;
+            v.SeriesLabel(l =>
+            {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.HideOverlapped;
+            });
+        });
+    });
+
+
+    settings.XYDiagram3D(d=>{
+        d.AxisX.Label.MaxWidth = 70;
+        d.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Year;
+        d.AxisY.Interlaced = true;
+        d.AxisY.WholeRange.AlwaysShowZeroLevel = false;
+        d.AxisY.NumericScaleOptions.GridSpacing= 50;
+        d.VerticalScrollPercent = 4;
+        d.RotationType = RotationType.UseAngles;
+        d.RotationOrder = RotationOrder.XYZ;
+        d.RotationAngleY = -20;
+        d.PerspectiveAngle = options.PerspectiveAngle;
+        d.ZoomPercent = options.ZoomPercent;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Coal Production, in Millions of Tonnes"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.quandl.com"
+    });
+}).Bind(Model.Data).GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels);
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Diagram Settings";
+            group.Items.Add(model => model.PerspectiveAngle, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetPerspectiveAngles()); });
+            });
+            group.Items.Add(model => model.ZoomPercent, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetZoomPercents()); });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 280,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

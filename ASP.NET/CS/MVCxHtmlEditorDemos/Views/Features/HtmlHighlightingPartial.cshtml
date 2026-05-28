@@ -1,0 +1,21 @@
+﻿@model HtmlHighlightingOptions
+@Html.DevExpress().HtmlEditorFor(m => m.Html,
+    settings =>
+    {
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "HtmlHighlightingPartial" };
+        settings.Height = Unit.Pixel(562);
+        
+        settings.Settings.SettingsHtmlView.ShowCollapseTagButtons = Model.ShowCollapseTagButtons;
+        settings.Settings.SettingsHtmlView.ShowLineNumbers = Model.ShowLineNumbers;
+        settings.Settings.SettingsHtmlView.HighlightActiveLine = Model.HighlightActiveLine;
+        settings.Settings.SettingsHtmlView.HighlightMatchingTags = Model.HighlightMatchingTags;
+        settings.Settings.SettingsHtmlView.EnableTagAutoClosing = Model.EnableTagAutoClosing;
+        settings.Settings.SettingsHtmlView.EnableAutoCompletion = Model.EnableAutoCompletion;
+        settings.Settings.SettingsHtmlView.Mode = Model.Mode;
+
+        settings.Toolbars.CreateDefaultToolbars();
+        settings.Toolbars[1].Items.RemoveAll(item => item.GetType() == typeof(ToolbarFontColorButton));
+
+        Model.PrepareHtmlEditorSettings(settings);
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }).GetHtml()

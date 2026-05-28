@@ -1,0 +1,31 @@
+﻿@Html.DevExpress().FileManager(
+    settings => {
+        settings.Name = "fileManager";
+        settings.CallbackRouteValues = new { Controller = "FileManager", Action = "FeaturesPartial" };
+        settings.DownloadRouteValues = new { Controller = "FileManager", Action = "DownloadFiles" };
+
+        settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+        settings.Settings.AllowedFileExtensions = FileManagerDemoHelper.AllowedFileExtensions;
+        settings.Settings.InitialFolder = "Images\\Employees";
+
+        settings.SettingsEditing.Assign(FileManagerDemoHelper.FeaturesDemoOptions.SettingsEditing);
+        settings.SettingsToolbar.Assign(FileManagerDemoHelper.FeaturesDemoOptions.SettingsToolbar);
+        settings.SettingsFolders.Assign(FileManagerDemoHelper.FeaturesDemoOptions.SettingsFolders);
+        settings.SettingsFileList.Assign(FileManagerDemoHelper.FeaturesDemoOptions.SettingsFileList);
+        settings.SettingsBreadcrumbs.Assign(FileManagerDemoHelper.FeaturesDemoOptions.SettingsBreadcrumbs);
+        
+        settings.SettingsUpload.Assign(FileManagerDemoHelper.FeaturesDemoOptions.SettingsUpload);
+        settings.SettingsUpload.UseAdvancedUploadMode = true;
+        
+        settings.SettingsPermissions.AccessRules.Add(new FileManagerFolderAccessRule { Path = "System", Edit = Rights.Deny });
+
+        settings.SettingsAdaptivity.Enabled = true;
+
+        settings.FileUploading = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.FolderCreating = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemRenaming = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemDeleting = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemMoving = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemCopying = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+    }
+).BindToFolder(Model).GetHtml()

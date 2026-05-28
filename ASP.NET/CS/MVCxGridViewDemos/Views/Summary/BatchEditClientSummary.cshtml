@@ -1,0 +1,24 @@
+﻿@model IEnumerable
+<script type="text/javascript">
+    function onBatchEditEndEditing(s, e) {        
+        var unitPriceColumn = s.GetColumnByField("UnitPrice");
+        var quantityColumn = s.GetColumnByField("Quantity");
+        var discountColumn = s.GetColumnByField("Discount");
+
+        var unitPriceValue = s.batchEditApi.GetCellValue(e.visibleIndex, "UnitPrice");
+        var quantityValue = s.batchEditApi.GetCellValue(e.visibleIndex, "Quantity");
+        var discountValue = s.batchEditApi.GetCellValue(e.visibleIndex, "Discount");
+
+        if (e.rowValues.hasOwnProperty(unitPriceColumn.index))
+            unitPriceValue = e.rowValues[unitPriceColumn.index].value;
+        if (e.rowValues.hasOwnProperty(quantityColumn.index))
+            quantityValue = e.rowValues[quantityColumn.index].value;
+        if (e.rowValues.hasOwnProperty(discountColumn.index))
+            discountValue = e.rowValues[discountColumn.index].value;
+
+        var newTotalColumnValue = unitPriceValue * quantityValue * (1 - discountValue);
+        s.batchEditApi.SetCellValue(e.visibleIndex, "Total", newTotalColumnValue);
+    }
+</script>
+
+@Html.Partial("BatchEditClientSummaryPartial", Model)

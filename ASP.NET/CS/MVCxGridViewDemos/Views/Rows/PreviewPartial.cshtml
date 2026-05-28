@@ -1,0 +1,17 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "gvPreview";
+    settings.CallbackRouteValues = new { Controller = "Rows", Action = "PreviewPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Settings.ShowPreview = true;
+    settings.PreviewFieldName = "Notes";
+    settings.SettingsPager.PageSize = 5;
+
+    settings.Columns.Add("FirstName");
+    settings.Columns.Add("Title");
+    settings.Columns.Add("LastName");
+    settings.Columns.Add("BirthDate").PropertiesEdit.DisplayFormatString = "d";
+    settings.Columns.Add("HireDate").PropertiesEdit.DisplayFormatString = "d";
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

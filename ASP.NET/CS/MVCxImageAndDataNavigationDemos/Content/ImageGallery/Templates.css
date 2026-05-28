@@ -1,0 +1,42 @@
+﻿/* ItemTextTemplate */
+.item, .details {
+	font-family: 'Segoe UI', Helvetica, 'Droid Sans', Tahoma, Geneva, sans-serif;
+}
+
+.item_text a {
+	font-size: 14px;
+	color: #eeeeee;
+}
+
+.item_email {
+	font-size: 12px;
+	color: #f17f21;
+	cursor: text;
+}
+
+/* FullscreenViewerItemTextTemplate */
+.details {
+	cursor: text;
+	margin-bottom: 30px;
+}
+
+.details_header {
+	color: #ffffff;
+	font-size: 22pt;
+	margin-bottom: 10px;
+}
+
+.details_text {
+	color: #a3a3a3;
+	font-size: 13pt;
+}
+
+.customGallery .dxig-fullscreenViewerTextArea {
+	opacity: 1!important; /* FullscreenViewer - Make the bottom panel non-transparent */
+	background-color: #000000;
+}
+
+.customGallery .dxig-imageSliderWrapper {
+	padding-top: 20px;
+	padding-bottom: 155px !important;
+}

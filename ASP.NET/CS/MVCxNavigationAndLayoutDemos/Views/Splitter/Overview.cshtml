@@ -1,0 +1,28 @@
+﻿@section AdditionalResources {
+    <style type="text/css">
+        .exampleContent
+        {
+            font-size: 20px;
+            text-align: center;
+        }
+    </style>
+}
+
+@Html.DevExpress().Splitter(settings => {
+    settings.Name = "splOverview";
+    settings.Height = Unit.Pixel(100);
+    settings.Panes.Add(pane => {
+        pane.SetContent(() => {
+            ViewContext.Writer.Write(
+                "<div class='exampleContent'>Left container</div>"
+            );
+        });
+    });
+    settings.Panes.Add(pane => {
+        pane.SetContent(() => {
+            ViewContext.Writer.Write(
+                "<div class='exampleContent'>Right container</div>"
+            );
+        });
+    });
+}).GetHtml()

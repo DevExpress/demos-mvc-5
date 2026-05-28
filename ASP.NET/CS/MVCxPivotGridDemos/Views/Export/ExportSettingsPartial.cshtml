@@ -1,0 +1,57 @@
+﻿@model PivotGridExportDemoOptions
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "options";
+    settings.ColCount = 3;
+    settings.ShowItemCaptionColon = false;
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Export Options";
+        g.Name = "WYSIWYGGroup";
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.SettingsItemCaptions.Location = LayoutItemCaptionLocation.Right;
+        g.Items.Add(i => i.FieldName = "WYSIWYG.PrintColumnAreaOnEveryPage");
+        g.Items.Add(i => i.FieldName = "WYSIWYG.PrintRowAreaOnEveryPage");
+        g.Items.Add(i => i.FieldName = "WYSIWYG.PrintFilterHeaders");
+        g.Items.Add(i => i.FieldName = "WYSIWYG.PrintColumnHeaders");
+        g.Items.Add(i => i.FieldName = "WYSIWYG.PrintRowHeaders");
+        g.Items.Add(i => i.FieldName = "WYSIWYG.PrintDataHeaders");
+        g.ClientVisible = false;
+    });
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Data Aware Options";
+        g.Name = "DataAwareGroup";
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.SettingsItemCaptions.Location = LayoutItemCaptionLocation.Right;
+        g.Items.Add(i => i.FieldName = "DataAware.AllowGrouping");
+        g.Items.Add(i => i.FieldName = "DataAware.AllowFixedColumnAndRowArea");
+        g.Items.Add(i => i.FieldName = "DataAware.ExportDisplayText");
+        g.Items.Add(i => i.FieldName = "DataAware.ExportRawData");
+    });
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Export To";
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.SettingsItems.ShowCaption = DefaultBoolean.False;
+        g.Items.Add(i => {
+            i.FieldName = "ExportType";
+            i.NestedExtension().ComboBox(s => {
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "onExportTypeChanged";
+                s.Width = 170;
+            });
+        });
+        g.Items.Add(i => {
+            i.Name = "ExportTo";
+            i.NestedExtension().Button(s => {
+                s.Text = "Export";
+                s.UseSubmitBehavior = true;
+                s.Width = Unit.Percentage(80);
+            });
+        });
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 300,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).GetHtml()
+

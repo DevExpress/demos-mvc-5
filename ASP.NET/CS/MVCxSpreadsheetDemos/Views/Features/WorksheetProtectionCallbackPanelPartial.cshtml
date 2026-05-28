@@ -1,0 +1,10 @@
+﻿@Html.DevExpress().CallbackPanel(
+    settings => {
+        settings.Name = "CallbackPanel";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "WorksheetProtectionCallbackPanelPartial" };
+        settings.ClientSideEvents.BeginCallback = "CallbackPanel_OnBeginCallback";
+        settings.SetContent(() => {
+            Html.RenderPartial("WorksheetProtectionSpreadsheetPartial");
+        });
+    }
+).GetHtml() 

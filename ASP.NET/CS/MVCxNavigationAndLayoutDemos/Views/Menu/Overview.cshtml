@@ -1,0 +1,23 @@
+﻿@Html.DevExpress().Menu(settings => {
+    settings.Name = "mOverview";
+    
+    settings.Items.Add(item => {
+        item.Text = "Home";
+        item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.NavigationHome32x32;
+        item.Items.Add("News");
+        item.Items.Add("Contact Us");
+    });
+    settings.Items.Add(item => {
+        item.Text = "Profile";
+        item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.PeopleCustomer32x32;
+        item.Items.Add("Change Password");
+    });
+    settings.Items.Add(item => {
+        item.Text = "Clients";
+        item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.PeopleUsergroup32x32;
+    });
+    settings.Items.Add(item => {
+        item.Text = "Reports";
+        item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ProgrammingShowtestreport32x32;
+    });
+}).GetHtml()

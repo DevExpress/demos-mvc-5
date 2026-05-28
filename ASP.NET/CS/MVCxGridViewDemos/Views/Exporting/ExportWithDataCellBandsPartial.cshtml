@@ -1,0 +1,65 @@
+﻿@using System.Web.Hosting;
+@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "Exporting", Action = "ExportWithDataCellBandsPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.EnableRowsCache = false;
+    settings.SettingsPager.PageSize = 3;
+    settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+    settings.SettingsExport.EnableClientSideExportAPI = true;
+    settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+
+    settings.Columns.Add(c => {
+        c.FieldName = "Price";
+        c.EditorProperties().SpinEdit(sp => {
+            sp.DisplayFormatString = "c0";
+        });
+    });
+    settings.Columns.Add(address => {
+        address.FieldName = "Address";
+        address.CellStyle.CssClass = "address-cell";
+        address.Columns.Add(features => {
+            features.FieldName = "Features";
+            features.Columns.Add("Beds").ExportWidth = 80;
+            features.Columns.Add("Baths").ExportWidth = 80;
+            features.Columns.Add("HouseSize").ExportWidth = 80;
+            features.Columns.Add(c => {
+                c.FieldName = "YearBuilt";
+                c.ExportWidth = 80;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Right;
+            });
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "PhotoUrl";
+        c.Caption = "Photo";
+        c.CellStyle.CssClass = "photo-cell";
+        c.EditorProperties().Image(i => {
+            i.ImageWidth = 200;
+        });
+    });
+
+    settings.Toolbars.Add(t => {
+        t.SettingsAdaptivity.Enabled = true;
+        t.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+        t.Items.Add(GridViewToolbarCommand.ExportToPdf);
+        t.Items.Add(GridViewToolbarCommand.ExportToXls);
+        t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+        t.Items.Add(GridViewToolbarCommand.ExportToDocx);
+        t.Items.Add(GridViewToolbarCommand.ExportToRtf);
+    });
+
+    settings.SettingsExport.RenderBrick += (s, e) => {
+        if (e.RowType != GridViewRowType.Data)
+            return;
+        var dataColumn = (GridViewDataColumn)e.Column;
+        if (dataColumn.FieldName == "PhotoUrl") {
+            var path = HostingEnvironment.MapPath(e.Value.ToString());
+            if (File.Exists(path))
+                e.ImageValue = File.ReadAllBytes(path);
+        }
+    };
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

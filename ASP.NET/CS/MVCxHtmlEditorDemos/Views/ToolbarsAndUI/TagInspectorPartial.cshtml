@@ -1,0 +1,17 @@
+﻿@Html.DevExpress().HtmlEditor(settings => {
+    settings.Name = "heTagInspector";
+    settings.CallbackRouteValues = new { Controller = "ToolbarsAndUI", Action = "TagInspectorPartial" };
+    settings.Html = HtmlEditorFeaturesDemosHelper.GeHtmlContentByFileName("Tables.htm");
+    settings.Toolbars.CreateDefaultToolbars();
+
+    settings.Settings.ShowTagInspector = true;
+
+    string htmlContentPath = Server.MapPath("~/Content/HtmlEditor/DemoHtml/Tables.htm");
+    settings.Html = System.IO.File.ReadAllText(htmlContentPath);
+    settings.CssFiles.Add("~/Content/HtmlEditor/DemoCss/Tables.css");
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(480);
+
+    DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+}).GetHtml()

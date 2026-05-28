@@ -1,0 +1,123 @@
+﻿@Html.DevExpress().PivotGrid(
+    settings => {
+        settings.Name = "pivotGrid";
+        settings.CallbackRouteValues = new { Controller = "DataProcessing", Action = "DataBindingToLargeDatabasePartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("OrderID");
+            f.DisplayFolder = "Order";
+            f.Visible = false;
+        });
+        settings.Fields.Add(f => {
+            f.Caption = "Revenue";
+            f.DataBinding = new ExpressionDataBinding("[fieldUnitPrice]*[fieldQuantity]");
+            f.DisplayFolder = "Order";
+            f.CellFormat.FormatType = FormatType.Numeric;
+            f.CellFormat.FormatString = "c";
+            f.Area = PivotArea.DataArea;
+        });
+        settings.Fields.Add(f => {
+            f.ID = "fieldUnitPrice";
+            f.DataBinding = new DataSourceColumnBinding("Quantity");
+            f.DisplayFolder = "Order";
+            f.Area = PivotArea.DataArea;
+        });
+        settings.Fields.Add(f => {
+            f.ID = "fieldQuantity";
+            f.DataBinding = new DataSourceColumnBinding("UnitPrice");
+            f.Caption = "Unit Price";
+            f.DisplayFolder = "Order";
+            f.Area = PivotArea.DataArea;
+        });
+
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("Order.Customer.CustomerName");
+            f.Caption = "Customer";
+            f.DisplayFolder = "Customer";
+            f.Visible = false;
+        });
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("Order.CustomerID");
+            f.Caption = "CustomerID";
+            f.DisplayFolder = "Customer";
+            f.Visible = false;
+        });
+
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("Order.OrderDate");
+            f.Caption = "Order Date";
+            f.DisplayFolder = "Order Date";
+            f.Visible = false;
+        });
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("Order.OrderDate", PivotGroupInterval.DateYear);
+            f.Caption = "Order Year";
+            f.DisplayFolder = "Order Date";
+            f.Area = PivotArea.ColumnArea;
+        });
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("Order.OrderDate", PivotGroupInterval.DateYear);
+            f.Caption = "Order Quarter";
+            f.DisplayFolder = "Order Date";
+            f.Visible = false;
+            f.Area = PivotArea.ColumnArea;
+        });
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("Order.OrderDate", PivotGroupInterval.DateMonth);
+            f.Caption = "Order Month";
+            f.DisplayFolder = "Order Date";
+            f.Visible = false;
+            f.Area = PivotArea.ColumnArea;
+        });
+
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("Product.ProductName");
+            f.Caption = "Product";
+            f.DisplayFolder = "Product";
+            f.Area = PivotArea.RowArea;
+        });
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("ProductID");
+            f.DisplayFolder = "Product";
+            f.Visible = false;
+        });
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("Product.Category.CategoryName");
+            f.Caption = "Category Name";
+            f.DisplayFolder = "Product";
+            f.Area = PivotArea.RowArea;
+            f.AreaIndex = 0;
+        });
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("Product.CategoryID");
+            f.Caption = "CategoryID";
+            f.DisplayFolder = "Product";
+            f.Visible = false;
+        });
+
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("Order.SalesPerson.SalesPersonName");
+            f.Caption = "Sales Person";
+            f.DisplayFolder = "Sales Person";
+            f.Area = PivotArea.FilterArea;
+        });
+        settings.Fields.Add(f => {
+            f.DataBinding = new DataSourceColumnBinding("Order.SalesPersonID");
+            f.Caption = "SalesPersonID";
+            f.DisplayFolder = "Sales Person";
+            f.Visible = false;
+        });
+
+        settings.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.OptionsCustomization.CustomizationFormStyle = CustomizationFormStyle.Excel2007;
+        settings.OptionsPager.RowsPerPage = 15;
+        settings.OptionsPager.ColumnsPerPage = 10;
+
+        settings.ClientSideEvents.Init = "onInit";
+        settings.ClientSideEvents.BeginCallback = "onStartCallback";
+        settings.ClientSideEvents.EndCallback = "onEndCallback";
+    }).BindToEF(typeof(PivotGridDemoModel.PivotGridDemoContext), "Sales", (s, e) => {
+        e.KeyExpression = "SaleID";
+    }).GetHtml()
+    

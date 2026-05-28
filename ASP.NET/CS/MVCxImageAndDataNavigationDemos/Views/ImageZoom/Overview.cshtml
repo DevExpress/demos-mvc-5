@@ -1,0 +1,7 @@
+﻿@Html.DevExpress().ImageZoom(
+settings => {
+    settings.Name = "imageZoom";
+    settings.ImageUrl = Url.Content("~/Content/ImageZoom/overview_151233002.jpg");
+    settings.Width = Unit.Pixel(350);
+    settings.Height = Unit.Pixel(350);
+}).GetHtml()

@@ -1,0 +1,12 @@
+﻿@{
+    var xmlElement = (((NavBarGroup)Model).DataItem as IHierarchyData).Item as System.Xml.XmlElement;   
+}
+
+<div class="content-image">
+    <a href="@Url.Content(xmlElement.Attributes["NavigateUrl"].Value)" target="_blank" class="clickable">
+        <img src="@Url.Content(xmlElement.Attributes["ImageUrl"].Value)" alt="">
+    </a>
+</div>
+<div class="right-content">
+    @Html.Raw(xmlElement.InnerXml)
+</div>

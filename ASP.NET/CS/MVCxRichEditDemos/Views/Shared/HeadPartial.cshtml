@@ -1,0 +1,16 @@
+﻿@Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.RichEdit },
+
+    // Default theme for some demos
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout, Theme = "Default" },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout, Theme = "Metropolis" },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors , Theme = DemoHelper.Instance.Theme }
+) 
+
+@Html.DevExpress().GetScripts( 
+    new Script { ExtensionSuite = ExtensionSuite.Editors }, 
+	new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.RichEdit }
+) 

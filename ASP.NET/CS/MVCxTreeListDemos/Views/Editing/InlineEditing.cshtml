@@ -1,0 +1,14 @@
+﻿@model IEnumerable
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1200); }
+
+<script type="text/javascript">
+    function TreeList_BeginCallback(s, e) {
+        DXDemo.LoadAntiForgeryTokenInputValue(e.customArgs);
+    }
+</script>
+
+@using (Html.BeginForm()){
+    @Html.AntiForgeryToken()
+
+    @Html.Partial("InlineEditingPartial", Model)
+}

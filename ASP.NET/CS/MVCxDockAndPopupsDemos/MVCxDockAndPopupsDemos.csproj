@@ -1,0 +1,469 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="17.0" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D2A8D9FB-7CDA-4007-9503-D822A5EA1CF4}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DevExpress.Web.Demos</RootNamespace>
+    <AssemblyName>MVCxDockAndPopupsDemos</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.CodeParser.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <ProjectReference Include="..\..\..\Components\CS\Web.DemoData\Web.DemoData.csproj">
+      <Project>{B681C0F5-978D-45A0-A3B5-6D3860FD749D}</Project>
+      <Name>Web.DemoData</Name>
+    </ProjectReference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data.Linq">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data.Entity">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Entity">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Abstractions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Routing">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Services">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.EnterpriseServices">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Data.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxThemes.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Web.Mvc5.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Web.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v26.1.Core">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\DemoHtmlHelper.cs" />
+    <Compile Include="Code\Helpers\ClientSideAPIHelper.cs" />
+    <Compile Include="Code\Helpers\ContentUrlHelper.cs" />
+    <Compile Include="Code\Helpers\WidgetsHelper.cs" />
+    <Compile Include="Controllers\DemoController.cs" />
+    <Compile Include="Controllers\DockingController.cs" />
+    <Compile Include="Controllers\Docking\DockingController.Callbacks.cs" />
+    <Compile Include="Controllers\Docking\DockingController.ClientSideAPI.cs" />
+    <Compile Include="Controllers\Docking\DockingController.ClientSideEvents.cs" />
+    <Compile Include="Controllers\Docking\DockingController.ForbiddenZones.cs" />
+    <Compile Include="Controllers\Docking\DockingController.LayoutManagement.cs" />
+    <Compile Include="Controllers\Docking\DockingController.Overview.cs" />
+    <Compile Include="Controllers\Docking\DockingController.Widgets.cs" />
+    <Compile Include="Controllers\FullScreenViewerController.cs" />
+    <Compile Include="Controllers\Hint\HintController.LoadContentOnDemand.cs" />
+    <Compile Include="Controllers\Hint\HintController.ChoosingSeat.cs" />
+    <Compile Include="Controllers\Hint\ColumnsController.TextEllipsis.cs" />
+    <Compile Include="Controllers\Hint\HintController.Overview.cs" />
+    <Compile Include="Controllers\Hint\HintController.Ellipsis.cs" />
+    <Compile Include="Controllers\Hint\HintController.Features.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoadingPanelController.cs" />
+    <Compile Include="Controllers\LoadingPanel\LoadingPanelController.Example.cs" />
+    <Compile Include="Controllers\HintController.cs" />
+    <Compile Include="Controllers\PopupControlController.cs" />
+    <Compile Include="Controllers\PopupControl\PopupControlController.ClientSideAPI.cs" />
+    <Compile Include="Controllers\PopupControl\PopupControlController.ClientSideEvents.cs" />
+    <Compile Include="Controllers\PopupControl\PopupControlController.ContentUrl.cs" />
+    <Compile Include="Controllers\PopupControl\PopupControlController.AdaptiveLayout.cs" />
+    <Compile Include="Controllers\PopupControl\PopupControlController.DataBinding.cs" />
+    <Compile Include="Controllers\PopupControl\PopupControlController.Features.cs" />
+    <Compile Include="Controllers\PopupControl\PopupControlController.ModalMode.cs" />
+    <Compile Include="Controllers\PopupControl\PopupControlController.Overview.cs" />
+    <Compile Include="Controllers\PopupControl\PopupControlController.Templates.cs" />
+    <Compile Include="Controllers\PopupControl\PopupControlController.LoadOnDemand.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FormLayoutResponsiveLayout.cs" />
+    <Compile Include="Models\Mail.cs" />
+    <Compile Include="Models\Options\HintOptions.cs" />
+    <Compile Include="Models\Options\PopupControlOptions.cs" />
+    <Compile Include="Models\Trading.cs" />
+    <Compile Include="Models\WeatherWidget.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\PhotoUtils.cs" />
+    <Content Include="App_Data\Charts.xml" />
+    <Content Include="App_Data\Components.xml" />
+    <Content Include="App_Data\NWind.mdf" />
+    <Content Include="Content\1x1.gif" />
+    <Content Include="Content\CodeFormatter.css" />
+    <Content Include="Content\Components.css" />
+    <Content Include="Content\ComponentsSpriteImage.png" />
+    <Content Include="Content\DemoIcons\Docking.png" />
+    <Content Include="Content\DemoIcons\Popup_Adaptive.png" />
+    <Content Include="Content\DemoIcons\Popup_LoadOnDemand.png" />
+    <Content Include="Content\DemoIcons\Popup_ModalWindow.png" />
+    <Content Include="Content\deviceViewer.css" />
+    <Content Include="Content\Docking\CSS\ClientSideAPI.css" />
+    <Content Include="Content\Docking\CSS\ForbiddenZones.css" />
+    <Content Include="Content\Docking\CSS\ServerSide.css" />
+    <Content Include="Content\Docking\CSS\Widgets.css" />
+    <Content Include="Content\Docking\Images\Callbacks\bgDesignDep.png" />
+    <Content Include="Content\Docking\Images\Callbacks\bgDevelopmentDep.png" />
+    <Content Include="Content\Docking\Images\Callbacks\designers1.png" />
+    <Content Include="Content\Docking\Images\Callbacks\designers2.png" />
+    <Content Include="Content\Docking\Images\Callbacks\developers.png" />
+    <Content Include="Content\Docking\Images\Callbacks\floatMode.png" />
+    <Content Include="Content\Docking\Images\Callbacks\managers.png" />
+    <Content Include="Content\Docking\Images\Callbacks\support.png" />
+    <Content Include="Content\Docking\Images\Charts\2DBubble.png" />
+    <Content Include="Content\Docking\Images\Charts\2DPie.png" />
+    <Content Include="Content\Docking\Images\Charts\3DBubble.png" />
+    <Content Include="Content\Docking\Images\Charts\3DManhattanBar.png" />
+    <Content Include="Content\Docking\Images\ClientSideEvents\Docked.png" />
+    <Content Include="Content\Docking\Images\ClientSideEvents\Float.png" />
+    <Content Include="Content\Docking\Images\ClientSideEvents\Undocked.png" />
+    <Content Include="Content\Docking\Images\ForbiddenZones\AllZonesAllowed.png" />
+    <Content Include="Content\Docking\Images\ForbiddenZones\AllZonesForbidden.png" />
+    <Content Include="Content\Docking\Images\ForbiddenZones\ForbiddenZone12.png" />
+    <Content Include="Content\Docking\Images\ForbiddenZones\ForbiddenZone13.png" />
+    <Content Include="Content\Docking\Images\ForbiddenZones\ForbiddenZone23.png" />
+    <Content Include="Content\Docking\Images\LayoutManagement\n1.png" />
+    <Content Include="Content\Docking\Images\LayoutManagement\n2.png" />
+    <Content Include="Content\Docking\Images\LayoutManagement\n3.png" />
+    <Content Include="Content\Docking\Images\Widgets\calendar.png" />
+    <Content Include="Content\Docking\Images\Widgets\dateTime.png" />
+    <Content Include="Content\Docking\Images\Widgets\default.png" />
+    <Content Include="Content\Docking\Images\Widgets\mail.png" />
+    <Content Include="Content\Docking\Images\Widgets\trading.png" />
+    <Content Include="Content\Docking\Images\Widgets\weather.png" />
+    <Content Include="Content\Docking\Images\Widgets\Weather\cloudiness_hi.png" />
+    <Content Include="Content\Docking\Images\Widgets\Weather\cloudiness_low.png" />
+    <Content Include="Content\Docking\Images\Widgets\Weather\cloudiness_partly.png" />
+    <Content Include="Content\Docking\Images\Widgets\Weather\rain_common.png" />
+    <Content Include="Content\Docking\Images\Widgets\Weather\rain_thunderstorm.png" />
+    <Content Include="Content\FeatureIcons\Ajax.png" />
+    <Content Include="Content\FeatureIcons\Appearance.png" />
+    <Content Include="Content\FeatureIcons\ClientSide.png" />
+    <Content Include="Content\FeatureIcons\CrossBrowser.png" />
+    <Content Include="Content\FeatureIcons\DataBinding.png" />
+    <Content Include="Content\DemoIcons\Hint.png" />
+    <Content Include="Content\FeatureIcons\Native.png" />
+    <Content Include="Content\FeatureIcons\Performance.png" />
+    <Content Include="Content\FeatureIcons\Power.png" />
+    <Content Include="Content\feedback.css" />
+    <Content Include="Content\FeedbackIcons\icon-cancel-hover.svg" />
+    <Content Include="Content\FeedbackIcons\icon-cancel.svg" />
+    <Content Include="Content\FeedbackIcons\icon-chat-hover.svg" />
+    <Content Include="Content\FeedbackIcons\icon-chat.svg" />
+    <Content Include="Content\FeedbackIcons\icon-thumb-down-hover.svg" />
+    <Content Include="Content\FeedbackIcons\icon-thumb-down.svg" />
+    <Content Include="Content\FeedbackIcons\icon-thumb-up-hover.svg" />
+    <Content Include="Content\FeedbackIcons\icon-thumb-up.svg" />
+    <Content Include="Content\IconsDark\angle-down.svg" />
+    <Content Include="Content\IconsDark\angle-right.svg" />
+    <Content Include="Content\IconsDark\arrow-left.svg" />
+    <Content Include="Content\IconsDark\arrow-right.svg" />
+    <Content Include="Content\IconsDark\copy.svg" />
+    <Content Include="Content\IconsDark\drop-down.svg" />
+    <Content Include="Content\IconsDark\font.svg" />
+    <Content Include="Content\IconsDark\phone-selected.svg" />
+    <Content Include="Content\IconsDark\phone.svg" />
+    <Content Include="Content\IconsDark\rotate.svg" />
+    <Content Include="Content\IconsDark\search.svg" />
+    <Content Include="Content\IconsDark\tablet-selected.svg" />
+    <Content Include="Content\IconsDark\tablet.svg" />
+    <Content Include="Content\IconsDark\three-dots.svg" />
+    <Content Include="Content\IconsDark\sprite.svg" />
+    <Content Include="Content\IconsDark\arrowDown.svg" />
+    <Content Include="Content\IconsDark\arrowUp.svg" />
+    <Content Include="Content\IconsDark\scrollLeft.svg" />
+    <Content Include="Content\IconsDark\scrollRight.svg" />
+    <Content Include="Content\arrowDown.svg" />
+    <Content Include="Content\arrowUp.svg" />
+    <Content Include="Content\Hint\ChoosingSeat.css" />
+    <Content Include="Content\Hint\translate.css" />
+    <Content Include="Content\Loading.gif" />
+    <Content Include="Content\Platform.css" />
+    <Content Include="Content\PopupControl\Charts\BarAndLine.jpg" />
+    <Content Include="Content\PopupControl\Charts\BarAndLine.png" />
+    <Content Include="Content\PopupControl\Charts\BarStacked.jpg" />
+    <Content Include="Content\PopupControl\Charts\BarStacked.png" />
+    <Content Include="Content\PopupControl\Charts\Gantt.jpg" />
+    <Content Include="Content\PopupControl\Charts\Gantt.png" />
+    <Content Include="Content\PopupControl\Charts\ManhattanBar.jpg" />
+    <Content Include="Content\PopupControl\Charts\ManhattanBar.png" />
+    <Content Include="Content\PopupControl\Charts\Pie.jpg" />
+    <Content Include="Content\PopupControl\Charts\Pie.png" />
+    <Content Include="Content\PopupControl\ClientSideEvents\Close.gif" />
+    <Content Include="Content\PopupControl\ClientSideEvents\Help.gif" />
+    <Content Include="Content\PopupControl\Colors\BlueColor.gif" />
+    <Content Include="Content\PopupControl\Colors\GrayColor.gif" />
+    <Content Include="Content\PopupControl\Colors\GreenColor.gif" />
+    <Content Include="Content\PopupControl\Colors\PinkColor.gif" />
+    <Content Include="Content\PopupControl\Colors\YellowColor.gif" />
+    <Content Include="Content\PopupControl\ContentUrl\ContentUrlFeedForm.css" />
+    <Content Include="Content\PopupControl\Features\Button.gif" />
+    <Content Include="Content\PopupControl\Features\ButtonPressed.gif" />
+    <Content Include="Content\PopupControl\Features\CountriesArea.png" />
+    <Content Include="Content\PopupControl\ContentUrl\mail32x32.gif" />
+    <Content Include="Content\PopupControl\PopupFooterBackground.gif" />
+    <Content Include="Content\PopupControl\Templates\Close.gif" />
+    <Content Include="Content\PopupControl\Templates\Help.gif" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\sprite.css" />
+    <Content Include="Content\sprite.svg" />
+    <Content Include="Content\sprite.png" />
+    <Content Include="Content\VideoBanner.png" />
+    <Content Include="Content\VideoButton.png" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\Demo.js" />
+    <Content Include="Scripts\Feedback.js" />
+    <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\PopupControl\LoadOnDemand.cshtml" />
+    <Content Include="Views\PopupControl\LoadOnDemandPartial.cshtml" />
+    <Content Include="Views\LoadingPanel\Example.cshtml" />
+    <Content Include="Views\LoadingPanel\ExamplePartial.cshtml" />
+    <Content Include="Views\Docking\CalendarWidgetPartial.cshtml" />
+    <Content Include="Views\Docking\Callbacks.cshtml" />
+    <Content Include="Views\Docking\CallbacksPartial.cshtml" />
+    <Content Include="Views\Docking\ClientSideAPI.cshtml" />
+    <Content Include="Views\Docking\ClientSideEvents.cshtml" />
+    <Content Include="Views\Docking\DateTimeWidgetPartial.cshtml" />
+    <Content Include="Views\Docking\DesignDepartmentEmployeesPartial.cshtml" />
+    <Content Include="Views\Docking\DevelopmentDepartmentEmployeesPartial.cshtml" />
+    <Content Include="Views\Docking\EditLayout.cshtml" />
+    <Content Include="Views\Docking\FloatModeContentPartial.cshtml" />
+    <Content Include="Views\Docking\ForbiddenZones.cshtml" />
+    <Content Include="Views\Docking\LayoutManagement.cshtml" />
+    <Content Include="Views\Docking\MailWidgetPartial.cshtml" />
+    <Content Include="Views\Docking\TradingWidgetPartial.cshtml" />
+    <Content Include="Views\Docking\WeatherWidgetPartial.cshtml" />
+    <Content Include="Views\Docking\Widgets.cshtml" />
+    <Content Include="Views\Docking\EditLayoutPartial.cshtml" />
+    <Content Include="Views\Shared\SearchPartial.cshtml" />
+    <Content Include="Views\Shared\DemoTabsPartial.cshtml" />
+    <Content Include="Views\Shared\SearchListPartial.cshtml" />
+    <Content Include="Views\PopupControl\ContentUrl.cshtml" />
+    <Content Include="Views\PopupControl\ContentUrlFeedForm.cshtml" />
+    <Content Include="Views\PopupControl\ContentUrlFeedFormPartial.cshtml" />
+    <Content Include="Views\PopupControl\ContentUrlFeedFormSuccessPartial.cshtml" />
+    <Content Include="Views\Docking\Overview.cshtml" />
+    <Content Include="Views\PopupControl\Overview.cshtml" />
+    <Content Include="Views\Shared\ErrorMessage.cshtml" />
+    <Content Include="Content\Fonts\OpenSans-CondBold.woff" />
+    <Content Include="Content\Fonts\overpass-semibold.woff" />
+    <Content Include="Content\Site.scss" />
+    <Content Include="Views\PopupControl\AdaptiveLayout.cshtml" />
+    <Content Include="Views\PopupControl\AdaptiveLayoutPage.cshtml" />
+    <Content Include="Views\Shared\DeviceViewer.cshtml" />
+    <Content Include="Views\Shared\FeedbackPanel.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\NavigationPartial.cshtml" />
+    <Content Include="Views\Shared\ThemeSelectorPartial.cshtml" />
+    <Content Include="Views\Shared\FooterTextPartial.cshtml" />
+    <Content Include="Views\Shared\HeadPartial.cshtml" />
+    <Content Include="Views\Shared\EventMonitor.cshtml" />
+    <Content Include="Views\PopupControl\ClientSideAPI.cshtml" />
+    <Content Include="Views\PopupControl\ClientSideEvents.cshtml" />
+    <Content Include="Views\PopupControl\DataBinding.cshtml" />
+    <Content Include="Views\PopupControl\Features.cshtml" />
+    <Content Include="Views\PopupControl\ModalMode.cshtml" />
+    <Content Include="Views\PopupControl\Templates.cshtml" />
+    <Content Include="Content\Fonts\CustomFont0.woff" />
+    <Content Include="Content\Fonts\CustomFont1.woff" />
+    <Content Include="Content\Fonts\CustomFont2.woff" />
+    <Content Include="Views\Shared\ThemeParametersSelectorPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Hint\Ellipsis.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Hint\Features.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Hint\LoadContentOnDemand.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Hint\ChoosingSeat.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Hint\ChoosingSeatPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Hint\Overview.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Hint\EllipsisPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Hint\LoadContentOnDemandPartial.cshtml" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>52198</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Mvc" />
+    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" />
+    <PackageReference Include="System.Text.Json" />
+    <PackageReference Include="EntityFramework" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="System.Security.AccessControl" />
+  </ItemGroup>
+</Project>

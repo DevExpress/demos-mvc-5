@@ -1,0 +1,14 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "ImagesPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 600;
+        settings.ActiveTabIndex = 1;
+        settings.ShowConfirmOnLosingChanges = false;
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideFileTab(spreadsheet);
+            SpreadsheetImagesDemoHelper.AddImagesToWorksheet(spreadsheet.Document.Worksheets.ActiveWorksheet);
+        };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "AddressBook.xlsx")).GetHtml()

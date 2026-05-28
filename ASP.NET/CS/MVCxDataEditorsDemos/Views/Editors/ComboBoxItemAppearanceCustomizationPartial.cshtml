@@ -1,0 +1,29 @@
+﻿@Html.DevExpress().ComboBox(settings => {
+    settings.Name = "customersComboBox";
+	settings.Width = Unit.Pixel(285);
+    settings.CallbackRouteValues = new { Controller = "Editors", Action = "ComboBoxItemAppearanceCustomizationPartial" };
+    settings.Properties.CallbackPageSize = 30;
+    settings.Properties.ValueField = "CustomerID";
+    settings.Properties.TextFormatString = "{0}";
+    settings.SelectedIndex = 0;
+    settings.ItemTextCellPrepared += (s, e) => {
+        if(e.Column.FieldName == "ContactName") {
+            string contactTitle = e.Item.GetFieldValue("ContactTitle").ToString();
+            if(contactTitle == "Owner") {
+                e.TextCell.CssClass += " owner";
+                e.TextCell.ToolTip = "Owner";
+            }
+        }
+        if(e.Column.FieldName == "Phone")
+            e.TextCell.CssClass += " phone";
+    };
+    settings.ItemRowPrepared += (s, e) => {
+        ListEditItem item = e.Item;
+        e.Row.ToolTip = string.Format("Country: {0}\r\nCity: {1} \r\nAddress: {2}",
+            item.GetFieldValue("Country"), item.GetFieldValue("City"), item.GetFieldValue("Address"));
+    };
+    settings.Properties.Columns.Add("ContactName", "Contact Name", Unit.Pixel(160));
+    settings.Properties.Columns.Add("CompanyName", "Company Name", Unit.Pixel(220));
+    settings.Properties.Columns.Add("Phone");
+}).BindList(Model).GetHtml()
+

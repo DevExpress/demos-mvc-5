@@ -1,0 +1,7 @@
+﻿<div style="padding-bottom: 30px;">
+    @Html.DevExpress().Ribbon(settings => {
+        settings.Name = "ExternalRibbon";
+        settings.ShowFileTab = false;
+        settings.Tabs.Add(RibbonCustomizationDemoHelper.GetCustomRibbonTab(true));
+    }).GetHtml()
+</div>

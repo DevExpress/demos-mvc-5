@@ -1,0 +1,12 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            <label>Click the <b>Open</b> button in the <b>Common</b> group within the <b>File</b> tab to open the document browser.</label>
+        </div>
+    </div>
+}
+@using(Html.BeginForm()) {
+    @Html.Partial("LoadAndSavePartial")
+}

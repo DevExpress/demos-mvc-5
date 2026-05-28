@@ -1,0 +1,33 @@
+﻿@Html.DevExpress().ImageGallery(settings => {
+    settings.Name = "imageGallery";
+    settings.CallbackRouteValues = new { Controller = "ImageGallery", Action = "TemplatesPartial" };
+    settings.ImageUrlField = "LargePhotoUrl";
+    settings.ThumbnailUrlField = "PhotoUrl";
+    settings.TextField = "Name";
+    settings.Theme = "Metropolis";
+    settings.ControlStyle.CssClass = "customGallery";
+
+    settings.PagerSettings.EndlessPagingMode = DataViewEndlessPagingMode.OnClick;
+    settings.SettingsTableLayout.RowsPerPage = 2;
+    settings.SettingsFullscreenViewer.NavigationBarVisibility = ElementVisibilityMode.None;
+    settings.SettingsFullscreenViewer.ShowPlayPauseButton = false;
+
+    settings.SetItemTextTemplateContent(c => {
+        ViewContext.Writer.Write(
+            "<div class=\"item\">" +
+                "<div class=\"item_text\"><a onclick=\"javascript:ShowViewer(" + c.ItemIndex + ");\" " +
+                    "href=\"#dxig" + c.ItemIndex + "\" title=\"Show Details...\">" + c.EvalDataItem("Name") + "</a></div>" +
+                "<div class=\"item_email\">" + c.EvalDataItem("Email") + "</div>" +
+            "</div>"
+        );
+    });
+    settings.SetFullscreenViewerItemTextTemplateContent(c => {
+        ViewContext.Writer.Write(
+            "<div class=\"details\">" +
+                "<div class=\"details_header\">" + c.EvalDataItem("Name") + "</div>" +
+                "<div class=\"details_text\">" + c.EvalDataItem("Email") + "</div>" +
+                "<div class=\"details_text\">" + c.EvalDataItem("Phone") + "</div>" +
+            "</div>"
+        );
+    });
+}).BindToXML(Server.MapPath("~/App_Data/Contacts.xml"), "//Contact").GetHtml()

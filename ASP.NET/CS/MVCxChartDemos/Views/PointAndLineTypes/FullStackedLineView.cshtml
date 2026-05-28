@@ -1,0 +1,114 @@
+﻿@model ChartLineFullStckedDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(340);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartLineFullStckedDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.Border.Visibility = DefaultBoolean.False;
+        l.HorizontalIndent = 12;
+    });
+
+    settings.Series.Template(t => {
+        t.ArgumentDataMember = "Year";
+        t.ValueDataMembers[0] = "Sales";
+        t.CrosshairLabelPattern = "{S}: {V}";
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        t.Views().FullStackedLineSeriesView(v => {
+            v.PointMarkerOptions.Size = options.MarkerSize;
+            v.PointMarkerOptions.Kind = options.MarkerKind;
+            if (v.PointMarkerOptions.Kind == MarkerKind.Star)
+                v.PointMarkerOptions.StarPointCount = options.StarPointCount;
+            v.SeriesLabel(l => {
+                l.TextPattern = options.ValueAsPercent ? "{VP:P0}" : "{V}";
+                l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+            });
+        });
+    });
+
+    settings.XYDiagram(d => {
+        d.AxisY.Interlaced = true;
+        d.AxisY.WholeRange.Auto = false;
+        d.AxisY.WholeRange.MaxValue = 1.1;
+        d.AxisY.WholeRange.MinValue = 0;
+        d.AxisY.WholeRange.AutoSideMargins = false;
+        d.AxisY.Label.TextPattern = "{V:P0}";
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Market Share Over Time"
+    });
+}).Bind(Model.Data, "Company").GetHtml()
+
+<script type="text/javascript">
+    function UpdateLabelOptionState() {
+        ValueAsPercent.SetEnabled(ShowLabels.GetChecked());
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.MarkerSize, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerSizes());
+                });
+            });
+            group.Items.Add(model => model.MarkerKindString, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerKinds());
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateLabelOptionState(); }";
+                });
+            });
+            group.Items.Add(model => model.ValueAsPercent, item => {
+                item.NestedExtension().CheckBox(checkBox => { checkBox.ClientEnabled = Model.ShowLabels; });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 320,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

@@ -1,0 +1,33 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+<script type="text/javascript">
+    var filePath = null;
+    function OnSelectedFileChanged(s, e) {
+        if(e.file) {
+            filePath = s.GetCurrentFolderPath() + "\\" + e.file.name;
+            if(!RichEdit.InCallback())
+                RichEdit.PerformCallback({ "filePath": filePath });
+        }
+    }
+    function OnRichEditBeginCallback(s, e) {
+        e.customArgs["filePath"] = filePath;
+        filePath = null;
+    }
+    function OnRichEditEndCallback(s, e) {
+        if(filePath != null)
+            RichEdit.PerformCallback();
+    }
+</script>
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            <label>Navigate through folders and select a document to open with the RichEdit.</label>
+        </div>
+    </div>
+}
+@using(Html.BeginForm()) {
+    @Html.Partial("CustomDocumentManagementFileManagerPartial")
+    <br />
+    @Html.Partial("CustomDocumentManagementPartial")
+}

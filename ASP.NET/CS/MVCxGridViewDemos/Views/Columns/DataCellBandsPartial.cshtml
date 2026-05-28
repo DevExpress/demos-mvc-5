@@ -1,0 +1,34 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "Columns", Action = "DataCellBandsPartial"  };
+
+    settings.Width = Unit.Percentage(100);
+    settings.SettingsBehavior.ColumnMoveMode = ViewBag.ColumnMoveMode;
+    settings.SettingsPager.PageSize = 3;
+    settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+
+    settings.Columns.Add(photo => {
+        photo.FieldName = "PhotoUrl";
+        photo.Caption = "Photo";
+        photo.EditorProperties().Image(i => i.ImageWidth = 220);
+    });
+    settings.Columns.Add(address => {
+        address.FieldName = "Address";
+        address.CellStyle.CssClass = "address-cell";
+        address.Columns.Add(features => {
+            features.FieldName = "Features";
+            features.Columns.Add("Beds");
+            features.Columns.Add("Baths");
+            features.Columns.Add("HouseSize");
+            features.Columns.Add("YearBuilt").CellStyle.HorizontalAlign = HorizontalAlign.Right;
+        });
+        address.Columns.Add(price => {
+            price.FieldName = "Price";
+            price.PropertiesEdit.DisplayFormatString = "c0";
+            price.CellStyle.CssClass = "price-cell";
+        });
+    });
+    settings.ClientSideEvents.BeginCallback = "OnBeginGridCallback";
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

@@ -1,0 +1,113 @@
+﻿@model ImageSliderSlideShowDemoOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(850);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(400);
+}
+
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/ImageSlider/SlideShow.css")" />
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().ImageSlider(settings => {
+    settings.Name = "imageSlider";
+    settings.EnableTheming = false;
+    settings.Width = Unit.Pixel(800);
+    settings.Height = Unit.Pixel(313);
+    settings.NavigateUrlFormatString = "javascript:void({0});";
+
+    settings.SettingsImageArea.ImageSizeMode = ImageSizeMode.ActualSizeOrFit;
+    settings.SettingsImageArea.NavigationButtonVisibility = ElementVisibilityMode.None;
+    settings.SettingsImageArea.ItemTextVisibility = ElementVisibilityMode.Always;
+    settings.SettingsImageArea.EnableLoopNavigation = true;
+    settings.SettingsNavigationBar.Mode = NavigationBarMode.Dots;
+
+    settings.SettingsSlideShow.AutoPlay = Model.AutoPlay;
+    settings.SettingsSlideShow.Interval = Model.Interval;
+    settings.SettingsSlideShow.PausePlayingWhenMouseOver = Model.PausePlayingWhenMouseOver;
+    settings.SettingsSlideShow.PlayPauseButtonVisibility = Model.PlayPauseButtonVisibility;
+    settings.SettingsSlideShow.StopPlayingWhenPaging = Model.StopPlayingWhenPaging;
+
+    settings.Items.Add(item => {
+        item.ImageUrl = Url.Content("~/Content/Images/widescreen/woman-using-laptop.jpg");
+        item.NavigateUrl = "1";
+        item.SetTextTemplateContent(
+            "<h3 class='isdemoH3'>Smile</h3>" +
+            "<p>It takes 17 muscles to smile and 43 to frown. <a tabindex=\"-1\" href='javascript:void(1);'>Details »</a></p>"
+        );
+    });
+    settings.Items.Add(item => {
+        item.ImageUrl = Url.Content("~/Content/Images/widescreen/swimmer-underwater.jpg");
+        item.NavigateUrl = "2";
+        item.SetTextTemplateContent(
+            "<h3 class='isdemoH3'>Dolphins</h3>" +
+            "<p>Dolphins sleep with one eye open. <a tabindex=\"-1\" href='javascript:void(2);'>Details »</a></p>"
+        );
+    });
+    settings.Items.Add(item => {
+        item.ImageUrl = Url.Content("~/Content/Images/widescreen/typing-male-hands.jpg");
+        item.NavigateUrl = "3";
+        item.SetTextTemplateContent(
+            "<h3 class='isdemoH3'>Paper</h3>" +
+            "<p>No piece of paper can be folded in half more than eight times. <a tabindex=\"-1\" href='javascript:void(3);'>Details »</a></p>"
+        );
+    });
+    settings.Items.Add(item => {
+        item.ImageUrl = Url.Content("~/Content/Images/widescreen/man-climbing-on-limestone-wall.jpg");
+        item.NavigateUrl = "4";
+        item.SetTextTemplateContent(
+            "<h3 class='isdemoH3'>Walking</h3>" +
+            "<p>In the average lifetime a person will walk the equivalent of five times around the equator. <a tabindex=\"-1\" href='javascript:void(4);'>Details »</a></p>"
+        );
+    });
+    settings.Items.Add(item => {
+        item.ImageUrl = Url.Content("~/Content/Images/widescreen/woman-using-notebook.jpg");
+        item.NavigateUrl = "5";
+        item.SetTextTemplateContent(
+            "<h3 class='isdemoH3'>Calories</h3>" +
+            "<p>You burn more calories sleeping than you do watching TV. <a tabindex=\"-1\" href='javascript:void(5);'>Details »</a></p>"
+        );
+    });
+}).GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+    settings.Name = "FormLayoutSettings";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Slide Show Settings";
+        g.Items.Add(m => m.AutoPlay);
+        g.Items.Add(m => m.Interval, i => {
+            i.Caption = "Interval (ms):";
+            i.NestedExtension().ComboBox(cb => {
+                cb.Properties.DataSource = ImageSliderDemoHelper.GetSlideShowIntervals();
+            });
+        });
+        g.Items.Add(m => m.StopPlayingWhenPaging);
+        g.Items.Add(m => m.PlayPauseButtonVisibility);
+        g.Items.Add(m => m.PausePlayingWhenMouseOver);
+    });
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 380,
+        ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+    });
+}).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

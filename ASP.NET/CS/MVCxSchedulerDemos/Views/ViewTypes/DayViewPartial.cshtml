@@ -1,0 +1,44 @@
+﻿@model SchedulerDayViewDemoOptions
+
+@Html.DevExpress().Scheduler(
+    settings => {
+        settings.Name = "scheduler";
+        settings.CallbackRouteValues = new { Controller = "ViewTypes", Action = "DayViewPartial" };
+        settings.ActiveViewType = SchedulerViewType.Day;
+        settings.GroupType = SchedulerGroupType.Resource;
+        settings.Start = new DateTime(2016, 10, 10);
+
+        settings.Views.DayView.Enabled = true;
+        settings.Views.WorkWeekView.Enabled = false;
+        settings.Views.WeekView.Enabled = false;
+        settings.Views.MonthView.Enabled = false;
+        settings.Views.TimelineView.Enabled = false;
+        settings.Views.AgendaView.Enabled = false;
+
+        SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.DayView);
+
+        settings.Views.DayView.ResourcesPerPage = 2;
+        settings.Views.DayView.ShowAllDayArea = Model.ShowAllDayArea;
+        settings.Views.DayView.ShowDayHeaders = Model.ShowDayHeaders;
+        settings.Views.DayView.ShowWorkTimeOnly = Model.ShowWorkTimeOnly;
+        settings.Views.DayView.DayCount = Model.DayCount;
+
+        settings.Views.DayView.AppointmentDisplayOptions.SnapToCellsMode = Model.SnapToCellsMode;
+        settings.Views.DayView.AppointmentDisplayOptions.StartTimeVisibility = Model.StartTimeVisibility;
+        settings.Views.DayView.AppointmentDisplayOptions.EndTimeVisibility = Model.EndTimeVisibility;
+        settings.Views.DayView.AppointmentDisplayOptions.ShowRecurrence = Model.ShowRecurrence;
+
+        settings.OptionsView.AppointmentSelectionAppearanceMode = Model.AppointmentSelectionAppearanceMode;
+        settings.OptionsBehavior.ShowViewNavigator = Model.ShowViewNavigator;
+        settings.OptionsBehavior.ShowViewVisibleInterval = Model.ShowViewVisibleInterval;
+        settings.OptionsBehavior.HighlightSelectionHeaders = Model.HighlightSelectionHeaders;
+
+        settings.Storage.EnableReminders = false;
+        settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+        settings.Storage.Appointments.Assign(SchedulerDemoHelper.DefaultAppointmentStorage);
+        settings.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.None;
+        settings.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.None;
+        settings.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.None;
+        settings.OptionsToolTips.ShowSelectionToolTip = false;
+
+    }).Bind(Model.Appointments, Model.Resources).GetHtml()

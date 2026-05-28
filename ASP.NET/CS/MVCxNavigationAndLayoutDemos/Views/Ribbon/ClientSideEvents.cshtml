@@ -1,0 +1,199 @@
+﻿@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);}
+
+@functions {
+    T CreateButtonItem<T>(string name, string text, string iconID) where T: RibbonButtonItem {
+        return CreateButtonItem<T>(name, text, RibbonItemSize.Small, iconID);
+    }
+    T CreateButtonItem<T>(string name, string text, RibbonItemSize size, string iconID) where T: RibbonButtonItem {
+        var item = Activator.CreateInstance<T>();
+        item.Name = name;
+        item.Text = text;
+        item.Size = size;
+        if(size == RibbonItemSize.Large)
+            item.LargeImage.IconID = iconID;
+        else
+            item.SmallImage.IconID = iconID;
+        return item;
+    }
+    
+    RibbonGalleryItem CreateGalleryItem(string text, string iconID) {
+        var galleryItem = new RibbonGalleryItem {
+            Text = text,
+            Value = text,
+            ToolTip = text
+        };
+        galleryItem.Image.IconID = iconID;
+        return galleryItem;
+    }
+}
+
+@Html.DevExpress().Ribbon(
+settings => {
+    settings.Name = "Ribbon";
+    settings.ClientSideEvents.ActiveTabChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'ActiveTabChanged') }";
+    settings.ClientSideEvents.FileTabClicked = "function(s, e) { DXEventMonitor.Trace(s, e, 'FileTabClicked') }";
+    settings.ClientSideEvents.CommandExecuted = "function(s, e) { DXEventMonitor.Trace(s, e, 'CommandExecuted') }";
+    settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init') }";
+    settings.ClientSideEvents.MinimizationStateChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'MinimizationStateChanged') }";
+    settings.ClientSideEvents.DialogBoxLauncherClicked = "function(s, e) { DXEventMonitor.Trace(s, e, 'DialogBoxLauncherClicked') }";
+
+    var typesItem = settings.Tabs.Add("Item Types");
+
+    var buttonsGroup = typesItem.Groups.Add("Buttons");
+    buttonsGroup.Name = "Buttons";
+    buttonsGroup.ShowDialogBoxLauncher = true;
+    buttonsGroup.Image.IconID = IconID.ActionsOpen32x32;
+    buttonsGroup.Items.Add(CreateButtonItem<RibbonButtonItem>("Cut", "Cut", IconID.EditCut16x16));
+    buttonsGroup.Items.Add(CreateButtonItem<RibbonButtonItem>("Copy", "Copy", IconID.EditCopy16x16));
+    buttonsGroup.Items.Add(CreateButtonItem<RibbonButtonItem>("Paste", "Paste", "edit_paste_16x16"));
+
+    var dropDownButtonItem = CreateButtonItem<RibbonDropDownButtonItem>("DropDownButton", "DropDown Button", RibbonItemSize.Large, IconID.ActionsOpen32x32);
+    dropDownButtonItem.ItemStyle.Width = Unit.Pixel(65);
+    dropDownButtonItem.Items.Add(
+        CreateButtonItem<RibbonDropDownButtonItem>("Pdf", "Pdf", IconID.ExportExporttopdf16x16),
+        CreateButtonItem<RibbonDropDownButtonItem>("Txt", "Txt", IconID.ExportExporttotxt16x16),
+        CreateButtonItem<RibbonDropDownButtonItem>("Xml", "Xml", IconID.ExportExporttoxml16x16)
+    );
+    buttonsGroup.Items.Add(dropDownButtonItem);
+
+    var editorsGroup = typesItem.Groups.Add("Editor Items");
+    editorsGroup.Name = "EditorItems";
+    editorsGroup.ShowDialogBoxLauncher = true;
+    editorsGroup.Image.IconID = IconID.FilterelementsRadiobuttons32x32;
+    var editorItemsItem = (RibbonComboBoxItem)editorsGroup.Items.Add(MVCxRibbonItemType.ComboBoxItem);
+    editorItemsItem.PropertiesComboBox.Width = Unit.Pixel(100);
+    editorItemsItem.PropertiesComboBox.NullText = "ComboBox";
+    editorItemsItem.Items.Add("Name");
+    editorItemsItem.Items.Add("Last Name");
+    editorItemsItem.Items.Add("City");
+
+    var spinEditItem = (RibbonSpinEditItem)editorsGroup.Items.Add(MVCxRibbonItemType.SpinEditItem);
+    spinEditItem.PropertiesSpinEdit.Width = Unit.Pixel(100);
+    spinEditItem.PropertiesSpinEdit.NullText = "SpinEdit";
+
+    var dateEditItem = (RibbonDateEditItem)editorsGroup.Items.Add(MVCxRibbonItemType.DateEditItem);
+    dateEditItem.PropertiesDateEdit.Width = Unit.Pixel(100);
+    dateEditItem.PropertiesDateEdit.NullText = "DateEdit";
+
+    var textBoxItem = (RibbonTextBoxItem)editorsGroup.Items.Add(MVCxRibbonItemType.TextBoxItem);
+    textBoxItem.PropertiesTextBox.Width = Unit.Pixel(100);
+    textBoxItem.PropertiesTextBox.NullText = "TextBox";
+
+    var toogleOptionsGroup = typesItem.Groups.Add("Toggle & Options");
+    toogleOptionsGroup.Name = "Toggle & Options";
+    toogleOptionsGroup.ShowDialogBoxLauncher = true;
+    toogleOptionsGroup.Image.IconID = IconID.ProgrammingBugreport32x32;
+    var option1Item = (RibbonOptionButtonItem)toogleOptionsGroup.Items.Add(MVCxRibbonItemType.OptionButtonItem, "Option1", "Option 1");
+    option1Item.OptionGroupName = "Group1";
+    option1Item.SmallImage.IconID = IconID.AlignmentAlignverticalleft216x16;
+
+    var option2Item = (RibbonOptionButtonItem)toogleOptionsGroup.Items.Add(MVCxRibbonItemType.OptionButtonItem, "Option2", "Option 2");
+    option2Item.OptionGroupName = "Group1";
+    option2Item.SmallImage.IconID = IconID.AlignmentAlignhorizontalcenter216x16;
+
+    var option3Item = (RibbonOptionButtonItem)toogleOptionsGroup.Items.Add(MVCxRibbonItemType.OptionButtonItem, "Option3", "Option 3");
+    option3Item.OptionGroupName = "Group1";
+    option3Item.SmallImage.IconID = IconID.AlignmentAlignhorizontalbottom216x16;
+
+    toogleOptionsGroup.Items.Add(CreateButtonItem<RibbonToggleButtonItem>("ToggleButton", "Toggle Button", RibbonItemSize.Large, IconID.ProgrammingBugreport32x32));
+
+    var dropDownToggleButtonsItem = CreateButtonItem<RibbonDropDownButtonItem>("", "DropDown Toggle Buttons", RibbonItemSize.Large, IconID.SetupProperties32x32);
+    dropDownToggleButtonsItem.DropDownMode = false;
+    dropDownToggleButtonsItem.Items.Add(CreateButtonItem<RibbonDropDownToggleButtonItem>("DropDownToggleButton1", "Drop Down Toggle Button 1", ""));
+    dropDownToggleButtonsItem.Items.Add(CreateButtonItem<RibbonDropDownToggleButtonItem>("DropDownToggleButton2", "Drop Down Toggle Button 2", "content_checkbox_16x16"));
+    toogleOptionsGroup.Items.Add(dropDownToggleButtonsItem);
+
+    var colorGroup = typesItem.Groups.Add("Color");
+    colorGroup.Name = "Color";
+    colorGroup.ShowDialogBoxLauncher = true;
+    var colorItem = (RibbonColorButtonItem)colorGroup.Items.Add(MVCxRibbonItemType.ColorButtonItem, "ColorButton", "Color");
+    colorItem.Color = Color.Red;
+    colorItem.Size = RibbonItemSize.Large;
+    colorItem.LargeImage.IconID = IconID.FormatChangefontstyle32x32;
+
+    var miscTab = settings.Tabs.Add("Misc");
+    var findGroup = miscTab.Groups.Add("Find");
+    findGroup.Name = "Find";
+    findGroup.ShowDialogBoxLauncher = true;
+    findGroup.Image.IconID = IconID.FindFind32x32;
+    findGroup.Items.Add(
+            CreateButtonItem<RibbonButtonItem>("Find", "Find", RibbonItemSize.Large, IconID.FindFind32x32),
+            CreateButtonItem<RibbonButtonItem>("By ID", null, RibbonItemSize.Small, IconID.FindFindbyid16x16)
+        );
+
+    var exportGroup = miscTab.Groups.Add("Export");
+    exportGroup.Name = "Export";
+    exportGroup.ShowDialogBoxLauncher = true;
+    var exportItem = (RibbonDropDownButtonItem)exportGroup.Items.Add(MVCxRibbonItemType.DropDownButtonItem, "Export", "Export");
+    exportItem.Size = RibbonItemSize.Large;
+    exportItem.LargeImage.IconID = IconID.ExportExport32x32;
+    exportItem.Items.Add(
+        CreateButtonItem<RibbonDropDownButtonItem>("DOC", "DOC", IconID.ExportExporttodoc16x16),
+        CreateButtonItem<RibbonDropDownButtonItem>("PDF", "PDF", IconID.ExportExporttopdf16x16),
+        CreateButtonItem<RibbonDropDownButtonItem>("TXT", "TXT", IconID.ExportExporttotxt16x16)
+    );
+
+    var galleryDropDownGroup = miscTab.Groups.Add("Gallery");
+    galleryDropDownGroup.Name = "Gallery";
+    galleryDropDownGroup.ShowDialogBoxLauncher = true;
+    var galleryDropDown = (RibbonGalleryDropDownItem)galleryDropDownGroup.Items.Add(MVCxRibbonItemType.GalleryDropDownItem, "Gallery", "Arrange");
+    galleryDropDown.Size = RibbonItemSize.Large;
+    galleryDropDown.LargeImage.IconID = IconID.ArrangeMorelayoutoptions32x32;
+    galleryDropDown.PropertiesDropDownGallery.ShowGroupText = false;
+    galleryDropDown.PropertiesDropDownGallery.ShowText = true;
+    galleryDropDown.PropertiesDropDownGallery.ColumnCount = 3;
+    galleryDropDown.PropertiesDropDownGallery.RowCount = 2;
+    galleryDropDown.PropertiesDropDownGallery.ImagePosition = ImagePosition.Top;
+    var galleryGroup = new RibbonGalleryGroup();
+    galleryGroup.Items.Add(
+        CreateGalleryItem("Bottom left", IconID.ArrangeWithtextwrappingBottomleft32x32),
+        CreateGalleryItem("Bottom right", IconID.ArrangeWithtextwrappingBottomright32x32),
+        CreateGalleryItem("Center", IconID.ArrangeWithtextwrappingCentercenter32x32),
+        CreateGalleryItem("Center left", IconID.ArrangeWithtextwrappingCenterleft32x32),
+        CreateGalleryItem("Center right", IconID.ArrangeWithtextwrappingCenterright32x32),
+        CreateGalleryItem("Top center", IconID.ArrangeWithtextwrappingTopcenter32x32),
+        CreateGalleryItem("Top left", IconID.ArrangeWithtextwrappingTopleft32x32),
+        CreateGalleryItem("Top right", IconID.ArrangeWithtextwrappingTopright32x32)
+        );
+    galleryDropDown.Groups.Add(galleryGroup);
+
+    var galleryBarGroup = miscTab.Groups.Add("Gallery Bar");
+    galleryBarGroup.Name = "Gallery Bar";
+    galleryBarGroup.ShowDialogBoxLauncher = true;
+    galleryBarGroup.Image.IconID = IconID.GaugesGaugestylehalfcircular32x32;
+    var galleryBar = (RibbonGalleryBarItem)galleryBarGroup.Items.Add(MVCxRibbonItemType.GalleryBarItem, "Gallery Bar");
+    galleryBar.ShowText = false;
+    galleryBar.MaxColumnCount = 4;
+    galleryBar.Name = "IconsGallery";
+    galleryBar.PropertiesDropDownGallery.RowCount = 2;
+    galleryGroup = new RibbonGalleryGroup("Arrows");
+    galleryGroup.Items.Add(
+        CreateGalleryItem("DoubleFirst", IconID.ArrowsDoublefirst32x32),
+        CreateGalleryItem("DoubleLast", IconID.ArrowsDoublelast32x32),
+        CreateGalleryItem("DoubleNext", IconID.ArrowsDoublenext32x32),
+        CreateGalleryItem("Download", IconID.ActionsDownload32x32)
+        );
+    galleryBar.Groups.Add(galleryGroup);
+    galleryGroup = new RibbonGalleryGroup("Edit");
+    galleryGroup.Items.Add(
+        CreateGalleryItem("EditCopy", IconID.EditCopy32x32),
+        CreateGalleryItem("EditCustomization", IconID.EditCustomization32x32),
+        CreateGalleryItem("EditCut", IconID.EditCut32x32),
+        CreateGalleryItem("EditDelete", IconID.EditDelete32x32)
+        );
+    galleryBar.Groups.Add(galleryGroup);
+    galleryGroup = new RibbonGalleryGroup("Gauges");
+    galleryGroup.Items.Add(
+        CreateGalleryItem("GaugesGaugestylefullcircular", IconID.GaugesGaugestylefullcircular32x32),
+        CreateGalleryItem("GaugesGaugestylehalfcircular", IconID.GaugesGaugestylehalfcircular32x32),
+        CreateGalleryItem("GaugesGaugestyleleftquartercircular", IconID.GaugesGaugestyleleftquartercircular32x32),
+        CreateGalleryItem("GaugesGaugestylelinearhorizontal", IconID.GaugesGaugestylelinearhorizontal32x32),
+        CreateGalleryItem("GaugesGaugestylelinearvertical", IconID.GaugesGaugestylelinearvertical32x32),
+        CreateGalleryItem("GaugesGaugestylerightquartercircular", IconID.GaugesGaugestylerightquartercircular32x32)
+        );
+    galleryBar.Groups.Add(galleryGroup);
+
+}).GetHtml()
+
+<br />
+@Html.Partial("EventMonitor")

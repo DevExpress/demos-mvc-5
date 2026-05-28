@@ -1,0 +1,42 @@
+﻿@Html.DevExpress().CardView(settings => {
+    settings.Name = "CardView";
+    settings.CallbackRouteValues = new { Controller = "Accessibility", Action = "CompliancePartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.AccessibilityCompliant = true;
+    
+    settings.KeyFieldName = "EmployeeID";
+    settings.Settings.ShowHeaderPanel = true;
+    settings.SettingsBehavior.AllowSelectByCardClick = true;
+    settings.SettingsPager.SettingsTableLayout.ColumnCount = 2;
+    settings.SettingsPager.SettingsTableLayout.RowsPerPage = 2;
+    settings.SettingsPager.EnableAdaptivity = true;
+
+    settings.Columns.Add(c => {
+        c.FieldName = "Photo";
+        c.ColumnType = MVCxCardViewColumnType.BinaryImage;
+        var imageProperties = (BinaryImageEditProperties)c.PropertiesEdit;
+        imageProperties.ImageWidth = imageProperties.ImageHeight = Unit.Pixel(150);
+    });
+    settings.Columns.Add("FirstName");
+    settings.Columns.Add("LastName");
+    settings.Columns.Add("Title");
+
+    settings.CardLayoutProperties.ColumnCount = 2;
+    settings.CardLayoutProperties.Items.Add("Photo").ShowCaption = DefaultBoolean.False;
+    settings.CardLayoutProperties.Items.AddGroupItem(g => {
+        g.ShowCaption = DefaultBoolean.False;
+        g.VerticalAlign = FormLayoutVerticalAlign.Middle;
+        g.SettingsItemCaptions.Location = LayoutItemCaptionLocation.Top;
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+
+        g.Items.AddCommandItem(i => {
+            i.ShowSelectCheckbox = true;
+            i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+        });
+        g.Items.Add("FirstName");
+        g.Items.Add("LastName");
+        g.Items.Add("Title");
+    });
+    settings.CardLayoutProperties.Styles.LayoutItem.Caption.Font.Bold = true;
+}).Bind(Model).GetHtml()

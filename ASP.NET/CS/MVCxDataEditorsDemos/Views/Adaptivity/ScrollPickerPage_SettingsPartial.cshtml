@@ -1,0 +1,61 @@
+﻿@model ScrollPickerDemoOptions
+
+
+@Html.DevExpress().FormLayout(settings => {
+settings.Name = "formlayout";
+settings.Width = Unit.Percentage(100);
+settings.Theme = DemoHelper.Instance.Theme;
+settings.Items.AddGroupItem(group => {
+   group.ShowCaption = DefaultBoolean.False;
+   group.GroupBoxDecoration = GroupBoxDecoration.None;
+   group.ColumnCount = 2;
+   group.GridSettings.Breakpoints.Add(new LayoutBreakpoint("S", 600, 1));
+
+   group.Items.AddGroupItem(gflo => {
+       gflo.ShowCaption = DefaultBoolean.False;
+       gflo.CssClass = "FormLayoutOptions";
+       gflo.GroupBoxDecoration = GroupBoxDecoration.None;
+       gflo.CellStyle.CssClass = "GroupFormLayout";
+       gflo.Items.AddGroupItem(go => {
+           go.Caption = "Options";
+           go.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+           go.GroupBoxStyle.CssClass = "OptionsGroupBox";
+           go.CellStyle.CssClass = "OptionsGroupFormLayout";
+           go.Items.Add(m => m.PickerDisplayMode, i => {
+               i.Caption = "Picker Display Mode";
+               i.NestedExtension().ComboBox(s => {
+                   s.Width = Unit.Percentage(100);
+                   s.Theme = DemoHelper.Instance.Theme;
+               });
+           });
+           go.Items.Add(m => m.TimeSectionVisibility, i => {
+               i.Caption = "Show Time Section";
+               i.NestedExtension().CheckBox(s => {
+                   s.Width = Unit.Percentage(100);
+                   s.Theme = DemoHelper.Instance.Theme;
+               });
+           });
+           go.Items.Add(m => m.PickerType, i => {
+               i.Caption = "Picker Type";
+               i.NestedExtension().ComboBox(s => {
+                   s.Width = Unit.Percentage(100);
+                   s.Theme = DemoHelper.Instance.Theme;
+               });
+           });
+           go.Items.Add(i => {
+               i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+               i.ShowCaption = DefaultBoolean.False;
+               i.ParentContainerStyle.Paddings.PaddingTop = 20;
+               i.SetNestedContent(() => {
+                   Html.DevExpress().Button(s => {
+                       s.Name = "ApplyButton";
+                       s.Text = "Apply Changes";
+                       s.Theme = DemoHelper.Instance.Theme;
+                       s.UseSubmitBehavior = true;
+                   }).Render();
+               });
+           });
+       });
+   });
+});
+}).GetHtml()

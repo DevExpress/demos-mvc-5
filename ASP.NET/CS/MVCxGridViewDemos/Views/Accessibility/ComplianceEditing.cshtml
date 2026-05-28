@@ -1,0 +1,35 @@
+﻿@model IEnumerable
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1200); }
+
+@section CustomTopAreaHolder {
+    @Html.Partial("SkipRepetitiveNavigationLinks")
+}
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        function OnEditModeChanged(s, e) {
+            $("form").submit();
+        }
+        function OnBeginCallback(s, e) {
+            e.customArgs["editMode"] = editMode.GetValue();
+        }
+    </script>
+    @using (Html.BeginForm()) {
+        <div class="options">
+            <div class="options-item">
+                @Html.DevExpress().RadioButtonList(settings => {
+                    settings.Name = "editMode";
+                    settings.Properties.Caption = "Edit Mode";
+                    settings.Properties.RepeatDirection = RepeatDirection.Horizontal;
+
+                    settings.Properties.Items.Add(GridViewEditingMode.Batch.ToString());
+                    settings.Properties.Items.Add(GridViewEditingMode.EditForm.ToString());
+                    settings.ControlStyle.Border.BorderStyle = BorderStyle.None;
+                    settings.Properties.ClientSideEvents.ValueChanged = "OnEditModeChanged";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                }).Bind(ViewBag.EditMode.ToString()).GetHtml()            
+            </div>
+        </div>
+    }
+}                           
+@Html.Partial("ComplianceEditingPartial", Model)
+@Html.Partial("AccessibilityValidatorLink")

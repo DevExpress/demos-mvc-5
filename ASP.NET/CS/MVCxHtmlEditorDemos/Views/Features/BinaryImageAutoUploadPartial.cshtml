@@ -1,0 +1,29 @@
+﻿@model HtmlEditorBinaryImageAutoUploadOptions
+@Html.DevExpress().HtmlEditor(settings => {
+    settings.Name = "DemoHtml";
+    settings.CallbackRouteValues = new { Controller = "Features", Action = "BinaryImageAutoUploadPartial" };
+
+    settings.CssFiles.Clear();
+    settings.CssFiles.Add("~/Content/HtmlEditor/DemoCss/BinaryImageAutoUploadCss.css");
+
+    settings.Toolbars.Clear();
+    settings.Toolbars.Add((toolbar) => {
+        toolbar.Items.Add((ToolbarUndoButton btn) => { });
+        toolbar.Items.Add((ToolbarRedoButton btn) => { });
+        toolbar.Items.Add((ToolbarBoldButton btn) => { btn.BeginGroup = true; });
+        toolbar.Items.Add((ToolbarItalicButton btn) => { });
+        toolbar.Items.Add((ToolbarUnderlineButton btn) => { });
+        toolbar.Items.Add((ToolbarStrikethroughButton btn) => { });
+        toolbar.Items.Add((ToolbarFullscreenButton btn) => { btn.BeginGroup = true; });
+    });
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(600);
+    settings.Settings.AllowSaveBinaryImageToServer = Model.AllowSaveBinaryImageToServer;
+    settings.SettingsDialogs.InsertImageDialog.ShowInsertFromWebSection = false;
+    settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.UploadCallbackRouteValues = new { Controller = "Features", Action = "BinaryImageProcessUploadedFile" };
+    settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.FileSystemSettings.Assign(HtmlEditorDialogsDemosHelper.FileSaveSettings.FileSystemSettings);
+    settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.ValidationSettings.Assign(HtmlEditorDialogsDemosHelper.ImageUploadValidationSettings);
+
+    settings.ClientSideEvents.BeginCallback = "onBeginCallback";
+}).Bind(Model.DemoHtml).GetHtml()

@@ -1,0 +1,12 @@
+﻿@model PasteProcessingOptions
+@Html.DevExpress().HtmlEditorFor(m => m.Html, settings => {
+    settings.Name = "Html";
+    settings.Width = Unit.Percentage(100);
+    settings.CallbackRouteValues = new { Controller = "Features", Action = "PasteProcessingPartial" };
+
+    settings.Settings.AllowSaveBinaryImageToServer = Model.AllowSaveBinaryImageToServer;
+    settings.SettingsHtmlEditing.ProcessRtfContentPastingOnServer = Model.ProcessRtfContentPastingOnServer;
+    settings.SettingsHtmlEditing.PasteFiltering.StyleAttributes = Model.StyleAttributes;
+    settings.SettingsHtmlEditing.PasteFiltering.StyleAttributeFilterMode = Model.StyleAttributeFilterMode;
+    DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+}).GetHtml()

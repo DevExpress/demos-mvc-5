@@ -1,0 +1,117 @@
+﻿@model ChartRadarDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(784);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(340);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartRadarDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 720;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+
+    settings.Legends.Default(l => {
+        l.Visibility = DefaultBoolean.False;
+    });
+    settings.Series.Add(s => {
+        s.Name = options.ScatterFunction.ToString();
+        s.ArgumentScaleType = ScaleType.Numerical;
+        s.ArgumentDataMember = "X";
+        s.ValueDataMembers[0] = "Y";
+        s.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        s.Label.ResolveOverlappingMode = ResolveOverlappingMode.HideOverlapped;
+        s.Label.TextPattern = "{V:N2}";
+        s.ToolTipEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+        s.ToolTipPointPattern = "{A}: {V:N2}";
+        s.Views().ScatterPolarLineSeriesView(v => {
+            v.MarkerVisibility = options.ShowMarkers ? DefaultBoolean.True : DefaultBoolean.False;
+            v.PointMarkerOptions.Kind = options.MarkerKind;
+            v.PointMarkerOptions.Size = options.MarkerSize;
+            if (v.PointMarkerOptions.Kind == MarkerKind.Star)
+                v.PointMarkerOptions.StarPointCount = options.StarPointCount;
+            v.Closed = false;
+        });
+    });
+
+    settings.PolarDiagram(d => {
+        d.DrawingStyle = options.DiagramType;
+        d.AxisY.WholeRange.AutoSideMargins = false;
+        d.AxisY.WholeRange.SideMarginsValue = 0;
+        d.StartAngleInDegrees = 270;
+    });
+}).Bind(Model.Data).GetHtml()
+
+<script type="text/javascript">
+    function UpdateMarkerOptionsState() {
+        var showMarkers = ShowMarkers.GetChecked();
+        MarkerSize.SetEnabled(showMarkers);
+        MarkerKindString.SetEnabled(showMarkers);
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Data Settings";
+            group.Items.Add(model => model.ScatterFunction, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetScatterRadarFunctions());
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.ShowMarkers, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateMarkerOptionsState(); }";
+                });
+            });
+            group.Items.Add(model => model.MarkerSize, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowMarkers;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerSizes());
+                });
+            });
+            group.Items.Add(model => model.MarkerKindString, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowMarkers;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerKinds());
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 320,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

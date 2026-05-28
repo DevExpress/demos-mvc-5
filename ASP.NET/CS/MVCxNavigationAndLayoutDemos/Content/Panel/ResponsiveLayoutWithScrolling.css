@@ -1,0 +1,63 @@
+﻿body, form {
+	padding: 0;
+	margin: 0;
+}
+
+.topPanel {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+.topPanel .btn {
+	margin-right: 12px;
+}
+
+.title {
+	float: left;
+	padding: 1px 4px 2px 38px;
+	font-size: 2.2em;
+}
+
+.expandedPanel .title {
+	display: none;
+}
+
+.mainMenu {
+	float: right !important;
+	margin: 8px 38px 4px 0;
+}
+
+.expandedPanel .mainMenu {
+	width: 100%;
+	margin: 0px;
+}
+
+.titleContainer,
+.dataView {
+	margin: 0 auto;
+	width: 100%;
+	max-width: 960px;
+}
+
+.dateViewContent {
+	border: 0 !important;
+	padding: 16px !important;
+}
+
+.dateViewContent > table {
+	margin: 0 !important;
+}
+
+.dateViewItem {
+	margin: 0 !important;
+	padding: 12px !important;
+	width: 200px !important;
+	height: 260px !important;
+}
+
+.dateViewItem > table {
+	border-collapse: separate;
+	border-spacing: 2px;
+	width: 100%;
+	white-space: nowrap;
+}

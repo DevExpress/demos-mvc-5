@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MathInterface>
+  <Panel Text="Tools">
+    <Group Text="Graph" ImageUrl="~/Content/Ribbon/MathIcons/XYPlot32x32.png">
+      <Item Text="X-Y Plot" SmallImageUrl="~/Content/Ribbon/MathIcons/XYPlot.png">
+      </Item>
+      <Item Text="Polar Plot" SmallImageUrl="~/Content/Ribbon/MathIcons/PolarPlot.png">
+      </Item>
+      <Item Text="3D Plot" SmallImageUrl="~/Content/Ribbon/MathIcons/3DPlot.png">
+      </Item>
+      <Item Text="Grid lines" ItemType="CheckBox">
+      </Item>
+      <Item Text="Numbered" ItemType="CheckBox">
+      </Item>
+      <Item Text="Auto scale" ItemType="CheckBox">
+      </Item>
+      <Item Text="View" ItemType="DropDownButton" Size="Large" LargeImageUrl="~/Content/Ribbon/MathIcons/View.png">
+        <SubItem Text="Zoom" ItemType="DropDownButton" SmallImageUrl="~/Content/Ribbon/MathIcons/Zoom.png">
+        </SubItem>
+        <SubItem Text="Unzoom" ItemType="DropDownButton" SmallImageUrl="~/Content/Ribbon/MathIcons/Unzoom.png">
+        </SubItem>
+        <SubItem Text="FullScreen" ItemType="DropDownToggleButton" SmallImageUrl="~/Content/Ribbon/MathIcons/FullScreen.png">
+        </SubItem>
+      </Item>
+    </Group>
+    <Group Text="Code" ImageUrl="~/Content/Ribbon/MathIcons/AnalyzeCode.png">
+      <Item Text="Analyze Code" Size="Large" LargeImageUrl="~/Content/Ribbon/MathIcons/AnalyzeCode.png">
+      </Item>                   
+      <Item Text="Run" Size="Large" LargeImageUrl="~/Content/Ribbon/MathIcons/Run.png">
+      </Item>                   
+      <Item Text="Clear" Size="Large" LargeImageUrl="~/Content/Ribbon/MathIcons/ClearCommands.png">
+      </Item>
+    </Group>
+  </Panel>
+  <Panel Text="Models">
+    <Group Text="Blocks" ImageUrl="~/Content/Ribbon/MathIcons/Discrete32x32.png">
+      <Item Text="Discrete" ItemType="DropDownButton" SmallImageUrl="~/Content/Ribbon/MathIcons/Discrete.png">
+        <SubItem Text="Difference" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="Discrete Derivative" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="Integere Delay" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="Discrete Filter" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="First-Order Hold" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="Zero-Order Hold" ItemType="DropDownButton">
+        </SubItem>
+      </Item>
+      <Item Text="Continuous" ItemType="DropDownButton" SmallImageUrl="~/Content/Ribbon/MathIcons/Continuous.png">
+        <SubItem Text="Integrator" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="Derivative" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="State-Space" ItemType="DropDownButton">
+        </SubItem>
+        <SubItem Text="Transfer Fcn" ItemType="DropDownButton">
+        </SubItem>
+      </Item>
+      <Item Text="Search by name: " ItemType="TextBox">
+      </Item>
+    </Group>
+    <Group Text="Edit" ImageUrl="~/Content/Ribbon/MathIcons/Copy32x32.png">
+      <Item Text="Cut" SmallImageUrl="~/Content/Ribbon/MathIcons/Cut.png">
+      </Item>
+      <Item Text="Copy" SmallImageUrl="~/Content/Ribbon/MathIcons/Copy.png">
+      </Item>
+      <Item Text="Delete" SmallImageUrl="~/Content/Ribbon/MathIcons/Delete.png">
+      </Item>
+      <Item Text="Undo" SmallImageUrl="~/Content/Ribbon/MathIcons/Undo.png">
+      </Item>
+      <Item Text="Restrore" SmallImageUrl="~/Content/Ribbon/MathIcons/Restore.png">
+      </Item>
+    </Group>
+    <Group Text="View" ImageUrl="~/Content/Ribbon/MathIcons/InterfaceColor32x32.png">
+      <Item Text="Fullscreen" ItemType="CheckBox">
+      </Item>
+      <Item Text="Large items" ItemType="CheckBox">
+      </Item>
+      <SubItem Text="Interface Color" ItemType="ColorButton" Size="Large" LargeImageUrl="~/Content/Ribbon/MathIcons/InterfaceColor.png">
+      </SubItem>
+    </Group>
+  </Panel>
+</MathInterface>

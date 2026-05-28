@@ -1,0 +1,29 @@
+﻿@model SchedulerDataObject
+
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+<script type="text/javascript">
+    function OnAppointmentsSelectionChanged(s, e) {
+        var appointmentIds = e.appointmentIds;
+        if(appointmentIds && appointmentIds.length == 1)
+            s.GetAppointmentProperties(appointmentIds[0], 'Subject;Location;Start;End;Description;ContactInfo', OnGetAppointmentProps);
+        else
+            OnGetAppointmentProps(null);
+    }
+    function OnGetAppointmentProps(values) {
+        $("#subject").html(values ? values[0] : '&nbsp;');
+        $("#location").html(values ? values[1] : '&nbsp;');
+        $("#startTime").html(values ? FormatDate(values[2]) : '&nbsp;');
+        $("#endTime").html(values ? FormatDate(values[3]) : '&nbsp;');
+        $("#description").html(values ? values[4] : '&nbsp;');
+    }
+    function FormatDate(date) {
+        var result = [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('.') + ' ' + [date.getHours(), date.getMinutes()].join(':');
+        return result.replace(/(\b\d{1}\b)/g, '0$1');
+    }
+</script>
+@Html.Partial("AppointmentsSelectionPartial", Model)
+
+@section DemoOptions  {
+    @Html.Partial("AppointmentsSelectionOptionsPartial")
+}

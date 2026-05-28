@@ -1,0 +1,89 @@
+﻿@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+
+    var cardView = Html.DevExpress().CardView(
+        settings =>
+        {
+            settings.Name = "CardView";
+            settings.KeyFieldName = "EmployeeID";
+            settings.CallbackRouteValues = new { Controller = "Editing", Action = "EditModesPartial" };
+            settings.CustomActionRouteValues = new { Controller = "Editing", Action = "ChangeEditModePartial" };
+            settings.SettingsEditing.AddNewCardRouteValues = new { Controller = "Editing", Action = "EditModesAddNewPartial" };
+            settings.SettingsEditing.UpdateCardRouteValues = new { Controller = "Editing", Action = "EditModesUpdatePartial" };
+            settings.SettingsEditing.DeleteCardRouteValues = new { Controller = "Editing", Action = "EditModesDeletePartial" };
+            settings.SettingsEditing.Mode = EditingDemosHelper.EditMode;
+            settings.SettingsBehavior.ConfirmDelete = true;
+            settings.SettingsPager.SettingsTableLayout.ColumnCount = 1;
+            settings.SettingsPager.SettingsTableLayout.RowsPerPage = 2;
+            settings.SettingsPopup.EditForm.Width = 600;
+            settings.Width = Unit.Percentage(100);
+            
+            settings.Columns.Add(c => {
+                c.FieldName = "Photo";
+                c.EditorProperties().BinaryImage(p => {
+                    p.ImageHeight = 175;
+                    p.CallbackRouteValues = new { Action = "BinaryImageColumnPhotoUpdate", Controller = "Editing" };
+                    p.EditingSettings.Enabled = true;
+                    p.EditingSettings.UploadSettings.UploadValidationSettings.MaxFileSize = 4194304;
+                });
+            });
+            
+            settings.Columns.Add("FirstName");
+            settings.Columns.Add("LastName");
+            settings.Columns.Add("Title", "Position");
+            settings.Columns.Add("HomePhone");
+            settings.Columns.Add("HireDate", MVCxCardViewColumnType.DateEdit);
+            settings.Columns.Add("BirthDate", MVCxCardViewColumnType.DateEdit);
+            settings.Columns.Add(c => {
+                c.FieldName = "Notes";
+                c.EditorProperties().Memo(p => p.Height = 80);
+            });
+            
+            settings.CardLayoutProperties.ColumnCount = 3;
+            settings.CardLayoutProperties.Items.AddCommandItem(i => {
+                i.ShowEditButton = true;
+                i.ColSpan = 3;
+                i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+            });
+            settings.CardLayoutProperties.Items.Add(i => {
+                i.ColumnName = "Photo";
+                i.ShowCaption = DefaultBoolean.False;
+                i.ColSpan = 1;
+                i.RowSpan = 4;
+            });
+            
+            settings.CardLayoutProperties.Items.Add(i => { i.ColumnName = "FirstName"; i.ColSpan = 1; });
+            settings.CardLayoutProperties.Items.Add("LastName");
+            settings.CardLayoutProperties.Items.Add("Title");
+            settings.CardLayoutProperties.Items.Add("HomePhone");
+            settings.CardLayoutProperties.Items.Add("HireDate");
+            settings.CardLayoutProperties.Items.Add("BirthDate");
+            settings.CardLayoutProperties.Items.Add(i => {
+                i.ColumnName = "Notes";
+                i.CaptionSettings.Location = LayoutItemCaptionLocation.Top;
+                i.VerticalAlign = FormLayoutVerticalAlign.Top;
+                i.ColSpan = 2;
+            });
+
+            settings.CardLayoutProperties.Items.AddEditModeCommandItem(item => {
+                item.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+                item.ColSpan = 3;
+            });
+                        
+            settings.PreRender = (sender, e) => {
+                ((MVCxCardView)sender).StartEdit(1);
+            };
+            settings.CellEditorInitialize = (s, e) => {
+                ASPxEdit editor = (ASPxEdit)e.Editor;
+                editor.ValidationSettings.Display = Display.Dynamic;
+            };
+            settings.ClientSideEvents.BeginCallback = "Grid_BeginCallback";
+        });
+
+    if(ViewData["EditError"] != null) {
+        cardView.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@cardView.Bind(Model).GetHtml()

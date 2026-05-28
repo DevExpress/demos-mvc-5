@@ -1,0 +1,23 @@
+﻿@model DevExpress.Web.Demos.Models.WorkflowModel
+
+@Html.DevExpress().Diagram(settings => {
+    settings.Name = "Diagram";
+    settings.Height = 600;
+    settings.SimpleView = true;
+
+    settings.BatchUpdateRouteValues = new { Controller = "DataBinding", Action = "NodesAndEdgesUpdate" };
+
+    settings.Mappings.Node.Key = "ID";
+    settings.Mappings.Node.Type = "Type";
+    settings.Mappings.Node.Text = "Text";
+
+    settings.Mappings.Edge.Key = "ID";
+    settings.Mappings.Edge.FromKey = "FromID";
+    settings.Mappings.Edge.ToKey = "ToID";
+    settings.Mappings.Edge.Text = "Text";
+
+    settings.Units = DevExpress.Web.ASPxDiagram.DiagramUnit.Px;
+    settings.SettingsAutoLayout.Type = DevExpress.Web.ASPxDiagram.DiagramAutoLayout.Layered;
+    settings.SettingsAutoLayout.Orientation = Orientation.Vertical;
+
+}).Bind(Model.Objects, Model.Connections).GetHtml()

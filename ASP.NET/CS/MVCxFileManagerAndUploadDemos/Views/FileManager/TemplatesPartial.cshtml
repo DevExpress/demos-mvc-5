@@ -1,0 +1,31 @@
+﻿@Html.DevExpress().FileManager(settings => {
+    settings.Name = "FileManager";
+    settings.CallbackRouteValues = new { Controller = "FileManager", Action = "TemplatesPartial" };
+
+    settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+    settings.Settings.InitialFolder = "Images\\Employees";
+    settings.ClientSideEvents.HighlightItemTemplate = "onHighlightItemTemplate";
+    settings.SettingsUpload.Enabled = false;
+
+    settings.SettingsFileList.ThumbnailsViewSettings.ThumbnailHeight = Unit.Pixel(50);
+    settings.SettingsFileList.ThumbnailsViewSettings.ThumbnailWidth = Unit.Pixel(50);
+    settings.SettingsFileList.ThumbnailsViewSettings.SetThumbnailViewItemTemplateContent(c => {
+        ViewContext.Writer.Write(
+            "<img class=\"tmplThumb\" src=\"" + c.Item.ThumbnailUrl + "\" alt='<%# Eval(\"Name\") %>' />" +
+            "<div class=\"tmplTextContainer\">" +
+                "<span>" + DataBinder.Eval(c.DataItem, "Name") + "</span>" +
+                "<br />" +
+                "<span class=\"additionalInfo\">" + FileManagerItemInfo.Create("", c.Item.FullName).Type + "</span>" +
+                "<br />" +
+                "<span class=\"additionalInfo\">" + c.Item.Length / 1024 + "Kb </span>" +
+            "</div>"
+        );
+    });
+
+    settings.Styles.File.Width = Unit.Pixel(200);
+    settings.Styles.File.Height = Unit.Pixel(65);
+    settings.Styles.File.HoverStyle.CssClass = "selectedFile";
+    settings.Styles.File.SelectionActiveStyle.CssClass = "selectedFile";
+
+    settings.SettingsAdaptivity.Enabled = true;
+}).BindToFolder(Model).GetHtml()

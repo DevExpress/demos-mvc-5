@@ -1,0 +1,32 @@
+﻿@model SpreadsheetWorksheetProtectionOptions
+@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+<script type="text/javascript">
+    MVCxClientGlobalEvents.AddControlsInitializedEventHandler(function() {
+        ASPxClientEdit.AttachEditorModificationListener(ApplyProtectionSettings, function(control) {
+            return control.GetParentControl() === OptionsFormLayout
+        });
+    });
+    function ApplyProtectionSettings() {
+        CallbackPanel.PerformCallback();
+    }
+    function CallbackPanel_OnBeginCallback(s, e) {
+        e.customArgs = $.extend(e.customArgs, GetEditorValues());
+    }
+    function GetEditorValues() {
+        return MVCxClientUtils.GetSerializedEditorValuesInContainer("OptionsFormLayout");
+    }
+</script>
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.Partial("WorksheetProtectionCallbackPanelPartial")
+
+@section DemoOptions {
+    @Html.Partial("WorksheetProtectionOptionsPartial", Model)
+}
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

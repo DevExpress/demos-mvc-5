@@ -1,0 +1,27 @@
+﻿@model HtmlEditorContentElementFilteringOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+<script type="text/javascript">
+    function onResetHtmlDocumentButtonClick(s, e) {
+        HtmlEditor.PerformDataCallback();
+    }
+    function onCustomDataCallbackHandler(s, e) {
+        s.SetHtml(e.result);
+    }
+</script>
+@Html.Partial("ContentElementFilteringPartial", Model)
+
+@section DemoOptions {
+    @Html.Partial("ContentElementFilteringOptionsPartial", Model)
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

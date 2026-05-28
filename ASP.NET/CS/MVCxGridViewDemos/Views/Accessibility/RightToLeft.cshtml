@@ -1,0 +1,10 @@
+﻿@model IEnumerable
+<script type="text/javascript">
+    function Grid_BeginCallback(s, e) {
+        DXDemo.LoadAntiForgeryTokenInputValue(e.customArgs);
+    }
+</script>
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("RightToLeftPartial", Model)

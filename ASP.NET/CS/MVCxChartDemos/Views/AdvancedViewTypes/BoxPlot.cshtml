@@ -1,0 +1,28 @@
+﻿<script type="text/javascript">
+    function BeginCallbackAccept(s, e) {
+        chart.PerformCallback();
+    }
+</script>
+
+@model ChartBoxPlotDemoOptions
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@{
+    ChartBoxPlotDemoOptions options = Model;
+        @Html.Partial("BoxPlotPartial", Model)
+        <div style="position:relative; bottom:30px; left:750px; width: 150px" >
+        @Html.DevExpress().Button(b => {
+            b.Name = "btnAddNewDataSet";
+            b.Text = "Add New Data Set";
+            b.ClientSideEvents.Click = "BeginCallbackAccept";
+        }).GetHtml()
+        </div>
+    @section EndDemoRegion {
+        @{ Html.EndForm(); }
+    }
+}

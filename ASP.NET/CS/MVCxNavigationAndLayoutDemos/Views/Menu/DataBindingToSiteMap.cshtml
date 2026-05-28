@@ -1,0 +1,28 @@
+﻿@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Menu/WorldCupImages.css")" />
+    <style>
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+}
+
+@Html.DevExpress().Menu(
+    settings =>
+    {
+        settings.Name = "mDataBinding";
+        settings.AllowSelectItem = true;
+        settings.EncodeHtml = false;
+        settings.Orientation = Orientation.Vertical;
+                
+        settings.ItemDataBound = (sender, e) =>
+        {
+            var node = e.Item.DataItem as SiteMapNode;
+            if(node != null) {
+                if(!string.IsNullOrEmpty(node["SpriteImage"]))
+                    e.Item.Image.SpriteProperties.CssClass = node["SpriteImage"];
+                e.Item.Text = "<span class='bold'>" + node["result"] + "</span> " + e.Item.Text;
+            }
+
+        };
+    }).BindToSiteMap("~/App_Data/WorldCup2010.sitemap", false).GetHtml()

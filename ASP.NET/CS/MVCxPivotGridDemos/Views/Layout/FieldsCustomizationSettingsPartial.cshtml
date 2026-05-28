@@ -1,0 +1,55 @@
+﻿@model PivotGridFieldsCustomizationDemoOptions
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "CustomizationFormSettings";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Customization Form Settings";
+
+        g.Items.Add(m => m.CustomizationFormStyle, s => {
+            s.NestedExtension().ComboBox(cbSettings => {
+                cbSettings.Properties.ClientSideEvents.SelectedIndexChanged = "onSelectedIndexChanged";
+                cbSettings.Width = Unit.Percentage(100);
+            });
+        });
+        g.Items.Add(m => m.CustomizationFormLayout,
+            s => {
+                s.ClientVisible = false;
+                s.NestedExtension().ComboBox(cbSettings => {
+                    cbSettings.Width = Unit.Percentage(100);
+                    cbSettings.Properties.ClientSideEvents.SelectedIndexChanged = "sendCallbackPivotGrid";
+                });
+            });
+
+        g.Items.Add(m => m.AllowDragFields, s => {
+            s.NestedExtension().CheckBox(chkSettings => {
+                chkSettings.Properties.ClientSideEvents.CheckedChanged = "sendCallbackPivotGrid";
+            });
+        });
+        g.Items.Add(m => m.AllowDragFieldsInCustomizationForm, s => {
+            s.NestedExtension().CheckBox(chkSettings => {
+                chkSettings.Properties.ClientSideEvents.CheckedChanged = "sendCallbackPivotGrid";
+            });
+        });
+
+        g.Items.Add(s => {
+            s.ShowCaption = DefaultBoolean.False;
+        });
+        g.Items.Add(s => {
+            s.ShowCaption = DefaultBoolean.False;
+            s.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+            s.NestedExtension().Button(btnSettings => {
+                btnSettings.Name = "btnShow";
+                btnSettings.Text = "Show Customization Window";
+                btnSettings.ClientSideEvents.Click = "onShow";
+                btnSettings.Width = Unit.Percentage(70);
+            });
+        });
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 420,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+
+}).GetHtml()

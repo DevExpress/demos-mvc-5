@@ -1,0 +1,16 @@
+﻿@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "DemoRichEdit";
+    settings.CallbackRouteValues = new { Controller = "BarsAndUI", Action = "CustomToolbarPartial" };
+    settings.Width = Unit.Percentage(100);
+    settings.RibbonMode = RichEditRibbonMode.None;
+    settings.ShowConfirmOnLosingChanges = false;
+
+    settings.ClientSideEvents.SelectionChanged = "updateToolbar";
+    settings.ClientSideEvents.DocumentChanged = "updateToolbar";
+    settings.ClientSideEvents.EndCallback = "updateToolbar";
+
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        richEdit.Focus();
+    };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "Example.rtf")).GetHtml()

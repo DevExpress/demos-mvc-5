@@ -1,0 +1,25 @@
+﻿@Html.DevExpress().FileManager(
+    settings => {
+        settings.Name = "fileManager";
+        settings.CallbackRouteValues = new { Controller = "FileManager", Action = "SubfolderSearchingPartial" };
+        settings.DownloadRouteValues = new { Controller = "FileManager", Action = "DownloadFiles" };
+
+        settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+        settings.Settings.AllowedFileExtensions = FileManagerDemoHelper.AllowedFileExtensions;
+        settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+
+        settings.SettingsUpload.UseAdvancedUploadMode = true;
+
+        settings.SettingsFiltering.FilterBoxMode = FileManagerDemoHelper.SubfolderSearchingDemoOptions.SearchFilesInSubfolders ? FileManagerFilterBoxMode.Subfolders : FileManagerFilterBoxMode.CurrentFolder;
+        settings.SettingsFiltering.FilteredFileListView = FileManagerDemoHelper.SubfolderSearchingDemoOptions.SearchResultView;
+        settings.SettingsFileList.View = FileManagerDemoHelper.SubfolderSearchingDemoOptions.FileListView;
+        settings.SettingsFileList.ShowFolders = true;
+
+        settings.SettingsAdaptivity.Enabled = true;
+
+        settings.PreRender = (sender, e) => {
+            var fileManager = (MVCxFileManager)sender;
+            fileManager.FilterBoxText = "g";
+        };
+    }
+).BindToFolder(Model).GetHtml()

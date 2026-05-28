@@ -1,0 +1,65 @@
+﻿@Html.DevExpress().Gantt(settings => {
+    settings.Name = "gantt";
+    settings.CallbackRouteValues = new { Controller = "TimeHighlighting", Action = "WorkTimeSchedulePartial" };
+    settings.Height = Unit.Pixel(700);
+    settings.Width = Unit.Percentage(100);
+
+    settings.SettingsGanttView.ViewType = ViewBag.ViewType != null ? ViewBag.ViewType : GanttViewType.Hours;
+
+    settings.SettingsTaskList.Width = Unit.Percentage(45);
+
+    settings.SettingsEditing.Enabled = false;
+    settings.SettingsToolbar.Visible = false;
+
+    settings.SettingsTaskList.Columns.Add(new GanttTextColumn() { FieldName = "Subject", Caption = "Title", Width = Unit.Pixel(360) });
+    settings.SettingsTaskList.Columns.Add(new GanttDateTimeColumn() { FieldName = "StartDate", Caption = "Start Date", Width = Unit.Pixel(100), DisplayFormat = "MM/dd/yyyy" });
+    settings.SettingsTaskList.Columns.Add(new GanttDateTimeColumn() { FieldName = "EndDate", Caption = "Due Date", Width = Unit.Pixel(100), DisplayFormat = "MM/dd/yyyy" });
+
+    settings.Mappings.Task.Key = "ID";
+    settings.Mappings.Task.ParentKey = "ParentID";
+    settings.Mappings.Task.Title = "Subject";
+    settings.Mappings.Task.Start = "StartDate";
+    settings.Mappings.Task.End = "EndDate";
+    settings.Mappings.Task.Progress = "PercentComplete";
+
+    settings.Mappings.Dependency.Key = "ID";
+    settings.Mappings.Dependency.PredecessorKey = "ParentID";
+    settings.Mappings.Dependency.SuccessorKey = "DependentID";
+    settings.Mappings.Dependency.DependencyType = "Type";
+
+    settings.Mappings.Resource.Key = "ID";
+    settings.Mappings.Resource.Name = "Name";
+
+    settings.Mappings.ResourceAssignment.Key = "ID";
+    settings.Mappings.ResourceAssignment.TaskKey = "TaskID";
+    settings.Mappings.ResourceAssignment.ResourceKey = "ResourceID";
+
+    var dailyRule = new DailyRule();
+    dailyRule.WorkTimeRanges.Add(new WorkTimeRange() { Start = new TimeSpan(8, 0, 0), End = new TimeSpan(11, 55, 00) });
+    dailyRule.WorkTimeRanges.Add(new WorkTimeRange() { Start = new TimeSpan(13, 0, 0), End = new TimeSpan(17, 00, 00) });
+    settings.WorkTimeRules.Add(dailyRule);
+
+    var weeklyRule = new WeeklyRule() { IsWorkDay = false };
+    weeklyRule.Recurrence.DayOfWeek = DayOfWeek.Saturday;
+    settings.WorkTimeRules.Add(weeklyRule);
+
+    weeklyRule = new WeeklyRule() { IsWorkDay = false };
+    weeklyRule.Recurrence.DayOfWeek = DayOfWeek.Sunday;
+    settings.WorkTimeRules.Add(weeklyRule);
+
+    var yearlyRule = new YearlyRule() { IsWorkDay = false };
+    yearlyRule.Recurrence.Month = Month.May;
+    yearlyRule.Recurrence.Day = 27;
+    settings.WorkTimeRules.Add(yearlyRule);
+
+    yearlyRule = new YearlyRule() { IsWorkDay = false };
+    yearlyRule.Recurrence.Month = Month.February;
+    yearlyRule.Recurrence.Day = 14;
+    settings.WorkTimeRules.Add(yearlyRule);
+
+    yearlyRule = new YearlyRule() { IsWorkDay = false };
+    yearlyRule.Recurrence.Month = Month.March;
+    yearlyRule.Recurrence.Day = 8;
+    settings.WorkTimeRules.Add(yearlyRule);
+
+}).Bind(GanttDataProvider.Tasks, GanttDataProvider.Dependencies, GanttDataProvider.Resources, GanttDataProvider.ResourceAssignments).GetHtml()

@@ -1,0 +1,12 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+@Html.Partial("TablesPartial")
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

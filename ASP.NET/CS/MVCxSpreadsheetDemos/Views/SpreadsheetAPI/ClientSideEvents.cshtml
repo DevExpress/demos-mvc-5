@@ -1,0 +1,11 @@
+﻿@section AdditionalResources {
+    <script src="@Url.Content("~/Scripts/InitEventMonitor.js")" type="text/javascript"></script>
+}
+
+@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+@using(Html.BeginForm()) {
+    @Html.Partial("ClientSideEventsPartial")
+    <br />
+    @Html.Partial("EventMonitor")
+}

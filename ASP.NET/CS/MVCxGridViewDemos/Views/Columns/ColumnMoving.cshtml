@@ -1,0 +1,31 @@
+﻿@model ColumnMovingDemoOptions
+@section DemoOptionsTop {
+   <script type="text/javascript">
+        MVCxClientGlobalEvents.ControlsInitialized.AddHandler(function () {
+            ProcessColumnMoveOnClient.ValueChanged.AddHandler(OnDemoOptionChanged);
+            ColumnMoveMode.ValueChanged.AddHandler(OnDemoOptionChanged);
+
+            function OnDemoOptionChanged() {
+                $("form").submit();
+            };
+       });
+       function onBeginCallback(s, e) {
+           e.customArgs = MVCxClientUtils.GetSerializedEditorValuesInContainer("options");
+       }
+    </script>
+    <div class="options">
+        <div class="options-item">
+            @using (Html.BeginForm()) {
+                @Html.DevExpress().FormLayout(settings => {
+                    settings.Name = "options";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.UseDefaultPaddings = false;
+                    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+                    settings.Items.Add(m => m.ProcessColumnMoveOnClient);
+                    settings.Items.Add(m => m.ColumnMoveMode);
+                }).GetHtml()
+            }
+        </div>
+    </div>
+}
+@Html.Action("ColumnMovingPartial", new { })

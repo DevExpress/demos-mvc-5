@@ -1,0 +1,71 @@
+﻿@model string
+@{
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = 250;
+}
+@section AdditionalResources {
+    <script>
+        function onInit(s, e) {
+            var items = diagram.GetItems().filter(function (item) {
+                return (item instanceof DiagramShape) && (item.text === "Greta Sims");
+            });
+            if(items.length > 0) {
+                diagram.SetSelectedItems(items);
+                diagram.ScrollToItem(items[0]);
+                diagram.Focus();
+            }
+        }
+        function onSelectionChanged(s, e) {
+            selectedItemsListBox.ClearItems();
+
+            var items = diagram.GetSelectedItems();
+            items.forEach(
+                function (item) {
+                    if(item instanceof DiagramShape)
+                        selectedItemsListBox.AddItem(item.text ? item.text : "Untitled");
+                }
+            );
+
+            var totalShapeCount = diagram.GetItems().filter(function (item) {
+                return (item instanceof DiagramShape);
+            }).length;
+            totalShapeCountLabel.SetText("Total number of shapes: " + totalShapeCount);
+        }
+    </script>
+}
+
+@Html.DevExpress().Diagram(settings => {
+    settings.Name = "diagram";
+    settings.Height = 600;
+
+    settings.ClientSideEvents.Init = "onInit";
+    settings.ClientSideEvents.SelectionChanged = "onSelectionChanged";
+}).Import(Model).GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+    settings.Name = "FormLayout";
+    settings.SettingsItemCaptions.Location = LayoutItemCaptionLocation.Top;
+    settings.Items.AddGroupItem(group => {
+        group.ShowCaption = DefaultBoolean.False;
+        group.Items.Add(i => {
+            i.Caption = "Selected Shapes";
+            i.NestedExtension().ListBox(s => {
+                s.Name = "selectedItemsListBox";
+                s.Height = 316;
+            });
+        });
+        group.Items.AddEmptyItem();
+        group.Items.Add(i => {
+            i.ShowCaption = DefaultBoolean.False;
+            i.NestedExtension().Label(s => {
+                s.Name = "totalShapeCountLabel";
+                s.Properties.EnableClientSideAPI = true;
+            });
+        });
+    });
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 220,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).GetHtml()
+}

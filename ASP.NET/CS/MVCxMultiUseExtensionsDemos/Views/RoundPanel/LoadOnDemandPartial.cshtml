@@ -1,0 +1,15 @@
+﻿@Html.DevExpress().RoundPanel(settings => {
+    settings.Name = "roundPanel";
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Contact Information";
+    settings.Collapsed = true;
+	settings.ControlStyle.CssClass="wrapper";
+    settings.CallbackRouteValues = new {
+        Controller = "RoundPanel",
+        Action = "LoadOnDemandPartial"
+    };
+    settings.SetContent(() => {
+        Html.RenderAction("RoundPanelContent");
+    });
+}).GetHtml()

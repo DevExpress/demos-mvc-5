@@ -1,0 +1,33 @@
+﻿@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "heFullPageEditMode";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "FullPageEditModePartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.ActiveView = HtmlEditorView.Html;
+        settings.Html = HtmlEditorFeaturesDemosHelper.GeHtmlContentByFileName("FullPageEditMode.html");
+        
+        settings.Settings.ShowTagInspector = true;
+        settings.Settings.SettingsHtmlView.EnableAutoCompletion = true;
+        settings.Settings.SettingsHtmlView.EnableTagAutoClosing = true;
+        settings.Settings.SettingsHtmlView.HighlightActiveLine = true;
+        settings.Settings.SettingsHtmlView.HighlightMatchingTags = true;
+        settings.Settings.SettingsHtmlView.ShowCollapseTagButtons = true;
+        settings.Settings.SettingsHtmlView.ShowLineNumbers = true;
+
+        settings.SettingsHtmlEditing.AllowedDocumentType = AllowedDocumentType.HTML5;
+        settings.SettingsHtmlEditing.AllowEditFullDocument = true;
+        settings.SettingsHtmlEditing.AllowFormElements = true;
+        settings.SettingsHtmlEditing.AllowHTML5MediaElements = true;
+        settings.SettingsHtmlEditing.AllowIFrames = true;
+        settings.SettingsHtmlEditing.AllowObjectAndEmbedElements = true;
+        settings.SettingsHtmlEditing.AllowScripts = true;
+        settings.SettingsHtmlEditing.AllowYouTubeVideoIFrames = true;
+        settings.SettingsHtmlEditing.EnablePasteOptions = true;
+        settings.SettingsHtmlEditing.EnterMode = HtmlEditorEnterMode.BR;
+        settings.SettingsHtmlEditing.PasteMode = HtmlEditorPasteMode.MergeFormatting;
+        settings.SettingsHtmlEditing.ResourcePathMode = ResourcePathMode.RootRelative;
+
+        settings.ClientSideEvents.ActiveTabChanged = "onDemoHtmlEditorActiveTabChanged";
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }
+).GetHtml()

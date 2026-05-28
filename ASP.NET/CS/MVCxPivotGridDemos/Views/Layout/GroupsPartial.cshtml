@@ -1,0 +1,98 @@
+﻿@Html.DevExpress().PivotGrid(
+    settings =>
+    {
+        settings.Name = "pivotGrid";
+        settings.OptionsData.DataProcessingEngine = PivotDataProcessingEngine.Optimized;
+        settings.OptionsFilter.FilterPanelMode = FilterPanelMode.Filter;
+        settings.CallbackRouteValues = new { Controller = "Layout", Action = "GroupsPartial" };
+        settings.OptionsView.ShowFilterHeaders = false;
+        settings.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.CustomizationFieldsLeft = 600;
+        settings.CustomizationFieldsTop = 400;
+        settings.Width = Unit.Percentage(100);
+
+        settings.Groups.Add("Category - Product");
+        settings.Groups.Add("Year - Quarter");
+        settings.Groups.Add("Sales Sum, Min, Average");
+
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.RowArea;
+            field.AreaIndex = 0;
+            field.Caption = "Category Name";
+            field.DataBinding = new DataSourceColumnBinding("CategoryName");
+            field.GroupIndex = 0;
+            field.InnerGroupIndex = 0;
+            field.CustomTotals.Add(PivotSummaryType.Average);
+            field.CustomTotals.Add(PivotSummaryType.Min);
+            field.CustomTotals.Add(PivotSummaryType.Max);
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.ColumnArea;
+            field.AreaIndex = 0;
+            field.Caption = "Year";
+            field.DataBinding = new DataSourceColumnBinding("ShippedDate", PivotGroupInterval.DateYear);
+            field.GroupIndex = 1;
+            field.InnerGroupIndex = 0;
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.ColumnArea;
+            field.AreaIndex = 1;
+            field.Caption = "Quarter";
+            field.DataBinding = new DataSourceColumnBinding("ShippedDate", PivotGroupInterval.DateQuarter);
+            field.ExpandedInFieldsGroup = false;
+            field.GroupIndex = 1;
+            field.InnerGroupIndex = 1;
+            field.ValueFormat.FormatString = "Qtr {0}";
+            field.ValueFormat.FormatType = FormatType.Numeric;
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.DataArea;
+            field.AreaIndex = 0;
+            field.Caption = "Product Sales";
+            field.DataBinding = new DataSourceColumnBinding("ProductSales");
+            field.ExpandedInFieldsGroup = false;
+            field.GroupIndex = 2;
+            field.InnerGroupIndex = 0;
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.RowArea;
+            field.AreaIndex = 1;
+            field.Caption = "Product Name";
+            field.DataBinding = new DataSourceColumnBinding("ProductName");
+            field.GroupIndex = 0;
+            field.InnerGroupIndex = 1;
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.ColumnArea;
+            field.AreaIndex = 2;
+            field.Caption = "Month";
+            field.DataBinding = new DataSourceColumnBinding("ShippedDate", PivotGroupInterval.DateMonth);
+            field.Visible = false;
+            field.GroupIndex = 1;
+            field.InnerGroupIndex = 2;
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.DataArea;
+            field.AreaIndex = 1;
+            field.Caption = "Average Sale";
+            field.DataBinding = new DataSourceColumnBinding("ProductSales");
+            field.SummaryType = PivotSummaryType.Average;
+            field.Visible = false;
+            field.ExpandedInFieldsGroup = false;
+            field.GroupIndex = 2;
+            field.InnerGroupIndex = 1;
+        });
+        settings.Fields.Add(field => {
+            field.Area = PivotArea.DataArea;
+            field.AreaIndex = 1;
+            field.Caption = "Min Sale";
+            field.DataBinding = new DataSourceColumnBinding("ProductSales");
+            field.SummaryType = PivotSummaryType.Min;
+            field.Visible = false;
+            field.GroupIndex = 2;
+            field.InnerGroupIndex = 2;
+        });
+        settings.PreRender = (sender, e) => {
+            ((MVCxPivotGrid)sender).CollapseAll();
+        };
+    }).Bind(Model).GetHtml()

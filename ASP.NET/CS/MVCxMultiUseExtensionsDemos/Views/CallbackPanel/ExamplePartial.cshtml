@@ -1,0 +1,54 @@
+﻿@Html.DevExpress().CallbackPanel(
+    settings => {
+        settings.Name = "cbpExample";
+        settings.CallbackRouteValues = new { Controller = "CallbackPanel", Action = "ExamplePartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 250;
+
+        settings.SetContent(() =>
+        {
+            Html.DevExpress().BinaryImage(
+                imageSettings => {
+                    imageSettings.ControlStyle.CssClass = "custom-image";
+                    imageSettings.Name = "Photo";
+                    imageSettings.Width = 160;
+                    imageSettings.Height = 170;
+                })
+                .Bind(((System.Data.Linq.Binary)DataBinder.Eval(Model, "Photo")).ToArray())
+                .Render();
+
+            Html.DevExpress().FormLayout(flSettings => {
+                flSettings.Name = "descriptionForm";
+                flSettings.ControlStyle.CssClass = "custom-form-layout";
+                flSettings.Items.Add(item => {
+                    item.Name = "First Name";
+                    item.SetNestedContent(DemosHelper.GetFieldText(Model, "FirstName"));
+                });
+                flSettings.Items.Add(item => {
+                    item.Name = "Last Name";
+                    item.SetNestedContent(DemosHelper.GetFieldText(Model, "LastName"));
+                });
+                flSettings.Items.Add(item => {
+                    item.Name = "Birth Date";
+                    item.SetNestedContent(String.Format("{0:d}", DataBinder.Eval(Model, "BirthDate")));
+                });
+
+                flSettings.Items.Add(item => {
+                    item.Name = "City";
+                    item.SetNestedContent(DemosHelper.GetFieldText(Model, "City"));
+                });
+                flSettings.Items.Add(item => {
+                    item.Name = "Region";
+                    item.SetNestedContent(DemosHelper.GetFieldText(Model, "Region"));
+                });
+                flSettings.Items.Add(item => {
+                    item.Name = "Notes";
+                    item.SetNestedContent(DemosHelper.GetFieldText(Model, "Notes"));
+                });
+            }).GetHtml();
+        });
+
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        settings.ClientSideEvents.EndCallback = "OnEndCallback";
+    }
+).GetHtml()

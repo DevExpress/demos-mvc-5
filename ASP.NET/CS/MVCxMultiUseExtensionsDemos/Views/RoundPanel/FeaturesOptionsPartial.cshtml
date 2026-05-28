@@ -1,0 +1,93 @@
+﻿@model RoundPanelFeaturesDemoOptions
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "SettingsFormLayout";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    bool isGroupBoxView = Model.View == DevExpress.Web.View.GroupBox;
+
+    settings.Items.AddGroupItem(groupSettings => {
+
+        groupSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        groupSettings.Caption = "View";
+
+        groupSettings.Items.Add(radiButtonListitem => {
+            radiButtonListitem.Name = "View";
+            radiButtonListitem.ShowCaption = DefaultBoolean.False;
+
+            radiButtonListitem.NestedExtensionType = FormLayoutNestedExtensionItemType.RadioButtonList;
+            RadioButtonListSettings radioButtonListSettings = (RadioButtonListSettings)radiButtonListitem.NestedExtensionSettings;
+            radioButtonListSettings.Properties.Items.Add(new ListEditItem() {
+                Selected = !isGroupBoxView, Text = "Standart", Value = "Standart"
+            });
+            radioButtonListSettings.Properties.Items.Add(new ListEditItem() {
+                Selected = isGroupBoxView, Text = "GroupBox", Value = "GroupBox"
+            });
+            radioButtonListSettings.ControlStyle.Border.BorderColor = Color.Transparent;
+        });
+
+    });
+    settings.Items.AddGroupItem(groupSettings => {
+        groupSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        groupSettings.Caption = "Header Options";
+
+        groupSettings.Items.Add(checkBoxItem => {
+            checkBoxItem.ShowCaption = DefaultBoolean.False;
+            checkBoxItem.Name = "ShowHeader";
+            checkBoxItem.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+            CheckBoxSettings checkBoxSettings = (CheckBoxSettings)checkBoxItem.NestedExtensionSettings;
+
+            checkBoxSettings.Text = "Show Header";
+            checkBoxSettings.Width = 200;
+            checkBoxSettings.Checked = Model.ShowHeader;
+        });
+        groupSettings.Items.AddGroupItem(commonSettings => {
+            commonSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+            commonSettings.Items.Add(checkBoxItem => {
+                checkBoxItem.ShowCaption = DefaultBoolean.False;
+                checkBoxItem.Name = "AllowCollapsingByHeaderClick";
+
+                checkBoxItem.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)checkBoxItem.NestedExtensionSettings;
+                checkBoxSettings.Text = "AllowCollapsingByHeaderClick";
+                checkBoxSettings.Checked = Model.AllowCollapsingByHeaderClick;
+
+            });
+
+            commonSettings.Items.Add(checkBoxItem => {
+                checkBoxItem.ShowCaption = DefaultBoolean.False;
+                checkBoxItem.Name = "ShowCollapseButton";
+
+                checkBoxItem.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)checkBoxItem.NestedExtensionSettings;
+                checkBoxSettings.Text = "ShowCollapseButton";
+                checkBoxSettings.Checked = Model.ShowCollapseButton;
+            });
+
+            commonSettings.Items.Add(checkBoxItem => {
+                checkBoxItem.ShowCaption = DefaultBoolean.False;
+                checkBoxItem.Name = "EnableAnimation";
+
+                checkBoxItem.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)checkBoxItem.NestedExtensionSettings;
+                checkBoxSettings.Text = "EnableAnimation";
+                checkBoxSettings.Checked = Model.EnableAnimation;
+            });
+        });
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 480,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+
+}).GetHtml()
+
+<div class="apply-button-container">
+    @Html.DevExpress().Button(s => {
+       s.Name = "submitButton";
+       s.Text = "Apply Changes";
+       s.Theme = DemoHelper.Instance.Theme;
+       s.UseSubmitBehavior = true;
+   }).GetHtml()
+</div>
+

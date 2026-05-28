@@ -1,0 +1,29 @@
+﻿@model bool?
+
+@section AdditionalResources {
+    <script>
+        function submitForm() {
+            $("form").submit();
+        }
+    </script>
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+ @Html.DevExpress().CheckBox(settings => {
+    settings.Name = "chEnableScrolling";
+    settings.Theme = DemoHelper.Instance.Theme;
+    settings.Text = "EnableSubMenuScrolling";
+    settings.Checked = Model.Value;
+    settings.Properties.ClientSideEvents.CheckedChanged = "submitForm";
+}).GetHtml()
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+
+<iframe id="menuFrame" class="menu_scrolling_frame" src="@DevExpressHelper.GetUrl(new { Controller = "Menu", Action = "ScrollingFrame" })">
+</iframe>

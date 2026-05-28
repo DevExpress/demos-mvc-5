@@ -1,0 +1,104 @@
+﻿@Html.DevExpress().CardView(settings => {
+    settings.Name = "cardView";
+    settings.CallbackRouteValues = new { Controller = "Exporting", Action = "ExportSelectedPartial" };
+    settings.Width = Unit.Percentage(100);
+    settings.Settings.ShowSummaryPanel = true;
+    settings.SettingsExport.EnableClientSideExportAPI = true;
+    settings.SettingsExport.CardWidth = 430;
+    settings.SettingsExport.ExportSelectedCardsOnly = true;
+
+    settings.Toolbars.Add(tb => {
+        tb.SettingsAdaptivity.Enabled = true;
+        tb.Items.Add(s => {
+            s.Text = "Selection";
+            s.Items.Add(i => {
+                i.Name = "custSelectAll";
+                i.Text = "Select All";
+                i.BeginGroup = true;
+            });
+            s.Items.Add(i => {
+                i.Name = "custUnselectAll";
+                i.Text = "Unselect All";
+            });
+            s.Items.Add(i => {
+                i.Name = "custSelectAllOnPage";
+                i.Text = "Select all on the page";
+                i.BeginGroup = true;
+            });
+            s.Items.Add(i => {
+                i.Name = "custUnselectAllOnPage";
+                i.Text = "Unselect all on the page";
+            });
+        });
+        tb.Items.Add(i => {
+            i.Text = "Export";
+            i.Name = "Export";
+            i.Alignment = MenuItemAlignment.Right;
+
+            i.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ExportExport16x16;
+            i.Items.Add(CardViewToolbarCommand.ExportToPdf);
+            i.Items.Add(CardViewToolbarCommand.ExportToXls);
+            i.Items.Add(CardViewToolbarCommand.ExportToXlsx);
+            i.Items.Add(CardViewToolbarCommand.ExportToDocx);
+            i.Items.Add(CardViewToolbarCommand.ExportToRtf);
+        });
+    });
+
+    settings.KeyFieldName = "ID";
+    settings.EnableCardsCache = false;
+    settings.Columns.Add("Address");
+    settings.Columns.Add("Baths");
+    settings.Columns.Add("Beds");
+    settings.Columns.Add("HouseSize");
+    settings.Columns.Add(column => {
+        column.FieldName = "Price";
+        column.PropertiesEdit.DisplayFormatString = "c";
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "PhotoUrl";
+        column.ColumnType = MVCxCardViewColumnType.Image;
+        var properties = (ImageEditProperties)column.PropertiesEdit;
+        properties.ImageWidth = 200;
+        properties.ExportImageSettings.Width = 200;
+        properties.ExportImageSettings.Height = 133;
+    });
+
+    settings.CardLayoutProperties.ColumnCount = 2;
+    settings.CardLayoutProperties.Items.Add(layoutItem => {
+        layoutItem.ColumnName = "PhotoUrl";
+        layoutItem.ShowCaption = DefaultBoolean.False;
+        layoutItem.RowSpan = 6;
+        layoutItem.VerticalAlign = FormLayoutVerticalAlign.Top;
+    });
+
+    settings.CardLayoutProperties.Items.Add(new CardViewCommandLayoutItem() {
+        ShowSelectCheckbox = true,
+        HorizontalAlign = FormLayoutHorizontalAlign.Right
+    });
+    settings.CardLayoutProperties.Items.Add("Baths");
+    settings.CardLayoutProperties.Items.Add("Beds");
+    settings.CardLayoutProperties.Items.Add("HouseSize");
+    settings.CardLayoutProperties.Items.Add("Price");
+    settings.CardLayoutProperties.Items.Add("Address");
+
+    settings.TotalSummary.Add(SummaryItemType.Min, "Price").ValueDisplayFormat = "c0";
+    settings.TotalSummary.Add(SummaryItemType.Max, "Price").ValueDisplayFormat = "c0";
+
+    settings.SettingsPager.SettingsTableLayout.ColumnCount = 2;
+    settings.SettingsPager.SettingsTableLayout.RowsPerPage = 2;
+
+    settings.SettingsBehavior.AllowSelectByCardClick = true;
+
+    settings.Styles.Card.Width = 450;
+
+    settings.ClientSideEvents.Init = "function(s, e) { cardView.SelectAllCardsOnPage(); }";
+    settings.ClientSideEvents.ToolbarItemClick = "OnToolbarItemClick";
+
+    settings.SettingsExport.RenderBrick += (s, e) => {
+        if (e.Column.FieldName == "PhotoUrl") {
+            var path = System.Web.Hosting.HostingEnvironment.MapPath(e.Value.ToString());
+            if (File.Exists(path))
+                e.ImageValue = File.ReadAllBytes(path);
+        }
+    };
+}).Bind(Model).GetHtml()

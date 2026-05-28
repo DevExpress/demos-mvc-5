@@ -1,0 +1,571 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="17.0" DefaultTargets="Build">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E308849C-747D-4728-806B-40F0BDF43B96}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DevExpress.Web.Demos</RootNamespace>
+    <AssemblyName>MVCxChartDemos</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.CodeParser.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.DemoReports.v26.1, Version=26.1.0.0, Culture=neutral, PublicKeyToken=79868b8147b5eae4, processorArchitecture=MSIL">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Drawing.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data.Linq">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data.Entity">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Entity">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Abstractions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Routing">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Services">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.EnterpriseServices">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Data.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxThemes.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Web.Mvc5.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Web.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <ProjectReference Include="..\..\..\Components\CS\Web.DemoData\Web.DemoData.csproj">
+      <Project>{B681C0F5-978D-45A0-A3B5-6D3860FD749D}</Project>
+      <Name>Web.DemoData</Name>
+    </ProjectReference>
+    <Reference Include="DevExpress.Charts.v26.1.Core">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v26.1">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v26.1.Web">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v26.1.Core">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.PivotGrid.v26.1.Core">
+      <HintPath>
+      </HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\DemoHtmlHelper.cs" />
+    <Compile Include="Code\Helpers\ChartHelper.cs" />
+    <Compile Include="Code\Helpers\DataGenerator.cs" />
+    <Compile Include="Code\Helpers\TwoKeyColorizer.cs" />
+    <Compile Include="Controllers\AdvancedViewTypes\AdvancedViewTypesController.BoxPlot.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.TornadoChart.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.Waterfall.cs" />
+    <Compile Include="Controllers\Miscellaneous\MiscellaneousController.EmptyPoints.cs" />
+    <Compile Include="Controllers\Miscellaneous\MiscellaneousController.Histogram.cs" />
+    <Compile Include="Controllers\Miscellaneous\MiscellaneousController.SegmentColorizer.cs" />
+    <Compile Include="Controllers\Miscellaneous\MiscellaneousController.TimeSpanScale.cs" />
+    <Compile Include="Models\BoxPlotData.cs" />
+    <Compile Include="Models\HistogramDataProvider.cs" />
+    <Compile Include="Models\SeriesDataGenerator.cs" />
+    <Compile Include="Code\PhotoUtils.cs" />
+    <Compile Include="Controllers\AdvancedViewTypesController.cs" />
+    <Compile Include="Controllers\AdvancedViewTypes\AdvancedViewTypesController.CandleView.cs" />
+    <Compile Include="Controllers\AdvancedViewTypes\AdvancedViewTypesController.StockView.cs" />
+    <Compile Include="Controllers\AdvancedViewTypes\AdvancedViewTypesController.GanttView.cs" />
+    <Compile Include="Controllers\AdvancedViewTypes\AdvancedViewTypesController.SideBySideGanttView.cs" />
+    <Compile Include="Controllers\AreaTypesController.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.Area3DView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.FullStackedArea3DView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.FullStackedStepAreaView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.StackedArea3DView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.AreaView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.FullStackedAreaView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.SplineArea3DView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.SplineFullStackedArea3DView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.SplineStackedArea3DView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.SplineAreaView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.SplineFullStackedAreaView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.SplineStackedAreaView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.StackedAreaView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.StackedStepAreaView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.StepArea3DView.cs" />
+    <Compile Include="Controllers\AreaTypes\AreaTypesController.StepAreaView.cs" />
+    <Compile Include="Controllers\BarTypesController.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.Bar3DView.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.FullStackedBar3DView.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.FullStackedSideBySideBar3DView.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.StackedBar3DView.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.StackedSideBySideBar3DView.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.BarView.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.FullStackedBarView.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.FullStackedSideBySideBarView.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.ManhattanBarView.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.StackedBarView.cs" />
+    <Compile Include="Controllers\BarTypes\BarTypesController.StackedSideBySideBarView.cs" />
+    <Compile Include="Controllers\DataBindingController.cs" />
+    <Compile Include="Controllers\FunnelTypesController.cs" />
+    <Compile Include="Controllers\FunnelTypes\FunnelTypesController.Funnel3DView.cs" />
+    <Compile Include="Controllers\FunnelTypes\FunnelTypesController.FunnelView.cs" />
+    <Compile Include="Controllers\MiscellaneousController.cs" />
+    <Compile Include="Controllers\Miscellaneous\MiscellaneousController.DrillDown.cs" />
+    <Compile Include="Controllers\Miscellaneous\MiscellaneousController.HitTesting.cs" />
+    <Compile Include="Controllers\Miscellaneous\MiscellaneousController.PrintingAndExporting.cs" />
+    <Compile Include="Controllers\DataBinding\DataBindingController.SeriesBinding.cs" />
+    <Compile Include="Controllers\DataBinding\DataBindingController.SeriesTemplateBinding.cs" />
+    <Compile Include="Controllers\DemoController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Miscellaneous\MiscellaneousController.RenderFormat.cs" />
+    <Compile Include="Controllers\Miscellaneous\MiscellaneousController.ToolTip.cs" />
+    <Compile Include="Controllers\PieTypesController.cs" />
+    <Compile Include="Controllers\PieTypes\PieTypesController.Pie3DView.cs" />
+    <Compile Include="Controllers\PieTypes\PieTypesController.DoughnutPie3DView.cs" />
+    <Compile Include="Controllers\PieTypes\PieTypesController.DoughnutPieView.cs" />
+    <Compile Include="Controllers\PieTypes\PieTypesController.NestedDoughnutPieView.cs" />
+    <Compile Include="Controllers\PieTypes\PieTypesController.PieView.cs" />
+    <Compile Include="Controllers\PointAndLineTypesController.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.FullStackedLine3DView.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.Line3DView.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.Spline3DView.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.StackedLine3DView.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.StepLine3DView.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.BubbleView.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.FullStackedLineView.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.LineView.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.PointView.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.ScatterLineView.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.SplineView.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.StackedLineView.cs" />
+    <Compile Include="Controllers\PointAndLineTypes\PointAndLineTypesController.StepLineView.cs" />
+    <Compile Include="Controllers\RadarTypesController.cs" />
+    <Compile Include="Controllers\RadarTypes\RadarTypesController.PolarRangeAreaView.cs" />
+    <Compile Include="Controllers\RadarTypes\RadarTypesController.PolarAreaView.cs" />
+    <Compile Include="Controllers\RadarTypes\RadarTypesController.PolarLineView.cs" />
+    <Compile Include="Controllers\RadarTypes\RadarTypesController.PolarPointView.cs" />
+    <Compile Include="Controllers\RadarTypes\RadarTypesController.RadarRangeAreaView.cs" />
+    <Compile Include="Controllers\RadarTypes\RadarTypesController.RadarAreaView.cs" />
+    <Compile Include="Controllers\RadarTypes\RadarTypesController.RadarLIneView.cs" />
+    <Compile Include="Controllers\RadarTypes\RadarTypesController.RadarPointView.cs" />
+    <Compile Include="Controllers\RadarTypes\RadarTypesController.ScatterPolarLineView.cs" />
+    <Compile Include="Controllers\RadarTypes\RadarTypesController.ScatterRadarLineView.cs" />
+    <Compile Include="Controllers\RangeTypesController.cs" />
+    <Compile Include="Controllers\RangeTypes\RangeTypesController.AreaRange3DView.cs" />
+    <Compile Include="Controllers\RangeTypes\RangeTypesController.AreaRangeView.cs" />
+    <Compile Include="Controllers\RangeTypes\RangeTypesController.BarRangeView.cs" />
+    <Compile Include="Controllers\RangeTypes\RangeTypesController.SideBySideBarRangeView.cs" />
+    <Compile Include="CustomViewEngine.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SourceOfEnergy.cs" />
+    <Compile Include="Models\CommentsInSite.cs" />
+    <Compile Include="Models\Countries.cs" />
+    <Compile Include="Models\Google.cs" />
+    <Compile Include="Models\PowerConsumption.cs" />
+    <Compile Include="Models\FuelOilPrice.cs" />
+    <Compile Include="Models\DevAV.cs" />
+    <Compile Include="Models\GDPofG7.cs" />
+    <Compile Include="Models\HistoricPopulation.cs" />
+    <Compile Include="Models\MathematicsFunctions.cs" />
+    <Compile Include="Models\MicrosoftAnnualRevenue.cs" />
+    <Compile Include="Models\Movies.cs" />
+    <Compile Include="Models\Options\ChartSeriesBindingOptions.cs" />
+    <Compile Include="Models\Options\ChartSeriesTemplateBindingOptions.cs" />
+    <Compile Include="Models\Options\ChartTypesOptions.cs" />
+    <Compile Include="Models\PopulationAgeStructure.cs" />
+    <Compile Include="Models\PopulationByTime.cs" />
+    <Compile Include="Models\Projects.cs" />
+    <Compile Include="Models\Weather.cs" />
+    <Compile Include="Models\EmptyPointsData.cs" />
+    <Compile Include="Models\WebSiteVisitors.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\BostonMarathon.xml" />
+    <Content Include="App_Data\carbon.xml" />
+    <Content Include="App_Data\CityWeather.xml" />
+    <Content Include="App_Data\Components.xml" />
+    <Content Include="App_Data\GDPofG7.xml" />
+    <Content Include="App_Data\GoogleStock.xml" />
+    <Content Include="App_Data\NWind.mdf" />
+    <Content Include="App_Data\Population.xml" />
+    <Content Include="Content\1x1.gif" />
+    <Content Include="Content\ChartIcons\BtnPrint.png" />
+    <Content Include="Content\ChartIcons\BtnSave.png" />
+    <Content Include="Content\ChartIcons\BtnSaveWindow.png" />
+    <Content Include="Content\CodeFormatter.css" />
+    <Content Include="Content\Components.css" />
+    <Content Include="Content\ComponentsSpriteImage.png" />
+    <Content Include="Content\DemoIcons\BoxPlot.png" />
+    <Content Include="Content\DemoIcons\DrillDown.png" />
+    <Content Include="Content\DemoIcons\Histogram.png" />
+    <Content Include="Content\DemoIcons\SegmentColorizer.png" />
+    <Content Include="Content\DemoIcons\SeriesTemplate.png" />
+    <Content Include="Content\DemoIcons\TimeSpanScale.png" />
+    <Content Include="Content\DemoIcons\Tooltips.png" />
+    <Content Include="Content\DemoIcons\VectorRendering.png" />
+    <Content Include="Content\DemoIcons\Waterfall.png" />
+    <Content Include="Content\FeatureIcons\Ajax.png" />
+    <Content Include="Content\FeatureIcons\Appearance.png" />
+    <Content Include="Content\FeatureIcons\ClientSide.png" />
+    <Content Include="Content\FeatureIcons\CrossBrowser.png" />
+    <Content Include="Content\FeatureIcons\DataBinding.png" />
+    <Content Include="Content\FeatureIcons\Native.png" />
+    <Content Include="Content\FeatureIcons\Performance.png" />
+    <Content Include="Content\FeatureIcons\Power.png" />
+    <Content Include="Content\feedback.css" />
+    <Content Include="Content\FeedbackIcons\icon-cancel-hover.svg" />
+    <Content Include="Content\FeedbackIcons\icon-cancel.svg" />
+    <Content Include="Content\FeedbackIcons\icon-chat-hover.svg" />
+    <Content Include="Content\FeedbackIcons\icon-chat.svg" />
+    <Content Include="Content\FeedbackIcons\icon-thumb-down-hover.svg" />
+    <Content Include="Content\FeedbackIcons\icon-thumb-down.svg" />
+    <Content Include="Content\FeedbackIcons\icon-thumb-up-hover.svg" />
+    <Content Include="Content\FeedbackIcons\icon-thumb-up.svg" />
+    <Content Include="Content\IconsDark\angle-down.svg" />
+    <Content Include="Content\IconsDark\angle-right.svg" />
+    <Content Include="Content\IconsDark\arrow-left.svg" />
+    <Content Include="Content\IconsDark\arrow-right.svg" />
+    <Content Include="Content\IconsDark\copy.svg" />
+    <Content Include="Content\IconsDark\drop-down.svg" />
+    <Content Include="Content\IconsDark\font.svg" />
+    <Content Include="Content\IconsDark\phone-selected.svg" />
+    <Content Include="Content\IconsDark\phone.svg" />
+    <Content Include="Content\IconsDark\rotate.svg" />
+    <Content Include="Content\IconsDark\search.svg" />
+    <Content Include="Content\IconsDark\tablet-selected.svg" />
+    <Content Include="Content\IconsDark\tablet.svg" />
+    <Content Include="Content\IconsDark\three-dots.svg" />
+    <Content Include="Content\IconsDark\sprite.svg" />
+    <Content Include="Content\IconsDark\arrowDown.svg" />
+    <Content Include="Content\IconsDark\arrowUp.svg" />
+    <Content Include="Content\IconsDark\scrollLeft.svg" />
+    <Content Include="Content\IconsDark\scrollRight.svg" />
+    <Content Include="Content\arrowDown.svg" />
+    <Content Include="Content\arrowUp.svg" />
+    <Content Include="Content\Loading.gif" />
+    <Content Include="Content\Platform.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\sprite.css" />
+    <Content Include="Content\sprite.svg" />
+    <Content Include="Content\sprite.png" />
+    <Content Include="Content\VideoBanner.png" />
+    <Content Include="Content\VideoButton.png" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\Demo.js" />
+    <Content Include="Scripts\Feedback.js" />
+    <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Shared\SearchPartial.cshtml" />
+    <Content Include="Views\Shared\DemoTabsPartial.cshtml" />
+    <Content Include="Views\Shared\SearchListPartial.cshtml" />
+    <Content Include="Views\Shared\ErrorMessage.cshtml" />
+    <Content Include="Views\AreaTypes\FullStackedArea3DView.cshtml" />
+    <Content Include="Views\AreaTypes\Area3DView.cshtml" />
+    <Content Include="Views\AreaTypes\StackedArea3DView.cshtml" />
+    <Content Include="Views\AreaTypes\FullStackedAreaView.cshtml" />
+    <Content Include="Views\AreaTypes\AreaView.cshtml" />
+    <Content Include="Views\AreaTypes\StackedAreaView.cshtml" />
+    <Content Include="Views\AreaTypes\SplineFullStackedArea3DView.cshtml" />
+    <Content Include="Views\AreaTypes\SplineArea3DView.cshtml" />
+    <Content Include="Views\AreaTypes\SplineStackedArea3DView.cshtml" />
+    <Content Include="Views\AreaTypes\SplineFullStackedAreaView.cshtml" />
+    <Content Include="Views\AreaTypes\SplineAreaView.cshtml" />
+    <Content Include="Views\AreaTypes\SplineStackedAreaView.cshtml" />
+    <Content Include="Views\AreaTypes\StepArea3DView.cshtml" />
+    <Content Include="Views\AreaTypes\StepAreaView.cshtml" />
+    <Content Include="Views\BarTypes\FullStackedBar3DView.cshtml" />
+    <Content Include="Views\BarTypes\FullStackedSideBySideBar3DView.cshtml" />
+    <Content Include="Views\BarTypes\Bar3DView.cshtml" />
+    <Content Include="Views\BarTypes\StackedBar3DView.cshtml" />
+    <Content Include="Views\BarTypes\StackedSideBySideBar3DView.cshtml" />
+    <Content Include="Views\BarTypes\FullStackedBarView.cshtml" />
+    <Content Include="Views\BarTypes\FullStackedSideBySideBarView.cshtml" />
+    <Content Include="Views\BarTypes\BarView.cshtml" />
+    <Content Include="Views\BarTypes\StackedBarView.cshtml" />
+    <Content Include="Views\BarTypes\StackedSideBySideBarView.cshtml" />
+    <Content Include="Views\BarTypes\ManhattanBarView.cshtml" />
+    <Content Include="Views\FunnelTypes\Funnel3DView.cshtml" />
+    <Content Include="Views\FunnelTypes\FunnelView.cshtml" />
+    <Content Include="Views\PieTypes\DoughnutPie3DView.cshtml" />
+    <Content Include="Views\PieTypes\DoughnutPieView.cshtml" />
+    <Content Include="Views\PieTypes\NestedDoughnutPieView.cshtml" />
+    <Content Include="Views\PieTypes\Pie3DView.cshtml" />
+    <Content Include="Views\PieTypes\PieView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\BubbleView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\FullStackedLine3DView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\FullStackedLineView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\Line3DView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\LineView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\PointView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\ScatterLineView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\Spline3DView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\SplineView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\StackedLine3DView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\StackedLineView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\StepLine3DView.cshtml" />
+    <Content Include="Views\PointAndLineTypes\StepLineView.cshtml" />
+    <Content Include="Views\RadarTypes\PolarAreaView.cshtml" />
+    <Content Include="Views\RadarTypes\PolarLineView.cshtml" />
+    <Content Include="Views\RadarTypes\PolarPointView.cshtml" />
+    <Content Include="Views\RadarTypes\RadarAreaView.cshtml" />
+    <Content Include="Views\RadarTypes\RadarLineView.cshtml" />
+    <Content Include="Views\RadarTypes\RadarPointView.cshtml" />
+    <Content Include="Views\RadarTypes\ScatterPolarLineView.cshtml" />
+    <Content Include="Views\RadarTypes\ScatterRadarLineView.cshtml" />
+    <Content Include="Views\RangeTypes\AreaRange3DView.cshtml" />
+    <Content Include="Views\RangeTypes\AreaRangeView.cshtml" />
+    <Content Include="Views\RangeTypes\BarRangeView.cshtml" />
+    <Content Include="Views\RangeTypes\SideBySideBarRangeView.cshtml" />
+    <Content Include="Views\Miscellaneous\ToolTip.cshtml" />
+    <Content Include="Views\AdvancedViewTypes\CandleView.cshtml" />
+    <Content Include="Views\AdvancedViewTypes\StockView.cshtml" />
+    <Content Include="Views\AdvancedViewTypes\OverlappedGanttView.cshtml" />
+    <Content Include="Views\AdvancedViewTypes\GanttViewsPartial.cshtml" />
+    <Content Include="Views\BarTypes\BarViewPartial.cshtml" />
+    <Content Include="Views\Miscellaneous\RenderFormat.cshtml" />
+    <Content Include="Content\Fonts\CustomFont0.woff" />
+    <Content Include="Content\Fonts\CustomFont1.woff" />
+    <Content Include="Content\Fonts\CustomFont2.woff" />
+    <Content Include="Content\Fonts\OpenSans-CondBold.woff" />
+    <Content Include="Content\Fonts\overpass-semibold.woff" />
+    <Content Include="Content\Site.scss" />
+    <Content Include="Views\Miscellaneous\SegmentColorizer.cshtml" />
+    <Content Include="Views\Miscellaneous\Histogram.cshtml" />
+    <Content Include="Views\Miscellaneous\TimeSpanScale.cshtml" />
+    <Content Include="Views\Miscellaneous\TimeSpanScalePartial.cshtml" />
+    <Content Include="Views\BarTypes\WaterfallView.cshtml" />
+    <Content Include="Views\AdvancedViewTypes\BoxPlotPartial.cshtml" />
+    <Content Include="Views\AdvancedViewTypes\BoxPlot.cshtml" />
+    <Content Include="Views\BarTypes\TornadoChart.cshtml" />
+    <Content Include="Views\Shared\FeedbackPanel.cshtml" />
+    <Content Include="Views\PieTypes\PieViewPartial.cshtml" />
+    <Content Include="Views\PieTypes\DoughnutPieViewPartial.cshtml" />
+    <Content Include="Views\Miscellaneous\EmptyPoints.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Mvc" />
+    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" />
+    <PackageReference Include="System.Text.Json" />
+    <PackageReference Include="EntityFramework" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="System.Security.AccessControl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\NavigationPartial.cshtml" />
+    <Content Include="Views\Shared\ThemeSelectorPartial.cshtml" />
+    <Content Include="Views\Shared\FooterTextPartial.cshtml" />
+    <Content Include="Views\Shared\HeadPartial.cshtml" />
+    <Content Include="Views\Shared\EventMonitor.cshtml" />
+    <Content Include="Views\DataBinding\SeriesBinding.cshtml" />
+    <Content Include="Views\DataBinding\SeriesTemplateBinding.cshtml" />
+    <Content Include="Views\Miscellaneous\HitTesting.cshtml" />
+    <Content Include="Views\Miscellaneous\DrillDown.cshtml" />
+    <Content Include="Views\Miscellaneous\DrillDownPartial.cshtml" />
+    <Content Include="Views\Miscellaneous\PrintingAndExporting.cshtml" />
+    <Content Include="Views\Miscellaneous\PrintingAndExportingPartial.cshtml" />
+    <Content Include="Views\AreaTypes\FullStackedStepAreaView.cshtml" />
+    <Content Include="Views\AreaTypes\StackedStepAreaView.cshtml" />
+    <Content Include="Views\RadarTypes\RadarRangeAreaView.cshtml" />
+    <Content Include="Views\RadarTypes\PolarRangeAreaView.cshtml" />
+    <Content Include="Views\AdvancedViewTypes\SideBySideGanttView.cshtml" />
+    <Content Include="Views\Shared\ThemeParametersSelectorPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>60461</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,115 @@
+﻿@model ChartDrillDownDemoOptions
+
+@functions{
+            public SeriesTemplate CreateDrillTemplate(string seriesDataMember, DevExpress.XtraCharts.ViewType viewType, bool crosshairByArgument) {
+                SeriesTemplate drillTemplate = new SeriesTemplate();
+                drillTemplate.ChangeView(viewType);
+                AreaSeriesViewBase view = drillTemplate.View as AreaSeriesViewBase;
+                if (view != null) {
+                    view.Transparency = 100;
+                    view.MarkerVisibility = DefaultBoolean.False;
+                }
+                drillTemplate.SeriesDataMember = seriesDataMember;
+                drillTemplate.ArgumentDataMember = "SaleDate";
+                drillTemplate.ValueDataMembersSerializable = "Sales";
+                drillTemplate.CrosshairLabelPattern = crosshairByArgument ? "{A:d}: ${V:N2}" : "{S}: ${V:N2}";
+                return drillTemplate;
+            }
+        }
+
+@{
+    ChartDrillDownDemoOptions options = Model;
+    if (options != null) {
+        @Html.DevExpress().Chart(settings => {
+       settings.Name = "chart";
+       settings.Width = 920;
+       settings.Height = 500;
+       settings.PaletteName = "Office";
+       settings.BorderOptions.Visibility = DefaultBoolean.False;
+       settings.CrosshairOptions.CrosshairLabelMode = CrosshairLabelMode.ShowForNearestSeries;
+       settings.CallbackRouteValues = new { Controller = "Miscellaneous", Action = "DrillDownPartial" };
+       settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+
+       settings.Titles.Add(t => {
+           t.DXFont = new DXFont("Tahoma", 18);
+           t.Text = "DevAV Total Sales";
+       });
+
+       settings.SeriesTemplate.ArgumentDataMember = "Region";
+       settings.SeriesTemplate.ValueDataMembers[0] = "Sales";
+       settings.SeriesTemplate.SeriesDataMember = "ProductCategory";
+       settings.SeriesTemplate.LabelsVisibility = DefaultBoolean.False;
+       settings.SeriesTemplate.CrosshairLabelPattern = "{S}: ${V:N2}";
+       settings.SeriesTemplate.QualitativeSummaryOptions.SummaryFunction = "SUM([Sales])";
+       settings.SeriesTemplate.ChangeView(DevExpress.XtraCharts.ViewType.StackedBar);
+
+       SeriesTemplate seriesPointLevel1Template = CreateDrillTemplate("ProductName", DevExpress.XtraCharts.ViewType.StackedSplineArea, false);
+       SeriesTemplate seriesPointLevel2Template = CreateDrillTemplate("ProductName", DevExpress.XtraCharts.ViewType.SplineArea, true);
+       seriesPointLevel1Template.SeriesDrillTemplate = seriesPointLevel2Template;
+       settings.SeriesTemplate.SeriesPointDrillTemplate = seriesPointLevel1Template;
+
+       SeriesTemplate argumentLevel1Template = CreateDrillTemplate("ProductCategory", DevExpress.XtraCharts.ViewType.StackedSplineArea, false);
+       SeriesTemplate argumentLevel2Template = CreateDrillTemplate("ProductName", DevExpress.XtraCharts.ViewType.StackedSplineArea, false);
+       SeriesTemplate argumentLevel3Template = CreateDrillTemplate("ProductName", DevExpress.XtraCharts.ViewType.SplineArea, true);
+       argumentLevel2Template.SeriesDrillTemplate = argumentLevel3Template;
+       argumentLevel1Template.SeriesDrillTemplate = argumentLevel2Template;
+       settings.SeriesTemplate.ArgumentDrillTemplate = argumentLevel1Template;
+
+       settings.XYDiagram(d => {
+           d.Rotated = true;
+           d.AxisX.GridLines.Visible = true;
+           d.AxisY.Title.Text = "Thousands of USD";
+           d.AxisY.Title.Visibility = DefaultBoolean.True;
+           d.AxisY.Label.TextPattern = "{V:0,.##}";
+           d.AxisX.Label.DXFont = new DXFont(d.AxisX.Label.DXFont, DXFontStyle.Underline);
+       });
+
+       settings.BoundDataChanged = (s, e) => {
+           MVCxChartControl chart = (MVCxChartControl)s;
+           XYDiagram diagram = chart.Diagram as XYDiagram;
+           if (diagram != null && chart.Series.Count > 0) {
+               diagram.AxisX.DateTimeScaleOptions.ScaleMode = ScaleMode.Automatic;
+               diagram.AxisX.DateTimeScaleOptions.AggregateFunction = AggregateFunction.Sum;
+               diagram.EnableAxisXScrolling = diagram.EnableAxisXZooming = chart.Series[0].ActualArgumentScaleType == ScaleType.DateTime;
+           }
+       };
+       settings.DrillDownStateChanged = (s, e) => {
+           MVCxChartControl chart = (MVCxChartControl)s;
+           XYDiagram diagram = chart.Diagram as XYDiagram;
+
+           if (diagram != null) {
+               if (e.States.Length == 0) {
+                   diagram.Rotated = true;
+                   diagram.AxisX.Label.DXFont = new DXFont(diagram.AxisX.Label.DXFont, DXFontStyle.Underline);
+                   chart.CrosshairOptions.ShowArgumentLine = false;
+                   chart.CrosshairOptions.CrosshairLabelMode = CrosshairLabelMode.ShowForNearestSeries;
+                   diagram.EnableAxisXScrolling = false;
+                   diagram.EnableAxisXZooming = false;
+               }
+               else {
+                   diagram.Rotated = false;
+                   diagram.AxisX.Label.DXFont = new DXFont(diagram.AxisX.Label.DXFont, DXFontStyle.Regular);
+                   chart.CrosshairOptions.ShowArgumentLine = true;
+                   chart.CrosshairOptions.CrosshairLabelMode = CrosshairLabelMode.ShowCommonForAllSeries;
+                   diagram.EnableAxisXScrolling = true;
+                   diagram.EnableAxisXZooming = true;
+               }
+           }
+
+           var keys = DevAV.CategorizedProducts.Keys;
+           List<string> categories = new List<string>(keys.Count);
+           foreach (string category in DevAV.CategorizedProducts.Keys)
+               categories.Add(category);
+
+           foreach (DrillDownItem item in e.States) {
+               if (item.Parameters.ContainsKey("ProductCategory")) {
+                   chart.PaletteBaseColorNumber = categories.IndexOf(item.Parameters["ProductCategory"].ToString()) + 1;
+                   return;
+               }
+           }
+           chart.PaletteBaseColorNumber = 0;
+       };
+   }).Bind(Model.Data).GetHtml()
+    }
+}
+

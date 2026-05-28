@@ -1,0 +1,43 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);
+}
+@section AdditionalResources {
+    <style type="text/css">
+        .dxtcFixed {
+            max-width: 800px;
+        }
+        .dxtcFixed td.dxdvItem {
+            width: auto !important;
+        }
+    </style>
+}
+@Html.DevExpress().PageControl(
+    settings => {
+        settings.Name = "pcScrolling";
+        settings.Height = Unit.Pixel(350);
+        settings.Width = Unit.Percentage(100);
+        settings.ControlStyle.CssClass = "dxtcAligned dxtcFixed horizontal-center-aligned";
+        settings.EnableTabScrolling = true;
+        settings.TabAlign = TabAlign.Justify;
+
+        settings.Styles.Tab.CssClass = "scrolling_Tab";
+
+        settings.TabPages.Add("Scheduling").SetContent(() => {
+            ViewContext.Writer.Write(Html.ComponentList("Scheduling", 9));
+        });
+        settings.TabPages.Add("Reporting").SetContent(() => {
+            ViewContext.Writer.Write(Html.ComponentList("Reporting", 9));
+        });
+        settings.TabPages.Add("Navigation & Layout").SetContent(() => {
+            ViewContext.Writer.Write(Html.ComponentList("Navigation & Layout", 9));
+        });
+        settings.TabPages.Add("Data").SetContent(() => {
+            ViewContext.Writer.Write(Html.ComponentList("Data", 9));
+        });
+        settings.TabPages.Add("Components").SetContent(() => {
+            ViewContext.Writer.Write(Html.ComponentList("Components", 9));
+        });
+        settings.TabPages.Add("Common Controls").SetContent(() => {
+            ViewContext.Writer.Write(Html.ComponentList("Common Controls", 9));
+        });
+    }).GetHtml()

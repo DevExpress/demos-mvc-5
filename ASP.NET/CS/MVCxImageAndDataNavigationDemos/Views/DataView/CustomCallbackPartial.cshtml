@@ -1,0 +1,36 @@
+﻿@functions{
+    public string SortColor(string fieldName)
+    {
+        return (string)Session["SortField"] == fieldName ? "dvcSortColor" : "";
+    }
+}
+
+@Html.DevExpress().DataView(
+    settings =>
+    {
+        settings.Name = "dvHeadphones";
+        settings.CallbackRouteValues = new { Controller = "DataView", Action = "CustomCallbackPartial" };
+        settings.CustomActionRouteValues = new { Controller = "DataView", Action = "SortData" };
+        settings.SettingsTableLayout.ColumnCount = 2;
+        settings.SettingsTableLayout.RowsPerPage = 5;
+        settings.Width = Unit.Percentage(100);
+        settings.Style.Add("clear", "both");
+        settings.Styles.Item.Height = Unit.Pixel(50);
+        settings.Styles.Item.Paddings.Assign(new Paddings { PaddingTop = Unit.Pixel(5), PaddingBottom = Unit.Pixel(5) });
+        settings.SetItemTemplateContent(
+            c =>
+            {
+                Html.DevExpress().BinaryImage(sett =>
+                {
+                    sett.Name = "binaryImage" + c.ID;
+                }).Bind(DataBinder.Eval(c.DataItem, "Photo")).GetHtml();
+                ViewContext.Writer.Write(
+                    "<div style=\"padding: 12px 0\">" +
+                        "<label class=\"" + SortColor("Model") + "\" style=\"margin-left: 5px; font-weight: bold\">" + DataBinder.Eval(c.DataItem, "Model").ToString() + "</label><br />" +
+                        "<label class=\"" + SortColor("Price") + "\" style=\"margin-left: 5px; font-weight: bold\">" + (String.Format("{0:c}", DataBinder.Eval(c.DataItem, "Price"))) + "</label>" +
+                    "</div>"
+                );
+            }
+        );
+    }
+).Bind(Model).GetHtml()

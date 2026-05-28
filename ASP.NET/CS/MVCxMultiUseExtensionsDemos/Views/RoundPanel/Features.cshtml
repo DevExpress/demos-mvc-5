@@ -1,0 +1,33 @@
+﻿@model RoundPanelFeaturesDemoOptions
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(360);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(400); 
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+    @Html.DevExpress().RoundPanel(settings => {
+        settings.Name = "roundPanel";
+        settings.AllowCollapsingByHeaderClick = Model.AllowCollapsingByHeaderClick;
+        settings.ShowCollapseButton = Model.ShowCollapseButton;
+        settings.ShowHeader = Model.ShowHeader;
+        settings.View = Model.View;
+        settings.EnableAnimation = Model.EnableAnimation;
+        settings.Width = 270;
+        settings.HeaderText = "ASP.NET MVC";
+
+        settings.SetContent(@"<h4>55+ MVC Extensions</h4><br />
+The extensions that are included inside the DevExpress ASP.NET Subscription have been optimized for MVC and designed so you can deliver elegant line-of-business apps with absolute ease. From an Outlook.com inspired solution to a full-featured web dashboard, DevExpress MVC extensions help you build your best, each and every time.");
+    }).GetHtml()
+
+@section DemoOptions  {
+    @Html.Partial("FeaturesOptionsPartial", Model)
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

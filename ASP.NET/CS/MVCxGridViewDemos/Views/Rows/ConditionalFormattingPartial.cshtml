@@ -1,0 +1,63 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "gvConditionalFormatting";
+    settings.CallbackRouteValues = new { Controller = "Rows", Action = "ConditionalFormattingPartial" };
+
+    settings.KeyFieldName = "OrderID;ProductID";
+    settings.Width = Unit.Percentage(100);
+
+    settings.Columns.Add("CustomerName").Width = 260;
+    settings.Columns.Add("Freight").SortOrder = DevExpress.Data.ColumnSortOrder.Descending;
+    settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+    settings.Columns.Add(c => {
+        c.FieldName = "Discount";
+        c.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        c.Settings.FilterMode = ColumnFilterMode.Value;
+        c.PropertiesEdit.DisplayFormatString = "p0";
+    });
+    settings.Columns.Add("Quantity");
+    settings.Columns.Add(c => {
+        c.FieldName = "Total";
+        c.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+        c.UnboundExpression = "UnitPrice * Quantity * (1 - Discount)";
+        c.PropertiesEdit.DisplayFormatString = "c";
+    });
+
+    settings.FormatConditions.AddTopBottom(c => {
+        c.FieldName = "Freight";
+        c.Rule = GridTopBottomRule.TopPercent;
+        c.Threshold = 20;
+        c.Format = GridConditionHighlightFormat.RedText;
+    });
+    settings.FormatConditions.AddTopBottom(c => {
+        c.FieldName = "Freight";
+        c.Rule = GridTopBottomRule.TopPercent;
+        c.Threshold = 20;
+        c.Format = GridConditionHighlightFormat.BoldText;
+    });
+    settings.FormatConditions.AddTopBottom(c => {
+        c.FieldName = "Freight";
+        c.Rule = GridTopBottomRule.BottomPercent;
+        c.Threshold = 20;
+        c.Format = GridConditionHighlightFormat.GreenText;
+    });
+    settings.FormatConditions.AddTopBottom(c => {
+        c.FieldName = "Freight";
+        c.Rule = GridTopBottomRule.BottomPercent;
+        c.Threshold = 20;
+        c.Format = GridConditionHighlightFormat.BoldText;
+    });
+    settings.FormatConditions.AddHighlight("Discount", "[Discount] > 0", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+    settings.FormatConditions.AddTopBottom(c => {
+        c.FieldName = "Discount";
+        c.Rule = GridTopBottomRule.TopItems;
+        c.Threshold = 15;
+        c.Format = GridConditionHighlightFormat.BoldText;
+    });
+    settings.FormatConditions.AddTopBottom("UnitPrice", GridTopBottomRule.AboveAverage, GridConditionHighlightFormat.ItalicText);
+    settings.FormatConditions.AddTopBottom("UnitPrice", GridTopBottomRule.AboveAverage, GridConditionHighlightFormat.RedText);
+    settings.FormatConditions.AddColorScale("Quantity", GridConditionColorScaleFormat.BlueWhiteRed);
+    settings.FormatConditions.AddIconSet("Quantity", GridConditionIconSetFormat.Ratings4);
+    settings.FormatConditions.AddIconSet("Total", GridConditionIconSetFormat.Arrows5Colored);
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

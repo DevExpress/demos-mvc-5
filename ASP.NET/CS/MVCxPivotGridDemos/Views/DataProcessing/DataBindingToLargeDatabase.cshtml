@@ -1,0 +1,51 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@if(!DatabaseGenerator.IsReady("GeneratedServerModeTable")) {
+    @Html.Partial("CreateDatabasePartial", "GeneratedServerModeTable")
+} else {
+    <script type="text/javascript">
+        var callbackInitDate;
+
+        function onInit(s, e) {
+            s.PerformCallback();
+        }
+
+        function onStartCallback(s, e) {
+            callbackInitDate = new Date();
+        }
+        function onEndCallback(s, e) {
+            var currentDate = new Date();
+            var time = currentDate - callbackInitDate;
+            $("#Time").html(time);
+        }
+    </script>
+
+    @section StartDemoRegion {
+        @{ Html.BeginForm(); }
+    }
+
+    @section DemoOptionsTop {
+        <div class="options">
+            <div class="options-item">
+                @Html.DevExpress().Label(s => {
+                   s.Text = "Time taken:";
+                   s.Theme = DemoHelper.Instance.Theme;
+               }).GetHtml()
+
+                @Html.DevExpress().Label(s => {
+                   s.Name = "Time";
+                   s.Style.Add(HtmlTextWriterStyle.Color, "red");
+                   s.Theme = DemoHelper.Instance.Theme;
+               }).GetHtml()
+
+            </div>
+        </div>
+    }
+
+    @Html.Partial("DataBindingToLargeDatabasePartial")
+
+
+    @section EndDemoRegion {
+        @{ Html.EndForm(); }
+    }
+}

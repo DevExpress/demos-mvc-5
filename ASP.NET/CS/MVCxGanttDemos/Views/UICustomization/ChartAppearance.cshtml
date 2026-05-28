@@ -1,0 +1,200 @@
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@section AdditionalResources {
+    <style>
+        div.custom-task-edit-tooltip {
+            background-color: white;
+            color: black;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            padding: 10px 12px 12px 12px;
+            border-radius: 3px;
+        }
+
+        .custom-task-edit-tooltip::before {
+            border-top-color: white !important;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+        }
+
+        .custom-task-edit-tooltip::after {
+            border-bottom-color: white;
+        }
+
+        .custom-tooltip-title {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            padding-bottom: 6px;
+        }
+
+        .custom-tooltip-row {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+}
+
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        function ViewTypeCombo_SelectedIndexChanged(s,e) {
+            gantt.SetViewType(s.GetValue());
+        }
+        function TitlePositionCombo_SelectedIndexChanged(s,e) {
+            gantt.SetTaskTitlePosition(s.GetValue());
+        }
+        function ShowResourcesCheckbox_CheckedChanged(s,e) {
+            gantt.ShowResources(s.GetValue());
+        }
+        function ShowDependencies_CheckedChanged(s, e) {
+            gantt.ShowDependencies(s.GetValue());
+        }
+        function onBeginCallback(s,e) {
+            e.customArgs = MVCxClientUtils.GetSerializedEditorValuesInContainer("options");
+        }
+        function onShowTooltip(s,e) {
+            var timeEstimate = Math.abs(e.task["StartDate"] - e.task["EndDate"]) / 36e5;
+            var timeLeft = Math.floor((100 - e.task["PercentComplete"]) / 100 * timeEstimate);
+
+            var customTooltip = document.createElement("div");
+            customTooltip.setAttribute("class", "custom-task-edit-tooltip");
+            var titleContainer = document.createElement("div");
+            titleContainer.setAttribute("class", "custom-tooltip-title");
+            titleContainer.textContent = e.task["Subject"];
+            customTooltip.appendChild(titleContainer);
+            var estimateContainer = document.createElement("div");
+            estimateContainer.setAttribute("class", "custom-tooltip-row");
+            estimateContainer.textContent = "Estimate: " + timeEstimate + " hours";
+            customTooltip.appendChild(estimateContainer);
+            var timeLeftConateiner = document.createElement("div");
+            timeLeftConateiner.setAttribute("class", "custom-tooltip-row");
+            timeLeftConateiner.textContent = "Left: " + timeLeft + "hours";
+            customTooltip.appendChild(timeLeftConateiner);
+
+            e.container.appendChild(customTooltip);
+        }
+        function startChanged(s,e) {
+            gantt.SetStartDateRange(s.GetValue());
+        }
+        function endChanged(s,e) {
+            gantt.SetEndDateRange(s.GetValue());
+        }
+    </script>
+
+    @Html.DevExpress().FormLayout(s => {
+    s.Name = "options";
+    s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    s.UseDefaultPaddings = false;
+    s.Styles.LayoutGroup.Cell.Paddings.PaddingBottom = Unit.Pixel(10);
+
+    s.Items.AddGroupItem(gl => {
+        gl.VerticalAlign = FormLayoutVerticalAlign.Top;
+        gl.ShowCaption = DefaultBoolean.False;
+        gl.ColumnCount = 2;
+
+        gl.Items.Add(i => {
+            i.Caption = "View Type";
+            i.SetNestedContent(() => {
+                @Html.DevExpress().ComboBox(settings => {
+                    settings.Name = "ViewType";
+                    settings.Properties.ClientSideEvents.SelectedIndexChanged = "ViewTypeCombo_SelectedIndexChanged";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.ValueType = typeof(int);
+                    settings.Properties.ValueField = "Value";
+                    settings.Properties.TextField = "Text";
+                }).BindList(GanttDemoOptions.AvailableViewTypes.Select(t => new { Value = (int)t, Text = t.ToString() })).Bind((int)DemoOptions.ViewType).GetHtml();
+            });
+        });
+        gl.Items.Add(i => {
+            i.Caption = "Start Date Range";
+            i.SetNestedContent(() => {
+                @Html.DevExpress().DateEdit(settings => {
+                    settings.Name = "StartDateRange";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.Properties.DisplayFormatString = "MM/dd/yyyy";
+                    settings.Properties.ClientSideEvents.ValueChanged = "startChanged";
+                }).Bind((DateTime)DemoOptions.StartDateRange).GetHtml();
+            });
+        });
+        gl.Items.Add(i => {
+            i.Caption = "Title Position";
+            i.SetNestedContent(() => {
+                @Html.DevExpress().ComboBox(settings => {
+                    settings.Name = "TitlePosition";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.ClientSideEvents.SelectedIndexChanged = "TitlePositionCombo_SelectedIndexChanged";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.Properties.ValueType = typeof(int);
+                    settings.Properties.ValueField = "Value";
+                    settings.Properties.TextField = "Text";
+                }).BindList(GanttDemoOptions.AvailableTaskTitlePositions.Select(t => new { Value = (int)t, Text = t.ToString() })).Bind((int)DemoOptions.TitlePosition).GetHtml();
+            });
+        });
+        gl.Items.Add(i => {
+            i.Caption = "End Date Range";
+            i.SetNestedContent(() => {
+                @Html.DevExpress().DateEdit(settings => {
+                    settings.Name = "EndDateRange";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.Properties.DisplayFormatString = "MM/dd/yyyy";
+                    settings.Properties.ClientSideEvents.ValueChanged = "endChanged";
+                }).Bind((DateTime)DemoOptions.EndDateRange).GetHtml();
+            });
+        });
+        gl.Items.Add(i => {
+            i.Caption = "Show Resources";
+            i.SetNestedContent(() => {
+                @Html.DevExpress().CheckBox(cbSettings => {
+                    cbSettings.Name = "ShowResources";
+                    cbSettings.Theme = DemoHelper.Instance.Theme;
+                    cbSettings.ControlStyle.Wrap = DefaultBoolean.False;
+                    cbSettings.Properties.ClientSideEvents.CheckedChanged = "ShowResourcesCheckbox_CheckedChanged";
+                }).Bind((bool)DemoOptions.ShowResources).GetHtml();
+            });
+        });
+        gl.Items.Add(i => {
+            i.Caption = "Customize Task Tooltip";
+            i.SetNestedContent(() => {
+                @Html.DevExpress().CheckBox(cbSettings => {
+                    cbSettings.Name = "CustomizeTaskTooltip";
+                    cbSettings.Theme = DemoHelper.Instance.Theme;
+                    cbSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { $('form').submit(); }";
+                }).Bind((bool)DemoOptions.CustomizeTaskTooltip).GetHtml();
+            });
+        });
+        gl.Items.Add(i =>
+        {
+            i.Caption = "Show Dependencies";
+            i.SetNestedContent(() =>
+            {
+                @Html.DevExpress().CheckBox(cbSettings =>
+                {
+                    cbSettings.Name = "ShowDependencies";
+                    cbSettings.Theme = DemoHelper.Instance.Theme;
+                    cbSettings.ControlStyle.Wrap = DefaultBoolean.False;
+                    cbSettings.Properties.ClientSideEvents.CheckedChanged = "ShowDependencies_CheckedChanged";
+                }).Bind((bool)DemoOptions.ShowDependencies).GetHtml();
+            });
+        });
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+        ColumnMinWidth = 600,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).GetHtml()
+}
+
+@Html.Partial("ChartAppearancePartial")
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+
+@functions {
+    GanttDemoOptions DemoOptions { get { return ViewBag.GanttDemoOptions; } }
+}

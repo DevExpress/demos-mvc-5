@@ -1,0 +1,69 @@
+﻿@using DevExpress.Data;
+@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "Exporting", Action = "ExportWithFormatConditionsPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.KeyFieldName = "OrderID;ProductID";
+    settings.EnableRowsCache = false;
+    settings.SettingsExport.EnableClientSideExportAPI = true;
+    settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+
+    settings.Columns.Add(column => {
+        column.FieldName = "CustomerName";
+        column.Width = 260;
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "Freight";
+        column.SortOrder = ColumnSortOrder.Descending;
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "UnitPrice";
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.PropertiesEdit.DisplayFormatString = "c";
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "Discount";
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        column.PropertiesEdit.DisplayFormatString = "p0";
+    });
+    settings.Columns.Add("Quantity");
+    settings.Columns.Add(column => {
+        column.FieldName = "Total";
+        column.UnboundType = UnboundColumnType.Decimal;
+        column.UnboundExpression = "UnitPrice * Quantity * (1 - Discount)";
+        column.PropertiesEdit.DisplayFormatString = "c";
+    });
+
+    settings.FormatConditions.AddTopBottom("UnitPrice", GridTopBottomRule.AboveAverage, GridConditionHighlightFormat.ItalicText);
+    settings.FormatConditions.AddTopBottom("UnitPrice", GridTopBottomRule.AboveAverage, GridConditionHighlightFormat.RedText);
+    settings.FormatConditions.AddHighlight("Discount", "[Discount] > 0", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+    settings.FormatConditions.AddTopBottom(f => {
+        f.FieldName = "Discount";
+        f.Rule = GridTopBottomRule.TopItems;
+        f.Threshold = 15;
+        f.Format = GridConditionHighlightFormat.BoldText;
+    });
+    settings.FormatConditions.AddColorScale("Quantity", GridConditionColorScaleFormat.GreenWhite);
+    settings.FormatConditions.AddIconSet("Quantity", GridConditionIconSetFormat.Ratings4);
+    settings.FormatConditions.AddTopBottom(f => {
+        f.FieldName = "Total";
+        f.Rule = GridTopBottomRule.TopPercent;
+        f.Threshold = 20;
+        f.Format = GridConditionHighlightFormat.Custom;
+        f.CellStyle.Font.Bold = true;
+        f.CellStyle.ForeColor = Color.FromArgb(0x9c, 0, 0x6);
+    });
+
+    settings.Toolbars.Add(t => {
+        t.SettingsAdaptivity.Enabled = true;
+        t.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+        t.Items.Add(GridViewToolbarCommand.ExportToPdf);
+        t.Items.Add(GridViewToolbarCommand.ExportToXls);
+        t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+        t.Items.Add(GridViewToolbarCommand.ExportToDocx);
+        t.Items.Add(GridViewToolbarCommand.ExportToRtf);
+    });
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

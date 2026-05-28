@@ -1,0 +1,31 @@
+﻿@model EditorTemplatesData
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+@section AdditionalResources {
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+}
+@using (Html.BeginForm("EditorTemplates", "Common", FormMethod.Post, new { id = "validationForm" })) {
+    @Html.AntiForgeryToken()
+
+    @Html.EditorFor(model => model.CarModel, new { Caption = CommonDemoHelper.GetCaptionFromModel("CarModel", Model.GetType()) })
+    @Html.EditorFor(model => model.Price, new { Caption = CommonDemoHelper.GetCaptionFromModel("Price", Model.GetType()) })
+    @Html.EditorFor(model => model.FuelType, new { Caption = CommonDemoHelper.GetCaptionFromModel("FuelType", Model.GetType()) })
+    @Html.EditorFor(model => model.Mileage, new { Caption = CommonDemoHelper.GetCaptionFromModel("Mileage", Model.GetType()) })
+    <div class="buttonsContainer">
+        @Html.DevExpress().Button(settings => {
+            settings.Name = "btnUpdate";
+            settings.Text = "Update";
+            settings.UseSubmitBehavior = true;
+        }).GetHtml()
+        @Html.DevExpress().Button(settings => {
+            settings.Name = "btnClear";
+            settings.Text = "Clear";
+            settings.ControlStyle.CssClass = "rightButton";
+            settings.ClientSideEvents.Click = "function(s, e){ ASPxClientEdit.ClearEditorsInContainer(); }";
+        }).GetHtml()
+    </div>
+}

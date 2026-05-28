@@ -1,0 +1,15 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "FreezePanesPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Pixel(700);
+        settings.ActiveTabIndex = 1;
+        settings.ShowConfirmOnLosingChanges = false;
+        
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideAllTabsExceptHomeAndView(spreadsheet);
+        };
+    }
+    ).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "EmployeeInformation.xlsx")).GetHtml()

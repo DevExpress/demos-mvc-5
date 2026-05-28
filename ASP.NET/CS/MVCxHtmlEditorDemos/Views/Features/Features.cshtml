@@ -1,0 +1,19 @@
+﻿@model FeaturesOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("FeaturesPartial", Model)
+
+@section DemoOptions {
+    @Html.Partial("FeaturesOptionsPartial", Model)
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

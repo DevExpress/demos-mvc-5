@@ -1,0 +1,22 @@
+﻿@model ColorEditDemoModel
+
+@Html.DevExpress().CallbackPanel(settings => {
+    settings.Name = "CallbackPanel";
+    settings.CallbackRouteValues = new { Controller = "Editors", Action = "ColorEditorColorSettingsPartial" };
+
+    settings.SetContent(() => {
+        @Html.DevExpress().FormLayout(flSettings => {
+            flSettings.UseDefaultPaddings = false;
+            flSettings.Name = "ColorEditors";
+            flSettings.Width = Unit.Percentage(100);
+            flSettings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+            flSettings.SettingsAdaptivity.GridSettings.ChangeCaptionLocationAtWidth = 320;
+            flSettings.Items.Add(m => m.RoundPanelAppearance.HeaderBackgroundColor, item => ColorEditorDemoHelper.SetColorEditSettings(item, Model.ColorEditorDemoOptions));
+            flSettings.Items.Add(m => m.RoundPanelAppearance.HeaderFontColor, item => ColorEditorDemoHelper.SetColorEditSettings(item, Model.ColorEditorDemoOptions));
+            flSettings.Items.Add(m => m.RoundPanelAppearance.BackgroundColor, item => ColorEditorDemoHelper.SetColorEditSettings(item, Model.ColorEditorDemoOptions));
+            flSettings.Items.Add(m => m.RoundPanelAppearance.BorderColor, item => ColorEditorDemoHelper.SetColorEditSettings(item, Model.ColorEditorDemoOptions));
+            flSettings.Items.Add(m => m.RoundPanelAppearance.FontColor, item => ColorEditorDemoHelper.SetColorEditSettings(item, Model.ColorEditorDemoOptions));
+        }).Bind(Model).GetHtml();
+    });
+    settings.ClientSideEvents.BeginCallback = "onBeginCallback";
+}).GetHtml()

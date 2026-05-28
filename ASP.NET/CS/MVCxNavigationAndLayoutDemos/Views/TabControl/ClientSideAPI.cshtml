@@ -1,0 +1,176 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(650);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(650);
+}
+@section AdditionalResources {
+    <style type="text/css">
+        .dxtcFixed {
+            max-width: 800px;
+            min-width: 300px;
+        }
+        .dxMemo {
+            max-width: 617px;
+        }
+    </style>
+}
+<script type="text/javascript">
+    function InitPageControl() {
+        var tab = pcClientSideAPI.GetActiveTab();
+        ShowProperty();
+        ShowTabContent(tab);
+    }
+    function ActiveTabChanged(s, e) {
+        var tab = GetTabByValue();
+        if(e.tab.name == tab.name)
+            chbActive.SetChecked(true);
+        else
+            chbActive.SetChecked(false);
+        ShowTabContent(e.tab)
+    }
+    function TabClick(s, e) {
+        cbTabs.SetValue(e.tab.name);
+        ShowProperty();
+        ShowTabContent(e.tab)
+    }
+    function ShowTabContent(tab) {
+        mContent.SetText(ASPxClientUtils.Trim(pcClientSideAPI.GetTabContentHTML(tab)));
+    }
+    function ApplyActiveTabContent() {
+        var tab = pcClientSideAPI.GetActiveTab();
+        pcClientSideAPI.SetTabContentHTML(tab, mContent.GetText());
+    }
+    function ChangeListTab() {
+        ShowProperty();
+    }
+    function ShowProperty() {
+        var tab = GetTabByValue();
+        var activeTab = pcClientSideAPI.GetActiveTab();
+
+        chbEnabled.SetChecked(tab.GetEnabled());
+        chbVisible.SetChecked(tab.GetVisible());
+        if(!activeTab)
+            chbActive.SetChecked(false);
+        else if(activeTab.name == tab.name)
+            chbActive.SetChecked(true);
+        else
+            chbActive.SetChecked(false);
+    }
+    function ToggleEnabled() {
+        GetTabByValue().SetEnabled(chbEnabled.GetChecked());
+        ShowProperty();
+    }
+    function ToggleVisible() {
+        GetTabByValue().SetVisible(chbVisible.GetChecked());
+        ShowProperty();
+    }
+    function ToggleActive() {
+        pcClientSideAPI.SetActiveTab(GetTabByValue());
+        ShowProperty();
+    }
+    function GetTabByValue() {
+        return pcClientSideAPI.GetTabByName(cbTabs.GetValue());
+    }
+</script>
+@using(Html.BeginForm()) {
+    @Html.DevExpress().PageControl(
+            settings => {
+                settings.Name = "pcClientSideAPI";
+                settings.EnableClientSideAPI = true;
+                settings.Width = Unit.Percentage(100);
+                settings.ControlStyle.CssClass = "dxtcFixed";
+                settings.EnableTabScrolling = true;
+                settings.Height = 126;
+                settings.TabPages.Add("Page 1", "Page1").SetContent(() => {
+                    ViewContext.Writer.Write(
+                        "<div style=\"padding-top: 24px; font: 18pt Trebuchet MS;\">" +
+                            "<b>Page Content</b> <span style=\"color: red;\">Sample</span>" +
+                        "</div>"
+                    );
+                });
+                settings.TabPages.Add("Page 2", "Page2").SetContent(() => {
+                    ViewContext.Writer.Write(
+                        "<div style=\"padding-top: 24px; font: 24pt Trebuchet MS;\">" +
+                            "<b>Page Content</b> <span style=\"color: green;\">Sample</span>" +
+                        "</div>"
+                    );
+                });
+                settings.TabPages.Add("Page 3", "Page3").SetContent(() => {
+                    ViewContext.Writer.Write(
+                        "<div style=\"padding-top: 24px; font: 32pt Trebuchet MS;\">" +
+                            "<b>Page Content</b> <span style=\"color: blue;\">Sample</span>" +
+                        "</div>"
+                    );
+                });
+                settings.ClientSideEvents.ActiveTabChanged = "ActiveTabChanged";
+                settings.ClientSideEvents.TabClick = "TabClick";
+                settings.ClientSideEvents.Init = "InitPageControl";
+            }).GetHtml()
+}
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+    s.Name = "SettingsFormLayout";
+    s.Items.AddGroupItem(g => {
+        g.Caption = "Active Tab Settings";
+        g.Items.Add(i => {
+            i.Caption = "Choose page:";
+            i.NestedExtension().ComboBox(c => {
+                c.Name = "cbTabs";
+                c.Width = Unit.Pixel(120);
+                c.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeListTab";
+                c.Properties.Items.Add("Page 1", "Page1");
+                c.Properties.Items.Add("Page 2", "Page2");
+                c.Properties.Items.Add("Page 3", "Page3");
+                c.Properties.Items[0].Selected = true;
+            });
+        });
+        g.Items.Add(i => {
+            i.Caption = "Enabled";
+            i.NestedExtension().CheckBox(c => {
+                c.Name = "chbEnabled";
+                c.Checked = true;
+                c.Properties.ClientSideEvents.CheckedChanged = "ToggleEnabled";
+            });
+        });
+        g.Items.Add(i => {
+            i.Caption = "Visible";
+            i.NestedExtension().CheckBox(c => {
+                c.Name = "chbVisible";
+                c.Checked = true;
+                c.Properties.ClientSideEvents.CheckedChanged = "ToggleVisible";
+            });
+        });
+        g.Items.Add(i => {
+            i.Caption = "Active";
+            i.NestedExtension().CheckBox(c => {
+                c.Name = "chbActive";
+                c.Checked = true;
+                c.Properties.ClientSideEvents.CheckedChanged = "ToggleActive";
+            });
+        });
+        g.Items.Add(i => {
+            i.Caption = "HTML code to be used as the active page's content";
+            i.CaptionSettings.Location = LayoutItemCaptionLocation.Top;
+            i.NestedExtension().Memo(c => {
+                c.Name = "mContent";
+                c.Height = Unit.Pixel(130);
+                c.Width = Unit.Percentage(100);
+                c.ControlStyle.CssClass = "dxMemo";
+            });
+        });
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+        ColumnMinWidth = 432,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+       s.Name = "ApplyButton";
+       s.Text = "Apply";
+       s.Theme = DemoHelper.Instance.Theme;
+       s.ClientSideEvents.Click = "ApplyActiveTabContent";
+   }).GetHtml()
+    </div>
+}

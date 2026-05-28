@@ -1,0 +1,42 @@
+﻿@Html.DevExpress().FileManager(
+    settings => {
+        settings.Name = "fileManager";
+        settings.CallbackRouteValues = new { Controller = "FileManager", Action = "ClientSideEventsPartial" };
+        settings.DownloadRouteValues = new { Controller = "FileManager", Action = "DownloadFiles" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+        settings.Settings.AllowedFileExtensions = FileManagerDemoHelper.AllowedFileExtensions;
+
+        settings.SettingsEditing.AllowCreate = true;
+        settings.SettingsEditing.AllowDelete = true;
+        settings.SettingsEditing.AllowMove = true;
+        settings.SettingsEditing.AllowRename = true;
+        settings.SettingsEditing.AllowDownload = true;
+
+        settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init') }";
+        settings.ClientSideEvents.ItemMoving = "function(s, e) { DXEventMonitor.Trace(s, e, 'ItemMoving') }";
+        settings.ClientSideEvents.ItemMoved = "function(s, e) { DXEventMonitor.Trace(s, e, 'ItemMoved') }";
+        settings.ClientSideEvents.ItemRenaming = "function(s, e) { DXEventMonitor.Trace(s, e, 'ItemRenaming') }";
+        settings.ClientSideEvents.ItemRenamed = "function(s, e) { DXEventMonitor.Trace(s, e, 'ItemRenamed') }";
+        settings.ClientSideEvents.ItemDeleting = "function(s, e) { DXEventMonitor.Trace(s, e, 'ItemDeleting') }";
+        settings.ClientSideEvents.ItemDeleted = "function(s, e) { DXEventMonitor.Trace(s, e, 'ItemDeleted') }";
+        settings.ClientSideEvents.FilesUploading = "function(s, e) { DXEventMonitor.Trace(s, e, 'FilesUploading') }";
+        settings.ClientSideEvents.FileUploaded = "function(s, e) { DXEventMonitor.Trace(s, e, 'FileUploaded') }";
+        settings.ClientSideEvents.FolderCreating = "function(s, e) { DXEventMonitor.Trace(s, e, 'FolderCreating') }";
+        settings.ClientSideEvents.FolderCreated = "function(s, e) { DXEventMonitor.Trace(s, e, 'FolderCreated') }";
+        settings.ClientSideEvents.ErrorOccurred = "function(s, e) { DXEventMonitor.Trace(s, e, 'ErrorOccurred') }";
+        settings.ClientSideEvents.SelectedFileChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'SelectedFileChanged') }";
+        settings.ClientSideEvents.CurrentFolderChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'CurrentFolderChanged') }";
+        settings.ClientSideEvents.SelectedFileOpened = "function(s, e) { DXEventMonitor.Trace(s, e, 'SelectedFileOpened') }";
+        settings.ClientSideEvents.FileDownloading = "function(s, e) { DXEventMonitor.Trace(s, e, 'FileDownloading') }";
+
+        settings.FileUploading = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.FolderCreating = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemRenaming = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemDeleting = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+        settings.ItemMoving = (s, e) => { FileManagerDemoHelper.ValidateSiteEdit(e); };
+
+        settings.SettingsAdaptivity.Enabled = true;
+    }
+).BindToFolder(Model).GetHtml()

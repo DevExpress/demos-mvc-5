@@ -1,0 +1,16 @@
+﻿<script type="text/javascript">
+    var useExtendedPopup = @(ViewData["UseExtendedPopup"] != null ? ViewData["UseExtendedPopup"].ToString().ToLower() : "false");
+    DXUploadedFilesContainer.ApplySettings("width: 340px; max-width: 340px", "width: 70px; max-width: 70px", "width: 100px", useExtendedPopup);
+
+</script>
+
+@Html.DevExpress().RoundPanel(
+    settings =>
+    {
+        settings.Name = "FilesRoundPanel";
+        settings.EnableClientSideAPI = true;
+        settings.HeaderText = "Uploaded files";
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Pixel(180);
+        settings.ControlStyle.CssClass = "uploadFilesContainerPanel";
+    }).GetHtml()

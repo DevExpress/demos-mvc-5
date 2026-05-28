@@ -1,0 +1,75 @@
+﻿@model IEnumerable<EditablePost>
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "Editing", Action = "BatchEditingPartial" };
+    settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Editing", Action = "BatchEditingUpdateModel" };
+
+    settings.SettingsEditing.Mode = TreeListEditMode.Batch;
+    settings.SettingsEditing.AllowRecursiveDelete = true;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = BatchEditingOptions.StartEditAction;
+    settings.SettingsEditing.BatchEditSettings.EditMode = BatchEditingOptions.EditMode;
+    settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+
+    settings.Toolbars.Add(t => {
+        t.ItemAlign = GridToolbarItemAlign.Right;
+        t.Position = GridToolbarPosition.Bottom;
+        t.Items.Add(ti => ti.Command = TreeListToolbarCommand.Update);
+        t.Items.Add(ti => ti.Command = TreeListToolbarCommand.Cancel);
+    });
+
+    settings.AutoGenerateColumns = false;
+    settings.Width = Unit.Percentage(100);
+
+    settings.KeyFieldName = "PostID";
+    settings.ParentFieldName = "ParentID";
+
+
+    settings.Columns.Add("From");
+    settings.Columns.Add("Subject");
+    settings.Columns.Add(c => {
+        c.FieldName = "PostDate";
+        c.Caption = "Date";
+        c.EditorProperties().DateEdit(p => {
+            p.DisplayFormatString = "dd/MM/yyyy hh:mm tt";
+            p.DisplayFormatInEditMode = true;
+            p.EditFormat = EditFormat.DateTime;
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "IsNew";
+        c.ColumnType = MVCxTreeListColumnType.CheckBox;
+        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "HasAttachment";
+        c.ColumnType = MVCxTreeListColumnType.CheckBox;
+        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.CommandColumn.NewButton.Visible = true;
+    settings.CommandColumn.DeleteButton.Visible = true;
+
+    settings.PreRender = (sender, e) => {
+        MVCxTreeList treeListControl = (MVCxTreeList)sender;
+        treeListControl.ExpandToLevel(3);
+    };
+
+    settings.CellEditorInitialize = (sender, e) => {
+        var editor = e.Editor as ASPxEdit;
+        editor.ValidationSettings.Display = Display.Dynamic;
+    };
+
+    settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+}).SetEditErrorText(ViewData["EditNodeError"] as string).Bind(Model).GetHtml()
+
+@functions {
+    BatchEditingDemoOptions BatchEditingOptions { get { return ViewBag.BatchEditingOptions; } }
+}

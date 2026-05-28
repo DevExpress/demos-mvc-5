@@ -1,0 +1,19 @@
+﻿@model SchedulerFullWeekViewDemoOptions
+
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("FullWeekViewPartial", Model)
+
+@section DemoOptions  {
+    @Html.Partial("FullWeekViewOptionsPartial", Model)
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

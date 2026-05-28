@@ -1,0 +1,12 @@
+﻿<div style="height: 150px;">
+    @Html.DevExpress().NavBar(settings => {
+        settings.Name = "nbOverview";
+        settings.Groups.Add(group => {
+            group.Text = "Charts";
+
+            group.Items.Add("Stacked Bar", "", "~/Content/NavBar/Charts/BarStacked.png");
+            group.Items.Add("3D Pie", "", "~/Content/NavBar/Charts/Pie.png");
+            group.Items.Add("Overlapped Gantt", "", "~/Content/NavBar/Charts/Gantt.png");
+        });
+    }).GetHtml()
+</div>

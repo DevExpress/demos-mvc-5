@@ -1,0 +1,51 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "Grid";
+    settings.CallbackRouteValues = new { Controller = "PagingAndScrolling", Action = "FixedColumnsPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.SettingsBehavior.AutoExpandAllGroups = true;
+    settings.Styles.FixedColumn.BackColor = ASPxWebControl.GlobalTheme != "Office365Dark" ? Color.LightYellow : Color.DarkGray;
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+
+    settings.Columns.Add(column => {
+        column.FieldName = "ContactName";
+        column.Width = 150;
+        column.FixedStyle = GridViewColumnFixedStyle.Left;
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "CompanyName";
+        column.Width = 180;
+        column.FixedStyle = GridViewColumnFixedStyle.Left;
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "City";
+        column.Width = 130;
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "Region";
+        column.Width = 80;
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "Country";
+        column.Width = 180;
+        column.GroupIndex = 1;
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "Address";
+        column.Width = 200;
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "PostalCode";
+        column.Width = 100;
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "Phone";
+        column.Width = 150;
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "Fax";
+        column.Width = 150;
+    });
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

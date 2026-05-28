@@ -1,0 +1,117 @@
+﻿@model ChartToolTipDemoOptions
+
+@section AdditionalResources {
+    <style type="text/css">
+        div[class*="dxchartsuiTooltip"] {
+            padding: 8px;
+        }
+
+        div[class*="dxchartsuiTooltip"] img {
+            width: 90px;
+        }
+    </style>
+}
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(300);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartToolTipDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Sales Volume by Year"
+    });
+
+    settings.Series.Template(t => {
+        t.Views().SideBySideBarSeriesView(v => {
+            v.SeriesLabel(l => {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+                l.TextPattern = "{VP:P0}";
+            });
+        });
+        t.ToolTipEnabled = DefaultBoolean.True;
+        t.CrosshairEnabled = DefaultBoolean.False;
+        t.ToolTipHintDataMember = "FirstName";
+        t.ToolTipPointPattern = "<div style='margin-left:8px;'>Name: {HINT} {S}\nYear: {A:yyyy}\nTotal sales: {V}</div>";
+        t.DateTimeSummaryOptions.SummaryFunction = "SUM([Freight])";
+        t.ArgumentScaleType = DevExpress.XtraCharts.ScaleType.DateTime;
+        t.ArgumentDataMember = "OrderDate";
+    });
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.Border.Visibility = DefaultBoolean.False;
+    });
+
+    settings.XYDiagram(d => {
+        d.AxisY.Interlaced = true;
+        d.AxisY.Title.Text = "Thousands of Dollars";
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+        d.AxisX.DateTimeScaleOptions.MeasureUnit = DevExpress.XtraCharts.DateTimeMeasureUnit.Year;
+        d.AxisX.DateTimeScaleOptions.GridAlignment = DevExpress.XtraCharts.DateTimeGridAlignment.Year;
+    });
+
+    settings.BoundDataChanged = (s, e) => {
+        DevExpress.XtraCharts.Web.WebChartControl chart = (DevExpress.XtraCharts.Web.WebChartControl)s;
+        foreach (Series series in chart.Series)
+            series.ToolTipImage.ImageUrl = Url.Action("showImage", "miscellaneous", new { id = options.ToolTipImages[series.Name] });
+        switch (options.Position) {
+            case ToolTipPositions.Free:
+                chart.ToolTipOptions.ToolTipPosition = new ToolTipFreePosition();
+                break;
+            case ToolTipPositions.Relative:
+                chart.ToolTipOptions.ToolTipPosition = new ToolTipRelativePosition();
+                break;
+            case ToolTipPositions.Mouse:
+                chart.ToolTipOptions.ToolTipPosition = new ToolTipMousePosition();
+                break;
+        }
+        chart.ToolTipController.OpenMode = options.OpeningMode;
+    };
+}).Bind(Model.Data, seriesDataMember: "LastName").GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Tool Tip Settings";
+            group.Items.Add(model => model.OpeningMode, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetToolTipOpenModes());
+                });
+            });
+            group.Items.Add(model => model.Position);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings { ColumnMinWidth = 280 });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

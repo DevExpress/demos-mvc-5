@@ -1,0 +1,69 @@
+﻿@Html.DevExpress().PivotGrid(
+    settings => {
+        settings.Name = "pivotGrid";
+        settings.OptionsData.DataProcessingEngine = PivotDataProcessingEngine.Optimized;
+        settings.OptionsFilter.FilterPanelMode = FilterPanelMode.Filter;
+        settings.CallbackRouteValues = new { Controller = "PagingAndScrolling", Action = "VirtualScrollingPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Pixel(600);
+
+        settings.OptionsView.VerticalScrollingMode = PivotScrollingMode.Virtual;
+        settings.OptionsView.HorizontalScrollingMode = PivotScrollingMode.Virtual;
+        settings.OptionsView.VerticalScrollBarMode = ScrollBarMode.Auto;
+        settings.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+        settings.OptionsView.ShowFilterHeaders = false;
+        
+        settings.OptionsPager.RowsPerPage = 25;
+        settings.OptionsPager.ColumnsPerPage = 15;
+        settings.OptionsPager.Visible = false;
+        settings.OptionsFilter.NativeCheckBoxes = false;
+        
+        settings.Fields.Add(f => {
+            f.ID = "Category";
+            f.DataBinding = new DataSourceColumnBinding("CategoryName");
+            f.Caption = "Category Name";
+            f.Area = PivotArea.RowArea;
+        });
+        settings.Fields.Add(f => {
+            f.ID = "Product";
+            f.DataBinding = new DataSourceColumnBinding("ProductName");
+            f.Caption = "Product Name";
+            f.Area = PivotArea.RowArea;
+        });
+
+        settings.Fields.Add(f =>
+        {
+            f.ID = "FieldYear";
+            f.DataBinding = new DataSourceColumnBinding("ShippedDate", PivotGroupInterval.DateYear);
+            f.Caption = "Year";
+            f.Area = PivotArea.ColumnArea;
+        });
+        settings.Fields.Add(f =>
+        {
+            f.ID = "Quarter";
+            f.DataBinding = new DataSourceColumnBinding("ShippedDate", PivotGroupInterval.DateQuarter);
+            f.Caption = "Quarter";
+            f.ValueFormat.FormatString = "Qtr {0}";
+            f.ValueFormat.FormatType = FormatType.Numeric;
+            f.Area = PivotArea.ColumnArea;
+        });
+        settings.Fields.Add(f => {
+            f.ID = "Month";
+            f.DataBinding = new DataSourceColumnBinding("ShippedDate", PivotGroupInterval.DateMonth);
+            f.Caption = "Month";
+            f.Area = PivotArea.ColumnArea;
+        });
+        settings.Fields.Add(f => {
+            f.ID = "WeekOfMonth";
+            f.DataBinding = new DataSourceColumnBinding("ShippedDate", PivotGroupInterval.DateWeekOfMonth);
+            f.Caption = "Week of Month";
+            f.Area = PivotArea.ColumnArea;
+        });
+        
+        settings.Fields.Add(f => {
+            f.ID = "Sales";
+            f.DataBinding = new DataSourceColumnBinding("ProductSales");
+            f.Caption = "Product Sales";
+            f.Area = PivotArea.DataArea;
+        });
+    }).Bind(Model).GetHtml()

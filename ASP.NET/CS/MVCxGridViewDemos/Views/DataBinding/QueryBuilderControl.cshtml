@@ -1,0 +1,43 @@
+﻿@model SqlDataSource
+
+@section AdditionalResources {
+    <style>
+        .textAlignLeft {
+            text-align: left;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/RunQueryBuilder.css")" />
+}
+
+@section TopRightMenuRegion {
+<a id="run-designer-button" class="ThemeButton run-designer-button" href="@Url.Action("QueryBuilder")"
+    title="Customize the 'SELECT' statement on the client side using the in-browser Query Builder.">
+    <img class="run-designer-image" src="@Url.Content("~/Content/RunQueryBuilder.svg")" alt="run query builder" />
+    Query Builder
+    <div class="run-designer-tooltip-container">
+        <div id="run-designer-tooltip" class="run-designer-tooltip">
+            <div class="run-designer-corner">
+            </div>
+            <span class="run-designer-content">Customize the 'SELECT' statement on the client side using the in-browser Query Builder.</span>
+        </div>
+    </div>
+</a>
+<script type="text/javascript">
+    (function() {     
+        var runDesignerTooltip = document.getElementById("run-designer-tooltip");
+        var myVal = '@Session[QueryBuilderHelper.ShowTooltipKey]';
+        if (myVal === "False") {
+            runDesignerTooltip.style.display = "none";
+            return;
+        }
+        setTimeout(function() {
+            runDesignerTooltip.className += " run-designer-fade";
+        }, 5000);
+        setTimeout(function() {
+            runDesignerTooltip.style.display = "none";
+        }, 7000);
+    })();
+</script>
+}
+           
+@Html.Partial("QueryBuilderControlPartial", Model)

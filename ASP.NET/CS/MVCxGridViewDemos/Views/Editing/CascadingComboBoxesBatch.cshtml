@@ -1,0 +1,59 @@
+﻿@model IEnumerable
+
+<script>
+    var currentRowIndex = -1;
+    var currentColumnIndex = -1;
+    var lastEditedCountry = -1;
+
+    function onBatchEditStartEditing(s, e) {
+        currentRowIndex = e.visibleIndex;
+        currentColumnIndex = e.focusedColumn.index;
+        var currentCountry = s.batchEditApi.GetCellValue(currentRowIndex, "CountryId");
+        if (currentCountry != lastEditedCountry && e.focusedColumn.fieldName == "CityId") {
+            lastEditedCountry = currentCountry;            
+            if (currentRowIndex > -1) {
+                e.cancel = true;
+                cmbCity.PerformCallback();
+            }
+        }
+    }
+
+    function onFocusedCellChanging(s, e) {
+        e.cancel = cmbCity.InCallback();
+    }
+
+    function onSelectedCountryChanged(s, e) {
+        lastEditedCountry = s.GetValue();
+        GridView.batchEditApi.SetCellValue(currentRowIndex, "CityId", null);
+    }
+
+    function onCityBeginCallback(s, e) {
+        window.setTimeout(function () {
+            if (cmbCity.InCallback()) {
+                var lpElement = cmbCity.IsVisible() ? cmbCity.GetMainElement() : GridView.batchEditApi.GetCellTextContainer(currentRowIndex, "CityId");
+                lp.ShowInElement(lpElement);
+            }
+        }, 300);
+        e.customArgs["countryID"] = lastEditedCountry;
+    }
+
+    function onCityEndCallback(s, e) {
+        lp.Hide();
+        GridView.batchEditApi.StartEdit(currentRowIndex, currentColumnIndex);        
+    }
+
+    function Grid_BeginCallback(s, e) {
+        DXDemo.LoadAntiForgeryTokenInputValue(e.customArgs);
+    }
+
+    function onGridEndCallback(s, e) {
+        lastEditedCountry = -1;
+    }
+</script>
+
+@using(Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    @Html.DevExpress().LoadingPanel(lp => lp.Name = "lp").GetHtml()
+    @Html.Partial("CascadingComboBoxesBatchPartial", Model)
+}

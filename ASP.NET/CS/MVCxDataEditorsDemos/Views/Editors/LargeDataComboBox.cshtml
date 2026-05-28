@@ -1,0 +1,74 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMinHeight = Unit.Pixel(370);
+}
+@section AdditionalResources {
+    <style type="text/css">
+    </style>
+}
+<script type="text/javascript">
+    var callbackInitDate;
+
+    function onStartCallback(s, e) {
+        callbackInitDate = new Date();
+    }
+    function onEndCallback(s, e) {
+        var currentDate = new Date();
+        var time = currentDate - callbackInitDate;
+        
+        document.getElementById("labelTime").innerHTML = "Time to retrieve the last data: &nbsp;";
+        document.getElementById("valueTime").innerHTML = time / 1000 + " sec";
+    }
+    function onSelectedIndexChanged(s, e) {
+        var selectedItem = s.GetSelectedItem();
+        lblFirstName.SetText(selectedItem.GetColumnText("FirstName"));
+        lblLastName.SetText(selectedItem.GetColumnText("LastName"));
+        lblPhone.SetText(selectedItem.GetColumnText("Phone"));
+    }
+</script>
+
+@if (!DatabaseGenerator.IsReady("GeneratedPersonTable")) {
+    @Html.Partial("CreateDatabasePartial", "GeneratedPersonTable")
+}
+else {
+    <div style="padding-bottom:16px;">To start filtering, enter at least two symbols (e.g. 'an') into the editor's text box. This is due to the editor's FilterMinLength property set to 2 in this demo.</div>
+    <div id="container" style="display:table;padding-bottom:16px">
+        <div id="labelTime" style="display:table-cell" >
+            &nbsp;
+        </div>
+        <div id="valueTime" style="color: red;display:table-cell">
+            &nbsp;
+        </div>
+    </div>
+    <div style="padding-bottom: 16px;">
+        @Html.Partial("LargeDataComboBoxPartial")
+        @Html.DevExpress().FormLayout(flSettings => {
+           flSettings.Name = "formLayoutDetails";
+           flSettings.Width = Unit.Pixel(285);
+           flSettings.UseDefaultPaddings = false;
+           flSettings.SettingsItemCaptions.VerticalAlign = FormLayoutVerticalAlign.Middle;
+           flSettings.Styles.LayoutGroupBox.Caption.Font.Bold = true;
+           flSettings.Items.AddGroupItem(group => {
+               group.Caption = "Customer Details";
+               group.ParentContainerStyle.Paddings.PaddingTop = Unit.Pixel(20);
+               group.Items.Add(item => {
+                   item.Caption = "First Name";
+                   item.NestedExtension().Label(s => {
+                       s.Properties.ClientInstanceName = "lblFirstName";
+                   });
+               });
+               group.Items.Add(item => {
+                   item.Caption = "Last Name";
+                   item.NestedExtension().Label(s => {
+                       s.Properties.ClientInstanceName = "lblLastName";
+                   });
+               });
+               group.Items.Add(item => {
+                   item.Caption = "Phone";
+                   item.NestedExtension().Label(s => {
+                       s.Properties.ClientInstanceName = "lblPhone";
+                   });
+               });
+           });
+        }).GetHtml()
+    </div>
+}

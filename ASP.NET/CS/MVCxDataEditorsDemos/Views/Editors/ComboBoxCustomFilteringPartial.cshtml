@@ -1,0 +1,29 @@
+﻿@Html.DevExpress().ComboBox(settings => {
+    settings.Name = "cmbWithServerFiltering";
+    settings.Width = Unit.Percentage(100);
+    settings.Properties.DropDownStyle = DropDownStyle.DropDownList;
+    settings.Properties.ValueField = "CustomerID";
+    settings.Properties.TextFormatString = "{0}";
+    settings.CallbackRouteValues = new { Controller = "Editors", Action = "ComboBoxCustomFilteringPartial" };
+    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+    settings.Properties.Columns.Add(column => {
+        column.FieldName = "CompanyName";
+        column.Width = Unit.Pixel(250);
+    });
+    settings.Properties.Columns.Add(column => {
+        column.FieldName = "Country";
+        column.Width = Unit.Pixel(100);
+    });
+    settings.CustomFiltering += (s, e) => {
+        string[] words = e.Filter.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        string[] columns = new string[] { "CompanyName", "Country" };
+        e.FilterExpression = GroupOperator.And(words.Select(w =>
+            GroupOperator.Or(
+                columns.Select(c =>
+                    new FunctionOperator(FunctionOperatorType.Contains, new OperandProperty(c), w)
+                )
+            )
+        )).ToString();
+        e.CustomHighlighting = columns.ToDictionary(c => c, c => words);
+    };
+}).BindList(Model).GetHtml()

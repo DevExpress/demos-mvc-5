@@ -1,0 +1,28 @@
+﻿@model HtmlEditorContentElementFilteringOptions
+@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "HtmlEditor";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "ContentElementFilteringPartial" };
+        settings.CustomDataActionRouteValues = new { Controller = "Features", Action = "ContentElementFilteringHtmlContentLoad" };
+        settings.ClientSideEvents.CustomDataCallback = "onCustomDataCallbackHandler";
+        
+        settings.Height = Unit.Pixel(430);
+        settings.Width = Unit.Percentage(100);
+
+        if(Model != null) {
+            settings.SettingsHtmlEditing.AllowScripts = false;
+            settings.SettingsHtmlEditing.ContentElementFiltering.Tags = Model.Tags.FilteringList.ToArray();
+            settings.SettingsHtmlEditing.ContentElementFiltering.TagFilterMode = Model.Tags.FilterMode;
+
+            settings.SettingsHtmlEditing.ContentElementFiltering.Attributes = Model.Attributes.FilteringList.ToArray();
+            settings.SettingsHtmlEditing.ContentElementFiltering.AttributeFilterMode = Model.Attributes.FilterMode;
+
+            settings.SettingsHtmlEditing.ContentElementFiltering.StyleAttributes = Model.StyleAttributes.FilteringList.ToArray();
+            settings.SettingsHtmlEditing.ContentElementFiltering.StyleAttributeFilterMode = Model.StyleAttributes.FilterMode;
+        }
+
+        settings.SettingsHtmlEditing.UpdateBoldItalic = false;
+        settings.SettingsHtmlEditing.UpdateDeprecatedElements = false;
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }
+).Bind(Model.Html).GetHtml()

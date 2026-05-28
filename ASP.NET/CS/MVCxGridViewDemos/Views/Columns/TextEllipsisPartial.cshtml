@@ -1,0 +1,14 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "Columns", Action = "TextEllipsisPartial" };
+    settings.Width = Unit.Percentage(100);
+    settings.Styles.Cell.CssClass = "cell";
+    settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
+    settings.SettingsBehavior.AllowEllipsisInText = true;
+    settings.Columns.Add("ContactName").Width = 100;
+    settings.Columns.Add("CompanyName").Width = 200;
+    settings.Columns.Add("City").Width = 100;
+    settings.Columns.Add("Region").Width = 50;
+    settings.Columns.Add("Country");
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

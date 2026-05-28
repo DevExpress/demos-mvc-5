@@ -1,0 +1,13 @@
+﻿@model IEnumerable
+
+@using (Html.BeginForm()){
+    <script type="text/javascript">
+        function Grid_BeginCallback(s, e) {
+            DXDemo.LoadAntiForgeryTokenInputValue(e.customArgs);
+        }
+    </script>
+
+    @Html.AntiForgeryToken()
+
+    @Html.Partial("EditFormTemplatePartial", Model)
+}

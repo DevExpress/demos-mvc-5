@@ -1,0 +1,110 @@
+﻿@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(800);}
+@section AdditionalResources {
+    <style type="text/css">
+        .fileTabtemplateDiv {
+            background: url(@Url.Content("~/Content/Ribbon/Images/ArrowIcon.png")) no-repeat center;
+            width: 21px;
+            height: 100%;
+        }
+
+        .contactTemplateDiv {
+            float: left;
+            text-align: left;
+            margin-left: 25px;
+            padding-top: 10px;
+            line-height: 22px;
+        }
+
+        .searchTemplate {
+            margin: 10px;
+        }
+        .searchTemplate td {
+            padding-right: 15px;
+        }
+    </style>
+}
+@Html.DevExpress().Ribbon(
+settings => {
+    settings.Name = "Ribbon";
+    settings.SetFileTabTemplateContent(c => {
+        TabControlTemplateContainerBase container = (TabControlTemplateContainerBase)c;
+        if(!container.Active) {
+            ViewContext.Writer.Write(@"<div id=""FileTabtemplateDiv"" class=""fileTabtemplateDiv""></div>");
+        }
+    });
+
+    var contactGroup = settings
+        .Tabs.Add("Contact")
+        .Groups.Add();
+    contactGroup.Image.Url = "~/Content/Ribbon/Images/LiveChat.png";
+    var contactItem = new MVCxRibbonTemplateItem();
+    contactItem.Size = RibbonItemSize.Large;
+    contactItem.SetContent(c => {
+        ViewContext.Writer.Write(
+            @"<div class=""contactTemplateDiv"">
+                <img src=""" + Url.Content("~/Content/Ribbon/Images/LiveChat.png") + "\" alt=\"\" />" +
+                @"<br />
+                Live Chat
+            </div>
+            <div class=""contactTemplateDiv"">
+                <b>Technical Support</b>
+                <br />
+                Internet: <a href=""javascript:void(0)"">https://supportcenter.devexpress.com/</a>
+                <br />
+                Email: <a href=""javascript:void(1)"">info@devexpress.com</a>
+            </div>
+            <div class=""contactTemplateDiv"">
+                <b>Corporate & Multi-Seat Pricing</b>
+                <br />
+                Tel: + 1 (818) 844 3383
+                <br />
+                Email: <a href=""javascript:void(2)"">CorpSales@devexpress.com</a>
+            </div>"
+        );
+    });
+    contactGroup.Items.Add(contactItem);
+
+    var searchGroup = settings
+        .Tabs.Add("Search")
+        .Groups.Add();
+    searchGroup.Image.IconID = IconID.FindFind32x32;
+    var searchItem = new MVCxRibbonTemplateItem();
+    searchItem.Size = RibbonItemSize.Large;
+    searchItem.ItemStyle.CssClass = "searchTemplate";
+    searchItem.SetContent(c => {
+        ViewContext.Writer.Write(
+            @"<table>
+                <tr>
+                    <td>
+                        <input name=""textBox"" type=""text"" style=""width:550px;"" />
+                    </td>
+                    <td>
+                        <input name=""searchBtn"" type=""button"" value=""Search"" style=""height:24px;"" />
+                    </td>
+                </tr>
+            </table>"
+        );
+        Html.DevExpress().CheckBoxList(cblSettings => {
+            cblSettings.Name = "cblSettings";
+            cblSettings.Properties.RepeatColumns = 4;
+            cblSettings.Properties.RepeatDirection = RepeatDirection.Horizontal;
+            cblSettings.Properties.Items.Add("User tickets");
+            cblSettings.Properties.Items.Add("Documentation");
+            cblSettings.Properties.Items.Add("What's new");
+            cblSettings.Properties.Items.Add("Code examples");
+            cblSettings.ControlStyle.Border.BorderWidth = 0;
+        }).Render();
+    });
+    searchGroup.Items.Add(searchItem);
+}).GetHtml()
+
+@Html.DevExpress().PopupMenu(settings => {
+    settings.Name = "menu";
+    settings.PopupAction = PopupAction.LeftMouseClick;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.LeftSides;
+    settings.PopupElementID = "FileTabtemplateDiv";
+    settings.Items.Add("New");
+    settings.Items.Add("Open");
+    settings.Items.Add("Close").BeginGroup = true;
+}).GetHtml()

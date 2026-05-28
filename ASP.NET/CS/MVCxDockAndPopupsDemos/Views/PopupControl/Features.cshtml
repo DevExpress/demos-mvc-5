@@ -1,0 +1,147 @@
+﻿@model PopupControlFeaturesDemoOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(450);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(480);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+<script type="text/javascript"> 
+    var popupButton = "@Url.Content("~/Content/PopupControl/Features/Button.gif")";
+    var closeButton = "@Url.Content("~/Content/PopupControl/Features/ButtonPressed.gif")";
+    function SetImageState(value) {
+        $("#imgButton").attr("src", value ? closeButton : popupButton);
+    }
+</script>
+
+<div class="vertComponentContainer">
+    <div>
+        <img id="imgButton" alt="" src="@Url.Content("~/Content/PopupControl/Features/Button.gif")" style="cursor:pointer; width: 103px; height: 28px;" />
+    </div>
+        @Html.DevExpress().PopupControl(
+                settings => {
+                    settings.Name = "pcFeatures";
+                    settings.PopupElementID = "imgButton";
+                    switch(Model.ScrollBars) {
+                        case ScrollBars.Horizontal:
+                            settings.Width = 150;
+                            break;
+                        case ScrollBars.Vertical:
+                            settings.Width = 372;
+                            break;
+                        default:
+                            settings.Width = 330;
+                            break;
+                    }
+                    settings.Height = 250;
+                    settings.MinHeight = 150;
+                    settings.MinWidth = 150;
+                    settings.MaxHeight = 800;
+                    settings.MaxWidth = 800;
+                    settings.Width = 310;
+
+                    settings.ShowCloseButton = Model.ShowCloseButton;
+                    settings.PreRender = (sender, e) => {
+                        var popup = (ASPxPopupControl)sender;
+                        if(Model.ShowShadow != ShowShadow.Default)
+                            popup.ShowShadow = Model.ShowShadow == ShowShadow.True;
+                    };
+                    settings.ShowFooter = Model.ShowFooter;
+                    settings.ShowHeader = Model.ShowHeader;
+                    settings.PopupHorizontalAlign = Model.PopupHorizontalAlign;
+                    settings.PopupVerticalAlign = Model.PopupVerticalAlign;
+                    settings.PopupHorizontalOffset = Model.PopupHorizontalOffset;
+                    settings.PopupVerticalOffset = Model.PopupVerticalOffset;
+                    settings.Opacity = (0 <= Model.Opacity && Model.Opacity < 100) ? Model.Opacity : -1;
+                    settings.PopupAnimationType = Model.PopupAnimationType;
+                    settings.CloseAnimationType = Model.CloseAnimationType;
+                    settings.AllowDragging = Model.AllowDragging;
+                    settings.DragElement = Model.DragElement;
+                    settings.AllowResize = Model.AllowResize;
+                    settings.ResizingMode = Model.ResizingMode;
+                    settings.ShowSizeGrip = Model.ShowSizeGrip;
+                    settings.CloseAction = Model.CloseAction;
+                    settings.CloseOnEscape = Model.CloseOnEscape;
+                    settings.PopupAction = Model.PopupAction;
+                    settings.AppearAfter = Model.AppearAfter;
+                    settings.DisappearAfter = Model.DisappearAfter;
+                    settings.ScrollBars = Model.ScrollBars;
+
+                    settings.FooterText = "Runtime: 142 min";
+                    settings.HeaderText = "Area of Countries";
+                    settings.SetContent(() => {
+                        ViewContext.Writer.Write(
+                            "<table>" +
+                                "<tr>" +
+                                    "<td>" +
+                                        "<img src=\"" + Url.Content("~/Content/PopupControl/Features/CountriesArea.png") + "\" style=\"max-width:100%\" alt=\"Area of Countries\" />" +
+                                    "</td>" +
+                                "</tr>" +
+                                "<tr>" +
+                                    "<td style=\"vertical-align: top; color: #666666;font-family: Tahoma; font-size: 10px;\">" +
+                                        "This is the Pie 3D series view, which is useful when it's necessary to compare the percentage" +
+                                        "values of different point arguments in the same series, and to show these values as easy" +
+                                        "to understand pie slices." +
+                                    "</td>" +
+                                "</tr>" +
+                            "</table>"
+                        );
+                    });
+
+                    settings.ClientSideEvents.CloseUp = "function(s, e) { SetImageState(false); }";
+                    settings.ClientSideEvents.PopUp = "function(s, e) { SetImageState(true); }";
+                }).GetHtml()
+</div>
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(g => {
+            g.Caption = "Layout";
+            g.Items.Add(m => m.ShowCloseButton);
+            g.Items.Add(m => m.ShowFooter);
+            g.Items.Add(m => m.ShowHeader);
+            g.Items.Add(m => m.ShowShadow);
+            g.Items.Add(m => m.PopupHorizontalAlign);
+            g.Items.Add(m => m.PopupVerticalAlign);
+            g.Items.Add(m => m.PopupHorizontalOffset).Caption = "Popup Horizontal Offset (px)";
+            g.Items.Add(m => m.PopupVerticalOffset).Caption = "Popup Vertical Offset (px)";
+            g.Items.Add(m => m.Opacity);
+        });
+        s.Items.AddGroupItem(g => {
+            g.Caption = "Behavior";
+            g.Items.Add(m => m.PopupAnimationType);
+            g.Items.Add(m => m.CloseAnimationType);
+            g.Items.Add(m => m.AllowDragging);
+            g.Items.Add(m => m.DragElement);
+            g.Items.Add(m => m.AllowResize);
+            g.Items.Add(m => m.ResizingMode);
+            g.Items.Add(m => m.ShowSizeGrip);
+            g.Items.Add(m => m.ScrollBars);
+            g.Items.Add(m => m.CloseAction);
+            g.Items.Add(m => m.CloseOnEscape);
+            g.Items.Add(m => m.PopupAction);
+            g.Items.Add(m => m.AppearAfter);
+            g.Items.Add(m => m.DisappearAfter);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 480,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+           s.Name = "ApplyButton";
+           s.Text = "Apply Changes";
+           s.Theme = DemoHelper.Instance.Theme;
+           s.UseSubmitBehavior = true;
+       }).GetHtml()
+    </div>
+}
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

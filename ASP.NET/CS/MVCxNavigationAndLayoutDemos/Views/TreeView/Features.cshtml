@@ -1,0 +1,148 @@
+﻿@{ TreeViewFeaturesDemoOptions options = (TreeViewFeaturesDemoOptions)ViewData["Options"]; }
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section DemoInfo {
+    <div id="infoPanel" class="info-panel" style="@(Utils.CanChangeTreeControlTreeLines() ? "display:none" : "display:block")">@Html.Raw(Utils.GetInfoMessageForTreeControlNoTreeLinesThemes())</div>
+}
+
+@{ 
+	DemoHelper.Instance.ControlAreaMaxWidth = 360;
+	DemoHelper.Instance.ControlOptionsRightBlockWidth = 250;
+}
+
+@Html.DevExpress().TreeView(
+    settings => {
+        settings.Name = "tvFeatures";
+        settings.AllowCheckNodes = options.AllowCheckNodes;
+        settings.AllowSelectNode = options.AllowSelectNode;
+        settings.CheckNodesRecursive = options.CheckNodesRecursive;
+        settings.EnableAnimation = options.EnableAnimation;
+        settings.EnableHotTrack = options.EnableHotTrack;
+        settings.ShowTreeLines = options.ShowTreeLines;
+        settings.ShowExpandButtons = options.ShowExpandButtons;
+        settings.Width = 300;
+
+        settings.Nodes.Add(node => {
+            node.Text = "Home";
+            node.Nodes.Add(subNode => {
+                subNode.Text = "News";
+                subNode.Nodes.Add("For Developers");
+                subNode.Nodes.Add("Website news");
+            });
+            node.Nodes.Add("Our Mission");
+            node.Nodes.Add("Our Customers");
+        });
+        settings.Nodes.Add(node => {
+            node.Text = "Products";
+            node.Nodes.Add("Subscriptions / Packs");
+            node.Nodes.Add(".NET Windows Forms Components");
+            node.Nodes.Add("Reporting / Printing Suites");
+            node.Nodes.Add("ASP.NET WebForms Components");
+            node.Nodes.Add("ASP.NET MVC Extensions");
+        });
+        settings.Nodes.Add(node => {
+            node.Text = "Support";
+            node.Nodes.Add("Knowledge Base");
+            node.Nodes.Add("Documentation");
+            node.Nodes.Add("Support Center");
+            node.Nodes.Add("Newsgroups");
+            node.Nodes.Add("Best Practicies");
+        });
+
+        settings.PreRender = (source, e) => {
+            ASPxTreeView treeView = (ASPxTreeView)source;
+            treeView.ExpandToDepth(0);
+        };
+    }).GetHtml()
+
+@section DemoOptions  {
+	@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "OptionsFormLayout";
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Options";
+
+        g.Items.Add(item => {
+            item.Caption = "AllowSelectNode";
+            item.NestedExtension().CheckBox(cbSettings => {
+                cbSettings.Checked = options.AllowSelectNode;
+                cbSettings.Name = "AllowSelectNode";
+            });
+        });
+
+        g.Items.Add(item => {
+            item.Caption = "EnableAnimation";
+            item.NestedExtension().CheckBox(cbSettings => {
+                cbSettings.Checked = options.EnableAnimation;
+                cbSettings.Name = "EnableAnimation";
+            });
+        });
+
+        g.Items.Add(item => {
+            item.Caption = "EnableHotTrack";
+            item.NestedExtension().CheckBox(cbSettings => {
+                cbSettings.Checked = options.EnableHotTrack;
+                cbSettings.Name = "EnableHotTrack";
+            });
+        });
+
+        g.Items.Add(item => {
+            item.Caption = "ShowTreeLines";
+            item.NestedExtension().CheckBox(cbSettings => {
+                cbSettings.Checked = options.ShowTreeLines;
+                cbSettings.Name = "ShowTreeLines";
+                cbSettings.Enabled = Utils.CanChangeTreeControlTreeLines();
+            });
+        });
+
+        g.Items.Add(item => {
+            item.Caption = "ShowExpandButtons";
+            item.NestedExtension().CheckBox(cbSettings => {
+                cbSettings.Checked = options.ShowExpandButtons;
+                cbSettings.Name = "ShowExpandButtons";
+            });
+        });
+
+        g.Items.Add(item => {
+            item.Caption = "AllowCheckNodes";
+            item.NestedExtension().CheckBox(cbSettings => {
+                cbSettings.Checked = options.AllowCheckNodes;
+                cbSettings.Name = "AllowCheckNodes";
+            });
+        });
+
+        g.Items.Add(item => {
+            item.Caption = "CheckNodesRecursive";
+            item.NestedExtension().CheckBox(cbSettings => {
+                cbSettings.Checked = options.CheckNodesRecursive;
+                cbSettings.Name = "CheckNodesRecursive";
+            });
+        });
+
+
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 248,
+        ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+    });
+}).GetHtml()
+
+	<div class="apply-button-container">
+		@Html.DevExpress().Button(s => {
+			s.Name = "ApplyButton";
+			s.Text = "Apply Changes";
+			s.Theme = DemoHelper.Instance.Theme;
+			s.UseSubmitBehavior = true;
+		}).GetHtml()
+	</div>
+
+}
+
+@section EndDemoRegion{
+	@{ Html.EndForm(); }
+}

@@ -1,0 +1,50 @@
+﻿@{
+    bool showServiceColumns = (bool)ViewBag.ShowServiceColumns;
+}
+
+@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "DataBinding", Action = "DataBindingPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.AutoGenerateColumns = false;
+    settings.KeyFieldName = "ID";
+    settings.ParentFieldName = "ParentID";
+
+    settings.Columns.Add("DepartmentName", "Department");
+    settings.Columns.Add(c => {
+        c.FieldName = "Budget";
+        c.PropertiesEdit.DisplayFormatString = "{0:C}";
+    });
+    settings.Columns.Add("Location");
+    settings.Columns.Add("Phone1", "Phone");
+    settings.Columns.Add(c => {
+        c.FieldName = "ID";
+        c.Visible = showServiceColumns;
+        c.CellStyle.BackColor = Color.FromArgb(0xffebb1);
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "ParentID";
+        c.Visible = showServiceColumns;
+        c.CellStyle.BackColor = Color.FromArgb(0xffebb1);
+    });
+
+    settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+    settings.SettingsCookies.StoreExpandedNodes = true;
+
+    settings.ClientLayout = (s, e) => {
+        if(e.LayoutMode == ClientLayoutMode.Loading) {
+            if(Session["TreeListState"] != null)
+                e.LayoutData = (string)Session["TreeListState"];
+        }
+        else
+            Session["TreeListState"] = e.LayoutData;
+    };
+
+    settings.PreRender = (sender, e) => {
+        if(Session["TreeListState"] == null)
+            ((MVCxTreeList)sender).ExpandToLevel(2);
+    };
+}
+).Bind(Model).GetHtml()
+

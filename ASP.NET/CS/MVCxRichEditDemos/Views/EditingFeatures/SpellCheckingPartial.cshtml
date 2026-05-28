@@ -1,0 +1,51 @@
+﻿@using DevExpress.Web.ASPxRichEdit.Localization;
+@using DevExpress.XtraRichEdit.Localization;
+
+@functions{
+    private void CreateRibbonReviewTab(ASPxRichEdit demoRichEdit) {
+        RERReviewTab reviewTab = new RERReviewTab();
+        RibbonGroup proofingGroup = new RibbonGroup();
+        proofingGroup.Text = ASPxRichEditLocalizer.GetString(ASPxRichEditStringId.GroupDocumentProofing);
+
+        RibbonButtonItem spellingButtonItem = new RibbonButtonItem();
+        spellingButtonItem.Name = "showSpellingDialog";
+        spellingButtonItem.LargeImage.IconID = "richedit_spellcheck_svg_gray_32x32";
+        spellingButtonItem.SmallImage.IconID = "richedit_spellcheck_svg_gray_16x16";
+        spellingButtonItem.Size = RibbonItemSize.Large;
+        spellingButtonItem.Text = XtraRichEditLocalizer.GetString(XtraRichEditStringId.MenuCmd_CheckSpelling);
+
+        proofingGroup.Items.Add(spellingButtonItem);
+        reviewTab.Groups.Add(proofingGroup);
+        demoRichEdit.RibbonTabs.Add(reviewTab);
+    }
+}
+
+@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "EditingFeatures", Action = "SpellCheckingPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(700);
+    
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ActiveTabIndex = 0;
+
+    settings.Settings.SpellChecker.Enabled = true;
+    settings.Settings.SpellChecker.SuggestionCount = 4;
+    settings.Settings.SpellChecker.Dictionaries.Add(new DevExpress.Web.ASPxSpellChecker.ASPxSpellCheckerISpellDictionary() {
+        GrammarPath = "~/App_Data/Dictionaries/english.aff",
+        DictionaryPath = "~/App_Data/Dictionaries/american.xlg",
+        Culture = new System.Globalization.CultureInfo("en-us"),
+        CacheKey = "enDic"
+    });
+                
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        RichEditDemoUtils.HideFileTab(richEdit);
+
+        CreateRibbonReviewTab(richEdit);
+        richEdit.Focus();
+    };
+    settings.ClientSideEvents.CustomCommandExecuted = "onCustomCommandExecuted";
+
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "SpellChecking.docx")).GetHtml()

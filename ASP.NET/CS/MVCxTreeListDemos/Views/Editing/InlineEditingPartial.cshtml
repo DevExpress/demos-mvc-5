@@ -1,0 +1,65 @@
+﻿@model IEnumerable<EditablePost>
+           
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "Editing", Action = "InlineEditingPartial" };
+
+    settings.SettingsEditing.AddNewNodeRouteValues = new { Controller = "Editing", Action = "InlineEditingAddNewPostPartial" };
+    settings.SettingsEditing.UpdateNodeRouteValues = new { Controller = "Editing", Action = "InlineEditingUpdatePostPartial" };
+    settings.SettingsEditing.NodeDragDropRouteValues = new { Controller = "Editing", Action = "InlineEditingMovePostPartial" };
+    settings.SettingsEditing.DeleteNodeRouteValues = new { Controller = "Editing", Action = "InlineEditingDeletePostPartial" };
+
+    settings.SettingsEditing.ConfirmDelete = true;
+    settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+    settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+    settings.AutoGenerateColumns = false;
+    settings.Width = Unit.Percentage(100);
+    settings.ClientSideEvents.BeginCallback = "TreeList_BeginCallback";
+
+    settings.KeyFieldName = "PostID";
+    settings.ParentFieldName = "ParentID";
+
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.CommandColumn.NewButton.Visible = true;
+    settings.CommandColumn.DeleteButton.Visible = true;
+    settings.CommandColumn.EditButton.Visible = true;
+
+    settings.Columns.Add("From");
+    settings.Columns.Add("Subject");
+    settings.Columns.Add(c => {
+        c.FieldName = "PostDate";
+        c.Caption = "Date";
+        c.EditorProperties().DateEdit(p => {
+            p.DisplayFormatString = "dd/MM/yyyy hh:mm tt";
+            p.DisplayFormatInEditMode = true;
+            p.EditFormat = EditFormat.DateTime;
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "IsNew";
+        c.ColumnType = MVCxTreeListColumnType.CheckBox;
+        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "HasAttachment";
+        c.ColumnType = MVCxTreeListColumnType.CheckBox;
+        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    settings.PreRender = (sender, e) => {
+        MVCxTreeList treeListControl = (MVCxTreeList)sender;
+        treeListControl.ExpandToLevel(3);
+        treeListControl.StartEdit("2");
+    };
+    settings.CellEditorInitialize = (sender, e) => {
+        var editor = e.Editor as ASPxEdit;
+        editor.ValidationSettings.Display = Display.Dynamic;
+    };
+}).SetEditErrorText(ViewData["EditNodeError"] as string).Bind(Model).GetHtml()

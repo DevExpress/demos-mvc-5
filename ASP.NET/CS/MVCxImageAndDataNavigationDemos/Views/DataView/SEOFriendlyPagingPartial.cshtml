@@ -1,0 +1,35 @@
+﻿@Html.DevExpress().DataView(
+    settings => {
+        settings.Name = "dataView";
+        settings.CallbackRouteValues = new { Controller = "DataView", Action = "SEOFriendlyPagingPartial" };
+        settings.SettingsTableLayout.RowsPerPage = 2;
+        settings.SettingsTableLayout.ColumnCount = 2;
+        settings.Width = 680;
+        settings.SetItemTemplateContent( c => {
+            ViewContext.Writer.Write("<div class=\"BottomMargin\">");
+            Html.DevExpress().BinaryImage(
+                imageSettings => {
+                    imageSettings.Name = "photo" + DataBinder.Eval(c.DataItem, "EmployeeID").ToString();
+                    imageSettings.ContentBytes = (byte[])DataBinder.Eval(c.DataItem, "Photo");
+            })
+            .Render();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write(
+                "<div class=\"BottomMargin\">" +
+                    "<b>FirstName: </b>" +
+                    "<label>" + DataBinder.Eval(c.DataItem, "FirstName").ToString() + "</label>" +
+                "</div>" +
+                "<div class=\"BottomMargin\">" +
+                    "<b>LastName: </b>" +
+                    "<label>" + DataBinder.Eval(c.DataItem, "LastName").ToString() + "</label>" +
+                "</div>" +
+                "<div class=\"BottomMargin\">" +
+                    "<b>Title: </b>" +
+                    "<label>" + DataBinder.Eval(c.DataItem, "Title").ToString() + "</label>" +
+                "</div>"
+            );   
+        });
+        settings.PagerSettings.SEOFriendly = SEOFriendlyMode.Enabled;
+        settings.PagerSettings.AllButton.Visible = true;        
+    }
+).Bind(Model).GetHtml()

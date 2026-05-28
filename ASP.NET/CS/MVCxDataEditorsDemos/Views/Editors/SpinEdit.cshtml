@@ -1,0 +1,47 @@
+﻿<div>
+    <div class="container">
+        <div class="editor">
+            @Html.DevExpress().SpinEdit(settings => {
+                settings.Name = "spinEdit1";
+                settings.Properties.DisplayFormatString = "C";
+                settings.Number = 799.95M;
+            }).GetHtml()
+        </div>
+        <div class="content">
+            DisplayFormatString = "C" 
+        </div>
+    </div>
+    <div class="container">
+        <div class="editor">
+            @Html.DevExpress().SpinEdit(settings => {
+                settings.Name = "spinEdit2";
+                settings.Properties.MinValue = 1;
+                settings.Properties.MaxValue = 10;
+                settings.Properties.NullText = "From 1 to 10...";
+            }).GetHtml()
+        </div>
+        <div class="content">
+            NullText = "From 1 to 10..."<br /> 
+            MinValue = 1<br /> 
+            MaxValue = 10                 
+        </div>
+    </div>
+    <div class="container">
+        <div class="editor">
+            @Html.DevExpress().SpinEdit(settings => {
+                settings.Name = "spinEdit3";
+                settings.Properties.NumberType = SpinEditNumberType.Float;
+                settings.Properties.Increment = 0.1M;
+                settings.Properties.LargeIncrement = 1;
+                settings.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+                settings.Number = 1.2M;
+            }).GetHtml()
+        </div>
+        <div class="content">
+            NumberType = Float<br /> 
+            Increment = 0.1<br /> 
+            LargeIncrement = 1<br /> 
+            SpinButtons.ShowLargeIncrementButtons = true
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+@Html.DevExpress().GetStyleSheets( 
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout }, 
+    // Default theme for some demos
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout, Theme = "Default" },
+    // Metropolis theme for FormLayout - Features demo
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout, Theme = "Metropolis" },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors, Theme = "Metropolis" },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors, Theme = DemoHelper.Instance.Theme }
+) 
+
+@Html.DevExpress().GetScripts(new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout })

@@ -1,0 +1,17 @@
+﻿.ribbonContainer {
+	vertical-align: top;
+	border-right: 1px solid #c8ccd1;
+	border-bottom: 1px solid #c8ccd1;
+	padding: 50px;
+	height: 40px;
+	background: url('../Images/editor.png') no-repeat;
+	text-align: center;
+}
+
+.editorWindow.kbsContainer {
+    overflow: hidden;
+}
+.editorWindow,
+.editorWindow .dxpc-contentWrapper {
+	border: none !important;
+}

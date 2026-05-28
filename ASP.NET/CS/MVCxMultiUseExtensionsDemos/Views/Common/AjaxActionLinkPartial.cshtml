@@ -1,0 +1,46 @@
+﻿@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvProducts";
+        settings.CallbackRouteValues = new { Controller = "Common", Action = "AjaxActionLinkPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCellsWindowLimit;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 800;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+		settings.SettingsAdaptivity.AdaptiveDetailLayoutProperties.ColCount = 2;
+        settings.SettingsAdaptivity.AdaptiveDetailLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+        settings.SettingsAdaptivity.AdaptiveDetailLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+		settings.SettingsAdaptivity.AdaptiveDetailLayoutProperties.Items.AddColumnItem("ProductName").Width = Unit.Percentage(50);
+		settings.SettingsAdaptivity.AdaptiveDetailLayoutProperties.Items.AddColumnItem("Category").Width = Unit.Percentage(50);
+		settings.SettingsAdaptivity.AdaptiveDetailLayoutProperties.Items.AddColumnItem("UnitPrice").Width = Unit.Percentage(50);
+		settings.SettingsAdaptivity.AdaptiveDetailLayoutProperties.Items.AddColumnItem("QuantityPerUnit").Width = Unit.Percentage(50);
+
+        settings.Columns.Add("ProductName");
+        settings.Columns.Add("QuantityPerUnit");
+        settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("Category").SetDataItemTemplateContent(c => {
+            int categoryID = (int)DataBinder.Eval(c.DataItem, "CategoryID");
+            ViewContext.Writer.Write(
+                Ajax.ActionLink(NorthwindDataProvider.GetCategoryNameById(categoryID), "AjaxActionLinkCategoryPartial", "Common",
+                    new {
+                        categoryID = categoryID
+                    }, 
+                    new AjaxOptions(){
+                        HttpMethod = "POST",
+                        UpdateTargetId = "categoryContent",
+                        OnSuccess = "ShowCategoryInformation",
+                        InsertionMode = InsertionMode.Replace
+                    }
+                )
+            );
+        });
+    }).Bind(Model).GetHtml()

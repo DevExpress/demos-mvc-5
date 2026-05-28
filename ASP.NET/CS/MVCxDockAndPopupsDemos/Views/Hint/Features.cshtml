@@ -1,0 +1,90 @@
+﻿@model HintFeaturesDemoOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(700);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(400);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+@{
+    @Html.AntiForgeryToken()
+
+    string[] positions = { "left", "top", "bottom", "right" };
+    for(int i = 0; i < positions.Length; i++) {
+        var position = positions[i];
+        @Html.DevExpress().Button(settings => {
+            settings.Name = position + "Button";
+            settings.Text = string.Format("Hint on {0}", position);
+            settings.Style.Add("margin-right", "3px");
+            settings.ControlStyle.CssClass = position;
+        }).GetHtml();
+
+        @Html.DevExpress().Hint(settings => {
+            settings.Name = position + "Hint";
+            settings.Content = string.Format("Hint from {0} side", position);
+            settings.TargetSelector = "." + position;
+
+            settings.ShowCallout = Model.ShowCallout;
+            settings.Animation = Model.Animation;
+            settings.AppearAfter = Model.AppearAfter;
+            settings.DisappearAfter = Model.DisappearAfter;
+            settings.TriggerAction = Model.Trigger;
+            settings.Title = Model.ShowTitle ? "Hint title" : "";
+
+            switch(position) {
+                case "left":
+                    settings.Position = HintPosition.Left;
+                    break;
+                case "top":
+                    settings.Position = HintPosition.Top;
+                    break;
+                case "bottom":
+                    settings.Position = HintPosition.Bottom;
+                    break;
+                case "right":
+                    settings.Position = HintPosition.Right;
+                    break;
+            }
+        }).GetHtml();
+    }
+}
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(g => {
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.Caption = "Options";
+            g.Items.Add(m => m.ShowCallout);
+            g.Items.Add(m => m.Animation);
+            g.Items.Add(m => m.ShowTitle);
+            g.Items.Add(m => m.Trigger, i => i.NestedExtensionSettings.Width = Unit.Pixel(124));
+            g.Items.Add(m => m.AppearAfter, i => {
+                i.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                i.NestedExtensionSettings.Width = Unit.Pixel(124);
+            });
+            g.Items.Add(m => m.DisappearAfter, i => {
+                i.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                i.NestedExtensionSettings.Width = Unit.Pixel(124);
+            });
+        });
+
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 350,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+           s.Name = "ApplyButton";
+           s.Text = "Apply Changes";
+           s.Theme = DemoHelper.Instance.Theme;
+           s.UseSubmitBehavior = true;
+       }).GetHtml()
+    </div>
+}
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

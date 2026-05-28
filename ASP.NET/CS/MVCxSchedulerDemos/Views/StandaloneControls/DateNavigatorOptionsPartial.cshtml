@@ -1,0 +1,37 @@
+﻿@model DateNavigatorDemoOptions
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "demoOptions";
+    settings.Theme = DemoHelper.Instance.Theme;
+    settings.ShowItemCaptionColon = false;
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.SettingsItemCaptions.Location = LayoutItemCaptionLocation.Left;
+    settings.Width = Unit.Percentage(100);
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Options";
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.Width = Unit.Pixel(200);
+        g.ColumnCount = 4;
+
+        g.Items.Add(m => m.ShowTodayButton);
+        g.Items.Add(m => m.ShowWeekNumbers);
+        g.Items.Add(m => m.AppointmentDatesHighlightMode).NestedExtension().ComboBox(s => {
+            s.Properties.Items.Add("None", 0);
+            s.Properties.Items.Add("Bold", 1);
+            s.Properties.Items.Add("Labels", 2);
+            s.Properties.Items.Add("Custom", 3);
+        });
+
+        g.Items.Add(i => {
+            i.ShowCaption = DefaultBoolean.False;
+            i.NestedExtension().Button(s => {
+                s.Name = "ApplyButton";
+                s.Text = "Apply Changes";
+                s.Theme = DemoHelper.Instance.Theme;
+                s.UseSubmitBehavior = true;
+            });
+        });
+    });
+
+}).Bind(Model).GetHtml()

@@ -1,0 +1,23 @@
+﻿@model string
+           
+@{ var pathToTemplateXlsx = Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "EmployeesHorizontalTemplate.xlsx"); }
+
+@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "MailMerging", Action = "MailMergePartial", mailMergeMode = Model };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 700;
+        settings.ActiveTabIndex = 0;
+        settings.ShowConfirmOnLosingChanges = false;
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideFileTab(spreadsheet);
+            if(Model == "Worksheets") {
+                foreach(Worksheet worksheet in spreadsheet.Document.Worksheets) {
+                    worksheet.Columns[1].Width = 2440;
+                    worksheet.Shapes[0].Left = (float)(worksheet.Columns[0].Width + (worksheet.Columns[1].Width - worksheet.Shapes[0].Width) / 2);
+                }
+            }
+        };
+}).PerformMailMerge(pathToTemplateXlsx, EmployeesDataProvider.GetEmployees(), string.Format("\"{0}\"", Model)).GetHtml()  

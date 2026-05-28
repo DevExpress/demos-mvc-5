@@ -1,0 +1,64 @@
+﻿@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+
+    Html.DevExpress().GridView<DevExpress.Web.Demos.Mvc.EditableWorldCustomer>(settings => {
+        settings.Name = "GridView";
+        settings.KeyFieldName = "CustomerId";
+        settings.CallbackRouteValues = new { Controller = "Editing", Action = "CascadingComboBoxesBatchPartial" };
+        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Editing", Action = "CascadingComboBoxesBatchEditingUpdateModel" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+        settings.Width = Unit.Percentage(100);
+
+        settings.ClientSideEvents.BatchEditStartEditing = "onBatchEditStartEditing";
+        settings.ClientSideEvents.FocusedCellChanging = "onFocusedCellChanging";
+        settings.ClientSideEvents.BeginCallback = "Grid_BeginCallback";
+        settings.ClientSideEvents.EndCallback = "onGridEndCallback";
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+
+        settings.Columns.Add(m => m.CustomerName);
+
+        settings.Columns.Add(m => m.CountryId, column => {
+            column.Caption = "Country";
+            column.EditorProperties().ComboBox(p => {
+                p.TextField = "CountryName";
+                p.ValueField = "CountryId";
+                p.ValueType = typeof(int);
+                p.ClientSideEvents.SelectedIndexChanged = "onSelectedCountryChanged";
+                p.BindList(WorldCitiesDataProvider.GetCountries());
+            });
+        });
+
+        settings.Columns.Add(m => m.CityId, column => {
+            column.Caption = "City";
+            column.EditorProperties().ComboBox(p => {
+                p.CallbackRouteValues = new { Controller = "Editing", Action = "GetCitiesBatchEdit" };
+                p.ValueField = "CityId";
+                p.TextField = "CityName";
+                p.ValueType = typeof(int);
+                p.ClientInstanceName = "cmbCity";
+
+                p.ClientSideEvents.BeginCallback = "onCityBeginCallback";
+                p.ClientSideEvents.EndCallback = "onCityEndCallback";
+                var citiesDataSource = WorldCitiesDataProvider.GetAllCities();
+                p.BindList(citiesDataSource);
+            });
+        });
+
+        settings.CellEditorInitialize = (sender, e) => {
+            MVCxGridView grid = sender as MVCxGridView;
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+
+            if(!grid.IsEditing && e.Column.FieldName == "CityId") {
+                MVCxComboBox comboboxCity = e.Editor as MVCxComboBox;
+                comboboxCity.SettingsLoadingPanel.Enabled = false;
+               
+            }
+        };
+        DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+    }).SetEditErrorText(ViewData["EditError"] as string).Bind(Model).GetHtml();
+}

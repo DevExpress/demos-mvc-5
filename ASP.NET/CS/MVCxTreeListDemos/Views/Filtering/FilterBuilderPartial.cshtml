@@ -1,0 +1,25 @@
+﻿@{
+    bool enableTextTab = (bool)ViewBag.EnableTextTab;
+}
+@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "Filtering", Action = "FilterBuilderPartial", EnableTextTab = enableTextTab };
+    settings.Width = Unit.Percentage(100);
+
+    settings.KeyFieldName = "ID";
+    settings.ParentFieldName = "ParentID";
+    settings.Columns.Add(c => {
+        c.FieldName = "DepartmentName";
+        c.Caption = "Departments";
+    });
+    settings.Columns.Add("Location");
+    settings.Columns.Add(c => {
+        c.FieldName = "Budget";
+        c.PropertiesEdit.DisplayFormatString = "{0:C}";
+    });
+    settings.Columns.Add("Phone1");
+
+    settings.SettingsBehavior.AutoExpandAllNodes = true;
+    settings.Settings.ShowFilterBar = GridViewStatusBarMode.Visible;
+    settings.SettingsFilterControl.ViewMode = enableTextTab ? FilterControlViewMode.VisualAndText : FilterControlViewMode.Visual;
+}).Bind(Model).GetHtml()

@@ -1,0 +1,14 @@
+﻿<div class="container">    
+    <div class="editorCell">
+        @Html.DevExpress().TextBoxFor(model => model, settings => {
+            settings.Width = Unit.Percentage(100);
+            settings.ShowModelErrors = true;
+            settings.EncodeHtml = false;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithText;
+            settings.Properties.ValidationSettings.Display = Display.Dynamic;
+            settings.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+            settings.Properties.CaptionCellStyle.CssClass = "editorCaption";
+            settings.Properties.Caption = (string)ViewData["Caption"];
+        }).GetHtml()
+    </div>
+</div>

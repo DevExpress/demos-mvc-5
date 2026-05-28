@@ -1,0 +1,135 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(600);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = 332;
+}
+@section AdditionalResources {
+    <script>
+        function getMenuItem() {
+            return menu.GetItemByName(cbItems.GetValue());
+        }
+        function showProperties() {
+            var item = getMenuItem();
+            chbVisible.SetChecked(item.GetVisible());
+            chbEnabled.SetChecked(item.GetEnabled());
+            chbSelect.SetChecked(menu.GetSelectedItem() == item);
+        }
+
+        function cbChangeSelection() {
+            showProperties();
+        }
+        function toggleEnabled() {
+            getMenuItem().SetEnabled(chbEnabled.GetChecked());
+            showProperties();
+        }
+        function toggleVisible() {
+            getMenuItem().SetVisible(chbVisible.GetChecked());
+            showProperties();
+        }
+        function toggleSelect() {
+            var item = chbSelect.GetChecked() ? getMenuItem() : null;
+            menu.SetSelectedItem(item);
+        }
+        function toggleClientVisible() {
+            menu.SetVisible(chbClientVisible.GetChecked());
+        }
+
+        function initMenu() {
+            menu.SetSelectedItem(getMenuItem());
+            showProperties();
+        }
+        function menuItemClick(s, e) {
+            cbItems.SetValue(e.item.name);
+            showProperties();
+        }
+    </script>
+    <style>
+        .custom-menu {
+            padding-top: 13px;
+            width: 100%;
+            max-width: 180px;
+        }
+    </style>
+}
+@Html.DevExpress().Menu(
+    settings =>
+    {
+        settings.Name = "menu";
+        settings.AllowSelectItem = true;
+        settings.EnableClientSideAPI = true;
+        settings.Orientation = Orientation.Vertical;
+        settings.ControlStyle.CssClass = "custom-menu";
+
+        settings.Items.Add("Visa", "Visa", "~/Content/Menu/visa.png").Selected = true;
+        settings.Items.Add("MasterCard", "MasterCard", "~/Content/Menu/master.png");
+        settings.Items.Add("Union", "Union", "~/Content/Menu/union.png");
+        settings.Items.Add("American Express", "American Express", "~/Content/Menu/amex.png");
+        settings.Items.Add("Maestro", "Maestro", "~/Content/Menu/maestro.png");
+
+        settings.ClientSideEvents.ItemClick = "menuItemClick";
+        settings.ClientSideEvents.Init = "initMenu";
+    }).GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+        settings.Name = "FormLayoutSettings";
+        settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        settings.Items.AddGroupItem(group => {
+            group.Caption = "Options";
+            group.Items.Add(item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                item.Caption = "Client Visible";
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Name = "chbClientVisible";
+                checkBoxSettings.Checked = true;
+                checkBoxSettings.Properties.ClientSideEvents.CheckedChanged = "toggleClientVisible";
+            });
+        });
+        settings.Items.AddGroupItem(group => {
+            group.Caption = "Item options";
+            group.Items.Add(item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+                item.Caption = "Choose item:";
+                ComboBoxSettings comboBoxSettings = (ComboBoxSettings)item.NestedExtensionSettings;
+                comboBoxSettings.Name = "cbItems";
+                comboBoxSettings.SelectedIndex = 0;
+                comboBoxSettings.Properties.Items.Add("Visa", "Visa");
+                comboBoxSettings.Properties.Items.Add("MasterCard", "MasterCard");
+                comboBoxSettings.Properties.Items.Add("Union", "Union");
+                comboBoxSettings.Properties.Items.Add("American Express", "American Express");
+                comboBoxSettings.Properties.Items.Add("Maestro", "Maestro");
+                comboBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "cbChangeSelection";
+            });
+
+            group.Items.Add(item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                item.Caption = "Enabled";
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Name = "chbEnabled";
+                checkBoxSettings.Checked = true;
+                checkBoxSettings.Properties.ClientSideEvents.CheckedChanged = "toggleEnabled";
+            });
+
+            group.Items.Add(item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                item.Caption = "Visible";
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Name = "chbVisible";
+                checkBoxSettings.Checked = true;
+                checkBoxSettings.Properties.ClientSideEvents.CheckedChanged = "toggleVisible";
+            });
+
+            group.Items.Add(item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                item.Caption = "Select";
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Name = "chbSelect";
+                checkBoxSettings.Checked = true;
+                checkBoxSettings.Properties.ClientSideEvents.CheckedChanged = "toggleSelect";
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+            ColumnMinWidth = 300,
+            ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+        });
+    }).GetHtml()
+}

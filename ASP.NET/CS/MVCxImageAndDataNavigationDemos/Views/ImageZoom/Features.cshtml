@@ -1,0 +1,55 @@
+﻿@model ImageZoomFeaturesOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(460);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(400);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().ImageZoom(settings => {
+    settings.Name = "imageZoom";
+    settings.ImageUrl = Url.Content("~/Content/ImageZoom/headphones_124696717_small.jpg");
+    settings.LargeImageUrl = Url.Content("~/Content/ImageZoom/headphones_124696717.jpg");
+
+    settings.EnableExpandMode = Model.EnableExpandMode;
+    settings.ShowHint = Model.ShowHint;
+    settings.LargeImageLoadMode = Model.LargeImageLoadMode;
+    settings.SettingsZoomMode.ZoomWindowPosition = Model.ZoomWindowPosition;
+    settings.SettingsZoomMode.MouseBoxOpacityMode = Model.MouseBoxOpacityMode;
+    settings.ZoomWindowText = "Zoom Window Text";
+    settings.ExpandWindowText = "Expand Window Text";
+}).GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "options";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(g => {
+            g.Caption = "Options";
+            g.Items.Add(m => m.ShowHint);
+            g.Items.Add(m => m.EnableExpandMode);
+            g.Items.Add(m => m.ZoomWindowPosition);
+            g.Items.Add(m => m.MouseBoxOpacityMode);
+            g.Items.Add(m => m.LargeImageLoadMode);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 380,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

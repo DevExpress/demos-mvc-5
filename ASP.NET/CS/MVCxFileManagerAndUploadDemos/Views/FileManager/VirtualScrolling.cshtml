@@ -1,0 +1,51 @@
+﻿@model string
+
+<script type="text/javascript">
+    function Submit() {
+        $("form").submit();
+    }
+</script>
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(cbSettings =>
+            {
+                cbSettings.Name = "fileListViewMode";
+                cbSettings.Theme = DemoHelper.Instance.Theme;
+                cbSettings.Properties.Caption = "View Mode";
+                cbSettings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e){ Submit(); }";
+                cbSettings.Width = Unit.Pixel(120);
+                cbSettings.Properties.ValueType = typeof(FileListView);
+            }).BindList(FileManagerDemoHelper.GetFileListViewModes()).Bind(FileManagerDemoHelper.VirtualScrollingViewMode).GetHtml()
+        </div>
+
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(cbSettings =>
+            {
+                cbSettings.Name = "fileListPageSize";
+                cbSettings.Theme = DemoHelper.Instance.Theme;
+                cbSettings.Properties.Caption = "Page Size";
+                cbSettings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e){ Submit(); }";
+                cbSettings.Width = Unit.Pixel(120);
+                cbSettings.Properties.ValueType = typeof(Int32);
+            }).BindList(FileManagerDemoHelper.GetFileListPageSizes()).Bind(FileManagerDemoHelper.VirtualScrollingPageSize).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.Partial("VirtualScrollingPartial", Model)
+<br />
+<p class="Note">
+    <b>Allowed Extensions</b>: .jpg, .jpeg, .gif, .rtf, .txt, .png, .doc, .pdf, .xls, .xlsx
+</p>
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}
+

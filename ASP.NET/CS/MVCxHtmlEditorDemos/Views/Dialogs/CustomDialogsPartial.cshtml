@@ -1,0 +1,40 @@
+﻿@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "heCustomDialogs";
+        settings.CallbackRouteValues = new { Controller = "Dialogs", Action = "CustomDialogsPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        string htmlContentPath = HttpContext.Current.Server.MapPath("~/Content/HtmlEditor/DemoHtml/CustomDialogs.html");
+        settings.Html = System.IO.File.ReadAllText(htmlContentPath);
+
+        settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.FileSystemSettings.Assign(HtmlEditorDialogsDemosHelper.FileSaveSettings.FileSystemSettings);
+        settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.ValidationSettings.Assign(HtmlEditorDialogsDemosHelper.ImageUploadValidationSettings);
+
+        settings.Toolbars.Add(toolbar => {
+            toolbar.Items.Add(new ToolbarUndoButton());
+            toolbar.Items.Add(new ToolbarRedoButton());
+            toolbar.Items.Add(new ToolbarBoldButton(true));
+            toolbar.Items.Add(new ToolbarItalicButton());
+            toolbar.Items.Add(new ToolbarUnderlineButton());
+            toolbar.Items.Add(new ToolbarStrikethroughButton());
+                
+            toolbar.Items.Add<ToolbarCustomDialogButton>(button => {
+                button.BeginGroup = true;
+                button.Name = "InsertTemplate";
+                button.ToolTip = "Insert Template";
+                button.Image.Url = "~/Content/HtmlEditor/Template.png";
+            });
+        });
+            
+        settings.CustomDialogs.Add(dialog => {
+            dialog.Name = "InsertTemplate";
+            dialog.Caption = "Insert Template";
+            dialog.FormAction = "InsertTemplateForm";
+            dialog.OkButtonText = "Insert";
+        });
+            
+        settings.ClientSideEvents.CustomDialogOpened = "OnCustomDialogOpened";
+        settings.ClientSideEvents.CustomDialogClosed = "OnCustomDialogClosed";
+        settings.ClientSideEvents.CustomDialogClosing = "OnCustomDialogClosing";
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }).GetHtml()

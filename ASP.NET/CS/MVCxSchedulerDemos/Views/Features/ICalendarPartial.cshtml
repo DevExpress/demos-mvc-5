@@ -1,0 +1,7 @@
+﻿@{
+    SchedulerExtension scheduler = Html.DevExpress().Scheduler(SchedulerDemoHelper.ExportSchedulerSettings);
+    if (TempData["SchedulerErrorText"] != null) {
+        scheduler.SetErrorText((string)TempData["SchedulerErrorText"]);
+    }
+}
+@scheduler.Bind(Model, MedicsSchedulingDataProvider.GetMedics()).GetHtml()

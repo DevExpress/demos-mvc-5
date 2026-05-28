@@ -1,0 +1,47 @@
+﻿@model AjaxFormValidationData
+
+<div class="container">
+    <div class="editorCell">
+        @Html.DevExpress().TextBoxFor(m => m.FullName, settings => {
+            CommonDemoHelper.TextBoxSettingsMethod(settings);
+            settings.Properties.CaptionCellStyle.CssClass = "editorCaption";
+            settings.Properties.Caption = "Full Name";
+        }).GetHtml()
+    </div>
+</div>
+<div class="container">
+    <div class="editorCell">
+        @Html.DevExpress().TextBoxFor(m => m.Login, settings => {
+            CommonDemoHelper.TextBoxSettingsMethod(settings);
+            settings.Properties.CaptionCellStyle.CssClass = "editorCaption";
+            settings.Properties.Caption = "Login";
+        }).GetHtml()
+    </div>
+</div>
+<div class="container">
+    <div class="editorCell">
+        @Html.DevExpress().TextBoxFor(m => m.Password, settings => {
+            CommonDemoHelper.TextBoxSettingsMethod(settings);
+            settings.Properties.Password = true;
+            settings.Properties.CaptionCellStyle.CssClass = "editorCaption";
+            settings.Properties.Caption = "Password";
+        }).GetHtml()
+    </div>
+</div>
+<div class="container">
+    <div class="editorCell">
+        @Html.DevExpress().RadioButtonListFor(m => m.Gender, settings => {
+            settings.Properties.CaptionCellStyle.CssClass = "editorCaption";            
+            settings.Properties.CaptionSettings.VerticalAlign = EditorCaptionVerticalAlign.Middle;
+            settings.Properties.Caption = "Gender";
+            settings.Width = Unit.Percentage(100);
+        }).BindList(Enum.GetNames(typeof(Gender))).GetHtml()
+    </div>
+</div>
+<div class="buttonsContainer">
+    @Html.DevExpress().Button(settings => {
+        settings.Name = "btnUpdate";                        
+        settings.Text = "Process";
+        settings.UseSubmitBehavior = true;
+    }).GetHtml()
+</div>

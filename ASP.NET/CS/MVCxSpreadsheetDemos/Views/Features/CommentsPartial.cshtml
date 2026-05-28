@@ -1,0 +1,13 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "CommentsPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 700;
+        settings.ShowConfirmOnLosingChanges = false;
+        settings.ShowFormulaBar = false;
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideAllTabsExceptReview(spreadsheet);
+        };
+    }).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "Comments.xlsx")).GetHtml()

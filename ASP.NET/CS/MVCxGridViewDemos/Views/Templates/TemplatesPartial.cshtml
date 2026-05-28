@@ -1,0 +1,150 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "gvTemplates";
+    settings.CallbackRouteValues = new { Controller = "Templates", Action = "TemplatesPartial" };
+    settings.SettingsPager.PageSize = ViewBag.PageSize;
+    settings.SettingsPager.AlwaysShowPager = true;
+    settings.Width = Unit.Percentage(100);
+
+    settings.Columns.Add("FirstName");
+    settings.Columns.Add("LastName");
+    settings.Columns.Add("BirthDate");
+    settings.Columns.Add("Title");
+    settings.Columns.Add("HireDate");
+
+    settings.SetDataRowTemplateContent(c => {
+        ViewContext.Writer.Write(
+            "<div style=\"padding:5px\">" +
+                "<table class=\"templateTable\">" +
+                    "<tr>" +
+                        "<td rowspan=\"4\">"
+        );
+                        Html.DevExpress().BinaryImage(imageSettings => {
+                            imageSettings.Name = "Photo" + DataBinder.Eval(c.DataItem, "EmployeeID");
+                            imageSettings.Width = 160;
+                            imageSettings.Height = 170;
+                        }).Bind(DataBinder.Eval(c.DataItem, "Photo")).Render();
+        ViewContext.Writer.Write(
+                        "</td>" +
+                        "<td class=\"caption\">First Name</td>" +
+                        "<td>" + DataBinder.Eval(c.DataItem, "FirstName") + "</td>" +
+                        "<td class=\"caption\">Last Name</td>" +
+                        "<td>" + DataBinder.Eval(c.DataItem, "LastName") + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td class=\"caption\">Title</td>" +
+                        "<td colspan=\"3\">" + DataBinder.Eval(c.DataItem, "Title") + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td class=\"caption\">Birth Date</td>" +
+                        "<td>" + DataBinder.Eval(c.DataItem, "BirthDate", "{0:d}") + "</td>" +
+                        "<td class=\"caption\">Hire Date</td>" +
+                        "<td>" + DataBinder.Eval(c.DataItem, "HireDate", "{0:d}") + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td colspan=\"4\" style=\"white-space:normal\">" + DataBinder.Eval(c.DataItem, "Notes") + "</td>" +
+                    "</tr>" +
+                "</table>" +
+            "</div>"
+        );
+    });
+    settings.SetPagerBarTemplateContent(c => {
+        MVCxGridView grid = null;
+        Control control = c.NamingContainer;
+        while(control != null) {
+            if(control is MVCxGridView) {
+                grid = (MVCxGridView)control;
+                break;
+            }
+            control = control.NamingContainer;
+        }
+        int[] pageSizes = new[] { 2, 3, 5 };
+        ViewContext.Writer.Write(
+            "<table class=\"OptionsTable\" style=\"width: 100%\">" + 
+                "<tr>" +
+                    "<td style=\"padding-left: 8px;\">"
+        );
+                    Html.DevExpress().Button(buttonSettings => {
+                        buttonSettings.Name = "First";
+                        buttonSettings.ControlStyle.CssClass = "button";
+                        buttonSettings.Text = "First";
+                        buttonSettings.Enabled = grid.PageIndex > 0;
+                        buttonSettings.ClientSideEvents.Click = "function(s, e){ gvTemplates.GotoPage(0); }";
+                    }).Render();
+        ViewContext.Writer.Write(
+                    "</td>" +
+                    "<td>"
+        );
+                    Html.DevExpress().Button(buttonSettings => {
+                        buttonSettings.Name = "Prev";
+                        buttonSettings.ControlStyle.CssClass = "button";
+                        buttonSettings.Text = "Prev";
+                        buttonSettings.Enabled = grid.PageIndex > 0;
+                        buttonSettings.ClientSideEvents.Click = "function(s, e){ gvTemplates.PrevPage(); }";
+                    }).Render();
+        ViewContext.Writer.Write(
+                    "</td>" +
+                    "<td> <label>Page:</label> </td>" +
+                    "<td>"
+        );
+                    Html.DevExpress().TextBox(editorSettings => {
+                        editorSettings.Name = "CurrentPage";
+                        editorSettings.Width = 50;
+                        editorSettings.Properties.Size = 2;
+                        editorSettings.Properties.MaskSettings.Mask = "<1.." + grid.PageCount.ToString() + ">";
+                        editorSettings.Properties.ValidationSettings.Display = Display.None;
+                        editorSettings.Text = (grid.PageIndex + 1).ToString();
+                        editorSettings.Properties.ClientSideEvents.TextChanged = "function(s, e){ gvTemplates.GotoPage(parseInt(s.GetValue()) - 1); }";
+                    }).Render();
+        ViewContext.Writer.Write(
+                    "</td>" +
+                    string.Format("<td> <label>of {0}</label> </td>", grid.PageCount) +
+                    "<td>"
+        );
+                    Html.DevExpress().Button(buttonSettings => {
+                        buttonSettings.Name = "Next";
+                        buttonSettings.ControlStyle.CssClass = "button";
+                        buttonSettings.Text = "Next";
+                        buttonSettings.Enabled = grid.PageIndex < grid.PageCount - 1;
+                        buttonSettings.ClientSideEvents.Click = "function(s, e){ gvTemplates.NextPage(); }";
+                    }).Render();
+        ViewContext.Writer.Write(
+                    "</td>" +
+                    "<td>"
+        );
+                    Html.DevExpress().Button(buttonSettings => {
+                        buttonSettings.Name = "Last";
+                        buttonSettings.ControlStyle.CssClass = "button";
+                        buttonSettings.Text = "Last";
+                        buttonSettings.Enabled = grid.PageIndex < grid.PageCount - 1;
+                        buttonSettings.ClientSideEvents.Click = "function(s, e){ gvTemplates.GotoPage(gvTemplates.GetPageCount() - 1); }";
+                    }).Render();
+        ViewContext.Writer.Write(
+                    "</td>" +
+                    "<td style=\"width: 100%\"></td>" +
+                    "<td> <label>Records per page:</label> </td>" + 
+                    "<td>"
+        );
+                    Html.DevExpress().ComboBox(editorSettings => {
+                        editorSettings.Name = "PageSize";
+                        editorSettings.Width = 70;
+                        foreach(int pageSize in pageSizes)
+                            editorSettings.Properties.Items.Add(pageSize.ToString(), pageSize);
+                        editorSettings.SelectedIndex = Array.IndexOf(pageSizes, ViewBag.PageSize);
+                        editorSettings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e){ gvTemplates.PerformCallback({'pageSize': s.GetValue()}); }";
+                    }).Render();
+        ViewContext.Writer.Write(
+                    "</td>" +
+                "</tr>" +
+            "</table>"
+        );
+    });
+    settings.BeforeGetCallbackResult = (sender, e) => {
+        MVCxGridView grid = (MVCxGridView)sender;
+        if(grid.SettingsPager.PageSize != ViewBag.PageSize) {
+            grid.SettingsPager.PageSize = ViewBag.PageSize;
+            grid.DataBind();
+        }
+    };
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

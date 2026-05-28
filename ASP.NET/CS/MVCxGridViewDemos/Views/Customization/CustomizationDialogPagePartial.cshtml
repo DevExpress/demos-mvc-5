@@ -1,0 +1,83 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "GridView";
+    settings.CallbackRouteValues = new { Controller = "Customization", Action = "CustomizationDialogPagePartial" };
+    settings.Width = Unit.Percentage(100);
+    settings.EnableRowsCache = false;
+
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowFilterRowMenu = true;
+    settings.Settings.ShowGroupPanel = true;
+    settings.Settings.UseFixedTableLayout = true;
+    settings.SettingsBehavior.AutoExpandAllGroups = true;
+    settings.SettingsPager.PageSize = 20;
+    settings.SettingsPager.NumericButtonCount = 6;
+    settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+    settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+    settings.SettingsCustomizationDialog.Enabled = true;
+
+    settings.Toolbars.Add(t => {
+        t.Position = GridToolbarPosition.Top;
+        t.ItemAlign = GridToolbarItemAlign.Right;
+        t.Items.Add(GridViewToolbarCommand.ShowCustomizationDialog);
+    });
+
+    settings.Columns.Add(c => {
+        c.FieldName = "ProductName";
+        c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "CategoryID";
+        c.Caption = "Category Name";
+        c.SortIndex = 0;
+        c.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+        c.AdaptivePriority = 1;
+        c.Settings.AllowHeaderFilter = DefaultBoolean.True;
+        c.Settings.AllowAutoFilter = DefaultBoolean.False;
+        c.Settings.SortMode = DevExpress.XtraGrid.ColumnSortMode.DisplayText;
+        c.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+        c.EditorProperties().ComboBox(cb => {
+            cb.DataSource = NorthwindDataProvider.GetCategories();
+            cb.TextField = "CategoryName";
+            cb.ValueField = "CategoryID";
+            cb.ValueType = typeof(int);
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "QuantityPerUnit";
+        c.AdaptivePriority = 1;
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "UnitPrice";
+        c.SortIndex = 1;
+        c.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+        c.Width = 150;
+        c.EditorProperties().SpinEdit(sp => {
+            sp.DisplayFormatString = "c";
+            sp.MinValue = 0;
+            sp.MaxValue = 60000;
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "UnitsInStock";
+        c.Width = 140;
+        c.EditorProperties().SpinEdit(sp => {
+            sp.NumberType = SpinEditNumberType.Integer;
+            sp.MinValue = 0;
+            sp.MaxValue = 10000;
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "Discontinued";
+        c.GroupIndex = 0;
+        c.Width = 150;
+    });
+
+    settings.Styles.Cell.Wrap = DefaultBoolean.False;
+    settings.SettingsDataSecurity.AllowInsert = false;
+    settings.SettingsDataSecurity.AllowEdit = false;
+    settings.SettingsDataSecurity.AllowDelete = false;
+
+    settings.PreRender = (sender, e) => {
+        ((MVCxGridView)sender).FilterExpression = "Contains([ProductName], 'an')";
+    };
+}).Bind(Model).GetHtml()

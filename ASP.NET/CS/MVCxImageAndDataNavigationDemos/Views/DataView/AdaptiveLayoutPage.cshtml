@@ -1,0 +1,48 @@
+﻿@{ Layout = null; }
+@model IEnumerable
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Adaptive Layout - ASP.NET MVC DataView Extension</title>
+    <style type="text/css">
+        #dataView .dxbplc {
+            vertical-align: top;
+        }
+        .itemphoto {
+            display: block;
+            margin: auto;
+            max-width: 200px;
+        }
+        .contactname {
+            display: block;
+            text-align: center;
+            width: 100%;
+            margin: 6px 0;
+        }
+        .contactemail {
+            display: block;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        html:not(.dxTheme-Office365Dark) .contentClass,
+        html:not(.dxTheme-Office365Dark) .itemClass {
+            background-color: white;
+        }
+    </style>
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionType = ExtensionType.DataView },
+        new StyleSheet { ExtensionType = ExtensionType.HyperLink, Theme = Utils.CurrentTheme }
+    )
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionType = ExtensionType.DataView }
+    )
+</head>
+<body>
+    @using(Html.BeginForm()) {
+        @Html.Partial("AdaptiveLayoutPagePartial", Model)
+    }
+</body>
+</html>

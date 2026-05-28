@@ -1,0 +1,37 @@
+﻿@model HtmlEditorModel
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+@Html.Partial("ImportExportPartial", Model)
+
+@section DemoOptionsTop {
+
+    <div class="options">
+        <div class="options-item">
+            Sample document:
+            @Html.DevExpress().HyperLink(
+        settings => {
+            settings.Name = "lnkDocument";
+            settings.Properties.Text = ViewData["SampleDocumentPath"].ToString();
+            settings.NavigateUrl = settings.Properties.Text;
+        }
+    ).GetHtml()
+        </div>
+    </div>
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(
+        settings => {
+            settings.Name = "btnImport";
+            settings.RouteValues = new { Controller = "Features", Action = "ImportSampleDocument" };
+            settings.Text = "Import the document";
+        }
+    ).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

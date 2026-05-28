@@ -1,0 +1,53 @@
+﻿@{ Layout = null; }
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Scrolling - ASP.NET MVC Menu Extension</title>
+    <script src="@Url.Content("~/Scripts/jquery.min.js")" ></script>
+    <link href="@Url.Content("~/Content/Components.css")" rel="stylesheet" />
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionType = ExtensionType.Menu }
+    )
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionType = ExtensionType.Menu }
+    )
+    <style>
+        body {
+            margin: 0;
+            padding: 8px;
+        }
+        .menu_scrolling_description {
+            font: 8pt Tahoma;
+            line-height: 150%;
+            color: Gray;
+            text-align: center;
+            margin-top: 120px;
+        }
+    </style>
+</head>
+<body>
+    @Html.DevExpress().Menu(
+        settings =>
+        {
+            settings.Name = "mFeatures";
+            settings.Orientation = Orientation.Horizontal;
+            settings.AllowSelectItem = true;
+            settings.EnableSubMenuScrolling = (bool)Session["DXEnableScrolling"];
+            settings.ShowPopOutImages = DefaultBoolean.True;
+
+            settings.ItemDataBound = (source, e) => {
+                IHierarchyData itemHierarchyData = (IHierarchyData)e.Item.DataItem;
+                System.Xml.XmlElement element = (System.Xml.XmlElement)itemHierarchyData.Item;
+                if(element.Attributes["Index"] != null) {
+                    int imageIndex = int.Parse(element.Attributes["Index"].Value);
+                    e.Item.Image.SpriteProperties.CssClass = string.Format("component_image_{0}", imageIndex);
+                }
+            };
+        }).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/Components.xml"), "/Groups/Group[@Text!=\"Data\"]").GetHtml()
+    <div class="menu_scrolling_description">
+         This element represents a new document. If a menu doesn't fit into the visible area of this element, 
+         the submenu displays scroll buttons. 
+    </div>    
+</body>
+</html>

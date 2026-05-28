@@ -1,0 +1,23 @@
+﻿@Html.DevExpress().CardView(
+    settings =>
+    {
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "PagingAndScrolling", Action = "PagerSettingsPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.SettingsPager.Position = PagerDemoHelper.Options.Position;
+        settings.SettingsPager.ShowDisabledButtons = PagerDemoHelper.Options.ShowDisabledButtons;
+        settings.SettingsPager.ShowNumericButtons = PagerDemoHelper.Options.ShowNumericButtons;
+        settings.SettingsPager.ShowSeparators = PagerDemoHelper.Options.ShowSeparators;
+        settings.SettingsPager.Summary.Visible = PagerDemoHelper.Options.ShowSummary;
+        settings.SettingsPager.PageSizeItemSettings.Visible = PagerDemoHelper.Options.ShowPageSizeItem;
+        settings.SettingsPager.PageSizeItemSettings.Position = PagerDemoHelper.Options.PageSizeItemPosition;
+
+        settings.SettingsPager.EnableAdaptivity = true;
+        
+        settings.Columns.Add("ContactName");
+        settings.Columns.Add("CompanyName");
+        settings.Columns.Add("City");
+        settings.Columns.Add("Region");
+        settings.Columns.Add("Country");
+    }).Bind(Model).GetHtml()

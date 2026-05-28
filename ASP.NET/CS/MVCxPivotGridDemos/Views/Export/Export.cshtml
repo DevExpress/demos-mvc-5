@@ -1,0 +1,31 @@
+﻿
+<script type="text/javascript">
+    function onExportTypeChanged(s, e) {
+        var isDataAware = s.GetValue() == "ExcelDataAware";
+        options.GetItemByName("DataAwareGroup").SetVisible(isDataAware);
+        options.GetItemByName("WYSIWYGGroup").SetVisible(!isDataAware);
+    }
+</script>
+
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(70);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(400); }
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+    
+@Html.Partial("ExportPartial")
+
+@section DemoOptions {
+
+@Html.Partial("ExportSettingsPartial", (PivotGridExportDemoOptions)ViewBag.DemoOptions)
+
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+

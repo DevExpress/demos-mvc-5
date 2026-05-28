@@ -1,0 +1,127 @@
+﻿@model ChartSegmentColorizerOptions
+
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(340);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartSegmentColorizerOptions options = Model;
+    settings.Name = "chart";
+    settings.Width = 920;
+    settings.Height = 500;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.Border.Visibility = DefaultBoolean.False;
+    });
+    settings.Series.Add(s => {
+        s.LabelsVisibility = DefaultBoolean.False;
+        s.ChangeView(options.SeriesView);
+        LineSeriesView view = (LineSeriesView)s.View;
+        view.MarkerVisibility = DefaultBoolean.False;
+
+        if (options.SegmentColorizer == "Range Segment Colorizer") {
+            view.SegmentColorizers().RangeSegmentColorizer(rc => {
+                rc.LegendItemPattern = "{V1}..{V2}";
+                rc.Palette = new Palette("TemperaturePalette", new PaletteEntry[] {
+                                                                    new PaletteEntry(Color.DarkBlue),
+                                                                    new PaletteEntry(Color.SteelBlue),
+                                                                    new PaletteEntry(Color.LightBlue),
+                                                                    new PaletteEntry(Color.Yellow),
+                                                                    new PaletteEntry(Color.OrangeRed) });
+                rc.RangeStops.AddRange(new double[] { -40, -35, -30, -25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 30 });
+            });
+        }
+        else if (options.SegmentColorizer == "Trend Segment Colorizer")
+            view.SegmentColorizers().TrendSegmentColorizer(tc => {
+                tc.RisingTrendColor = Color.Red;
+                tc.FallingTrendColor = Color.Blue;
+            });
+        else if (options.SegmentColorizer == "Point Based Colorizer") {
+            view.SegmentColorizer = new PointBasedSegmentColorizer();
+            view.MarkerVisibility = DefaultBoolean.True;
+            view.LineMarkerOptions.Size = 5;
+            s.ColorDataMember = "Date";
+            Palette palette = new Palette("Temperature Palette");
+            palette.Add(Color.FromArgb(21, 40, 151));
+            palette.Add(Color.FromArgb(64, 120, 176));
+            palette.Add(Color.FromArgb(157, 202, 222));
+            palette.Add(Color.FromArgb(185, 222, 194));
+            palette.Add(Color.FromArgb(236, 246, 53));
+            palette.Add(Color.FromArgb(255, 183, 0));
+            palette.Add(Color.FromArgb(250, 121, 5));
+            palette.Add(Color.FromArgb(255, 183, 0));
+            palette.Add(Color.FromArgb(236, 246, 53));
+            palette.Add(Color.FromArgb(185, 222, 194));
+            palette.Add(Color.FromArgb(157, 202, 222));
+            palette.Add(Color.FromArgb(64, 120, 176));
+            KeyColorColorizer colorizer = new KeyColorColorizer() { Palette = palette };
+            colorizer.Keys.AddRange(new List<string>() { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" });
+            colorizer.KeyProvider = new MonthKeyProvider();
+            view.Colorizer = colorizer;
+        }
+
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetDataMembers("Date", "Temperature");
+    });
+
+    settings.XYDiagram(d => {
+        d.AxisY.Title.Text = "Temperature";
+        d.AxisY.Label.TextPattern = "{V:F1}°C";
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Mean Daily Temperature"
+    });
+}).Bind(Model.Data, seriesDataMember: "").GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+    s.Name = "SettingsFormLayout";
+    s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    s.Items.AddGroupItem(group => {
+        group.Caption = "View Settings";
+        group.Items.Add(model => model.SegmentColorizer, item => {
+            item.NestedExtension().ComboBox(comboBox => {
+                comboBox.Properties.EnableClientSideAPI = true;
+                comboBox.Properties.Items.AddRange(ChartDemoHelper.GetSegmentColorizers());
+                comboBox.SelectedIndex = 0;
+
+            });
+        });
+        group.Items.Add(model => model.SeriesView, item => {
+            item.NestedExtension().ComboBox(comboBox => {
+                comboBox.Properties.EnableClientSideAPI = true;
+                comboBox.Properties.Items.AddRange(ViewTypesItemsHelper.CreateLineViewItems());
+                comboBox.SelectedIndex = 0;
+            });
+        });
+    });
+    DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings { ColumnMinWidth = 320 });
+}).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+

@@ -1,0 +1,33 @@
+﻿@model dynamic
+
+<div class="templateContainer">
+    <div style="float: left; margin-right: 2px;">
+        @Html.DevExpress().BinaryImage(settings => {
+            settings.Name = "PhotoBinaryImage" + Model.EmployeeID;
+            settings.Width = 100;
+            settings.Height = 100;
+        }).Bind(Model.Photo).GetHtml()
+    </div>
+    <table class="templateTable" style="width:auto">
+        <tr>
+            <td class="caption">First Name:</td>
+            <td><span>@(Model.FirstName)</span></td>
+        </tr>
+        <tr>
+            <td class="caption">Last Name:</td>
+            <td><span>@(Model.LastName)</span></td>
+        </tr>
+        <tr>
+            <td class="caption">Birth Date:</td>
+            <td><span>@(string.Format("{0:d}", Model.BirthDate))</span></td>
+        </tr>
+        <tr>
+            <td class="caption">City:</td>
+            <td><span>@(Model.City)</span></td>
+        </tr>
+        <tr>
+            <td class="caption">Region:</td>
+            <td><span>@(Model.Region)</span></td>
+        </tr>
+    </table>
+</div> 

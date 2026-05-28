@@ -1,0 +1,40 @@
+﻿@{ Layout = null; } 
+@model IEnumerable
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>Adaptive Layout - ASP.NET MVC CardView Extension</title>
+    @Html.DevExpress().GetStyleSheets(new StyleSheet { ExtensionType = ExtensionType.CardView })
+    <style type="text/css">
+        body, form
+        {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    @Html.DevExpress().GetScripts(new Script { ExtensionType = ExtensionType.CardView })
+    <script type="text/javascript">
+        function UpdateCardViewHeight(){
+            cardView.SetHeight(0);
+            var containerHeight = ASPxClientUtils.GetDocumentClientHeight();
+            if(document.body.scrollHeight > containerHeight)
+                containerHeight = document.body.scrollHeight;
+            cardView.SetHeight(containerHeight);
+        }
+    </script>
+</head>
+<body>
+    @Html.Partial("AdaptiveLayoutPagePartial", Model)
+    <script type="text/javascript">
+        ASPxClientControl.GetControlCollection().ControlsInitialized.AddHandler(function(s,e){
+            UpdateCardViewHeight();
+        });
+        ASPxClientControl.GetControlCollection().BrowserWindowResized.AddHandler(function(s,e){
+            UpdateCardViewHeight();
+        });
+    </script>
+</body>
+</html>

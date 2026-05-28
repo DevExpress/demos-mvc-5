@@ -1,0 +1,15 @@
+﻿@model HtmlEditorModel
+
+@Html.DevExpress().HtmlEditor(
+    settings =>
+    {
+        HtmlEditorImportExportHelper.SetHtmlEditorExportSettings(settings);
+        if(Model != null) {
+            settings.Html = Model.Html;
+            if(Model.CssFiles != null) {
+                settings.CssFiles.Clear();
+                settings.CssFiles.AddRange(Model.CssFiles);
+            }
+        }
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }).GetHtml()

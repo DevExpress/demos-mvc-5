@@ -1,0 +1,29 @@
+﻿@model HtmlEditorPlaceholdersDemoOptions
+<script type="text/javascript" src="@Url.Content("~/Scripts/Placeholders.js")"></script>
+@using(Html.BeginForm()) {
+    <div style="float: left; padding-right: 20px;">
+        @Html.DevExpress().Button(settings => {
+            settings.Name = "Button";
+            settings.Width = Unit.Percentage(100);
+            settings.Text = "Preview Results";
+            settings.ClientSideEvents.Click = "onButtonClick";
+        }).GetHtml()
+        <br />
+        <br />
+        @Html.DevExpress().ListBox(settings => {
+            settings.Name = "ListBox";
+            settings.Height = Unit.Pixel(316);
+            settings.ClientEnabled = false;
+            settings.Properties.ClientSideEvents.SelectedIndexChanged = "onSelectedIndexChanged";
+            settings.PreRender = (s, e) => {
+                ASPxListBox listBox = (s as ASPxListBox);
+                listBox.Items.AddRange(Model.ListEditItems);
+                listBox.SelectedIndex = 1;
+            };
+        }).GetHtml()
+    </div>
+    <div style="float: left;">
+        @Html.Partial("PlaceholdersHtmlEditorPartial", Model)
+        @Html.Partial("PlaceholdersRoundPanelPartial", Model)
+    </div>
+}

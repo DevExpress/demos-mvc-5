@@ -1,0 +1,34 @@
+﻿@model DocumentProtectionDemoOptions
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "FormLayoutSettings";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Authentication";
+        g.Items.Add(m => m.User, i => {
+            i.NestedExtension().ComboBox(s => {
+                s.Properties.Items.Add("lawyer@somecompany.com");
+                s.Properties.Items.Add("projectmanager@somecompany.com");
+                s.Properties.Items.Add("senior@somecompany.com");
+                s.Properties.Items.Add("novice@somecompany.com");
+            });
+        });
+    });
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Range Permissions";
+        g.Items.Add(m => m.Color, i => i.NestedExtensionType = FormLayoutNestedExtensionItemType.ColorEdit);
+        g.Items.Add(m => m.BracketsColor, i => i.NestedExtensionType = FormLayoutNestedExtensionItemType.ColorEdit);
+        g.Items.Add(m => m.Visibility);
+    });
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 350,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).GetHtml()
+<div class="apply-button-container">
+    @Html.DevExpress().Button(s => {
+        s.Name = "ApplyButton";
+        s.Text = "Apply Changes";
+        s.Theme = DemoHelper.Instance.Theme;
+        s.UseSubmitBehavior = true;
+    }).GetHtml()
+</div>

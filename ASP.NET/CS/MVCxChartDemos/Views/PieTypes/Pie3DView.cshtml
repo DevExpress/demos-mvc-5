@@ -1,0 +1,149 @@
+﻿@model ChartPieDoughnutDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(320);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartPieDoughnutDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.MaxHorizontalPercentage = 50;
+        l.Border.Visibility = DefaultBoolean.False;
+    });
+
+    settings.Series.Add(s => {
+        s.Name = "Counties";
+        s.ArgumentDataMember = "Name";
+        s.ValueDataMembers[0] = "Area";
+        s.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        s.Views().Pie3DSeriesView(v => {
+            v.ExplodedDistancePercentage = options.ExplodeDistance;
+            v.SeriesLabel(l => {
+                l.Position = options.LabelPosition;
+                l.TextPattern = options.ValueAsPercent ? "{A}: {VP:P0}" : "{A}: {V:G}";
+            });
+        });
+    });    
+
+    settings.BoundDataChanged = (s, e) => {
+        MVCxChartControl chart = (MVCxChartControl)s;
+        chart.Series[0].Views().Pie3DSeriesView(v => {
+            if (options.ExplodePoint != null) {
+                SeriesPoint explodedPoint = null;
+                foreach (SeriesPoint point in chart.Series[0].Points) {
+                    if (point.Argument == options.ExplodePoint) {
+                        explodedPoint = point;
+                        break;
+                    }
+                }
+                if (explodedPoint != null)
+                    v.ExplodedPoints.Add(explodedPoint);
+            }
+            else
+                v.ExplodeMode = options.ExplodeMode;
+        });
+    };
+
+    settings.SimpleDiagram3D(d => {
+        d.RotationType = RotationType.UseAngles;
+        d.RotationOrder = RotationOrder.ZXY;
+        d.RotationAngleX = -35;
+        d.RotationAngleZ = 15;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Area of Countries"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.nationmaster.com"
+    });
+}).Bind(Model.Data).GetHtml()
+
+<script type="text/javascript">
+    function UpdateLabelOptionsState() {
+        var showLabels = ShowLabels.GetChecked();
+        ValueAsPercent.SetEnabled(showLabels);
+        LabelPosition.SetEnabled(showLabels);
+    }
+    function UpdateExplodeDistanceOptionState() {
+        ExplodeDistance.SetEnabled(ExplodedPoints.GetValue() != 'None');
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.ExplodedPoints, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetPieExplodePoints());
+                    comboBox.Properties.ClientSideEvents.ValueChanged = "function(s, e) { UpdateExplodeDistanceOptionState(); }";
+                });
+            });
+            group.Items.Add(model => model.ExplodeDistance, item => {
+                item.NestedExtension().SpinEdit(spinEdit => {
+                    spinEdit.Properties.MinValue = 10;
+                    spinEdit.Properties.MaxValue = 100;
+                    spinEdit.ClientEnabled = Model.ExplodedPoints != "None";
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateLabelOptionsState(); }";
+                });
+            });
+            group.Items.Add(model => model.ValueAsPercent, item => {
+                item.NestedExtension().CheckBox(checkBox => { checkBox.ClientEnabled = Model.ShowLabels; });
+            });
+            group.Items.Add(model => model.LabelPosition, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowLabels;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetPieLabelPositions());
+                });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 300,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

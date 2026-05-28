@@ -1,0 +1,128 @@
+﻿@model CustomerInfo
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+@functions{
+    protected void PrepareValidationSettings(DevExpress.Web.ValidationSettings vs) {
+        vs.SetFocusOnError = true;
+        vs.Display = Display.Dynamic;
+        vs.ErrorTextPosition = ErrorTextPosition.Bottom;
+        vs.ErrorDisplayMode = ErrorDisplayMode.ImageWithText;
+    }
+}
+
+@section AdditionalResources {
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <style type="text/css">
+        .radioButton > tbody > tr > td {
+            padding-right: 0 !important;
+            padding-left: 0 !important;
+        }
+    </style>
+}
+
+@section CustomTopAreaHolder {
+    @Html.Partial("SkipRepetitiveNavigationLinks")
+}
+
+<div role="form" aria-labelledby="header label1">
+    <h3 id="header">Customer Info</h3>
+    @using (Html.BeginForm("Compliance", "Accessibility", FormMethod.Post)) {
+        @Html.AntiForgeryToken()
+
+        @Html.DevExpress().FormLayout(settings => {
+            settings.Name = "FormLayout";
+            settings.AlignItemCaptionsInAllGroups = true;
+            settings.UseDefaultPaddings = false;
+            settings.Styles.LayoutGroup.Cell.Paddings.Padding = Unit.Pixel(0);
+
+            settings.Items.Add(new EmptyLayoutItem() { Height = 20 });
+
+            settings.Items.Add(itemSettings => {
+                itemSettings.ShowCaption = DefaultBoolean.False;
+                itemSettings.NestedExtension().Label(label => {
+                    label.Name = "label1";
+                    label.Text = "Fields marked with an asterisk (*) are required.";
+                });
+            });
+
+            settings.Items.Add(new EmptyLayoutItem() { Height = 20 });
+
+            settings.Items.Add(m => m.Name, itemSettings => {
+                itemSettings.NestedExtension().TextBox(textBox => {
+                    PrepareValidationSettings(textBox.Properties.ValidationSettings);
+                    textBox.Width = Unit.Pixel(200);
+                    textBox.ShowModelErrors = true;
+                    textBox.AccessibilityCompliant = true;
+                });
+            });
+
+            settings.Items.Add(m => m.Birthday, itemSettings => {
+                itemSettings.NestedExtension().DateEdit(dateEdit => {
+                    PrepareValidationSettings(dateEdit.Properties.ValidationSettings);
+                    dateEdit.Properties.CalendarProperties.FastNavProperties.DisplayMode = FastNavigationDisplayMode.Inline;
+                    dateEdit.Width = Unit.Pixel(200);
+                    dateEdit.ShowModelErrors = true;
+                    dateEdit.AccessibilityCompliant = true;
+                });
+            });
+
+            settings.Items.Add(m => m.Occupation, itemSettings => {
+                itemSettings.NestedExtension().ComboBox(comboBox => {
+                    PrepareValidationSettings(comboBox.Properties.ValidationSettings);
+                    comboBox.Width = Unit.Pixel(200);
+                    comboBox.ShowModelErrors = true;
+                    comboBox.AccessibilityCompliant = true;
+                    comboBox.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    comboBox.Properties.Items.Add("Academic", 1);
+                    comboBox.Properties.Items.Add("Administrative", 2);
+                    comboBox.Properties.Items.Add("Art/Entertainment", 3);
+                });
+            });
+
+            settings.Items.Add(m => m.Gender, itemSettings => {
+                itemSettings.NestedExtension().RadioButtonList(radioButtonList => {
+                    radioButtonList.Width = Unit.Pixel(200);
+                    radioButtonList.AccessibilityCompliant = true;
+                    radioButtonList.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                    radioButtonList.ControlStyle.CssClass = "radioButton";
+                    radioButtonList.Properties.Items.Add("Male", 0);
+                    radioButtonList.Properties.Items.Add("Female", 1);
+                    radioButtonList.ControlStyle.Border.BorderColor = Color.Transparent;
+                });
+            });
+
+            settings.Items.Add(new EmptyLayoutItem() { Height = 20 });
+
+            settings.Items.Add(m => m.Accepted, itemSettings => {
+                itemSettings.ShowCaption = DefaultBoolean.False;
+                itemSettings.RequiredMarkDisplayMode = FieldRequiredMarkMode.Hidden;
+                itemSettings.NestedExtension().CheckBox(checkBox => {
+                    PrepareValidationSettings(checkBox.Properties.ValidationSettings);                    
+                    checkBox.ShowModelErrors = true;
+                    checkBox.AccessibilityCompliant = true;
+                    checkBox.Text = "I agree with terms of use (*)";
+                    checkBox.Properties.ValueUnchecked = null;
+                });
+            });
+
+            settings.Items.Add(new EmptyLayoutItem() { Height = 20 });
+
+            settings.Items.Add(itemSettings => {
+                itemSettings.ShowCaption = DefaultBoolean.False;
+                itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+                itemSettings.NestedExtension().Button(button => {
+                    button.Name = "btnSubmit";
+                    button.Text = "Submit";
+                    button.UseSubmitBehavior = true;
+                });
+            });
+        }).GetHtml()
+    }
+</div>
+
+@Html.Partial("AccessibilityValidatorLink")

@@ -1,0 +1,66 @@
+﻿@section AdditionalResources {
+    <style>
+        .rating-row > div {
+            float: right;
+        }
+        .rating-row > span {
+            font-size: 18pt;
+        }
+        .text-row {
+            padding: 5px 5px 0 0;
+        }
+    </style>
+}
+
+@{DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+
+@Html.DevExpress().RoundPanel(
+    settings => {
+        settings.Name = "ratingPanel";
+        settings.Width = Unit.Percentage(100);
+        settings.ShowHeader = false;
+        settings.SetContent(() => {
+            Html.DevExpress().DataView(
+                dvSettings => {
+                    dvSettings.Name = "dataView";
+                    dvSettings.Width = Unit.Percentage(100);
+                    dvSettings.AllowPaging = false;
+                    dvSettings.EnableTheming = false;
+                    dvSettings.SettingsTableLayout.ColumnCount = 1;
+                    dvSettings.ControlStyle.ItemSpacing = 25;
+                    dvSettings.ControlStyle.Paddings.Padding = 5;
+                    dvSettings.Styles.Item.Width = Unit.Percentage(100);
+                    dvSettings.Styles.Item.CssClass = "itemStyle";
+
+                    dvSettings.SetItemTemplateContent(c => {
+                        ViewContext.Writer.Write("<div class=\"rating-row\">");
+                        Html.DevExpress().Label(
+                            lblSettings => {
+                                lblSettings.Name = "Name" + c.ItemIndex;
+                                lblSettings.ControlStyle.Font.Size = 18;
+                            }
+                        ).Bind(DataBinder.Eval(c.DataItem, "Name")).Render();
+
+                        Html.DevExpress().RatingControl(
+                            rcSettings => {
+                                rcSettings.Name = "ratingControl" + c.ItemIndex;
+                                rcSettings.ReadOnly = true;
+                            }
+                        ).Bind(Decimal.Parse((string)DataBinder.Eval(c.DataItem, "Value"))).Render();
+
+                        ViewContext.Writer.Write("</div>");
+                        ViewContext.Writer.Write("<div class=\"text-row\">");
+
+                        Html.DevExpress().Label(
+                            lblSettings => {
+                                lblSettings.Name = "label" + c.ItemIndex;
+                            }
+                        ).Bind(DataBinder.Eval(c.DataItem, "Description")).Render();
+                        ViewContext.Writer.Write("</div>");
+                    });
+                }
+            )
+            .BindToXML(Server.MapPath("~/App_Data/ExtensionRatings.xml"), "/Extensions/*")
+            .Render();
+        });
+    }).GetHtml()

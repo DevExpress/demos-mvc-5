@@ -1,0 +1,158 @@
+﻿@model MenuFeaturesDemoOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(700);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = 332;
+}
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@this.GetUrlContentWithVersionSuffix("~/Content/FloatingActionButton/Features.css")" />
+}
+<script type="text/javascript">
+    function OnInit(s, e) {
+        AttachEvents();
+    }
+    function ChangeHorizontalPosition(value) {
+        fab.SetHorizontalPosition(value);
+    }
+    function ChangeVerticalPosition(value) {
+        fab.SetVerticalPosition(value);
+    }
+    function ChangeContext(value) {
+        fab.SetActionContext(value, true);
+    }
+
+    function AttachEvents() {
+        AttachClickEvent("header", function(e) {
+            ChangeFABContext("NewItemContext", false, e.currentTarget);
+        });
+        AttachClickEvent("item1", function(e) {
+            ChangeFABContext("EditItemContext", true, e.currentTarget);
+        });
+        AttachClickEvent("item2", function(e) {
+            ChangeFABContext("ShareItemContext", true, e.currentTarget);
+        });
+        AttachClickEvent("item3", function(e) {
+            ChangeFABContext("CommentItemContext", false, e.currentTarget);
+        });
+    }
+    function AttachClickEvent(elementId, handler) {
+        ASPxClientUtils.AttachEventToElement(document.getElementById(elementId), "click", handler);
+    }
+    function ChangeFABContext(contextName, expand, element) {
+        fab.SetActionContext(contextName, expand);
+
+        document.getElementsByClassName("demo-item-selected")[0].classList.remove("demo-item-selected");
+        element.classList.add("demo-item-selected");
+    }
+
+</script>
+
+<div class="demo-mainContainer">
+    <div class="demo-container demo-border-radius">
+        <div class="demo-header demo-border-radius" id="header">
+            <div class="demo-buttonsContainer">
+                <div class="demo-button"></div>
+                <div class="demo-button"></div>
+                <div class="demo-button"></div>
+                <div class="demo-button"></div>
+            </div>
+            <div class="demo-title"></div>
+        </div>
+        <div id="content">
+            <div class="demo-item" id="item1">
+                <div class="demo-image"></div>
+                <div style="width: 100%;">
+                    <div class="demo-caption"></div>
+                    <div class="demo-text" style="max-width: 350px;"></div>
+                    <div class="demo-text" style="max-width: 200px;"></div>
+                </div>
+            </div>
+            <div class="demo-item demo-item-selected" id="item2">
+                <div class="demo-image"></div>
+                <div style="width: 100%;">
+                    <div class="demo-caption"></div>
+                    <div class="demo-text" style="max-width: 270px;"></div>
+                    <div class="demo-text" style="max-width: 100px;"></div>
+                </div>
+            </div>
+            <div class="demo-item" id="item3">
+                <div class="demo-image"></div>
+                <div style="width: 100%;">
+                    <div class="demo-caption"></div>
+                    <div class="demo-text" style="max-width: 320px;"></div>
+                    <div class="demo-text" style="max-width: 280px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.DevExpress().FloatingActionButton(
+    settings => {
+        settings.Name = "fab";
+        settings.ContainerElementID = "content";
+        settings.InitialActionContext = "ShareItemContext";
+
+        settings.ClientSideEvents.Init = "OnInit";
+
+        settings.Items.Add(new FABAction("NewItemContext", "NewItem", "New Item"));
+
+        FABActionGroup shareItemGroup = new FABActionGroup() { ContextName = "ShareItemContext", Text = "Share" };
+        shareItemGroup.ExpandImage.Url = "~/Content/FloatingActionButton/Images/Share.svg";
+        settings.Items.Add(shareItemGroup);
+        shareItemGroup.Items.Add(new FABActionItem("Email", "~/Content/FloatingActionButton/Images/Email.svg"));
+        shareItemGroup.Items.Add(new FABActionItem("Copy", "~/Content/FloatingActionButton/Images/Copy.svg"));
+        shareItemGroup.Items.Add(new FABActionItem("GooglePlus", "~/Content/FloatingActionButton/Images/GooglePlus.svg"));
+        shareItemGroup.Items.Add(new FABActionItem("Facebook", "~/Content/FloatingActionButton/Images/Facebook.svg"));
+
+        FABActionGroup editItemGroup = new FABActionGroup() { ContextName = "EditItemContext" };
+        settings.Items.Add(editItemGroup);
+        editItemGroup.Items.Add(new FABActionItem("Delete", "~/Content/FloatingActionButton/Images/Delete.svg", "Delete"));
+        editItemGroup.Items.Add(new FABActionItem("Edit", "~/Content/FloatingActionButton/Images/Edit.svg", "Edit"));
+
+        FABActionGroup commentItemGroup = new FABActionGroup() { ContextName = "CommentItemContext" };
+        commentItemGroup.ExpandImage.Url = "~/Content/FloatingActionButton/Images/CommentItemContext.svg";
+        settings.Items.Add(commentItemGroup);
+        commentItemGroup.Items.Add(new FABActionItem("Comment", "~/Content/FloatingActionButton/Images/Comment.svg"));
+        commentItemGroup.Items.Add(new FABActionItem("MultipleComment", "~/Content/FloatingActionButton/Images/MultipleComment.svg"));
+        commentItemGroup.Items.Add(new FABActionItem("RemoveComment", "~/Content/FloatingActionButton/Images/RemoveComment.svg"));
+
+    }).GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+        settings.Name = "OptionsFormLayout";
+        settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        settings.Items.AddGroupItem(group => {
+            group.Caption = "Options";
+
+            group.Items.Add(item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+                item.Caption = "Horizontal Position:";
+                ComboBoxSettings comboBoxSettings = (ComboBoxSettings)item.NestedExtensionSettings;
+                comboBoxSettings.Name = "cbHorizontalPosition";
+                comboBoxSettings.SelectedIndex = 2;
+                comboBoxSettings.Properties.Items.Add("Left", "Left");
+                comboBoxSettings.Properties.Items.Add("Center", "Center");
+                comboBoxSettings.Properties.Items.Add("Right", "Right");
+                comboBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e) { ChangeHorizontalPosition(s.GetValue()); }";
+            });
+
+            group.Items.Add(item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+                item.Caption = "Vertical Position:";
+                ComboBoxSettings comboBoxSettings = (ComboBoxSettings)item.NestedExtensionSettings;
+                comboBoxSettings.Name = "cbVerticalPosition";
+                comboBoxSettings.SelectedIndex = 0;
+                comboBoxSettings.Properties.Items.Add("Bottom", "Bottom");
+                comboBoxSettings.Properties.Items.Add("Top", "Top");
+                comboBoxSettings.Properties.Items.Add("TopEdge", "TopEdge");
+                comboBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e) { ChangeVerticalPosition(s.GetValue()); }";
+            });
+        });
+
+        DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+            ColumnMinWidth = 300,
+            ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+        });
+    }).GetHtml()
+}

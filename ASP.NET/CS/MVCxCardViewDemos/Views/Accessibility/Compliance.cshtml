@@ -1,0 +1,10 @@
+﻿@model IEnumerable
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1200); }
+
+@section CustomTopAreaHolder {
+    @Html.Partial("SkipRepetitiveNavigationLinks")
+}
+
+@Html.Partial("CompliancePartial", Model)
+
+@Html.Partial("AccessibilityValidatorLink")

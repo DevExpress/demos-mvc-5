@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Extensions>
+  <Extension Name="Chart" Value="4.8" NavigateUrl="javascript:void(1);" Description="The ASP.NET MVC Charts Suite offers you a comprehensive set of 2D and 3D charts to address a broad range of business needs with ease." />
+  <Extension Name="GridView" Value="5" NavigateUrl="javascript:void(2);" Description="The DevExpress ASP.NET MVC GridView extension is a feature-complete grid with built-in data editors." />
+  <Extension Name="Report" Value="4.9" NavigateUrl="javascript:void(3);" Description="The Reports Suite is a no-compromise banded reporting platform and includes native integration with DevExpress ASP.NET MVC Extensions for an unequalled design-time experience and unmatched runtime flexibility." />
+  <Extension Name="HtmlEditor" Value="4.3" NavigateUrl="javascript:void(4);" Description="The DevExpress ASP.NET MVC HtmlEditor is a rich-text WYSIWYG HTML editor extension. Its intuitive user interface enables even inexperienced users to edit HTML page content with ease." />
+  <Extension Name="TreeList" Value="4.5" NavigateUrl="javascript:void(5);" Description="The DevExpress ASP.NET MVC TreeList extension combines the power of the Grid with the hierarchical structure of the TreeView. Like the GridView, the TreeList supports binding to data, editing data, sorting, and more." />
+</Extensions>

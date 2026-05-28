@@ -1,0 +1,27 @@
+﻿@(
+    Html.DevExpress().TreeList<EditablePost>(settings => {
+        settings.Name = "treeList";
+        settings.CallbackRouteValues = new { Controller = "DataBinding", Action = "ColumnBindingViaLambdasPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.KeyField(m => m.PostID);
+        settings.ParentField(m => m.ParentID);
+
+        settings.Columns.Add(m => m.From);
+        settings.Columns.Add(m => m.Subject);
+        settings.Columns.Add(m => m.PostDate);
+        settings.Columns.Add(m => m.IsNew, c => {
+            c.ColumnType = MVCxTreeListColumnType.CheckBox;
+            c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+        settings.Columns.Add(m => m.HasAttachment, c => {
+            c.ColumnType = MVCxTreeListColumnType.CheckBox;
+            c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        settings.PreRender = (sender, e) => {
+            MVCxTreeList treeList = (MVCxTreeList)sender;
+            treeList.ExpandToLevel(3);
+        };
+    }).Bind(Model).GetHtml()
+)

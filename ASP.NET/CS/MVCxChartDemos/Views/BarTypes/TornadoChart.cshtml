@@ -1,0 +1,148 @@
+﻿@model ChartStackedBarDemoOptions
+
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(300);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartStackedBarDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.ToolTipEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+    settings.CrosshairEnabled = DefaultBoolean.False;
+    settings.CalculatedFields.Add(new ChartCalculatedField() {
+        Name="CalculatedPopulation",
+        DisplayName="Calculated Population",
+        FieldType=ChartCalculatedFieldType.Double,
+        Expression="IIF ([GenderAge.Gender] == 'Male', [Population] * -1, [Population])"
+    });
+
+    settings.Legends.Add(new Legend());
+    foreach(Legend legend in settings.Legends) {
+        legend.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        legend.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        legend.Direction = LegendDirection.LeftToRight;
+    }
+    settings.Legends.Default(l =>
+    {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+    });
+
+    settings.Series.Template(t => {
+        t.Views().StackedBarSeriesView(v => {
+            v.SeriesLabel(l => {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+                l.TextPattern = "{V:0,,.0}";
+            });
+        });
+        t.SetDataMembers("Country", "CalculatedPopulation");
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        t.ToolTipPointPattern = "{A} {S} - {PopulationString} million";
+
+        Dictionary<string, int> firstKeys = new Dictionary<string, int> {
+            {"Male", 0 },
+            {"Female", 1 }
+        };
+        Dictionary<string, int> secondaryKeys = new Dictionary<string, int> {
+            {"0-14 years", 0 },
+            {"15-64 years", 1 },
+            {"65 years and older", 2 }
+        };
+        t.SeriesColorizer = new TwoKeyColorizer(':', firstKeys, secondaryKeys);
+    });
+    settings.CustomDrawAxisLabel = (s, e) => {
+        double axisValue;
+        if (Double.TryParse(e.Item.AxisValue.ToString(), out axisValue) && axisValue < 0)
+            e.Item.Text = (-axisValue).ToString("0,,");
+    };
+    settings.CustomDrawSeriesPoint = (s, e) => {
+        double number;
+        if(Double.TryParse(e.LabelText, out number) && number < 0)
+            e.LabelText = (-number).ToString();
+    };
+    settings.CustomizeStackedBarTotalLabel = (s, e) => {
+        double number;
+        if (Double.TryParse(e.Text, out number) && number < 0)
+            e.Text = (-number).ToString() + " M";
+        if (number >= 0)
+            e.Text += " M";
+    };
+    settings.BoundDataChanged = (s, e) => {
+        MVCxChartControl chart = (MVCxChartControl)s;
+        if(chart.Series.Count > 0) {
+            foreach(Series series in chart.Series) {
+                if (((GenderAgeInfo)series.Tag).Gender == "Male") {
+                    series.Legend = chart.Legends[0];
+                }
+            }
+        }
+    };
+
+    settings.XYDiagram(d => {
+        d.AxisY.Interlaced = true;
+        d.AxisY.Title.Text = "Population (Millions)";
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+        d.AxisY.Label.TextPattern = "{V:0,,}";
+        d.DefaultPane.StackedBarTotalLabel.Visible = options.ShowTotalLabels;
+        d.DefaultPane.StackedBarTotalLabel.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+        d.DefaultPane.StackedBarTotalLabel.TextPattern = "{TV: 0,,.0}";
+        d.AxisX.Reverse = true;
+        d.Rotated = true;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Population: Age Structure"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 12),
+        Text = "Data estimate for 2020"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.cia.gov"
+    });
+}).Bind(Model.Data, seriesDataMember: "GenderAge").GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels);
+            group.Items.Add(model => model.ShowTotalLabels);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 280,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+<div class="apply-button-container">
+    @Html.DevExpress().Button(s => {
+    s.Name = "ApplyButton";
+    s.Text = "Apply Changes";
+    s.Theme = DemoHelper.Instance.Theme;
+    s.UseSubmitBehavior = true;
+    }).GetHtml()
+</div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

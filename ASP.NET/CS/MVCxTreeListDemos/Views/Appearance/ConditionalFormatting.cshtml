@@ -1,0 +1,14 @@
+﻿@model IEnumerable
+
+@Html.Partial("ConditionalFormattingPartial", Model)
+
+@section AdditionalResources {
+    <style>
+        .treeListCell {
+            border-color: white;
+        }
+        .dxTheme-Office365Dark .treeListCell {
+            border-color: black;
+        }
+    </style>
+}

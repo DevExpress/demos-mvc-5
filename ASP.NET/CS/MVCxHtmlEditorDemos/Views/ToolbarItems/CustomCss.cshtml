@@ -1,0 +1,14 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/HtmlEditor/DemoCss/PreviewCustomCss.css")" />
+}
+@Html.Partial("CustomCssPartial")
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

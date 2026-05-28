@@ -1,0 +1,45 @@
+﻿@functions{
+    RibbonButtonItem CreateRibbonColorButtonItem(string name, string text, string iconID) {
+        var item = new RibbonColorButtonItem(name, text);
+        item.SmallImage.IconID = iconID;
+        return item;
+    }
+}
+@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "HtmlEditor";
+        settings.CallbackRouteValues = new { Controller = "ToolbarsAndUI", Action = "RibbonContextTabsPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Pixel(550);
+        settings.ToolbarMode = HtmlEditorToolbarMode.Ribbon;
+        settings.Html = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/Content/HtmlEditor/DemoHtml/RibbonContextTabs.html"));
+
+        settings.RibbonContextTabCategories.CreateDefaultRibbonContextTabCategories();
+
+        MVCxRibbonContextTabCategory tabCategory = settings.RibbonContextTabCategories.Add("ImageFormat");
+        tabCategory.Color = Color.FromName("#17a300");
+        MVCxRibbonTab tab = tabCategory.Tabs.Add("Format");
+
+        MVCxRibbonGroup imageTextGroup = tab.Groups.Add("Image Text");
+        RibbonButtonItem altTextButtonItem = new RibbonButtonItem("AltText", "Alt-Text", RibbonItemSize.Large);
+        altTextButtonItem.LargeImage.IconID = "actions_editname_32x32";
+        imageTextGroup.Items.Add(altTextButtonItem);
+
+        MVCxRibbonGroup imageStyleGroup = tab.Groups.Add("Image Style");
+        RibbonDropDownButtonItem borderStyleDropDownButton = new RibbonDropDownButtonItem("BorderStyle", "Alt-Text", RibbonItemSize.Large);
+        borderStyleDropDownButton.LargeImage.IconID = "analysis_linestyle_32x32";
+        borderStyleDropDownButton.DropDownMode = false;
+        borderStyleDropDownButton.Items.Add(new RibbonDropDownButtonItem("Hidden"));
+        borderStyleDropDownButton.Items.Add(new RibbonDropDownButtonItem("Dotted"));
+        borderStyleDropDownButton.Items.Add(new RibbonDropDownButtonItem("Dashed"));
+        borderStyleDropDownButton.Items.Add(new RibbonDropDownButtonItem("Solid"));
+        borderStyleDropDownButton.Items.Add(new RibbonDropDownButtonItem("Ridge"));
+        imageStyleGroup.Items.Add(borderStyleDropDownButton);
+        imageStyleGroup.Items.Add(CreateRibbonColorButtonItem("BackColor", "Background Color", "format_fillbackground_16x16"));
+        imageStyleGroup.Items.Add(CreateRibbonColorButtonItem("BorderColor", "Border Color", "format_pictureshapeoutlinecolor_16x16"));
+
+        settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+        settings.ClientSideEvents.CustomCommand = "OnCustomCommand";
+
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }).GetHtml()

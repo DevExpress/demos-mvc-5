@@ -1,0 +1,23 @@
+﻿@model PivotGridPagingDemoOptions
+
+@Html.DevExpress().FormLayout(
+    settings => {
+        settings.Name = "demoOptions";
+
+        settings.Items.AddGroupItem(g => {
+            g.Caption = "Pager Settings";
+            g.Items.Add(i => i.Position);
+            g.Items.Add(i => i.PageSizeItemPosition);
+            g.Items.Add(i => i.PagerAlign);
+            g.Items.Add(i => i.ShowDisabledButtons);
+            g.Items.Add(i => i.ShowNumericButtons);
+            g.Items.Add(i => i.ShowPageSizeItem);
+            g.Items.Add(i => i.ShowSeparators);
+            g.Items.Add(i => i.ShowSummary);
+        });
+
+        DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+            ColumnMinWidth = 330,
+            ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+        });
+}).GetHtml()

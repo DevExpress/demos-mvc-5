@@ -1,0 +1,14 @@
+﻿@model string
+
+@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "SampleDocuments", Action = string.Format("{0}Partial", Model) };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 700;
+        settings.ActiveTabIndex = 0;
+        settings.ShowConfirmOnLosingChanges = false;
+        settings.PreRender = (s, e) => {
+            SpreadsheetDemoUtils.HideFileTab((MVCxSpreadsheet)s);
+        };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, string.Format("SampleDocuments\\{0}.xlsx", Model))).GetHtml()

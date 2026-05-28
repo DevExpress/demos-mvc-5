@@ -1,0 +1,30 @@
+﻿@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "EditingFeatures", Action = "AutoCorrectPartial" };
+
+    settings.Settings.AutoCorrect.CorrectTwoInitialCapitals = true;
+    settings.Settings.AutoCorrect.DetectUrls = true;
+    settings.Settings.AutoCorrect.EnableAutomaticNumbering = true;
+    settings.Settings.AutoCorrect.ReplaceTextAsYouType = true;
+    settings.Settings.AutoCorrect.ReplaceInfoCollectionSettings.CaseSensitive = false;
+    settings.Settings.AutoCorrect.ReplaceInfoCollectionSettings.AutoCorrectReplaceInfoCollection.AddRange(
+        new List<ASPxRichEditAutoCorrectReplaceInfo> {
+            new ASPxRichEditAutoCorrectReplaceInfo("(c)", "©"),
+            new ASPxRichEditAutoCorrectReplaceInfo("wnwd", "well-nourished, well-developed"),
+            new ASPxRichEditAutoCorrectReplaceInfo("pctus", "Please do not hesitate to contact us again in case of any further questions")
+        }
+    );
+    settings.ClientSideEvents.AutoCorrect = "OnAutoCorrect";
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(700);
+    
+    settings.ShowConfirmOnLosingChanges = false;
+    settings.ActiveTabIndex = 0;
+    
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        RichEditDemoUtils.HideFileTab(richEdit);
+        richEdit.Focus();
+    };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "AutoCorrect.docx")).GetHtml()

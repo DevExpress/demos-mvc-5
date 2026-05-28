@@ -1,0 +1,23 @@
+﻿@Html.DevExpress().SpellChecker(settings => {
+    settings.Name = "spellChecker";
+    settings.CallbackRouteValues = new { Action = "EditorsSpellCheckerPartial", Controller = "Features" };
+
+    settings.Culture = new CultureInfo("en-US");
+    settings.CheckedElementID = "sampleText";
+    settings.ClientSideEvents.BeforeCheck = "OnSpellCheckerBeforeCheck";
+    settings.ClientSideEvents.AfterCheck = "OnSpellCheckerAfterCheck";
+
+    ASPxSpellCheckerISpellDictionary dictionary = new ASPxSpellCheckerISpellDictionary();
+    dictionary.GrammarPath = "~/Dictionaries/english.aff";
+    dictionary.DictionaryPath = "~/Dictionaries/american.xlg";
+    dictionary.CacheKey = "hunspellDic";
+    dictionary.Culture = new System.Globalization.CultureInfo("en-us");
+    settings.Dictionaries.Add(dictionary);
+    settings.Dictionaries.AddCustomDictionary(d => {
+        d.AlphabetPath = "~/Dictionaries/EnglishAlphabet.txt";
+        d.DictionaryPath = "~/Dictionaries/CustomEnglish.dic";
+        d.CacheKey = "customDic";
+        d.Culture = new CultureInfo("en-US");
+        d.EncodingName = "Western European (Windows)";
+    });
+}).GetHtml()

@@ -1,0 +1,21 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "FormulasPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 700;
+        settings.ActiveTabIndex = 2;
+        settings.ShowConfirmOnLosingChanges = false;
+        settings.ClientSideEvents.EndSynchronization = "function (s, e) { StartEditSpreadsheetFormula(s); }";
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideFileTab(spreadsheet);
+            spreadsheet.Document.Worksheets[0].Cells["G3"].Select();
+
+            if(spreadsheet.Document.Worksheets.Count == 1)
+                spreadsheet.Document.Worksheets.Add();
+            spreadsheet.Document.Worksheets.ActiveWorksheet = spreadsheet.Document.Worksheets[0];
+            SpreadsheetFormulasDemoHelper.PrepareSpreadsheet(spreadsheet, 1);
+            spreadsheet.Document.History.Clear();
+        };
+    }).Open(Path.Combine(DirectoryManagmentUtils.SampleDocumentsFolderPath, "OrderAccounting.xlsx")).GetHtml()

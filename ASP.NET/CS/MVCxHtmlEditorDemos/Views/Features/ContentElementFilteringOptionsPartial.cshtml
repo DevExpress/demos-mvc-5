@@ -1,0 +1,86 @@
+﻿@model HtmlEditorContentElementFilteringOptions
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "demoOptions";
+    settings.ShowItemCaptionColon = false;
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.ColCount = 3;
+    settings.SettingsItemCaptions.Location = LayoutItemCaptionLocation.Left;
+    
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Tag Filter Settings";
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+
+        g.Items.Add(m => m.Tags.FilterMode, i => i.CaptionSettings.Location = LayoutItemCaptionLocation.Top);
+        g.Items.Add(i => {
+            i.Caption = "Tags";
+            i.CaptionSettings.Location = LayoutItemCaptionLocation.Top;
+            i.NestedExtension().TokenBox(s => {
+                s.Name = "tagTokenBox";
+                s.Properties.DataSource = Model.Tags.List;
+                s.PreRender = (c, e) => {
+                    ASPxTokenBox tokenBox = (c as ASPxTokenBox);
+                    tokenBox.Tokens.AddRange(Model.Tags.FilteringList);
+                };
+            });
+        });
+    });
+    
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Attribute Filter Settings";
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+
+        g.Items.Add(m => m.Attributes.FilterMode, i => i.CaptionSettings.Location = LayoutItemCaptionLocation.Top);
+        g.Items.Add(i => {
+            i.Caption = "Attributes";
+            i.CaptionSettings.Location = LayoutItemCaptionLocation.Top;
+            i.NestedExtension().TokenBox(s => {
+                s.Name = "attributeTokenBox";
+                s.Properties.DataSource = Model.Attributes.List;
+                s.PreRender = (c, e) => {
+                    ASPxTokenBox tokenBox = (c as ASPxTokenBox);
+                    tokenBox.Tokens.AddRange(Model.Attributes.FilteringList);
+                };
+            });
+        });
+    });
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Style Attribute Filter Settings";
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+
+        g.Items.Add(m => m.StyleAttributes.FilterMode, i => i.CaptionSettings.Location = LayoutItemCaptionLocation.Top);
+        g.Items.Add(i => {
+            i.Caption = "StyleAttributes";
+            i.CaptionSettings.Location = LayoutItemCaptionLocation.Top;
+            i.NestedExtension().TokenBox(s => {
+                s.Name = "styleAttributeTokenBox";
+                s.Properties.DataSource = Model.StyleAttributes.List;
+                s.PreRender = (c, e) => {
+                    ASPxTokenBox tokenBox = (c as ASPxTokenBox);
+                    tokenBox.Tokens.AddRange(Model.StyleAttributes.FilteringList);
+                };
+            });
+        });
+    });
+    
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 300,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).Bind(Model).GetHtml()
+<div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+    s.Name = "ApplyButton";
+    s.Text = "Apply Changes";
+    s.Theme = DemoHelper.Instance.Theme;
+    s.UseSubmitBehavior = true;
+}).GetHtml()
+        @Html.DevExpress().Button(s => {
+       s.Name = "resetHtmlDocument";
+       s.Text = "Reset Html Document";
+       s.Width = Unit.Pixel(140);
+       s.ClientSideEvents.Click = "onResetHtmlDocumentButtonClick";
+       s.Theme = DemoHelper.Instance.Theme;
+   }).GetHtml()
+</div>

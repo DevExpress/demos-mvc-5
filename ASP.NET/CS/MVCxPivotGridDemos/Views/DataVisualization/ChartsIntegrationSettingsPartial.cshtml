@@ -1,0 +1,26 @@
+﻿@model PivotGridChartIntegrationDemoOptions
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "options";
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Chart Settings";
+        g.Items.Add(i => i.ChartType, i => {
+            i.Caption = "Chart Type";
+            i.NestedExtension().ComboBox(c => {
+                c.Name = "ChartType";           
+                c.Properties.Items.AddRange(PivotGridDataOutputDemosHelper.GetSupportedChartTypes());
+                });
+            });
+        g.Items.Add(i => i.ShowColumnGrandTotals);
+        g.Items.Add(i => i.GenerateSeriesFromColumns);
+        g.Items.Add(i => i.ShowPointLabels);
+        g.Items.Add(i => i.ShowRowGrandTotals);
+
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 300,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).GetHtml()

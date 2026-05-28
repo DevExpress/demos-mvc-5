@@ -1,0 +1,31 @@
+﻿@model IEnumerable
+
+@section StartDemoRegion {
+	<script>
+		function onBeginCallback(s, e) {
+			e.customArgs["exportMode"] = ExportMode.GetText();
+		}
+	</script>
+	@{ Html.BeginForm(); }
+}
+
+@section DemoOptionsTop {
+    <div style="padding: 10px;">
+        @Html.DevExpress().ComboBox(settings => {
+            settings.Name = "ExportMode";
+            settings.Properties.Caption = "Details Export Mode: ";
+            settings.Theme = DemoHelper.Instance.Theme;
+            settings.Properties.ValueType = typeof(GridViewDetailExportMode);
+            settings.SelectedIndex = 1;
+        }).BindList(Enum.GetValues(typeof(GridViewDetailExportMode))).Bind(GridViewDetailExportMode.Expanded).GetHtml()
+    </div>
+}
+@Html.Partial("ExportDetailsMasterPartial", Model)
+<br />
+<p class="Note">
+    <strong>Note:</strong> If you export grouped data to RTF, be sure to open the resulting file with an editor that fully supports RTF, including tables. For instance, Microsoft WordPad does not support this feature, and thus the file may appear corrupt.
+</p>
+
+@section EndDemoRegion {
+	@{ Html.EndForm(); }
+}

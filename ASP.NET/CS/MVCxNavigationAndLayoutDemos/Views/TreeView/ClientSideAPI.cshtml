@@ -1,0 +1,189 @@
+﻿<script type="text/javascript">
+  function GetCurrentNode() {
+      return treeView.GetNodeByName(ddNodes.GetKeyValue());
+  }
+
+  function ToggleEnabled() {
+      GetCurrentNode().SetEnabled(cbEnabled.GetChecked());
+  }
+
+  function ToggleVisible() {
+      GetCurrentNode().SetVisible(cbVisible.GetChecked());
+  }
+
+  function ToggleSelect() {
+      var node = cbSelected.GetChecked() ? GetCurrentNode() : null;
+      treeView.SetSelectedNode(node);
+  }
+
+  function ToggleCheck() {
+      GetCurrentNode().SetChecked(cbChecked.GetChecked());
+  }
+
+  function ToggleExpand() {
+      GetCurrentNode().SetExpanded(cbExpanded.GetChecked());
+  }
+
+  function OnExpandAllClick(s, e) {
+      if(cbExpanded.GetEnabled())
+          cbExpanded.SetChecked(true);
+      treeView.ExpandAll();
+  }
+
+  function OnCollapseAllClick(s, e) {
+      if (cbExpanded.GetEnabled())
+          cbExpanded.SetChecked(false);
+      treeView.CollapseAll();
+  }
+
+  function InitializePropertiesEditors() {
+      var node = GetCurrentNode();
+      cbVisible.SetChecked(node.GetVisible());
+      cbEnabled.SetChecked(node.GetEnabled());
+      cbSelected.SetChecked(treeView.GetSelectedNode() == node);
+      cbChecked.SetChecked(node.GetChecked());
+      cbExpanded.SetChecked(node.GetExpanded());
+      cbExpanded.SetEnabled(node.GetNodeCount() > 0);
+  }
+
+  function OnTreeViewInit(s, e) {
+      var node = tvNodes.GetRootNode().nodes[0];
+      tvNodes.SetSelectedNode(node);
+      ddNodes.SetText(node.text);
+      ddNodes.SetKeyValue(node.name);
+      
+      InitializePropertiesEditors();
+  }
+
+  function OnTreeViewNodeClick(s, e) {
+      tvNodes.SetSelectedNode(tvNodes.GetNodeByName(e.node.name));
+      ddNodes.SetKeyValue(e.node.name);
+      ddNodes.SetText(e.node.GetText());
+      InitializePropertiesEditors();
+  }
+
+  function OnTreeViewCheckedChanged(s, e) {
+      InitializePropertiesEditors();
+  }
+
+  function OnTreeViewExpandedChanged(s, e) {
+      InitializePropertiesEditors();
+  }
+
+  function OnNodesTreeViewNodeClick(s, e) {
+      ddNodes.SetKeyValue(e.node.name);
+      ddNodes.SetText(e.node.GetText());
+      ddNodes.HideDropDown();
+      InitializePropertiesEditors();
+  }
+</script>
+
+@section StartDemoRegion {
+  @{ Html.BeginForm(); }
+}
+
+@{
+  DemoHelper.Instance.ControlAreaMaxWidth = 360;
+  DemoHelper.Instance.ControlOptionsRightBlockWidth = 370;
+}
+
+@Html.DevExpress().TreeView(
+    settings => {
+        settings.Name = "treeView";
+        settings.AllowSelectNode = true;
+        settings.AllowCheckNodes = true;
+        settings.CheckNodesRecursive = true;
+        settings.Width = 250;
+
+        settings.ClientSideEvents.Init = "OnTreeViewInit";
+        settings.ClientSideEvents.NodeClick = "OnTreeViewNodeClick";
+        settings.ClientSideEvents.ExpandedChanged = "OnTreeViewExpandedChanged";
+        settings.ClientSideEvents.CheckedChanged = "OnTreeViewCheckedChanged";
+
+        settings.PreRender = (source, e) => {
+            ASPxTreeView treeView = (ASPxTreeView)source;
+            treeView.ExpandAll();
+        };
+    }).BindToXML(Server.MapPath("~/App_Data/ChemicalElements.xml")).GetHtml()
+
+
+@section DemoOptions  {
+	@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "OptionsFormLayout";
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Options";
+
+        g.Items.Add(item => {
+            item.Caption = "Choose node";
+            item.NestedExtension().DropDownEdit(cbSettings => {
+                cbSettings.Name = "ddNodes";
+                cbSettings.Properties.AllowUserInput = false;
+                cbSettings.SetDropDownWindowTemplateContent(c => {
+                    Html.DevExpress().TreeView(treeView => {
+                        treeView.Name = "tvNodes";
+                        treeView.AllowSelectNode = true;
+                        treeView.ShowExpandButtons = false;
+                        treeView.ClientSideEvents.NodeClick = "OnNodesTreeViewNodeClick";
+                        treeView.PreRender = (s, e) => {
+                            ASPxTreeView tree = (ASPxTreeView)s;
+                            tree.ExpandAll();
+                        };
+                    }).BindToXML(Server.MapPath("~/App_Data/ChemicalElements.xml")).GetHtml();
+                });
+            });
+        });
+
+        g.Items.Add(item => {
+            item.Caption = "Enabled";
+            item.NestedExtension().CheckBox(cbSettings => {
+                cbSettings.Name = "cbEnabled";
+                cbSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { ToggleEnabled(); }";
+            });
+        });
+
+        g.Items.Add(item => {
+            item.Caption = "Visible";
+            item.NestedExtension().CheckBox(cbSettings => {
+                cbSettings.Name = "cbVisible";
+                cbSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { ToggleVisible(); }";
+            });
+        });
+
+        g.Items.Add(item => {
+            item.Caption = "Selected";
+            item.NestedExtension().CheckBox(cbSettings => {
+                cbSettings.Name = "cbSelected";
+                cbSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { ToggleSelect(); }";
+            });
+        });
+
+        g.Items.Add(item => {
+            item.Caption = "Checked";
+            item.NestedExtension().CheckBox(cbSettings => {
+                cbSettings.Name = "cbChecked";
+                cbSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { ToggleCheck(); }";
+            });
+        });
+
+        g.Items.Add(item => {
+            item.Caption = "Expanded";
+            item.NestedExtension().CheckBox(cbSettings => {
+                cbSettings.Name = "cbExpanded";
+                cbSettings.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { ToggleExpand(); }";
+            });
+        });
+
+
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 350,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).GetHtml()
+
+}
+
+@section EndDemoRegion{
+	@{ Html.EndForm(); }
+}

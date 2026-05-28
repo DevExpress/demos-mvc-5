@@ -1,0 +1,20 @@
+﻿@model SchedulerDataObject
+
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            <label style="float:left;padding:4px;">Choose the Client Time Zone:&nbsp;</label>
+            @Html.DevExpress().TimeZoneEdit(
+                settings => {
+                    settings.Name = "timeZoneEdit";
+                    settings.SchedulerName = "scheduler";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Theme = DemoHelper.Instance.Theme;
+                }).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.Partial("TimeZonesPartial", Model)

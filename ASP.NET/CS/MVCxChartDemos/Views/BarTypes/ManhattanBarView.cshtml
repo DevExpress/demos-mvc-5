@@ -1,0 +1,115 @@
+﻿@model ChartBar3DDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(300);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartBar3DDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.Width = 920;
+    settings.Height = 500;
+    settings.PaletteName = "Office";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+    settings.SeriesSorting = SortingMode.Descending;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.Border.Visibility = DefaultBoolean.False;
+    });    
+
+    settings.Series.Template(t => {
+        t.Views().ManhattanBarSeriesView(v => {
+            v.SeriesLabel(l => {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+                l.TextPattern = "{V}";
+            });
+            v.ShowFacet = options.ShowFacet;
+            v.Model = options.Bar3DModel;
+            v.Transparency = options.Transparency;
+        });
+        t.SetDataMembers("Region", "Sales");
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    });
+    
+    settings.XYDiagram3D(d => {
+        d.AxisY.Interlaced = true;
+        d.AxisY.Label.TextPattern = "${V}M";
+        d.AxisY.NumericScaleOptions.GridSpacing = 1;
+        d.AxisY.NumericScaleOptions.GridAlignment = NumericGridAlignment.Ones;
+        d.RotationType = RotationType.UseAngles;
+        d.RotationOrder = RotationOrder.XYZ;
+        d.PerspectiveAngle = options.PerspectiveAngle;
+        d.ZoomPercent = options.ZoomPercent;
+        d.VerticalScrollPercent = 4;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "DevAV Sales by Regions"
+    });
+}).Bind(Model.Data, seriesDataMember: "Year").GetHtml()
+
+<script type="text/javascript">
+    function UpdateShowFacetOptionState() {
+        var barModel = Bar3DModel.GetValue();
+        ShowFacet.SetEnabled(barModel == 'Cylinder' || barModel == 'Box');
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.Bar3DModel, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.ClientSideEvents.ValueChanged = "function(s, e) { UpdateShowFacetOptionState(); }"; });
+            });
+            group.Items.Add(model => model.ShowFacet, item => {
+                item.NestedExtension().CheckBox(checkBox => { checkBox.ClientEnabled = Model.Bar3DModel == Bar3DModel.Cylinder || Model.Bar3DModel == Bar3DModel.Box; });
+            });
+            group.Items.Add(model => model.Transparency, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetTransparency()); });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels);
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Diagram Settings";
+            group.Items.Add(model => model.PerspectiveAngle, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetPerspectiveAngles()); });
+            });
+            group.Items.Add(model => model.ZoomPercent, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetZoomPercents()); });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 280,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

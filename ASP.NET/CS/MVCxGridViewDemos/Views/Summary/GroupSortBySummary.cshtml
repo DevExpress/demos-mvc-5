@@ -1,0 +1,9 @@
+﻿@model IEnumerable
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+@Html.Partial("GroupSortBySummaryPartial", Model)
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

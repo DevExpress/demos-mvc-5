@@ -1,0 +1,82 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "Accessibility", Action = "ComplianceEditingPartial" };
+    settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Accessibility", Action = "ComplianceBatchEditingUpdateModel" };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Accessibility", Action = "ComplianceEditingUpdateModel" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.AccessibilityCompliant = true;
+    settings.Caption = "Products";
+    settings.KeyFieldName = "ProductID";
+    settings.CommandColumn.Visible = EditMode != GridViewEditingMode.Batch;
+    settings.CommandColumn.ShowEditButton = true;
+    settings.CommandColumn.Width = Unit.Pixel(50);
+    settings.Columns.Add(c => {
+        c.FieldName = "ProductName";
+        c.Width = Unit.Pixel(200);
+        c.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+    });
+
+    settings.Columns.Add(c => {
+        c.FieldName = "CategoryID";
+        c.Caption = "Category";
+        c.Width = Unit.Pixel(100);
+        c.EditorProperties().ComboBox(p => {
+            p.TextField = "CategoryName";
+            p.ValueField = "CategoryID";
+            p.ValueType = typeof(int);
+            p.DataSource = NorthwindDataProvider.GetCategories();
+        });
+    });
+
+    settings.Columns.Add(c => {
+        c.FieldName = "QuantityPerUnit";
+        c.Width = Unit.Pixel(120);
+        c.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "UnitPrice";
+        c.EditorProperties().SpinEdit(p => {
+            p.DisplayFormatString = "c";
+            p.DisplayFormatInEditMode = true;
+            p.MinValue = 0;
+            p.MaxValue = 1000000;
+        });
+        c.Width = Unit.Pixel(100);
+        c.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+    });
+
+    settings.Columns.Add(c => {
+        c.FieldName = "UnitsInStock";
+        c.Width = Unit.Pixel(100);
+    });
+
+    settings.Columns.Add(c => {
+        c.FieldName = "Discontinued";
+        c.ColumnType = MVCxGridViewColumnType.CheckBox;
+        c.Width = Unit.Pixel(100);
+    });
+
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.ShowHeaderFilterButton = true;
+    settings.Settings.VerticalScrollableHeight = 300;
+
+    settings.SettingsEditing.Mode = EditMode;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+
+    settings.SettingsPager.PageSize = 20;
+    settings.SettingsPager.AllButton.Visible = true;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.ShowAllItem = true;
+    settings.SettingsPager.PageSizeItemSettings.Items = new string[] {"10", "20", "50"};
+
+    settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()
+
+@functions {
+    GridViewEditingMode EditMode { get { return ViewBag.EditMode; } }
+}

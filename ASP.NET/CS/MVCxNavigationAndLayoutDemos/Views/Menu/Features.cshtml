@@ -1,0 +1,125 @@
+﻿@model MenuFeaturesDemoOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(600);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = 332;
+}
+
+@section AdditionalResources {
+    <script>
+        function submitForm() {
+            $("form").submit();
+        }
+    </script>
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+    @Html.DevExpress().Menu(
+        settings =>
+        {
+            settings.Name = "mFeatures";
+            settings.AllowSelectItem = Model.AllowSelectItem;
+            settings.EnableHotTrack = Model.EnableHotTrack;
+            settings.EnableAnimation = Model.EnableAnimation;
+            settings.AppearAfter = Model.AppearAfter;
+            settings.DisappearAfter = Model.DisappearAfter;
+            settings.MaximumDisplayLevels = Model.MaximumDisplayLevels;
+            
+            settings.Init = (s, e) => {
+                MVCxMenu menu = (MVCxMenu)s;
+                menu.AutoSeparators = Model.AutoSeparators;
+                menu.ShowPopOutImages = DefaultBoolean.True;
+            };
+
+            settings.Items.Add(item => {
+                item.Text = "Home";
+                item.Items.Add(subItem => {
+                    subItem.Text = "News";
+                    subItem.Items.Add("For Developers");
+                    subItem.Items.Add("Website News");
+                });
+                item.Items.Add("Our Mission");
+                item.Items.Add("Our Customers");
+            });
+            settings.Items.Add(item => {
+                item.Text = "Products";
+                item.Items.Add("Subscriptions / Packs");
+                item.Items.Add(".NET Windows Forms Components");
+                item.Items.Add("Reporting / Printing Suites");
+                item.Items.Add("VCL Components and Tools");
+                item.Items.Add("ASP.NET Components");
+            });
+            settings.Items.Add(item => {
+                item.Text = "Support";
+                item.Items.Add("Knowledge Base");
+                item.Items.Add("Documentation");
+                item.Items.Add("Support Center");
+                item.Items.Add("Newsgroups");
+                item.Items.Add("Best Practicies");
+            });
+        }).GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+        settings.Name = "OptionsFormLayout";
+        settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        settings.Items.AddGroupItem(group => {
+            group.Caption = "Options";
+            group.Items.Add(m => m.AllowSelectItem, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+            });
+            group.Items.Add(m => m.EnableAnimation, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+            });
+            group.Items.Add(m => m.EnableHotTrack, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+                checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+            });
+            group.Items.Add(m => m.AppearAfter, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                TextBoxSettings textBoxSettings = (TextBoxSettings)item.NestedExtensionSettings;
+                textBoxSettings.Properties.MaskSettings.Mask = "<0..1000>";
+            });
+            group.Items.Add(m => m.DisappearAfter, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                TextBoxSettings textBoxSettings = (TextBoxSettings)item.NestedExtensionSettings;
+                textBoxSettings.Properties.MaskSettings.Mask = "<0..1000>";
+            });
+            group.Items.Add(m => m.MaximumDisplayLevels, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                TextBoxSettings textBoxSettings = (TextBoxSettings)item.NestedExtensionSettings;
+                textBoxSettings.Properties.MaskSettings.Mask = "<0..1000>";
+            });
+            group.Items.Add(m => m.AutoSeparators, item => {
+                item.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+                ComboBoxSettings comboBoxSettings = (ComboBoxSettings)item.NestedExtensionSettings;
+                comboBoxSettings.Width = 100;
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+            ColumnMinWidth = 300,
+            ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+        });
+    }).GetHtml()
+<div class="apply-button-container">
+    @Html.DevExpress().Button(settings => {
+        settings.Name = "btnApply";
+        settings.Text = "Apply Changes";
+        settings.Width = 200;
+        settings.Theme = DemoHelper.Instance.Theme;
+        settings.ClientSideEvents.Click = "submitForm";
+    }).GetHtml()
+</div>
+}
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

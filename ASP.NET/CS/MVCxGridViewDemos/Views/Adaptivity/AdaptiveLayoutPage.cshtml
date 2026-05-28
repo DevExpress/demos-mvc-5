@@ -1,0 +1,74 @@
+﻿@{ Layout = null; } 
+@model IEnumerable
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>Adaptive Layout - ASP.NET MVC GridView Extension</title>
+     <style>
+        body, form
+        {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+
+            min-height: 200px;
+            min-width: 400px;
+        }
+        .grid
+        {
+            margin: 0 auto;
+        }
+    </style>
+    <script type="text/javascript">
+        function UpdateGridHeight() {
+            GridView.SetHeight(0);
+            var containerHeight = ASPxClientUtils.GetDocumentClientHeight();
+            if (document.body.scrollHeight > containerHeight)
+                containerHeight = document.body.scrollHeight;
+            GridView.SetHeight(containerHeight);
+        }
+        function Grid_BeginCallback(s, e) {
+            LoadAntiForgeryTokenInputValue(e.customArgs);
+        }
+        function LoadAntiForgeryTokenInputValue(customArgs) {
+            var tokenInput = $("input[name='__RequestVerificationToken']")[0];
+            if(tokenInput) {
+                if(!customArgs)
+                    customArgs = {};
+                customArgs["__RequestVerificationToken"] = tokenInput.value;
+            }
+        }
+
+        window.addEventListener('resize', function(evt) {
+            if(ASPxClientUtils && !ASPxClientUtils.androidPlatform)
+                return;
+            var activeElement = document.activeElement;
+            if(activeElement && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA") && activeElement.scrollIntoViewIfNeeded)
+                window.setTimeout(function() { activeElement.scrollIntoViewIfNeeded(); }, 0);
+        });
+    </script>
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionType = ExtensionType.GridView }
+    )
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionType = ExtensionType.GridView }
+    )
+</head>
+<body>
+    @using(Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        @Html.Partial("AdaptiveLayoutPagePartial", Model)
+    }
+    <script type="text/javascript">
+        ASPxClientControl.GetControlCollection().ControlsInitialized.AddHandler(function (s, e) {
+            UpdateGridHeight();
+        });
+        ASPxClientControl.GetControlCollection().BrowserWindowResized.AddHandler(function (s, e) {
+            UpdateGridHeight();
+        });
+    </script>
+</body>
+</html>

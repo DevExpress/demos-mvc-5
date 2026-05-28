@@ -1,0 +1,54 @@
+﻿@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/DataView/CSS/CustomCallback.css")" />
+}
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        MVCxClientGlobalEvents.AddControlsInitializedEventHandler(function () {
+            SetSortOrderSelectionEnabled();
+        });
+        function onSortFieldChanged(s, e) {
+            SetSortOrderSelectionEnabled();
+            SortDataView();
+        }
+        function onSortOrderChanged(s, e) {
+            SortDataView();
+        }
+        function SetSortOrderSelectionEnabled() {
+            if (!sortField.GetValue())
+                sortOrder.SetEnabled(false);
+            else {
+                if (!sortOrder.GetEnabled())
+                    sortOrder.SetEnabled(true);
+            }
+        }
+        function SortDataView() {
+            dvHeadphones.PerformCallback({
+                "sortField": sortField.GetValue(),
+                "sortOrder": sortOrder.GetValue()
+            });
+        }
+    </script>
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(s => {
+               s.Name = "sortField";
+               s.Properties.Caption = "Sort by:";
+               s.Width = 90;
+               s.Theme = DemoHelper.Instance.Theme;
+               s.SelectedIndex = 0;
+               s.Properties.ClientSideEvents.ValueChanged = "onSortFieldChanged";
+           }).BindList(DataViewDemoHelper.GetSortFields()).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(s => {
+               s.Name = "sortOrder";
+               s.Theme = DemoHelper.Instance.Theme;
+               s.Width = 120;
+               s.SelectedIndex = 0;
+               s.Properties.ClientSideEvents.ValueChanged = "onSortOrderChanged";
+           }).BindList(DataViewDemoHelper.GetSortOrders()).GetHtml()
+        </div>
+
+    </div>
+}
+@Html.Partial("CustomCallbackPartial")

@@ -1,0 +1,25 @@
+﻿@model SchedulerDataObject
+
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Scheduler/CustomToolTip/styles.css")" />
+}        
+<script type="text/javascript">
+    var toolTipContext;
+    function OnToolTipDisplaying(s, e) {
+        toolTipContext = e;
+        switch(e.toolTip.type) {
+            case MVCxSchedulerToolTipType.Appointment:
+                OnAppointmentTipDisplaying(s, e);
+                break;
+            case MVCxSchedulerToolTipType.AppointmentDrag:
+                OnAppointmentDragTipDisplaying(s, e);
+                break;
+            case MVCxSchedulerToolTipType.Selection:
+                OnSelectionTipDisplaying(s, e);
+                break;
+        }
+    }
+</script>
+@Html.Partial("CustomToolTipPartial", Model)

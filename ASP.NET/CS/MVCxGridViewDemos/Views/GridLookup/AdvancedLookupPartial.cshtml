@@ -1,0 +1,37 @@
+﻿@Html.DevExpress().GridLookup(settings => {
+    settings.Name = "gridLookup";
+    settings.GridViewProperties.CallbackRouteValues = new { Controller = "GridLookup", Action = "AdvancedLookupPartial" };
+    settings.Width = Unit.Pixel(220);
+
+    settings.KeyFieldName = "EmployeeID";
+    settings.Columns.Add("FirstName");
+    settings.Columns.Add("LastName");
+    settings.Properties.TextFormatString = "{0} {1}";
+    settings.GridViewProperties.Settings.ShowColumnHeaders = false;
+    settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.GridViewProperties.SettingsBehavior.EnableRowHotTrack = true;
+    settings.GridViewProperties.SetDataRowTemplateContent(c => {
+        var employee = new Employee() {
+            EmployeeID = (int)DataBinder.Eval(c.DataItem, "EmployeeID"),
+            FirstName = (string)DataBinder.Eval(c.DataItem, "FirstName"),
+            LastName = (string)DataBinder.Eval(c.DataItem, "LastName"),
+            BirthDate = (Nullable<System.DateTime>)DataBinder.Eval(c.DataItem, "BirthDate"),
+            Photo = (byte[])DataBinder.Eval(c.DataItem, "Photo"),
+            City = (string)DataBinder.Eval(c.DataItem, "City"),
+            Region = (string)DataBinder.Eval(c.DataItem, "Region")
+        };
+        Html.RenderPartial("AdvancedLookupRowTemplatePartial", employee);
+    });
+    
+    settings.DataBound = (sender, e) => {
+        var gridLookup = (MVCxGridLookup)sender;
+        gridLookup.GridView.Width = 300;
+        gridLookup.GridView.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        gridLookup.GridView.Settings.VerticalScrollableHeight = 300;
+    };
+    settings.GridViewProperties.BeforeGetCallbackResult = (sender, e) => {
+        var grid = (ASPxGridView)sender;
+        if(grid.VisibleRowCount <= 2)
+            grid.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+    };
+}).BindList(Model).GetHtml()

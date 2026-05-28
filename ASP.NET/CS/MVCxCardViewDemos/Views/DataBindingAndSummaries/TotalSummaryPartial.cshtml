@@ -1,0 +1,30 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMinWidth = Unit.Pixel(650);
+}
+
+@Html.DevExpress().CardView(
+    settings =>
+    {
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "DataBindingAndSummaries", Action = "TotalSummaryPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Columns.Add("CompanyName");
+        settings.Columns.Add("Country");
+        settings.Columns.Add("City");
+        settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("Quantity");
+        settings.Columns.Add(column => {
+            column.FieldName = "Total";
+            column.PropertiesEdit.DisplayFormatString = "c";
+            column.UnboundType = UnboundColumnType.Decimal;
+            column.UnboundExpression = "UnitPrice * Quantity * (1 - Discount)";
+            column.PropertiesEdit.DisplayFormatString = "<b>{0:c}</b>";
+        });
+        settings.SettingsPager.EnableAdaptivity = true;
+        settings.Settings.ShowSummaryPanel = true;
+        settings.TotalSummary.Add(SummaryItemType.Sum, "Total").ValueDisplayFormat = "<b>{0:c}</b>";
+
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+        settings.Styles.Card.Height = Unit.Pixel(1);
+    }).Bind(Model).GetHtml()

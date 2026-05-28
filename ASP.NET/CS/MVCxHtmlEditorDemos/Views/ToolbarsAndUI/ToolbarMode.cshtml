@@ -1,0 +1,29 @@
+﻿@model ToolbarModeOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBoxFor(m => m.ToolbarModeString, (settings) => {
+                settings.Theme = DemoHelper.Instance.Theme;
+                settings.Properties.Caption = "Toolbar Mode";
+                settings.Properties.Items.Add("Menu", "Menu");
+                settings.Properties.Items.Add("Ribbon", "Ribbon");
+                settings.Properties.Items.Add("OneLine Ribbon", "OneLineRibbon");
+                settings.Properties.Items.Add("None", "None");
+                settings.Properties.ClientSideEvents.ValueChanged = "function(s, e) { $('form').submit(); }";
+            }).GetHtml()
+        </div>
+    </div>
+}
+@Html.Partial("ToolbarModePartial", Model)
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

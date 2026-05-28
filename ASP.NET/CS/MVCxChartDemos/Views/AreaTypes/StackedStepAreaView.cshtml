@@ -1,0 +1,88 @@
+﻿@model ChartStepAreaDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(200);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartStepAreaDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.Width = 920;
+    settings.Height = 500;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.Border.Visibility = DefaultBoolean.False;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Statistics comments in the past month"
+    });
+
+    settings.Series.Template(t => {
+        t.Views().StackedStepAreaSeriesView(v => {
+            v.InvertedStep = options.InvertedStep;
+            v.SeriesLabel(l => {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+            });
+        });
+        t.SetDataMembers("Date", "Value");
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+    });
+        
+    settings.XYDiagram(d => {
+        d.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Month;
+        d.AxisX.DateTimeScaleOptions.GridAlignment = DateTimeGridAlignment.Month;
+        d.AxisX.DateTimeScaleOptions.AutoGrid = false;
+        d.AxisX.DateTimeScaleOptions.GridSpacing = 1;
+        d.AxisX.Label.TextPattern = "{A:MMMM}";
+        
+        d.AxisY.Title.Text = "Count";
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+        d.AxisY.Interlaced = true;
+    });
+}).Bind(Model.Data, seriesDataMember: "Type").GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.InvertedStep);
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 180,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

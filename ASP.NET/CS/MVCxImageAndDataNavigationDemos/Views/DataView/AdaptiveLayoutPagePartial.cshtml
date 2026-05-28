@@ -1,0 +1,48 @@
+﻿@Html.DevExpress().DataView(settings => {
+    settings.Name = "dataView";
+    settings.CallbackRouteValues = new { Controller = "DataView", Action = "AdaptiveLayoutPagePartial" };
+
+    settings.Layout = DevExpress.Web.Layout.Breakpoints;
+    settings.SettingsBreakpointsLayout.ItemsPerPage = 20;
+    settings.SettingsBreakpointsLayout.ItemsPerRow = 6;
+    settings.SettingsBreakpointsLayout.Breakpoints.Add(BreakpointsLayoutDeviceSizes.Medium, 4);
+    settings.SettingsBreakpointsLayout.Breakpoints.Add(BreakpointsLayoutDeviceSizes.Small, 3);
+    settings.SettingsBreakpointsLayout.Breakpoints.Add(BreakpointsLayoutDeviceSizes.XSmall, 2);
+    settings.SettingsBreakpointsLayout.Breakpoints.Add(545, 1);
+
+    settings.SetItemTemplateContent(c => {
+        Html.DevExpress().Image(s => {
+            s.ImageUrl = DataBinder.Eval(c.DataItem, "PhotoUrl").ToString();
+            s.Width = Unit.Percentage(100);
+            s.ControlStyle.CssClass = "itemphoto";
+        }).Render();
+        Html.DevExpress().Label(s => {
+            s.Text = DataBinder.Eval(c.DataItem, "Name").ToString();
+            s.ControlStyle.Font.Bold = true;
+            s.ControlStyle.Font.Underline = true;
+            s.ControlStyle.CssClass = "contactname";
+        }).Render();
+        Html.DevExpress().Label(s => {
+            s.Text = "Address: " + DataBinder.Eval(c.DataItem, "Address").ToString();
+        }).Render();
+        ViewContext.Writer.Write("<br />");
+        Html.DevExpress().Label(s => {
+            s.Text = "Phone: " + DataBinder.Eval(c.DataItem, "Phone").ToString();
+            s.ControlStyle.Font.Italic = true;
+        }).Render();
+        ViewContext.Writer.Write("<br />");
+        Html.DevExpress().HyperLink(s => {
+            s.Properties.Text = DataBinder.Eval(c.DataItem, "Email").ToString();
+            s.NavigateUrl = "mailto:" + DataBinder.Eval(c.DataItem, "Email").ToString();
+            s.ControlStyle.CssClass = "contactemail";
+        }).Render();
+    });
+
+    settings.PagerSettings.EndlessPagingMode = DataViewEndlessPagingMode.OnScroll;
+
+    settings.Styles.Content.CssClass = "contentClass";
+    settings.Styles.Item.CssClass = "itemClass";
+    settings.Styles.Item.Height = Unit.Percentage(100);
+    settings.Styles.Item.Border.BorderWidth = 0;
+    settings.Styles.Item.Paddings.Padding = Unit.Pixel(8);
+}).BindToXML(HttpContext.Current.Server.MapPath("~/App_Data/Contacts.xml"), "//Contact").GetHtml()

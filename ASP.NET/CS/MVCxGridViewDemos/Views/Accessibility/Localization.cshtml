@@ -1,0 +1,33 @@
+﻿@model IEnumerable
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        function OnLanguageChanged(s, e) {
+            $("form").submit();
+        }
+        function OnBeginCallback(s, e) {
+            e.customArgs["Language"] = Language.GetValue();
+            DXDemo.LoadAntiForgeryTokenInputValue(e.customArgs);
+        }
+    </script>
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(settings => {
+                settings.Name = "Language";
+                settings.Theme = DemoHelper.Instance.Theme;
+                settings.Width = 200;
+                settings.Properties.ClientSideEvents.SelectedIndexChanged = "OnLanguageChanged";
+            }).BindList(GridViewAccessibilityDemoHelper.GetLanguages()).Bind(ViewBag.Language).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("LocalizationPartial", Model)
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

@@ -1,0 +1,52 @@
+﻿@model IEnumerable
+
+@section AdditionalResources{
+    <style>
+        .paddings .dxh-content {
+            padding: 8px;
+        }
+        .hintContent {
+            display: table;
+            width: 335px;
+            font: 12px 'Segoe UI', Helvetica, 'Droid Sans', Tahoma, Geneva, sans-serif;
+        }
+        .hintContent > img {
+            width: 80px;
+            display: table-cell;
+            margin-right: 8px;
+        }
+        .hintContent > div {
+            vertical-align: top;
+            display: table-cell;
+        }
+    </style>
+}
+
+@Html.DevExpress().Hint(settings => {
+    settings.Name = "Hint";
+}).GetHtml()
+
+@Html.Partial("LoadContentOnDemandPartial", Model)
+
+<script type="text/javascript">
+    ASPxClientHint.Register('[data-visibleindex]', {
+        onShowing: function(s, e) {
+            var index = getElementAttr(e.targetElement);
+            var key = Grid.GetRowKey(index);
+            Grid.GetRowValues(index, 'Notes', function(content) {
+                e.contentElement.innerHTML = '<div class="hintContent">' +
+                                                '<img src="Image/?photoId=' + key + '" />' +
+                                                '<div>' + content + '</div>' +
+                                            '</div>';
+                ASPxClientHint.UpdatePosition(e.hintElement);
+            });
+            return 'loading...';
+        },
+        position: 'left',
+        triggerAction: 'click',
+        className: 'paddings'
+    });
+    function getElementAttr(element) {
+        return element.dataset ? element.dataset['visibleindex'] : element.getAttribute('data-visibleindex');
+    }
+</script>

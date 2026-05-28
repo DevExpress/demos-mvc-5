@@ -1,0 +1,42 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "GridView";
+    settings.CallbackRouteValues = new { Controller = "Filtering", Action = "DateRangeHeaderFilterPartial", HeaderFilterMode = HeaderFilterMode };
+    settings.Width = Unit.Percentage(100);
+
+    settings.Columns.Add("Patient");
+    settings.Columns.Add("Doctor");
+    settings.Columns.Add("Clinic");
+    settings.Columns.Add(column => {
+        column.FieldName = "VisitDate";
+        column.Settings.AllowHeaderFilter = DefaultBoolean.True;
+        column.PropertiesEdit.DisplayFormatString = "d";
+        column.SettingsHeaderFilter.Mode = HeaderFilterMode;
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "Duration";
+        column.Settings.AllowHeaderFilter = DefaultBoolean.True;
+        column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.NumericRangePicker;
+    });
+
+    settings.Settings.ShowFilterBar = GridViewStatusBarMode.Visible;
+
+    settings.SettingsPopup.HeaderFilter.Height = Unit.Pixel(440);
+    settings.SettingsPopup.HeaderFilter.Width = GetHeaderFilterPopupWidth();
+    settings.SettingsPopup.HeaderFilter.SettingsAdaptivity.Mode = PopupControlAdaptivityMode.OnWindowInnerWidth;
+    settings.SettingsPopup.HeaderFilter.SettingsAdaptivity.SwitchAtWindowInnerWidth = 768;
+
+    settings.FormatConditions.AddHighlight("VisitDate", "[VisitDate] < LocalDateTimeToday()", GridConditionHighlightFormat.RedText);
+    settings.FormatConditions.AddHighlight("VisitDate", "[VisitDate] > LocalDateTimeToday()", GridConditionHighlightFormat.GreenText);
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()
+
+@functions {
+    static string[] WideThemes = new string[] { "iOS", "Material", "MaterialCompact", "Metropolis", "MetropolisBlue", "Moderno", "Mulberry", "SoftOrange" };
+
+    GridHeaderFilterMode HeaderFilterMode { get { return ViewBag.HeaderFilterMode; } }
+
+    int GetHeaderFilterPopupWidth() {
+        return HeaderFilterMode == GridHeaderFilterMode.DateRangeCalendar && WideThemes.Contains(Utils.CurrentTheme) ? 360 : 300;
+    }
+}

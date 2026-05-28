@@ -1,0 +1,20 @@
+﻿@Html.DevExpress().HtmlEditor(
+    settings => {
+        settings.Name = "heFindAndReplace";
+        settings.Width = Unit.Percentage(100);
+        settings.CallbackRouteValues = new { Controller = "Dialogs", Action = "FindAndReplacePartial" };
+
+        string htmlContentPath = Server.MapPath("~/Content/HtmlEditor/DemoHtml/FindAndReplace.html");
+        settings.Html = System.IO.File.ReadAllText(htmlContentPath);
+
+        HtmlEditorToolbar toolbar = new HtmlEditorToolbar();
+        toolbar.Items.Add(new ToolbarUndoButton());
+        toolbar.Items.Add(new ToolbarRedoButton());
+        toolbar.Items.Add(new ToolbarBoldButton(true));
+        toolbar.Items.Add(new ToolbarItalicButton());
+        toolbar.Items.Add(new ToolbarUnderlineButton());
+        toolbar.Items.Add(new ToolbarStrikethroughButton());
+        toolbar.Items.Add(new ToolbarFindAndReplaceDialogButton(true));
+        settings.Toolbars.Add(toolbar);
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }).GetHtml()

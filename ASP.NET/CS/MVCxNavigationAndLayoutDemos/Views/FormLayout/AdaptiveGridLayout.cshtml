@@ -1,0 +1,167 @@
+﻿@section AdditionalResources {
+    <style type="text/css" id="styleSection">
+    </style>
+    <link href="../Content/AdaptiveGridLayout.css" rel="stylesheet" />
+}
+    The current form layout width is
+@Html.DevExpress().Label(settings => {
+    settings.Name = "CurrentWidthLabel";
+    settings.Properties.EnableClientSideAPI = true;
+    settings.ControlStyle.Font.Bold = true;
+}).GetHtml()
+    pixels.<br />
+    The current break point is set to
+@Html.DevExpress().Label(settings => {
+    settings.Name = "CurrentBreakpointLabel";
+    settings.Properties.EnableClientSideAPI = true;
+    settings.ControlStyle.Font.Bold = true;
+}).GetHtml().<br />
+    All form editors are displayed within
+@Html.DevExpress().Label(settings => {
+    settings.Name = "CurrentColCountLabel";
+    settings.Properties.EnableClientSideAPI = true;
+    settings.ControlStyle.Font.Bold = true;
+}).GetHtml()
+    columns.<br />
+    The captions are
+@Html.DevExpress().Label(settings => {
+    settings.Name = "CurrentWrapLabel";
+    settings.Properties.EnableClientSideAPI = true;
+    settings.ControlStyle.Font.Bold = true;
+}).GetHtml().<br />
+<br />
+
+<div id="ResizedDiv" style="width: 100%">
+    @Html.DevExpress().FormLayout(settings => {
+    settings.Name = "FormLayout";
+    settings.Width = Unit.Percentage(100);
+    var groupItem = settings.Items.AddGroupItem(groupSettings => {
+        groupSettings.Caption = "Registration form";
+        groupSettings.Width = Unit.Percentage(100);
+        groupSettings.ColumnCount = 3;
+    });
+    groupItem.GridSettings.StretchLastItem = DefaultBoolean.True;
+    groupItem.GridSettings.ChangeCaptionLocationAtWidth = 660;
+    groupItem.GridSettings.Breakpoints.Add(new LayoutBreakpoint() { Name = "S", ColumnCount = 1, MaxWidth = 500 });
+    groupItem.GridSettings.Breakpoints.Add(new LayoutBreakpoint() { Name = "M", ColumnCount = 2, MaxWidth = 800 });
+    groupItem.Items.Add(i => {
+        i.Caption = "First name";
+        i.VerticalAlign = FormLayoutVerticalAlign.Middle;
+        i.NestedExtension().TextBox(s => {
+            s.Name = "FirstNameTextBox";
+            s.Width = Unit.Percentage(100);
+        });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 1, RowSpan = 1 });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 2, RowSpan = 1 });
+    });
+    groupItem.Items.Add(i => {
+        i.Caption = "Last name";
+        i.VerticalAlign = FormLayoutVerticalAlign.Middle;
+        i.NestedExtension().TextBox(s => {
+            s.Name = "LastNameTextBox";
+            s.Width = Unit.Percentage(100);
+        });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 1, RowSpan = 1 });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 1, RowSpan = 1 });
+    });
+    groupItem.Items.Add(i => {
+        i.Caption = "Birthday";
+        i.VerticalAlign = FormLayoutVerticalAlign.Middle;
+        i.NestedExtension().DateEdit(s => {
+            s.Name = "BirthdayDateEdit";
+            s.Width = Unit.Percentage(100);
+            s.Properties.Password = true;
+        });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 1, RowSpan = 1 });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 1, RowSpan = 1 });
+    });
+    groupItem.Items.Add(i =>
+    {
+        i.Caption = "Email";
+        i.VerticalAlign = FormLayoutVerticalAlign.Middle;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Name = "EmailTextBox";
+            s.Width = Unit.Percentage(100);
+        });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 1, RowSpan = 1 });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 1, RowSpan = 1 });
+    });
+    groupItem.Items.Add(i =>
+    {
+        i.Caption = "Phone 1";
+        i.VerticalAlign = FormLayoutVerticalAlign.Middle;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Name = "Phone1TextBox";
+            s.Width = Unit.Percentage(100);
+        });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 1, RowSpan = 1 });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 1, RowSpan = 1 });
+    });
+    groupItem.Items.Add(i =>
+    {
+        i.Caption = "Phone 2";
+        i.VerticalAlign = FormLayoutVerticalAlign.Middle;
+        i.NestedExtension().TextBox(s =>
+        {
+            s.Name = "Phone2TextBox";
+            s.Width = Unit.Percentage(100);
+        });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 1, RowSpan = 1 });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 1, RowSpan = 1 });
+    });
+    groupItem.Items.Add(i => {
+        i.Caption = "Country";
+        i.ColumnSpan = 2;
+        i.VerticalAlign = FormLayoutVerticalAlign.Middle;
+        i.NestedExtension().ComboBox(s => {
+            s.Name = "CountryComboBox";
+            s.Width = Unit.Percentage(100);
+            s.Properties.DataSource = NorthwindDataProvider.DB.Invoices.Select(m => m.Country).ToList().OfType<string>().Distinct();
+        });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 1, RowSpan = 1 });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 1, RowSpan = 1 });
+
+    });
+    groupItem.Items.Add(i => {
+        i.Caption = "Address";
+        i.RowSpan = 2;
+        i.NestedExtension().Memo(s => {
+            s.Name = "AddressMemo";
+            s.Height = Unit.Percentage(100);
+            s.Width = Unit.Percentage(100);
+        });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 1, RowSpan = 1 });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 1, RowSpan = 2 });
+    });
+    groupItem.Items.Add(i => {
+        i.Caption = "City";
+        i.ColumnSpan = 2;
+        i.VerticalAlign = FormLayoutVerticalAlign.Middle;
+        i.NestedExtension().TextBox(s => {
+            s.Name = "CityTextBox";
+            s.Width = Unit.Percentage(100);
+        });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 1, RowSpan = 1 });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 1, RowSpan = 1 });
+    });
+    groupItem.Items.Add(i => {
+        i.ShowCaption = DefaultBoolean.False;
+        i.Paddings.PaddingTop = 20;
+        i.CssClass = "lastItem";
+        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+        i.VerticalAlign = FormLayoutVerticalAlign.Middle;
+        i.NestedExtension().Button(s => {
+            s.Name = "SignUpButton";
+            s.Text = "Sign Up";
+        });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "S", ColumnSpan = 1, RowSpan = 1 });
+        i.SpanRules.Add(new SpanRule() { BreakpointName = "M", ColumnSpan = 1, RowSpan = 1 });
+    });
+}).GetHtml()
+    @Html.DevExpress().Hint(settings => {
+        settings.Name = "Hint";
+    }).GetHtml()
+    <script src="../Scripts/AdaptiveGridLayout.js" type="text/javascript"></script>
+</div>

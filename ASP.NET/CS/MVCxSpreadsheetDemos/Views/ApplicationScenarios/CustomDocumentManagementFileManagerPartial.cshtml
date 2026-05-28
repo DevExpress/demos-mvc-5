@@ -1,0 +1,23 @@
+﻿@Html.DevExpress().FileManager(
+    settings => {
+        settings.Name = "fileManager";
+        settings.CallbackRouteValues = new { Controller = "ApplicationScenarios", Action = "CustomDocumentManagementFileManagerPartial" };
+        settings.DownloadRouteValues = new { Controller = "ApplicationScenarios", Action = "DownloadFile" };
+        settings.Height = 250;
+		settings.Width = Unit.Percentage(100);
+        settings.Settings.InitialFolder = "XLSX";
+        settings.Settings.AllowedFileExtensions = new string[] { ".xlsx", ".xls", ".xlsb", ".csv" };
+        settings.SettingsEditing.AllowDownload = true;
+        settings.ClientSideEvents.SelectedFileChanged = "OnSelectedFileChanged";
+        settings.PreRender = (s, e) => {
+            MVCxFileManager fileManager = (MVCxFileManager)s;
+            FileManagerFile file = fileManager.SelectedFolder.GetFiles().FirstOrDefault();
+            if(file != null)
+                fileManager.SelectedFile = file;
+        };
+        settings.FileUploading = (s, e) => {
+            e.Cancel = Utils.IsSiteMode;
+            e.ErrorText = Utils.GetReadOnlyMessageText();
+        };
+    }
+).BindToFolder(DirectoryManagmentUtils.DocumentBrowsingFolderPath).GetHtml()

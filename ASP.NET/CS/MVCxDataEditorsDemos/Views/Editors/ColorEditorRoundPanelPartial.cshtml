@@ -1,0 +1,18 @@
+﻿@model RoundPanelAppearance
+
+@Html.DevExpress().RoundPanel(settings => {
+    settings.Name = "RoundePanel";
+    settings.HeaderText = "Header";
+    settings.ShowHeader = true;
+    settings.Width = Unit.Percentage(100);
+    settings.EnableTheming = false;
+    settings.ContentHeight = 60;
+    settings.Styles.Header.BackColor = Model.HeaderBackgroundColor;
+    settings.Styles.Header.ForeColor = Model.HeaderFontColor;
+    settings.ControlStyle.BackColor = Model.BackgroundColor;
+    settings.ControlStyle.Border.BorderColor = Model.BorderColor;
+    settings.ControlStyle.ForeColor = Model.FontColor;
+    settings.ControlStyle.Border.BorderWidth = 1;
+    settings.ControlStyle.Border.BorderStyle = BorderStyle.Solid;
+    settings.SetContent("<div style=\"width: 100%; height: 60px;\">Content</div>");
+}).GetHtml()

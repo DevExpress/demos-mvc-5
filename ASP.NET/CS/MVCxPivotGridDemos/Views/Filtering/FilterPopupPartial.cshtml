@@ -1,0 +1,53 @@
+﻿@Html.DevExpress().PivotGrid(s => {
+    s.Name = "pivotGridWithFilterPopup";
+    s.OptionsData.DataProcessingEngine = PivotDataProcessingEngine.Optimized;
+    s.OptionsFilter.FilterPanelMode = FilterPanelMode.Filter;
+    s.CallbackRouteValues = new {
+        Action = "FilterPopupPartial",
+        Controller = "Filtering",
+    };
+    s.CustomActionRouteValues = new {
+        Action = "FilterPopupPartialCustomAction",
+        Controller = "Filtering",
+    };
+    s.Width = Unit.Percentage(100);
+
+    s.Fields.Add(f => {
+        f.Area = PivotArea.DataArea;
+        f.Caption = "Order Amount";
+        f.ID = "fieldOrderAmount";
+        f.DataBinding = new ExpressionDataBinding("[UnitPrice] * [Quantity]");
+        f.CellFormat.FormatType = FormatType.Numeric;
+        f.CellFormat.FormatString = "c";
+    });
+    s.Fields.Add(f => {
+        f.ID = "fieldQuantity";
+        f.Area = PivotArea.DataArea;
+        f.DataBinding = new DataSourceColumnBinding("Quantity");
+    });
+    s.Fields.Add(f => {
+        f.Area = PivotArea.FilterArea;
+        f.DataBinding = new DataSourceColumnBinding("CategoryName");
+        f.Caption = "Category";
+        f.FilterValues.SetValues(new object[] { "Beverages" }, PivotFilterType.Included, false);
+        f.ID = "fieldCategoryName";
+    });
+    s.Fields.Add(f => {
+        f.Area = PivotArea.RowArea;
+        f.DataBinding = new DataSourceColumnBinding("ProductName");
+        f.Caption = "Product";
+    });
+    s.OptionsCustomization.FilterPopupWindowMinWidth = 400;
+    s.OptionsCustomization.FilterPopupWindowMinHeight = 300;
+    s.OptionsFilter.ShowOnlyAvailableItems = true;
+
+    s.AfterPerformCallback = (sender, e) => {
+        var pivotGrid = (MVCxPivotGrid)sender;
+        if(ViewBag.ShowListBoxSearchUI != null && ViewBag.ShowOnlyAvailableItems != null) {
+            pivotGrid.OptionsFilter.ShowListBoxSearchUI = ViewBag.ShowListBoxSearchUI;
+            pivotGrid.OptionsFilter.ShowOnlyAvailableItems = ViewBag.ShowOnlyAvailableItems;
+        }
+    };
+
+
+}).Bind(Model).GetHtml()

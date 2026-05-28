@@ -1,0 +1,8 @@
+﻿@if(!DatabaseGenerator.IsReady("GeneratedEmailTable")) {
+    @Html.Partial("CreateDatabasePartial", "GeneratedEmailTable")
+} else {
+    @Html.AntiForgeryToken()
+
+    @Html.Partial("PerformanceTestPartial")
+    @Html.Action("CustomBindingPartial")
+}

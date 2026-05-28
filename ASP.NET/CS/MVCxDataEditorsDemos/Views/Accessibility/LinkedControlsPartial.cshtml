@@ -1,0 +1,27 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "gvProducts";
+    settings.CallbackRouteValues = new { Controller = "Accessibility", Action = "LinkedControlsPartial" };
+    settings.CustomActionRouteValues = new { Controller = "Accessibility", Action = "LinkedControlsCustomActionPartial" };
+    settings.KeyFieldName = "ProductID";
+    
+    settings.AccessibilityCompliant = true;
+
+    settings.Width = Unit.Percentage(100);
+    settings.ControlStyle.CssClass = "gvProducts";
+
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowSelectCheckbox = true;
+    settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.Page;
+    settings.CommandColumn.Width = Unit.Pixel(30);
+
+    settings.Columns.Add("ProductID");
+    settings.Columns.Add("ProductName");
+
+    settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+    settings.ClientSideEvents.EndCallback = "OnEndCallback";
+
+    settings.DataBound += (s, e) => {
+        MVCxGridView gvProducts = (MVCxGridView)s;
+        gvProducts.JSProperties["cpProductCount"] = gvProducts.VisibleRowCount;
+    };
+}).Bind(Model).GetHtml()

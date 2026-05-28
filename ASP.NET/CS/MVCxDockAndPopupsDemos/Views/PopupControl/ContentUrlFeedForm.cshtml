@@ -1,0 +1,41 @@
+﻿@model Mail
+@{ 
+   Layout = null; 
+   Html.EnableClientValidation();
+   Html.EnableUnobtrusiveJavaScript(); 
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head runat="server">
+        <title>Feedback form</title>
+        <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Site.css")" />
+        @Html.DevExpress().GetStyleSheets(
+            new StyleSheet { ExtensionSuite = ExtensionSuite.Editors }
+        )
+        <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/PopupControl/ContentUrl/ContentUrlFeedForm.css")" />
+        @Html.DevExpress().GetScripts(
+            new Script { ExtensionSuite = ExtensionSuite.Editors }
+        )
+    </head>
+    <body>
+        @using(Ajax.BeginForm("ContentUrlFeedForm", "PopupControl",
+            new AjaxOptions { 
+                HttpMethod = "POST",
+                UpdateTargetId = "mail", 
+                InsertionMode = InsertionMode.Replace 
+            },
+            new { 
+                id = "feedbackForm",
+                @class = "feedForm"
+            })) {
+
+            @Html.AntiForgeryToken()
+
+            <div id="mail">
+                @Html.Partial("ContentUrlFeedFormPartial", Model)
+            </div>
+        }
+    </body>
+</html>

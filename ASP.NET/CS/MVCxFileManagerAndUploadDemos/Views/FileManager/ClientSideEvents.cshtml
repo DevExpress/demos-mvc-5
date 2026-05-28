@@ -1,0 +1,11 @@
+﻿@model string
+
+@using(Html.BeginForm()) {           
+    @Html.Partial("ClientSideEventsPartial", Model)
+    <br />
+    <p class="Note">
+        <b>Allowed Extensions</b>: .jpg, .jpeg, .gif, .rtf, .txt, .avi, .png, .mp3, .xml, .doc, .pdf
+    </p>
+    <br />
+    @Html.Partial("EventMonitor")
+}

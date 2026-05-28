@@ -1,0 +1,20 @@
+﻿@model BinaryImageModel
+
+@Html.DevExpress().CallbackPanel(settings => {
+    settings.Name = "CallbackPanel";
+    settings.CallbackRouteValues = new { Controller = "Editors", Action = "BinaryImagePartial" };
+
+    settings.SetContent(() =>
+        @Html.DevExpress().BinaryImage(biSettings => {
+            biSettings.Width = Model.Width;
+            biSettings.Height = Model.Height;
+            biSettings.Properties.ImageSizeMode = Model.ImageSizeMode;
+            biSettings.Name = "BinaryImage";
+            biSettings.ControlStyle.CssClass = "biClass";
+            biSettings.Properties.EnableServerResize = true;
+            biSettings.Properties.ClientSideEvents.Init = "onBinaryImageInit";
+        }).Bind(Model.ImageBytes).GetHtml()
+    );
+
+    settings.ClientSideEvents.BeginCallback = "onBeginCallback";
+}).GetHtml()

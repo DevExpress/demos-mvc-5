@@ -1,0 +1,61 @@
+﻿@model FeaturesOptions
+
+@functions{
+    public void AdjustCheckBoxItemSettings(MVCxFormLayoutItem item, string Caption) {
+        item.ShowCaption = DefaultBoolean.False;
+        item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+        (item.NestedExtensionSettings as CheckBoxSettings).Text = Caption;
+        item.SpanRules.Add(new SpanRule { BreakpointName = "S", ColumnSpan = 1 });
+    }
+    public void AdjustComboBoxItemSettings(MVCxFormLayoutItem item) {
+        item.NestedExtensionSettings.Width = Unit.Pixel(90);
+        item.SpanRules.Add(new SpanRule { BreakpointName = "S", ColumnSpan = 1 });
+    }
+}
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "demoOptions";
+    settings.ShowItemCaptionColon = false;
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.ColumnCount = 2;
+    settings.SettingsItemCaptions.Location = LayoutItemCaptionLocation.Left;
+    settings.SettingsAdaptivity.GridSettings.Breakpoints.Add(new LayoutBreakpoint { ColumnCount = 1, MaxWidth = 600, Name = "S" });
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Content Filtering";
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.ColumnCount = 2;
+        g.GridSettings.Breakpoints.Add(new LayoutBreakpoint { ColumnCount = 1, MaxWidth = 1200, Name = "S" });
+
+        g.Items.Add(m => m.AllowScripts, item => AdjustCheckBoxItemSettings(item, "AllowScripts"));
+        g.Items.Add(m => m.AllowIFrames, item => AdjustCheckBoxItemSettings(item, "AllowIFrames"));
+        g.Items.Add(m => m.AllowFormElements, item => AdjustCheckBoxItemSettings(item, "AllowFormElements"));
+        g.Items.Add(m => m.AllowIdAttributes, item => AdjustCheckBoxItemSettings(item, "AllowIdAttributes"));
+        g.Items.Add(m => m.AllowStyleAttributes, item => AdjustCheckBoxItemSettings(item, "AllowStyleAttributes"));
+        g.Items.Add(m => m.AllowedDocumentType, item => AdjustComboBoxItemSettings(item));
+    });
+
+    settings.Items.AddGroupItem(g => {
+        g.Caption = "Content Editing";
+        g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        g.ColumnCount = 2;
+        g.GridSettings.Breakpoints.Add(new LayoutBreakpoint { ColumnCount = 1, MaxWidth = 1200, Name = "S" });
+
+        g.Items.Add(m => m.UpdateBoldItalic, item => AdjustCheckBoxItemSettings(item, "UpdateBoldItalic"));
+        g.Items.Add(m => m.AllowEditFullDocument, item => AdjustCheckBoxItemSettings(item, "AllowEditFullDocument"));
+        g.Items.Add(m => m.UpdateDeprecatedElements, item => AdjustCheckBoxItemSettings(item, "UpdateDeprecatedElements"));
+        g.Items.Add(m => m.AllowCustomColorsInColorPickers, item => AdjustCheckBoxItemSettings(item, "AllowCustomColorsInColorPickers"));
+        g.Items.Add(m => m.EnterMode, item => AdjustComboBoxItemSettings(item));
+        g.Items.Add(m => m.ResourcePathMode, item => AdjustComboBoxItemSettings(item));
+    });
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 360,
+        ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+    });
+}).GetHtml()
+<div class="apply-button-container">
+    @Html.DevExpress().Button(s => {
+    s.Name = "ApplyButton";
+    s.Text = "Apply Changes";
+    s.Theme = DemoHelper.Instance.Theme;
+    s.UseSubmitBehavior = true;
+}).GetHtml()
+</div>

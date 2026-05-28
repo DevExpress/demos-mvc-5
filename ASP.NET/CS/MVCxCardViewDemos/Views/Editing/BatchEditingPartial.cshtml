@@ -1,0 +1,73 @@
+﻿@model IEnumerable<EditableProduct>
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+@Html.DevExpress().CardView(
+    settings => {
+        settings.Name = "CardView";
+        settings.KeyFieldName = "ProductID";
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Editing", Action = "BatchEditingUpdateModel" };
+        settings.CallbackRouteValues = new { Controller = "Editing", Action = "BatchEditingPartial" };
+
+        settings.SettingsEditing.Mode = CardViewEditingMode.Batch;
+        settings.SettingsEditing.BatchEditSettings.EditMode = BatchEditingDemoHelper.Options.BatchEditMode;
+        settings.SettingsEditing.BatchEditSettings.StartEditAction = BatchEditingDemoHelper.Options.StartEditAction;
+        settings.SettingsEditing.BatchEditSettings.HighlightDeletedCards = BatchEditingDemoHelper.Options.HighlightDeletedCards;
+
+        settings.Columns.Add("ProductName");
+        settings.Columns.Add(column => {
+            column.FieldName = "CategoryID";
+            column.Caption = "Category Name";
+
+            column.ColumnType = MVCxCardViewColumnType.ComboBox;
+            var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+            comboBoxProperties.DataSource = NorthwindDataProvider.GetCategories();
+            comboBoxProperties.TextField = "CategoryName";
+            comboBoxProperties.ValueField = "CategoryID";
+            comboBoxProperties.ValueType = typeof(int);
+        });
+        settings.Columns.Add("QuantityPerUnit");
+        settings.Columns.Add(column => {
+            column.FieldName = "UnitPrice";
+
+            column.ColumnType = MVCxCardViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.ValidationSettings.RequiredField.IsRequired = true;
+            spinEditProperties.DisplayFormatString = "c";
+            spinEditProperties.DisplayFormatInEditMode = true;
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 1000000;
+        });
+        settings.Columns.Add(column => {
+            column.FieldName = "UnitsInStock";
+            column.ColumnType = MVCxCardViewColumnType.SpinEdit;
+            var spinEditProperties = column.PropertiesEdit as SpinEditProperties;
+            spinEditProperties.NumberType = SpinEditNumberType.Integer;
+            spinEditProperties.MinValue = 0;
+            spinEditProperties.MaxValue = 10000;
+        });
+        settings.Columns.Add("Discontinued", MVCxCardViewColumnType.CheckBox);
+
+        settings.CardLayoutProperties.Items.AddCommandItem(i => {
+            i.ShowNewButton = true;
+            i.ShowDeleteButton = true;
+            i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+        });
+        settings.CardLayoutProperties.Items.Add("ProductName");
+        settings.CardLayoutProperties.Items.Add("CategoryID");
+        settings.CardLayoutProperties.Items.Add("QuantityPerUnit");
+        settings.CardLayoutProperties.Items.Add("UnitPrice");
+        settings.CardLayoutProperties.Items.Add("UnitsInStock");
+        settings.CardLayoutProperties.Items.Add("Discontinued");
+        
+        settings.SettingsPager.SettingsTableLayout.RowsPerPage = 2;
+        settings.CellEditorInitialize = (s, e) => {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.None;
+        };
+        settings.ClientSideEvents.BeginCallback = "OnBeginGridCallback";
+    }).Bind(Model).GetHtml()

@@ -1,0 +1,105 @@
+﻿<script type="text/javascript">
+    function UpdateLabelOptionsState() {
+        var showLabels = ShowLabels.GetChecked();
+        ValueAsPercent.SetEnabled(showLabels);
+        LabelPosition.SetEnabled(showLabels);
+    }
+
+    function UpdateCursor(s, e) {
+        var hitInPie = e.hitInfo.inSeriesPoint && !e.hitInfo.inLegend;
+        s.SetCursor(hitInPie ? 'pointer' : 'default');
+    }
+
+    function UpdatePieSliseState(s, e) {
+        var hitInPie = e.hitInfo.inSeriesPoint && !e.hitInfo.inLegend;
+        if (hitInPie) {
+            var itemStr = e.hitInfo.seriesPoint.argument;
+            if (itemStr == ExplodedPoints.GetValue())
+                itemStr = ExplodedPoints.GetItem(0).text;
+            for (var i = 0; i < ExplodedPoints.GetItemCount(); i++) {
+                var item = ExplodedPoints.GetItem(i);
+                if (item.text == itemStr) {
+                    ExplodedPoints.SetSelectedItem(item);
+                    var modelObj = @Html.Raw(Json.Encode(Model))
+                    modelObj.ExplodedPoints = itemStr;
+                    modelObj.Data = null;
+                    SubmitPartialView(modelObj);
+                    break;
+                }
+            }
+        }
+    }
+    function SubmitPartialView(modelObj){
+              $.ajax({
+                  type: "POST",
+                  url: '@Url.Action("PieViewPartial", "PieTypes")',
+                  data: { options: modelObj },
+                  success: function(response) {
+                      $("#chartContainer").html(response);
+                  }
+              });
+          }
+</script>
+
+@model ChartPieDoughnutDemoOptions
+
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(320);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+<div id="chartContainer" class="horizontal-center-aligned">
+    @Html.Partial("PieViewPartial", Model)
+</div>
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.ExplodedPoints, item => {
+                item.NestedExtension().ComboBox(comboBox => { comboBox.Properties.Items.AddRange(ChartDemoHelper.GetPieExplodePoints()); });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateLabelOptionsState(); }";
+                });
+            });
+            group.Items.Add(model => model.ValueAsPercent, item => {
+                item.NestedExtension().CheckBox(checkBox => { checkBox.ClientEnabled = Model.ShowLabels; });
+            });
+            group.Items.Add(model => model.LabelPosition, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowLabels;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetPieLabelPositions());
+                });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 300,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

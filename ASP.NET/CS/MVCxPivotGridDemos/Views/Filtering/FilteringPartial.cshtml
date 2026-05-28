@@ -1,0 +1,45 @@
+﻿@model IEnumerable
+
+@Html.DevExpress().PivotGrid(s => {
+    s.Name = "pivotGridWithFilter";
+    s.OptionsData.DataProcessingEngine = PivotDataProcessingEngine.Optimized;
+    s.OptionsFilter.FilterPanelMode = FilterPanelMode.Filter;
+    s.CallbackRouteValues = new { Controller = "Filtering", Action = "FilteringPartial" };
+    s.Filter.CriteriaString = "[Year] = " + DateTime.Today.Year;
+    s.OptionsView.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    s.Width = Unit.Percentage(100);
+
+    s.Fields.Add(f => {
+        f.Area = PivotArea.RowArea;
+        f.DataBinding = new DataSourceColumnBinding("CompanyName");
+        f.Caption = "Customer";
+    });
+    s.Fields.Add(f => {
+        f.Area = PivotArea.ColumnArea;
+        f.DataBinding = new DataSourceColumnBinding("OrderDate", PivotGroupInterval.DateYear);
+        f.Caption = "Year";
+        f.ID = "Year";
+    });
+    s.Fields.Add(f => {
+        f.Area = PivotArea.ColumnArea;
+        f.DataBinding = new DataSourceColumnBinding("OrderDate", PivotGroupInterval.DateQuarter);
+        f.Caption = "Quarter";
+        f.ID = "Quarter";
+        f.ValueFormat.FormatString = "Qtr {0}";
+        f.ValueFormat.FormatType = FormatType.Numeric;
+    });
+    s.Fields.Add(f => {
+        f.Area = PivotArea.DataArea;
+        f.DataBinding = new DataSourceColumnBinding("ProductAmount");
+        f.Caption = "Product Amount";
+        f.CellFormat.FormatType = FormatType.Custom;
+        f.CellFormat.FormatString = "c";
+    });
+    s.Fields.Add(f => {
+        f.Area = PivotArea.FilterArea;
+        f.DataBinding = new DataSourceColumnBinding("ProductName");
+        f.Caption = "Product Name";
+    });
+    s.OptionsCustomization.FilterPopupWindowMinWidth = 440;
+    s.OptionsCustomization.FilterPopupWindowMinHeight = 300;
+}).Bind(Model).GetHtml()

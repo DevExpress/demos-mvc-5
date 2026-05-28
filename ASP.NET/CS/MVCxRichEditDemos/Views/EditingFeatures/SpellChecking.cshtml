@@ -1,0 +1,11 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+<script>
+    function onCustomCommandExecuted(s, e) {
+        if (e.commandName == 'showSpellingDialog')
+            s.commands.openSpellingDialog.execute();
+    }
+</script>
+@using(Html.BeginForm()) {
+    @Html.Partial("SpellCheckingPartial")
+}

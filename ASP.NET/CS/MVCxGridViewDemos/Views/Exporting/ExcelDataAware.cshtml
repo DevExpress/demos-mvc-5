@@ -1,0 +1,20 @@
+﻿@model IEnumerable
+
+@section AdditionalResources {
+    <script>
+        function onBeginCallback(s, e) {
+            e.customArgs["exportRowType"] = ExportRowType.GetText();
+        }
+    </script>
+}
+
+@using (Html.BeginForm()) {
+	@Html.DevExpress().ComboBox(settings => {
+		settings.Name = "ExportRowType";
+		settings.Properties.Caption = "Export row type";
+		settings.Theme = DemoHelper.Instance.Theme;
+		settings.SelectedIndex = 0;
+	}).BindList(Enum.GetValues(typeof(GridViewExportedRowType))).Bind(GridViewExportedRowType.All).GetHtml()
+
+    @Html.Partial("ExcelDataAwarePartial", Model)
+}

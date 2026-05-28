@@ -1,0 +1,27 @@
+﻿@model ChartTimeSpanScaleDemoOptions
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section AdditionalResources {
+    <style type="text/css">
+        div[class*="dxchartsuiTooltip"] img {
+            width: 60px;
+            display: block;
+            margin: auto;
+        }
+        div[class*="dxchartsuiTooltip"] td {
+            padding: 3px;
+            text-align: center;
+        }
+    </style>
+}
+
+@Html.Partial("TimeSpanScalePartial", Model)
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

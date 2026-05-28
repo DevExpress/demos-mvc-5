@@ -1,0 +1,44 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "sampleGrid";
+    settings.CallbackRouteValues = new { Controller = "Panel", Action = "ResponsiveLayoutGridPartial" };    
+    settings.Width = Unit.Percentage(100);
+    settings.ControlStyle.CssClass = "grid";
+    
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = 500;
+    settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+    settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+    settings.SettingsBehavior.AllowFocusedRow = true;
+    settings.SettingsPager.PageSize = 50;
+    settings.SettingsPager.NumericButtonCount = 6;
+
+    settings.KeyFieldName = "OrderID";
+    settings.Columns.Add(gridViewColumnSettings => {
+        gridViewColumnSettings.FieldName = "OrderID";
+        gridViewColumnSettings.Width = Unit.Pixel(100);
+        gridViewColumnSettings.AdaptivePriority = 2;
+    });
+    settings.Columns.Add(gridViewColumnSettings => {
+        gridViewColumnSettings.FieldName = "OrderDate";
+        gridViewColumnSettings.PropertiesEdit.DisplayFormatString = "d";
+    });
+    settings.Columns.Add(gridViewColumnSettings => {
+        gridViewColumnSettings.FieldName = "ShipName";
+        gridViewColumnSettings.Width = Unit.Percentage(20);
+        gridViewColumnSettings.AdaptivePriority = 1;
+    });
+    settings.Columns.Add("ShipCountry").AdaptivePriority = 1;
+    settings.Columns.Add("ShipCity").AdaptivePriority = 1;
+    settings.Columns.Add(gridViewColumnSettings => {
+        gridViewColumnSettings.FieldName = "ShippedDate";
+        gridViewColumnSettings.PropertiesEdit.DisplayFormatString = "d";
+        gridViewColumnSettings.AdaptivePriority = 1;
+    });
+    settings.Columns.Add("Quantity").Width = Unit.Pixel(100);
+    settings.Columns.Add(gridViewColumnSettings => {
+        gridViewColumnSettings.FieldName = "UnitPrice";
+        gridViewColumnSettings.Width = Unit.Pixel(100);
+        gridViewColumnSettings.PropertiesEdit.DisplayFormatString = "c";
+    });
+    settings.ClientSideEvents.BeginCallback = "OnGridViewBeginCallback";
+}).Bind(Model).GetHtml()

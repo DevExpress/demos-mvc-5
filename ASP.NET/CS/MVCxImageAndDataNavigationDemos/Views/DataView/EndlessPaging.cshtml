@@ -1,0 +1,24 @@
+﻿@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(s => {
+                s.Name = "endlessPagingMode";
+                s.Width = 200;
+                s.Properties.Caption = "Endless Paging mode:";
+                s.Theme = DemoHelper.Instance.Theme;
+                s.Properties.ValueType = typeof(DevExpress.Web.DataViewEndlessPagingMode);
+                s.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e){ $('form').submit(); }";
+            }).BindList(DataViewDemoHelper.EndlessPagingModeTextList).Bind(DataViewDemoHelper.EndlessPagingMode).GetHtml()
+        </div>
+    </div>
+}
+@Html.Partial("EndlessPagingPartial")
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

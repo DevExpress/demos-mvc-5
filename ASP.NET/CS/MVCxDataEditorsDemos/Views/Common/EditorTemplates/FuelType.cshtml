@@ -1,0 +1,13 @@
+﻿<div class="container">
+    <div class="editorCell">
+        @Html.DevExpress().ComboBoxFor(model => model, settings => {
+            settings.Width = Unit.Percentage(100);
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithText;
+            settings.Properties.ValidationSettings.Display = Display.Dynamic;
+            settings.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+            settings.Properties.CaptionCellStyle.CssClass = "editorCaption";
+            settings.Properties.Caption = (string)ViewData["Caption"];
+        }).BindList(Enum.GetNames(typeof(FuelType))).GetHtml()
+    </div>
+</div>

@@ -1,0 +1,287 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+@section AdditionalResources {
+    <style type="text/css">
+        .buttonsContainer {
+            max-width: 300px;
+            margin: 0 0 0 auto;
+            text-align: right;
+            padding-top: 12px;
+        }
+
+        .submitButton,
+        .cancelButton {
+            margin-bottom: 9px;
+        }
+
+        .cancelButton {
+            margin-left: 8px;
+        }
+
+        .clearPaddings {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        .clearMarginTop {
+            margin-top: 0 !important;
+        }
+    </style>
+}
+<script type="text/javascript">
+    var exportSettings;
+    var dialogState={};
+    window.onload=function() {
+        updateExportSettings();
+        saveDialogState();
+        rangeValueChanged();
+    }
+    function saveDialogState() {
+        dialogState.format=docFormatCombo.GetText();
+        dialogState.landscape=cbLandscape.GetValue();
+        dialogState.exportMode=exportModeCombo.GetText();
+        dialogState.dataRangeMode=rangeCombo.GetText();
+        dialogState.startIndex=startTaskEdit.GetValue();
+        dialogState.endIndex=endTaskEdit.GetValue();
+        dialogState.startDate=startDateEdit.GetValue();
+        dialogState.endDate=endDateEdit.GetValue();
+    }
+    function resetDialogState() {
+        docFormatCombo.SetText(dialogState.format);
+        cbLandscape.SetValue(dialogState.landscape);
+        exportModeCombo.SetText(dialogState.exportMode);
+        rangeCombo.SetText(dialogState.dataRangeMode);
+        startTaskEdit.SetValue(dialogState.startIndex);
+        endTaskEdit.SetValue(dialogState.endIndex);
+        startDateEdit.SetValue(dialogState.startDate);
+        endDateEdit.SetValue(dialogState.endDate);
+    }
+    function updateExportSettings() {
+        exportSettings=getExportSettings();
+    }
+    function getExportSettings() {
+        var dataRangeMode=rangeCombo.GetText().toLowerCase();
+        var dataRange;
+        if(dataRangeMode === 'custom') {
+            dataRange={
+                startIndex: startTaskEdit.GetValue(),
+                endIndex: endTaskEdit.GetValue(),
+                startDate: startDateEdit.GetValue(),
+                endDate: endDateEdit.GetValue()
+            }
+        }
+        else {
+            dataRange=dataRangeMode
+        }
+        var exportMode = exportModeCombo.GetText();
+        exportMode = exportMode === 'Tree List'? 'treeList':exportMode.toLowerCase();
+        var options = {
+            format: docFormatCombo.GetText().toLowerCase(),
+            landscape: cbLandscape.GetValue(),
+            exportMode: exportMode,
+            dateRange: dataRange,
+            fileName: "test.pdf"
+        };
+
+        return options;
+    }
+    function exportGantt() {
+        gantt.ExportToPdf(exportSettings);
+    }
+    function CustomCommand(s,e) {
+        if(e.commandName === "ExportToPdf")
+            exportGantt();
+        if(e.commandName === "Settings") {
+            SettingsPopup.ShowAtElement(gantt.GetMainElement());
+        }
+    }
+    function applyBtnClick() {
+        updateExportSettings();
+        saveDialogState();
+        SettingsPopup.Hide();
+    }
+    function cancelBtnClick() {
+        SettingsPopup.Hide();
+    }
+    function popupCLosing() {
+        resetDialogState();
+    }
+    function rangeValueChanged() {
+        var isCustomRange=rangeCombo.GetText() === "Custom";
+        startTaskEdit.SetEnabled(isCustomRange);
+        endTaskEdit.SetEnabled(isCustomRange);
+        startDateEdit.SetEnabled(isCustomRange);
+        endDateEdit.SetEnabled(isCustomRange);
+    }
+</script>
+
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+
+
+@Html.DevExpress().PopupControl(settings => {
+    settings.Name = "SettingsPopup";
+    settings.Modal = false;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.RightSides;
+    settings.PopupVerticalAlign = PopupVerticalAlign.TopSides;
+    settings.CloseOnEscape = true;
+    settings.MaxHeight = Unit.Pixel(700);
+    settings.MinWidth = Unit.Pixel(375);
+    settings.ShowFooter = false;
+    settings.ShowHeader = false;
+    settings.ScrollBars = ScrollBars.None;
+    settings.ClientSideEvents.Closing = "popupCLosing";
+
+    settings.SetContent(() => {
+        @Html.DevExpress().FormLayout(s => {
+            s.Name = "options";
+            s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+            s.UseDefaultPaddings = false;
+            s.Styles.LayoutGroup.Cell.Paddings.Padding = Unit.Pixel(0);
+            s.Styles.LayoutGroup.CssClass = "clearPaddings";
+            s.Styles.LayoutGroupBox.Caption.Paddings.Padding = Unit.Pixel(0);
+            s.Styles.LayoutGroupBox.CssClass = "clearPaddings";
+
+            s.Items.AddGroupItem(gl => {
+                gl.Paddings.Padding = Unit.Pixel(0);
+                gl.VerticalAlign = FormLayoutVerticalAlign.Top;
+                gl.ShowCaption = DefaultBoolean.False;
+
+                gl.Items.AddGroupItem(g => {
+                    g.Caption = "Export Options";
+                    g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+                    g.Paddings.Padding = Unit.Pixel(0);
+                    g.GroupBoxStyle.Caption.Paddings.PaddingTop = Unit.Pixel(5);
+                    g.GroupBoxStyle.Caption.OffsetX = 0;
+                    g.Items.Add(i => {
+                        i.Caption = "Document format";
+                        i.NestedExtension().ComboBox(cb => {
+                            cb.Name = "docFormatCombo";
+                            cb.SelectedIndex = 4;
+                            cb.Properties.ValueType = typeof(string);
+                            cb.Properties.Items.Add("A0");
+                            cb.Properties.Items.Add("A1");
+                            cb.Properties.Items.Add("A2");
+                            cb.Properties.Items.Add("A3");
+                            cb.Properties.Items.Add("A4");
+                            cb.Properties.Items.Add("Auto");
+                        });
+                    });
+                    g.Items.Add(i => {
+                        i.Caption = "Landscape orientation";
+                        i.NestedExtension().CheckBox(cb => {
+                            cb.Name = "cbLandscape";
+                            cb.Checked = true;
+                        });
+                    });
+                    g.Items.Add(i => {
+                        i.Caption = "Export mode";
+                        i.NestedExtension().ComboBox(cb => {
+                            cb.Name = "exportModeCombo";
+                            cb.SelectedIndex = 0;
+                            cb.Properties.ValueType = typeof(string);
+                            cb.Properties.Items.Add("All");
+                            cb.Properties.Items.Add("Chart");
+                            cb.Properties.Items.Add("Tree List");
+                        });
+                    });
+                });
+                gl.Items.AddGroupItem(g => {
+                    g.Caption = "Task Filter Options";
+                    g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+                    g.Paddings.Padding = Unit.Pixel(0);
+                    g.Paddings.PaddingBottom = Unit.Pixel(0);
+                    g.GroupBoxStyle.Caption.Paddings.PaddingTop = Unit.Pixel(15);
+                    g.GroupBoxStyle.Caption.OffsetX = 0;
+
+                    g.Items.Add(i => {
+                        i.Caption = "Date range";
+                        i.NestedExtension().ComboBox(cb => {
+                            cb.Name = "rangeCombo";
+                            cb.SelectedIndex = 1;
+                            cb.Properties.ValueType = typeof(string);
+                            cb.Properties.Items.Add("All");
+                            cb.Properties.Items.Add("Visible");
+                            cb.Properties.Items.Add("Custom");
+                            cb.Properties.ClientSideEvents.ValueChanged = "rangeValueChanged";
+                        });
+                    });
+                    g.Items.Add(i => {
+                        i.Caption = "Start task (index)";
+                        i.NestedExtension().SpinEdit(cb => {
+                            cb.Name = "startTaskEdit";
+                            cb.Number = 0;
+                        });
+                    });
+                    g.Items.Add(i => {
+                        i.Caption = "End task (index)";
+                        i.NestedExtension().SpinEdit(cb => {
+                            cb.Name = "endTaskEdit";
+                            cb.Number = 10;
+                        });
+                    });
+                    g.Items.Add(i => {
+                        i.Caption = "Start date";
+                        i.NestedExtension().DateEdit(cb => {
+                            cb.Name = "startDateEdit";
+                            cb.Properties.DisplayFormatString = "MM/dd/yyyy";
+                            cb.Date = GanttDataProvider.Tasks[1].StartDate;
+                        });
+                    });
+                    g.Items.Add(i => {
+                        i.Caption = "End date";
+                        i.NestedExtension().DateEdit(cb => {
+                            cb.Name = "endDateEdit";
+                            cb.Properties.DisplayFormatString = "MM/dd/yyyy";
+                            cb.Date = GanttDataProvider.Tasks[1].EndDate;
+                        });
+                    });
+                });
+                gl.Items.AddGroupItem(g => {
+                    g.Caption = "";
+                    g.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+                    g.Paddings.Padding = Unit.Pixel(0);
+                    g.GroupBoxStyle.CssClass = "clearMarginTop";
+                    g.Items.Add(i => {
+                        i.ShowCaption = DefaultBoolean.False;
+                        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+                        i.CssClass = "clearPaddings";
+                        i.SetNestedContent(() => {
+                            ViewContext.Writer.Write("<div class='buttonsContainer'>");
+                            Html.DevExpress().Button(b => {
+                                b.Name = "applyBtn";
+                                b.Width = Unit.Pixel(100);
+                                b.ControlStyle.CssClass = "submitButton";
+                                b.Text = "Apply";
+                                b.UseSubmitBehavior = false;
+                                b.ClientSideEvents.Click = "applyBtnClick";
+                            }).Render();
+                            Html.DevExpress().Button(b => {
+                                b.Name = "cancelBtn";
+                                b.Width = Unit.Pixel(100);
+                                b.ControlStyle.CssClass = "cancelButton";
+                                b.Text = "Cancel";
+                                b.UseSubmitBehavior = false;
+                                b.ClientSideEvents.Click = "cancelBtnClick";
+                            }).Render();
+                            ViewContext.Writer.Write("</div>");
+                        });
+                    });
+                });
+            });
+            DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings
+            {
+                ColumnMinWidth = 600,
+                ColumnCountMode = RecalculateColumnCountMode.RootGroup
+            });
+        }).GetHtml();
+    });
+}).GetHtml()
+
+@Html.Partial("ExportToPDFPartial")
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

@@ -1,0 +1,74 @@
+﻿@model SchedulerDataObject
+
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        function OnShowPreviewButtonClick(s, e) {
+            reportContainer.Show();
+            reportViewer.Refresh();
+        }
+        function OnDateChanged(s, e) {
+            ValidateTimeInterval();
+            UpdateDemoOptions();
+        }
+        function UpdateDemoOptions() {
+            $.ajax({
+                url: '@Url.Action("ReportTemplatesUpdateOptions", "Reporting")',
+                data: {
+                    ReportTemplateFileName: reportTemplateFileName.GetValue(),
+                    StartDate: startDate.GetValueString(),
+                    EndDate: endDate.GetValueString()
+                }
+            });
+        }
+        function ValidateTimeInterval() {
+            var startValue = startDate.GetDate();
+            var endValue = endDate.GetDate();
+            if(endValue < startValue)
+                endDate.SetDate(startValue);
+        }
+    </script>
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(
+                settings => {
+                    settings.Name = "reportTemplateFileName";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.SelectedIndex = 0;
+                    settings.Properties.Caption = "Select a template file to load...";
+                    settings.Properties.ClientSideEvents.ValueChanged = "UpdateDemoOptions";
+                }).BindList(SchedulerDemoHelper.ReportTemplateFileNames).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().DateEdit(
+                settings => {
+                    settings.Name = "startDate";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.Properties.Caption = "Print From";
+                    settings.Properties.ClientSideEvents.DateChanged = "OnDateChanged";
+                }).Bind(SchedulerDemoHelper.ReportTemplatesOptions.StartDate).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().DateEdit(
+                settings => {
+                    settings.Name = "endDate";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.Properties.Caption = "Print To";
+                    settings.Properties.ClientSideEvents.DateChanged = "OnDateChanged";
+                }).Bind(SchedulerDemoHelper.ReportTemplatesOptions.EndDate).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().Button(
+                settings => {
+                    settings.Name = "showPreview";
+                    settings.Text = "Show Preview";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.ClientSideEvents.Click = "OnShowPreviewButtonClick";
+                }).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.Partial("ReportTemplatesPartial", Model)
+@Html.Partial("ReportTemplatesPreviewPartial")

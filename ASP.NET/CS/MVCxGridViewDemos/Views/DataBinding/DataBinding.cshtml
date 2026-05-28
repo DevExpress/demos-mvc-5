@@ -1,0 +1,32 @@
+﻿@model IList<Quote>
+
+@{
+    ViewBag.Title = "DataBinding";
+}
+
+<script type="text/javascript">
+    var timeout;
+    function scheduleGridUpdate(grid) {
+        window.clearTimeout(timeout);
+        timeout = window.setTimeout( 
+            function() { grid.Refresh(); },
+            2000
+        );
+    }
+    function grid_Init(s, e) {
+        scheduleGridUpdate(s);
+    }
+    function grid_BeginCallback(s, e) {
+        window.clearTimeout(timeout);
+    }
+    function grid_EndCallback(s, e) {
+        scheduleGridUpdate(s);
+    }
+</script>
+
+@Html.Partial("DataBindingPartial", Model)
+
+<div class="Note">
+	<b>Note:</b>
+	The quote values are generated for the demonstration purpose only. 
+</div>

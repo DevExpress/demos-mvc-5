@@ -1,0 +1,24 @@
+﻿@Html.DevExpress().GridView(
+    settings => {
+        settings.Name = "Grid";
+        settings.Width = Unit.Percentage(100);
+        settings.KeyFieldName = "EmployeeID";
+        settings.CallbackRouteValues = new { Controller = "Hint", Action = "Grid" };
+        settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+        settings.Columns.Add("FirstName");
+        settings.Columns.Add("LastName");
+        settings.Columns.Add("BirthDate");
+        settings.Columns.Add("Title");
+        settings.Columns.Add("HireDate");
+        settings.Columns.Add(column => {
+            column.Caption = "Details";
+            column.Width = Unit.Percentage(15);
+            column.SetDataItemTemplateContent(c => {
+                ViewContext.Writer.Write(string.Format("<a href='javascript:void(0);' data-visibleindex='{0}'>More Info...</a>", c.VisibleIndex));
+            });
+        });
+        settings.Columns.Add("Photo").Visible = false;
+        settings.Columns.Add("Notes").Visible = false;
+        settings.ClientSideEvents.EndCallback = "function(s, e) { ASPxClientHint.Update(); }";
+    }).Bind(Model).GetHtml()

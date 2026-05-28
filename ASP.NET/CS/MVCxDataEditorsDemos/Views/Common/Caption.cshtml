@@ -1,0 +1,111 @@
+﻿@section AdditionalResources {    
+    <style type="text/css">
+        .mainContainer {
+            display: table;
+            width: 100%;
+            padding-bottom: 24px;
+        }
+
+        .editorContainer {
+            max-width: 350px;
+            padding-bottom: 20px;
+        }
+
+        .contentContainer {
+            word-break: break-all;
+            line-height: 22px;
+        }
+
+        @@media (min-width:820px) {
+            .mainContainer {
+                padding-bottom: 30px;
+            }
+
+                .mainContainer > div {
+                    display: table-cell;
+                }
+
+            .editorContainer {
+                padding-right: 100px;
+                width: 300px;
+            }
+
+            .contentContainer {
+                vertical-align: top;
+                word-break: break-word;
+            }
+        }
+    </style>
+}
+<div class="mainContainer">
+    <div class="editorContainer">
+        @Html.DevExpress().TextBox(settings => {
+            settings.Name = "textBox";
+            settings.Properties.Caption = "Text Box";
+            settings.Width = Unit.Percentage(100);
+        }).Bind("Text").GetHtml()
+    </div>
+    <div class="contentContainer">
+        Properties.Caption = "Text Box"
+    </div>
+</div>
+<div class="mainContainer">
+    <div class="editorContainer">
+        @Html.DevExpress().ComboBox(settings => {
+            settings.Name = "comboBox";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.Caption = "Combo Box";
+            for (int i = 1; i < 4; i++) {
+                settings.Properties.Items.Add(String.Format("Item {0}", i), i);
+            }
+            settings.Properties.ValidationSettings.RequiredField.IsRequired = true;
+            settings.Properties.ValidationSettings.Display = Display.Dynamic;
+            settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+            settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+            settings.SelectedIndex = 0;
+        }).GetHtml()
+    </div>
+    <div class="contentContainer">
+        Properties.Caption = "Combo Box"<br />
+        Properties.CaptionSettings.RequiredMarkDisplayMode = EditorRequiredMarkMode.Auto<br />
+        Properties.CaptionSettings.RequiredMark = "*"<br />
+        Properties.CaptionSettings.Position = EditorCaptionPosition.Top<br />
+        Properties.ValidationSettings.RequiredField.IsRequired = true<br />
+        Properties.ValidationSettings.Display = Display.Dynamic
+    </div>
+</div>
+<div class="mainContainer">
+    <div class="editorContainer">
+        @Html.DevExpress().Memo(settings => {
+            settings.Name = "memo";
+            settings.Width = Unit.Percentage(100);
+            settings.Height = 71;
+            settings.Properties.Caption = "Memo";
+            settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+            settings.Properties.CaptionSettings.RequiredMarkDisplayMode = EditorRequiredMarkMode.Optional;
+            settings.Properties.CaptionSettings.OptionalMark = " (optional)";
+        }).Bind("Text").GetHtml()
+    </div>
+    <div class="contentContainer">
+        Properties.Caption = "Memo"<br />
+        Properties.CaptionSettings.Position = EditorCaptionPosition.Top<br />
+        Properties.CaptionSettings.RequiredMarkDisplayMode = EditorRequiredMarkMode.Optional<br />
+        Properties.CaptionSettings.OptionalMark = " (optional)"
+    </div>
+</div>
+<div class="mainContainer">
+    <div class="editorContainer">
+        @Html.DevExpress().RadioButtonList(settings => {
+            settings.Name = "radioButtonList";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.Items.Add("Item 1", 1);
+            settings.Properties.Items.Add("Item 2", 2);
+            settings.Properties.Caption = "Radio Button List";
+            settings.Properties.CaptionSettings.VerticalAlign = EditorCaptionVerticalAlign.Middle;
+        }).GetHtml()
+    </div>
+    <div class="contentContainer">
+        Properties.Caption = "Radio Button List"<br />
+        Properties.CaptionSettings.VerticalAlign = EditorCaptionVerticalAlign.Middle
+    </div>
+</div>     

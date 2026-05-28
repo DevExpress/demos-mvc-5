@@ -1,0 +1,54 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);}
+<div class="horizontal-center-aligned" style="max-width: 400px;">
+    @Html.DevExpress().Ribbon(settings => {
+        settings.Name = "ribbon";
+        var tab = settings.Tabs.Add("Home");
+
+        var tasksGroup = tab.Groups.Add("Tasks");
+        tasksGroup.Items.Add(MVCxRibbonItemType.ButtonItem, i => {
+            i.Text = "TasksList";
+            i.Name = "Tasks List";
+            i.Size = RibbonItemSize.Large;
+            ((RibbonButtonItem)i).LargeImage.IconID = IconID.TasksTask32x32;
+        });
+        tasksGroup.Items.Add(MVCxRibbonItemType.ButtonItem, i => {
+            i.Text = "New";
+            i.Name = "NewTask";
+            i.Size = RibbonItemSize.Small;
+            ((RibbonButtonItem)i).SmallImage.IconID = IconID.TasksNewtask16x16;
+        });
+        tasksGroup.Items.Add(MVCxRibbonItemType.ButtonItem, i => {
+            i.Text = "Edit";
+            i.Name = "EditTask";
+            i.Size = RibbonItemSize.Small;
+            ((RibbonButtonItem)i).SmallImage.IconID = IconID.TasksEdittask16x16;
+        });
+
+        var saveAndCloseGroup = tab.Groups.Add("Save & Close");
+        saveAndCloseGroup.Items.Add(MVCxRibbonItemType.ButtonItem, i => {
+            i.Text = "Save";
+            i.Name = "Save";
+            i.Size = RibbonItemSize.Large;
+            ((RibbonButtonItem)i).LargeImage.IconID = IconID.SaveSave32x32;
+        });
+        saveAndCloseGroup.Items.Add(MVCxRibbonItemType.ButtonItem, i => {
+            i.Text = "";
+            i.Name = "SaveTo";
+            i.Size = RibbonItemSize.Small;
+            ((RibbonButtonItem)i).SmallImage.IconID = IconID.SaveSaveto16x16;
+        });
+        saveAndCloseGroup.Items.Add(MVCxRibbonItemType.ButtonItem, i => {
+            i.Text = "";
+            i.Name = "SaveAndClose";
+            i.Size = RibbonItemSize.Small;
+            ((RibbonButtonItem)i).SmallImage.IconID = IconID.SaveSaveandclose16x16;
+        });
+        saveAndCloseGroup.Items.Add(MVCxRibbonItemType.ButtonItem, i => {
+            i.Text = "Close";
+            i.Name = "Close";
+            i.Size = RibbonItemSize.Large;
+            ((RibbonButtonItem)i).LargeImage.IconID = IconID.ActionsClose32x32;
+        });
+    }).GetHtml()
+</div>
+

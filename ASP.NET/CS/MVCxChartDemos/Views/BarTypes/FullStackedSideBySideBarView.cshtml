@@ -1,0 +1,132 @@
+﻿@model ChartSideBySideBarDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(300);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartSideBySideBarDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.Border.Visibility = DefaultBoolean.False;
+        l.Margins.Left = 40;
+    });
+
+    settings.Series.Template(t => {
+        t.Views().SideBySideFullStackedBarSeriesView(v => {
+            v.SeriesLabel(l => {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+                l.TextPattern = options.ValueAsPercent ? "{VP:P0}" : "{V:0,,.00}";
+            });
+        });
+        t.SetDataMembers("Country", "Population");
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        t.CrosshairLabelPattern = "{S}<br/>{V:0,,.00} million";
+    });
+
+    settings.BoundDataChanged = (s, e) => {
+        MVCxChartControl chart = (MVCxChartControl)s;
+        foreach (Series series in chart.Series) {
+            series.Views().SideBySideFullStackedBarSeriesView(v => {
+                if (options.Group == GroupBy.Sex)
+                    v.StackedGroup = series.Name.Contains("Female") ? "Female" : "Male";
+                else {
+                    if (series.Name.Contains("0-14"))
+                        v.StackedGroup = "0-14 years";
+                    else if (series.Name.Contains("15-64"))
+                        v.StackedGroup = "15-64 years";
+                    else
+                        v.StackedGroup = "65 years and older";
+                }
+            });
+        };
+    };
+
+    settings.XYDiagram(d => {
+        d.AxisY.Interlaced = true;
+        d.AxisY.Title.Visibility = DefaultBoolean.False;
+        d.AxisY.WholeRange.SetMinMaxValues(0, 1);
+        d.AxisY.WholeRange.SideMarginsValue = 0;
+        d.AxisY.Label.TextPattern = "{VP:P0}";
+        d.DefaultPane.StackedBarTotalLabel.Visible = options.ShowTotalLabels;
+        d.DefaultPane.StackedBarTotalLabel.TextPattern = "Total\r\n{TV: 0,,.00}";
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Population: Age Structure"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 12),
+        Text = "Data estimate for 2020"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.cia.gov"
+    });
+}).Bind(Model.Data, seriesDataMember: "GenderAge").GetHtml()
+
+<script type="text/javascript">
+    function UpdateLabelOptionState() {
+        ValueAsPercent.SetEnabled(ShowLabels.GetChecked());
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.Group);
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateLabelOptionState(); }";
+                });
+            });
+            group.Items.Add(model => model.ValueAsPercent, item => {
+                item.NestedExtension().CheckBox(checkbox => { checkbox.ClientEnabled = Model.ShowLabels; });
+            });
+            group.Items.Add(model => model.ShowTotalLabels);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 280,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

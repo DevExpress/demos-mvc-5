@@ -1,0 +1,70 @@
+﻿@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/UploadControl/DragAndDrop.css")" />
+}
+<script type="text/javascript">
+    function onUploadControlFileUploadComplete(s, e) {
+        if(e.isValid)
+            $("#uploadedImage").attr("src", e.callbackData);
+        setElementVisible("uploadedImage", e.isValid);
+    }
+    function onImageLoad() {
+        var externalDropZone = $("#externalDropZone");
+        var uploadedImage = $("#uploadedImage");
+        uploadedImage.css({
+            left: (externalDropZone.width() - uploadedImage.width()) / 2,
+            top: (externalDropZone.height() - uploadedImage.height()) / 2 
+        });
+        setElementVisible("dragZone", false);
+    }
+    function setElementVisible(elementId, visible) {
+        var el = $("#" + elementId);
+        if(visible) 
+            el.show();
+        else 
+            el.hide();
+    }
+</script>
+<div id="externalDropZone" class="dropZoneExternal">
+    <div id="dragZone">
+        <span class="dragZoneText">Drag an image here</span>
+    </div>
+    <img id="uploadedImage" src="#" alt="" style="display: none" onload="onImageLoad()" />
+    <div id="dropZone" style="display: none">
+        <span class="dropZoneText">Drop an image here</span>
+    </div>
+</div>
+@using(Html.BeginForm()) {
+    <div class="uploadContainer">
+        @Html.DevExpress().UploadControl(settings => {
+            settings.ShowProgressPanel = true;
+            settings.CallbackRouteValues = new { Controller = "UploadControl", Action = "DragAndDropImageUpload" };
+            settings.Name = "ucDragAndDrop";
+            settings.UploadMode = UploadControlUploadMode.Auto;
+            settings.AutoStartUpload = true;
+            settings.Width = Unit.Percentage(100);
+            settings.DialogTriggerID = "externalDropZone";
+            settings.AdvancedModeSettings.EnableDragAndDrop = true;
+            settings.AdvancedModeSettings.EnableFileList = false;
+            settings.AdvancedModeSettings.EnableMultiSelect = false;
+            settings.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+            settings.AdvancedModeSettings.DropZoneText = "";
+            settings.ValidationSettings.MaxFileSize = 4194304;
+            settings.ValidationSettings.AllowedFileExtensions = new string[] {".jpg", ".jpeg", ".gif", ".png"};
+            settings.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+            settings.BrowseButton.Text = "Select an image for upload...";
+            settings.Styles.DropZone.CssClass = "uploadControlDropZone";
+            settings.ClientSideEvents.DropZoneEnter = "function(s, e) { if(e.dropZone.id == 'externalDropZone') setElementVisible('dropZone', true); }";
+            settings.ClientSideEvents.DropZoneLeave = "function(s, e) { if(e.dropZone.id == 'externalDropZone') setElementVisible('dropZone', false); }";
+            settings.ClientSideEvents.FileUploadComplete = "onUploadControlFileUploadComplete";
+        }).GetHtml()
+    </div>
+}
+<br />
+@Html.DevExpress().Label(settings => { settings.Text = "You can upload JPG, GIF, or PNG file."; }).GetHtml()
+<br />
+@Html.DevExpress().Label(settings => { settings.Text = "Maximum file size is 4MB."; }).GetHtml()
+<br />
+<div class="Note">
+    <p><b>Note.</b>&nbsp;The drag and drop functionality requires the end-user's browser to support HTML5 technology. It means that it works in modern browsers only: IE10+, Safari 6+, Firefox 4+, Google Chrome, and Opera 12+.</p>
+    <p>All files uploaded to this demo will be automatically deleted in 5 minutes.</p>
+</div>

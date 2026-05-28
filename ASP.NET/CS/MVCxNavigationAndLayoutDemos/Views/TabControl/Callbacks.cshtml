@@ -1,0 +1,19 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);
+}
+@section AdditionalResources {
+    <style type="text/css">
+        .dxtcFixed {
+            max-width: 600px;
+        }
+        .dxtcFixed .dxtmImage {
+            width: 100%;
+            max-width: 600px;
+            max-height: 600px;
+        }
+        .dxtcFixed .dxtcTab {
+            min-width: 120px;
+        }
+    </style>
+}
+@Html.Partial("CallbacksPartial")

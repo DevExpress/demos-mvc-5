@@ -1,0 +1,16 @@
+﻿@Html.DevExpress().PopupControl(
+    settings => {
+        settings.Name = "reportContainer";
+        settings.Modal = true;
+        settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        settings.Width = Unit.Pixel(1020);
+        settings.Height = Unit.Pixel(700);
+        settings.HeaderText = "Print Preview";
+        settings.AllowDragging = true;
+        settings.PopupAnimationType = AnimationType.None;
+        
+        settings.SetContent(() => {
+            Html.RenderAction("ReportTemplatesViewerPartial");
+        });
+    }).GetHtml()

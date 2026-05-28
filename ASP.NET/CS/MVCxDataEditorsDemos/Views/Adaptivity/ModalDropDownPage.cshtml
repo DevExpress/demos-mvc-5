@@ -1,0 +1,115 @@
+﻿@model IEnumerable<Country>
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>Adaptive Modal DropDown - ASP.NET MVC Data Editors</title>
+
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionType = ExtensionType.FormLayout },
+        new StyleSheet { ExtensionType = ExtensionType.DateEdit },
+        new StyleSheet { ExtensionType = ExtensionType.ListBox },
+        new StyleSheet { ExtensionType = ExtensionType.ComboBox },
+        new StyleSheet { ExtensionType = ExtensionType.DropDownEdit }
+    )
+    <link href="~/Content/deviceViewerContent.css" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/jquery.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionType = ExtensionType.FormLayout },
+        new Script { ExtensionType = ExtensionType.DateEdit },
+        new Script { ExtensionType = ExtensionType.ListBox },
+        new Script { ExtensionType = ExtensionType.ComboBox },
+        new Script { ExtensionType = ExtensionType.DropDownEdit }
+    )
+    <script src="~/Scripts/modalDropDownScript.js"></script>
+</head>
+<body>
+    @using (Html.BeginForm()) {
+        @Html.DevExpress().FormLayout(settings => {
+            settings.Name = "formlayout";
+            settings.Width = Unit.Percentage(100);
+            settings.Items.AddGroupItem(group => {
+                group.Caption = "Reservation Form";
+                group.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+                group.ColumnCount = 2;
+                group.GridSettings.Breakpoints.Add(new LayoutBreakpoint("S", 600, 1));
+                group.Items.Add(i => {
+                    i.Caption="Check-In";
+                    i.HelpText="Registration will be closed in 5 days";
+                    i.NestedExtension().DateEdit(s => {
+                        s.Name = "deCheckIn";
+                        s.Properties.SettingsAdaptivity.Mode = DropDownEditAdaptivityMode.OnWindowInnerWidth;
+                        s.Width = Unit.Percentage(100);
+                        s.Date = DateTime.Today.AddDays(5);
+                        s.Properties.CalendarProperties.ShowTodayButton = false;
+                        s.Properties.CalendarProperties.ShowClearButton = false;
+                    });
+                });
+                group.Items.Add(i => {
+                    i.Caption="Ticket Type";
+                    i.HelpText="All special offers are available on the website";
+                    i.NestedExtension().ComboBox(s => {
+                        s.Name = "cmbTicketType";
+                        s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                        s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.None;
+                        s.Properties.SettingsAdaptivity.Mode = DropDownEditAdaptivityMode.OnWindowInnerWidth;
+                        s.Width = Unit.Percentage(100);
+                        s.SelectedIndex = 0;
+                        s.Properties.Items.Add("Standard", "Standard");
+                        s.Properties.Items.Add("Business", "Business");
+                        s.Properties.Items.Add("Economy", "Economy");
+                        s.Properties.Items.Add("Special Offer", "SO");
+                    });
+                });
+                group.Items.Add(i => {
+                    i.Caption="Extra Services";
+                    i.HelpText="Additional fee charged";
+                    i.NestedExtension().DropDownEdit(s => {
+                        s.Name = "ddeExtraServices";
+                        s.Properties.DropDownApplyButton.Visibility = DropDownElementVisibility.Always;
+                        s.Properties.DropDownCloseButton.Visibility = DropDownElementVisibility.Always;
+                        s.Properties.SettingsAdaptivity.Mode = DropDownEditAdaptivityMode.OnWindowInnerWidth;
+                        s.Properties.SettingsAdaptivity.ModalDropDownCaption = "Select extra services";
+                        s.Properties.ClientSideEvents.TextChanged = "synchronizeListBoxValues";
+                        s.Properties.ClientSideEvents.DropDown = "onDropDown";
+                        s.Properties.ClientSideEvents.DropDownCommandButtonClick = "onDropDownCommandButtonClick";
+                        s.SetDropDownWindowTemplateContent(c => {
+                            @Html.DevExpress().ListBox(listBoxSettings => {
+                                listBoxSettings.Name = "listBox";
+                                listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                                listBoxSettings.Height = Unit.Pixel(200);
+                                listBoxSettings.Width = Unit.Percentage(100);
+                                listBoxSettings.Properties.EnableSelectAll = true;
+                                listBoxSettings.Properties.Items.Add("Extra baggage", "0");
+                                listBoxSettings.Properties.Items.Add("Oversize baggage", "1");
+                                listBoxSettings.Properties.Items.Add("Special menu", "2");
+                                listBoxSettings.Properties.Items.Add("Pre-reserved seats", "3");
+                                listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateText";
+                                listBoxSettings.Properties.ClientSideEvents.Init = "updateText";
+                            }).Render();
+                        });
+                    });
+                });
+                group.Items.Add(i => {
+                    i.Caption="Country";
+                    i.NestedExtension().ComboBox(s => {
+                        s.Name = "cmbCountry";
+                        s.Properties.TextField = "CountryName";
+                        s.Properties.ValueField = "CountryName";
+                        s.Properties.DataSource = Model;
+                        s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                        s.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                        s.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
+                        s.Properties.SettingsAdaptivity.Mode = DropDownEditAdaptivityMode.OnWindowInnerWidth;
+                        s.Properties.SettingsAdaptivity.ModalDropDownCaption = "Select your country";
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+            });
+        }).GetHtml()
+    }
+</body>
+</html>

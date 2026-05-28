@@ -1,0 +1,37 @@
+﻿@model IEnumerable
+@{ DemoHelper.Instance.ControlAreaMinWidth = Unit.Pixel(700); }
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(settings => {
+               settings.Name = "ColumnResizeMode";
+               settings.Properties.Caption = "Column resizing mode:";
+               settings.Properties.ClientSideEvents.ValueChanged = "function(s,e) { $('form').submit() }";
+               settings.Theme = DemoHelper.Instance.Theme;
+           }).BindList(Enum.GetNames(typeof(ColumnResizeMode))).Bind(DemoOptions.ColumnResizeMode.ToString()).GetHtml()
+        </div>
+        <div class="options-item">
+            @Html.DevExpress().ComboBox(settings => {
+               settings.Name = "Visualization";
+               settings.Properties.Caption = "Resizing visualization:";
+               settings.Properties.ClientSideEvents.ValueChanged = "function(s,e) { $('form').submit() }";
+               settings.Theme = DemoHelper.Instance.Theme;
+           }).BindList(Enum.GetNames(typeof(ResizingMode))).Bind(DemoOptions.Visualization.ToString()).GetHtml()
+        </div>
+    </div>
+}
+
+@Html.Partial("ColumnResizingPartial", Model)
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}
+
+@functions {
+    ColumnResizingDemoOptions DemoOptions { get { return ViewBag.ResizingOptions; } }
+}

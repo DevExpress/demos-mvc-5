@@ -1,0 +1,28 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "SpreadsheetAPI", Action = "ClientSideEventsPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.ShowFormulaBar = false;
+        settings.ActiveTabIndex = 0;
+        settings.ShowConfirmOnLosingChanges = false;
+
+        settings.RibbonTabs.AddRange(ClientSideEventsDemoHelper.GetRibbonTabs());
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.ApplyCurrentThemeToCustomRibbonIcons(spreadsheet);
+        };
+
+        settings.ClientSideEvents.Init = "function(s, e) { DXEventMonitor.Trace(s, e, 'Init'); SetDefaultTrackedEvents();  }";
+        settings.ClientSideEvents.SelectionChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'SelectionChanged') }";
+        settings.ClientSideEvents.PopupMenuShowing = "function(s, e) { DXEventMonitor.Trace(s, e, 'PopupMenuShowing') }";
+        settings.ClientSideEvents.HyperlinkClick = "function(s, e) { DXEventMonitor.Trace(s, e, 'HyperlinkClick'); e.handled = true; }";
+        settings.ClientSideEvents.CustomCommandExecuted = "function(s, e) { DXEventMonitor.Trace(s, e, 'CustomCommandExecuted') }";
+        settings.ClientSideEvents.BeginSynchronization = "function(s, e) { DXEventMonitor.Trace(s, e, 'BeginSynchronization') }";
+        settings.ClientSideEvents.EndSynchronization = "function(s, e) { DXEventMonitor.Trace(s, e, 'EndSynchronization') }";
+        settings.ClientSideEvents.CellEndEdit = "function(s, e) { DXEventMonitor.Trace(s, e, 'CellEndEdit') }";
+        settings.ClientSideEvents.CellBeginEdit = "function(s, e) { DXEventMonitor.Trace(s, e, 'CellBeginEdit') }";
+        settings.ClientSideEvents.CellCancelEdit = "function(s, e) { DXEventMonitor.Trace(s, e, 'CellCancelEdit') }";
+        settings.ClientSideEvents.ViewModeChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'ViewModeChanged') }";
+    }
+).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "ClientSideEvents.xlsx")).GetHtml()

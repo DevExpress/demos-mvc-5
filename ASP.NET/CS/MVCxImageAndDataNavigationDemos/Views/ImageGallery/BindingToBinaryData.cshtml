@@ -1,0 +1,8 @@
+﻿@Html.DevExpress().ImageGallery(settings => {
+    settings.Name = "imageGallery";
+    settings.ImageCacheFolder = ImageGalleryDemoHelper.DefaultImageCacheFolder;
+    settings.ImageContentBytesField = "Picture";
+    settings.TextField = "Text";
+    settings.AllowPaging = false;
+    settings.SettingsFullscreenViewer.NavigationBarVisibility = ElementVisibilityMode.Always;
+}).Bind(Model).GetHtml()

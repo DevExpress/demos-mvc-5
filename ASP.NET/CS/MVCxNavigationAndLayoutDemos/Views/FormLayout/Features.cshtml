@@ -1,0 +1,103 @@
+﻿@model FormLayoutFeaturesModel
+
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(400);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(400);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+<div style="padding-top:30px">
+    @Html.DevExpress().FormLayout(settings => {
+        settings.Name = "formLayout";
+        settings.EncodeHtml = false;
+        settings.UseDefaultPaddings = false;
+        settings.Width = Unit.Percentage(100);
+
+        var groupItem = settings.Items.AddGroupItem(i => {
+            i.Caption = "Group Caption";
+            i.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        });
+        groupItem.Items.Add(m => m.Name, i => {
+            i.HelpText = "Please, enter your login name";
+            i.NestedExtension().TextBox(s => s.Width = Unit.Percentage(100));
+        });
+        groupItem.Items.Add(m => m.Email, i => {
+            i.HelpText = "Please, enter your e-mail";
+            i.NestedExtension().TextBox(s => s.Width = Unit.Percentage(100));
+        });
+        groupItem.Items.Add(m => m.Description, i => {
+            i.HelpText = "Leave a little bit of information<br/>about yourself";
+            i.NestedExtension().Memo(s => {
+                s.Height = 50;
+                s.Width = Unit.Percentage(100);
+            });
+        });
+
+        FormLayoutFeaturesDemoOptions options = ViewBag.FeaturesDemoOptions;
+        groupItem.GroupBoxDecoration = options.GroupSettingsGroupBoxDecoration;
+        groupItem.ShowCaption = options.GroupSettingsShowCaption ? DefaultBoolean.True : DefaultBoolean.False;
+        groupItem.SettingsItems.ShowCaption = options.ItemCaptionSettingsShowCaption ? DefaultBoolean.True : DefaultBoolean.False;
+        groupItem.SettingsItemCaptions.Location = options.ItemCaptionSettingsLocation;
+        groupItem.SettingsItemCaptions.HorizontalAlign = options.ItemCaptionSettingsHorizontalAlign;
+        groupItem.SettingsItemCaptions.VerticalAlign = options.ItemCaptionSettingsVerticalAlign;
+        groupItem.SettingsItemHelpTexts.Position = options.ItemHelpTextSettingsPosition;
+        groupItem.SettingsItemHelpTexts.HorizontalAlign = options.ItemHelpTextSettingsHorizontalAlign;
+        groupItem.SettingsItemHelpTexts.VerticalAlign = options.ItemHelpTextSettingsVerticalAlign;
+        foreach (MVCxFormLayoutItem layoutItem in groupItem.Items) {
+            if (!options.ItemHelpTextSettingsShowHelpText)
+                layoutItem.HelpText = string.Empty;
+        }
+    }).GetHtml()
+</div>
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+        settings.Name = "FormLayoutSettings";
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.SettingsItemCaptions.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+    
+        settings.Items.AddGroupItem(group => {
+            group.Caption = "Group Settings";            
+            group.Items.Add(i => i.FieldName = "GroupSettingsGroupBoxDecoration");
+            group.Items.Add(i => i.FieldName = "GroupSettingsShowCaption");
+        });
+    
+        settings.Items.AddGroupItem(group => {
+            group.Caption = "Item Caption Settings";            
+    
+            group.Items.Add(i => i.FieldName = "ItemCaptionSettingsShowCaption");
+            group.Items.Add(i => i.FieldName = "ItemCaptionSettingsLocation");
+            group.Items.Add(i => i.FieldName = "ItemCaptionSettingsHorizontalAlign");
+            group.Items.Add(i => i.FieldName = "ItemCaptionSettingsVerticalAlign");
+        });
+    
+        settings.Items.AddGroupItem(group => {
+            group.Caption = "Item HelpText Settings";            
+            group.Items.Add(i => i.FieldName = "ItemHelpTextSettingsShowHelpText");
+            group.Items.Add(i => i.FieldName = "ItemHelpTextSettingsPosition");
+            group.Items.Add(i => i.FieldName = "ItemHelpTextSettingsHorizontalAlign");
+            group.Items.Add(i => i.FieldName = "ItemHelpTextSettingsVerticalAlign");
+        });
+    
+        DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+            ColumnMinWidth = 350,
+            ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+        });
+    }).Bind(ViewBag.FeaturesDemoOptions).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

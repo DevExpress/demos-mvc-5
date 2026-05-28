@@ -1,0 +1,7 @@
+﻿@model string
+
+@Html.DevExpress().ImageSlider(settings => {
+    settings.Name = "imageSlider";
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(280);
+}).BindToFolder(Model).GetHtml()

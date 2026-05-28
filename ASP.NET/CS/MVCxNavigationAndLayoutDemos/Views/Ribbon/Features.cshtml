@@ -1,0 +1,121 @@
+﻿@model RibbonFeaturesDemoOptions
+@{ DemoHelper.Instance.ControlOptionsRightBlockWidth = 300;}
+@section AdditionalResources {
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Ribbon.js")"></script>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Ribbon/Common/Ribbon.css")" />
+}
+<script type="text/javascript">
+    function submitForm() {
+        $("form").submit();
+    }
+    function onCommandExecuted(s, e) {
+        var text = e.item.name;
+        if(e.parameter !== null)
+            text += ": " + e.parameter;
+        Label.SetText(text);
+    }
+    function onFileTabClicked(s, e) {
+        Label.SetText("File Tab");
+    }
+    function onDialogBoxLauncherClicked(s, e) {
+        Label.SetText("Show a dialog for the " + e.group.name + " group");
+    }
+</script>
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+<div id="PopupPlaceHolder" style="height: 400px;"></div>
+
+@Html.DevExpress().PopupControl(
+        settings => {
+            settings.Name = "PopupControl";
+            settings.PopupElementID = "PopupPlaceHolder";
+            settings.ShowShadow = false;
+            settings.AllowResize = true;
+            settings.AllowDragging = false;
+            settings.CloseAction = CloseAction.None;
+            settings.ShowSizeGrip = ShowSizeGrip.True;
+            settings.PopupAction = PopupAction.None;
+            settings.ShowOnPageLoad = true;
+            settings.PopupAnimationType = AnimationType.None;
+            settings.MaxWidth = Unit.Pixel(850);
+            settings.MinWidth = Unit.Pixel(288);
+            settings.MinHeight = Unit.Pixel(1);
+            settings.MaxHeight = Unit.Pixel(1);
+            settings.Height = Unit.Pixel(1);
+            settings.ShowHeader = false;
+            settings.ShowFooter = true;
+            settings.FooterText = "Resize the ribbon by the size grip to see the control responsive layout functionality";
+            settings.Styles.Footer.Wrap = DefaultBoolean.True;
+            settings.Styles.Footer.HorizontalAlign = HorizontalAlign.Right;
+            settings.ControlStyle.CssClass = "editorWindow";
+            settings.PopupAlignCorrection = PopupAlignCorrection.Disabled;
+            settings.Styles.Content.Paddings.Padding = 0;
+            settings.ClientSideEvents.AfterResizing = "onWindowResize";
+            settings.ClientSideEvents.Init = "onPopupInit";
+
+            settings.SetContent(() => {
+                ViewContext.Writer.Write(
+                @"<table id=""editor"" style=""width:100%;"">
+                    <tr style=""height: 1px"">
+                        <td>"
+                );
+                Html.RenderPartial("FeaturesPartial", Model);
+                ViewContext.Writer.Write(
+                        @"</td>
+                    </tr>
+                    <tr>
+                        <td class=""ribbonContainer"" id=""container"">"
+                );
+                Html.DevExpress().Label(s => {
+                    s.Name = "Label";
+                    s.Properties.EnableClientSideAPI = true;
+                }).Render();
+                ViewContext.Writer.Write(
+                        @"</td>
+                    </tr>
+                </table>"
+                );
+            });
+        }).GetHtml()
+
+@section DemoOptions{
+    @Html.DevExpress().FormLayout(settings => {
+    settings.Name = "FormLayoutSettings";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    settings.Items.AddGroupItem(group => {
+        group.Caption = "Options";
+        group.Items.Add(m => m.AllowMinimize, item => {
+            item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+            CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+            checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+        });
+        group.Items.Add(m => m.ShowFileTab, item => {
+            item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+            CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+            checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+        });
+        group.Items.Add(m => m.ShowTabs, item => {
+            item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+            CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+            checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+        });
+        group.Items.Add(m => m.ShowGroupNames, item => {
+            item.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+            CheckBoxSettings checkBoxSettings = (CheckBoxSettings)item.NestedExtensionSettings;
+            checkBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+        });
+    });
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 280,
+        ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+    });
+}).GetHtml()
+}
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

@@ -1,0 +1,78 @@
+﻿@section AdditionalResources {
+    <style>
+        .group-title {
+            margin: 2px 0px;
+            font-weight: bold;
+        }
+        .dxnbLite .dxnb-header,
+        .dxnbLite .dxnb-headerCollapsed {
+            background-color: #f1f1f1!important;
+            border: none!important;
+        }
+        .dxrpCW,
+        .dxnbLite {
+            padding: 0!important;
+        }
+        .dxnbSys .dxnb-header {
+            background-color: rgb(199, 222, 247)!important;
+        }
+        .dxnb-gr {
+            margin-bottom: 1px!important;
+        }
+        .dxnb-content {
+            background-color: #ebf4fc!important;
+            border: none!important;
+        }
+        .group-title a {
+            display: inline-block;
+        }
+        .group-title a > img {
+            width: 71px;
+            height: 21px;
+        }
+        .group-title img {
+            width: 21px;
+            height: 21px;
+        }
+        .group-title .text {
+            float: left;
+            color: gray;
+        }
+        .group-title.expanded .text {
+            color: black;
+        }
+        .group-title .button {
+            float: right;
+        }
+        .content {
+            margin: 5px;
+            color: #818180;
+        }
+        .content-image {
+            float: left;
+            margin: 5px;
+        }
+        .dxnbLite .dxnb-header,
+        .dxnbLite .dxnb-headerCollapsed {
+            white-space: initial!important;
+        }
+    </style>
+    <script>
+        window.addEventListener('load', function() {
+            var elements = document.querySelectorAll('.clickable')
+            for(var i = 0, element = null; element = elements[i]; i++)
+                element.addEventListener('click', function(e) { DXDemo.ShowScreenshotWindow(e, e.currentTarget ? e.currentTarget : e.srcElement) });
+        })
+    </script>
+}
+
+
+@Html.DevExpress().RoundPanel(
+    settings => {
+        settings.Name = "panel";
+        settings.HeaderText = "ASPxGrid Interactive Lessons";
+        settings.SetContent(() => {
+            Html.RenderPartial("TemplateNavBar");
+        });
+    }
+).GetHtml()

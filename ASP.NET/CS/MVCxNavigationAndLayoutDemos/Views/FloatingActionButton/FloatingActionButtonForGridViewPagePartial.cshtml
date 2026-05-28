@@ -1,0 +1,85 @@
+﻿@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+@Html.DevExpress().GridView(settings => {
+    settings.Name = "GridView";
+    settings.CallbackRouteValues = new { Controller = "FloatingActionButton", Action = "FloatingActionButtonForGridViewPagePartial" };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "FloatingActionButton", Action = "FloatingActionButtonForGridViewAddNewPartial" };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "FloatingActionButton", Action = "FloatingActionButtonForGridViewUpdatePartial" };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "FloatingActionButton", Action = "FloatingActionButtonForGridViewDeletePartial" };
+    settings.Width = Unit.Percentage(100);
+    settings.EnableRowsCache = false;
+
+    settings.ClientSideEvents.Init = "OnInit";
+    settings.ClientSideEvents.RowClick = "OnRowClick";
+    settings.ClientSideEvents.BeginCallback = "Grid_BeginCallback";
+    settings.ClientSideEvents.EndCallback = "OnEndCallback";
+
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = 500;
+
+    settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+    settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+    settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+    settings.SettingsBehavior.AllowEllipsisInText = true;
+    settings.SettingsBehavior.AllowFocusedRow = true;
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.EditForm;
+
+    settings.KeyFieldName = "ProductID";
+    settings.Columns.Add(c => {
+        c.FieldName = "ProductName";
+        c.AllowTextTruncationInAdaptiveMode = true;
+        c.MinWidth = 230;
+        c.MaxWidth = 370;
+        c.Width = Unit.Percentage(27);
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "CategoryID";
+        c.Caption = "Category Name";
+        c.AdaptivePriority = 1;
+        c.MinWidth = 100;
+        c.MaxWidth = 250;
+        c.Width = Unit.Percentage(18);
+        c.EditorProperties().ComboBox(cb => {
+            cb.DataSource = NorthwindDataProvider.GetCategories();
+            cb.TextField = "CategoryName";
+            cb.ValueField = "CategoryID";
+            cb.ValueType = typeof(int);
+        });
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "QuantityPerUnit";
+        c.AdaptivePriority = 1;
+        c.MinWidth = 150;
+        c.MaxWidth = 250;
+        c.Width = Unit.Percentage(20);
+    });
+    settings.Columns.Add(c => {
+        c.FieldName = "UnitPrice";
+        c.MinWidth = 70;
+        c.MaxWidth = 100;
+        c.Width = Unit.Percentage(9);
+        c.EditorProperties().SpinEdit(sp => {
+            sp.DisplayFormatString = "c";
+            sp.DisplayFormatInEditMode = true;
+            sp.MinValue = 0;
+            sp.MaxValue = 60000;
+        });
+    });
+
+    settings.EditFormLayoutProperties.ColumnCount = 2;
+    settings.EditFormLayoutProperties.Items.Add("ProductName");
+    settings.EditFormLayoutProperties.Items.Add("CategoryID");
+    settings.EditFormLayoutProperties.Items.Add("QuantityPerUnit");
+    settings.EditFormLayoutProperties.Items.Add("UnitPrice");
+
+    settings.SettingsPager.Mode = GridViewPagerMode.EndlessPaging;
+    settings.SettingsPager.PageSize = 20;
+
+    settings.CellEditorInitialize = (s, e) => {
+        ((ASPxEdit)e.Editor).ValidationSettings.Display = Display.Static;
+    };
+}).SetEditErrorText(ViewData["EditError"] as string).Bind(Model).GetHtml()

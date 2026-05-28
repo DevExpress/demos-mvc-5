@@ -1,0 +1,492 @@
+﻿.dx-menu-container {
+    padding-top: 3px;
+}
+.dxm-menuItem .Baking,
+.dxm-menuItem .Baking_Hovered,
+.dxm-menuItem .Beverages,
+.dxm-menuItem .Beverages_Hovered,
+.dxm-menuItem .FastFood,
+.dxm-menuItem .FastFood_Hovered,
+.dxm-menuItem .Fruit,
+.dxm-menuItem .Fruit_Hovered,
+.dxm-menuItem .HealthyFood,
+.dxm-menuItem .HealthyFood_Hovered,
+.dxm-menuItem .Juice,
+.dxm-menuItem .Juice_Hovered,
+.dxm-menuItem .MeatAndPoultry,
+.dxm-menuItem .MeatAndPoultry_Hovered,
+.dxm-menuItem .Wine,
+.dxm-menuItem .Wine_Hovered {
+    width: 18px;
+    height: 18px;
+    background-repeat: no-repeat;
+}
+.Baking {
+    background-image: url(../Menu/Images/Collapse/Normal/Baking.svg);
+}
+.Baking_Hovered {
+    background-image: url(../Menu/Images/Collapse/Hovered/Baking.svg);
+}
+.Beverages {
+    background-image: url(../Menu/Images/Collapse/Normal/Beverages.svg);    
+}
+.Beverages_Hovered {
+    background-image: url(../Menu/Images/Collapse/Hovered/Beverages.svg);
+}
+.FastFood {
+    background-image: url(../Menu/Images/Collapse/Normal/FastFood.svg);
+}
+.FastFood_Hovered {
+    background-image: url(../Menu/Images/Collapse/Hovered/FastFood.svg);
+}
+.Fruit {
+    background-image: url(../Menu/Images/Collapse/Normal/Fruit.svg);
+}
+.Fruit_Hovered {
+    background-image: url(../Menu/Images/Collapse/Hovered/Fruit.svg);
+}
+.HealthyFood {
+    background-image: url(../Menu/Images/Collapse/Normal/HealthyFood.svg);
+}
+.HealthyFood_Hovered {
+    background-image: url(../Menu/Images/Collapse/Hovered/HealthyFood.svg);
+}
+.Juice {
+    background-image: url(../Menu/Images/Collapse/Normal/Juice.svg);
+}
+.Juice_Hovered {
+    background-image: url(../Menu/Images/Collapse/Hovered/Juice.svg);
+}
+.MeatAndPoultry {
+    background-image: url(../Menu/Images/Collapse/Normal/MeatAndPoultry.svg);
+}
+.MeatAndPoultry_Hovered {
+    background-image: url(../Menu/Images/Collapse/Hovered/MeatAndPoultry.svg);
+}
+.Wine {
+    background-image: url(../Menu/Images/Collapse/Normal/Wine.svg);
+}
+.Wine_Hovered {
+    background-image: url(../Menu/Images/Collapse/Hovered/Wine.svg);
+}
+.subMenu .dxm-menuItem {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+/*Themes*/
+.dxmLite .Baking_Hovered,
+.dxmLite_DevEx .Baking_Hovered,
+.dxmLite_Metropolis .dxm-vertical .Baking_Hovered,
+.dxmLite_MetropolisBlue .dxm-vertical .Baking_Hovered,
+.dxmLite_Moderno .dxm-vertical .Baking_Hovered,
+.dxmLite_iOS .Baking_Hovered,
+.dxmLite_Material .Baking_Hovered,
+.dxmLite_MaterialCompact .Baking_Hovered,
+.dxmLite_Office365 .Baking_Hovered,
+.dxmLite_Mulberry .Baking_Hovered,
+.dxmLite_Aqua .Baking_Hovered,
+.dxmLite_BlackGlass .dxm-gutter .Baking_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .Baking_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .Baking,
+.dxmLite_BlackGlass .dxm-gutter .Baking,
+.dxmLite_Glass .Baking_Hovered,
+.dxmLite_Glass .dxm-selected.dxm-hovered .Baking_Hovered,
+.dxmLite_PlasticBlue .dxm-gutter .Baking_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .Baking_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .Baking,
+.dxmLite_PlasticBlue .dxm-gutter .Baking,
+.dxmLite_RedWine .dxm-vertical .Baking_Hovered,
+.dxmLite_RedWine .dxm-vertical .Baking,
+.dxmLite_RedWine .dxm-gutter .Baking,
+.dxmLite_SoftOrange .Baking_Hovered,
+.dxmLite_Youthful .Baking_Hovered,
+.dxmLite_Office2010Blue .Baking_Hovered,
+.dxmLite_Office2010Silver .Baking_Hovered,
+.dxmLite_Office2010Black .dxm-horizontal .Baking_Hovered,
+.dxmLite_Office2010Black .dxm-gutter .Baking,
+.dxmLite_Office2010Black .dxm-vertical .Baking,
+.dxmLite_Office2010Black .dxm-selected .Baking,
+.dxmLite_Office2003Blue .Baking_Hovered,
+.dxmLite_Office2003Olive .Baking_Hovered,
+.dxmLite_Office2003Silver .Baking_Hovered {
+    background-image: url(../Menu/Images/Collapse/Normal/Baking.svg);
+}
+
+.dxmLite .Beverages_Hovered,
+.dxmLite_DevEx .Beverages_Hovered,
+.dxmLite_Metropolis .dxm-vertical .Beverages_Hovered,
+.dxmLite_MetropolisBlue .dxm-vertical .Beverages_Hovered,
+.dxmLite_Moderno .dxm-vertical .Beverages_Hovered,
+.dxmLite_iOS .Beverages_Hovered,
+.dxmLite_Material .Beverages_Hovered,
+.dxmLite_MaterialCompact .Beverages_Hovered,
+.dxmLite_Office365 .Beverages_Hovered,
+.dxmLite_Mulberry .Beverages_Hovered,
+.dxmLite_Aqua .Beverages_Hovered,
+.dxmLite_BlackGlass .dxm-gutter .Beverages_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .Beverages_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .Beverages,
+.dxmLite_BlackGlass .dxm-gutter .Beverages,
+.dxmLite_Glass .Beverages_Hovered,
+.dxmLite_Glass .dxm-selected.dxm-hovered .Beverages_Hovered,
+.dxmLite_PlasticBlue .dxm-gutter .Beverages_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .Beverages_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .Beverages,
+.dxmLite_PlasticBlue .dxm-gutter .Beverages,
+.dxmLite_RedWine .dxm-vertical .Beverages_Hovered,
+.dxmLite_RedWine .dxm-vertical .Beverages,
+.dxmLite_RedWine .dxm-gutter .Beverages,
+.dxmLite_SoftOrange .Beverages_Hovered,
+.dxmLite_Youthful .Beverages_Hovered,
+.dxmLite_Office2010Blue .Beverages_Hovered,
+.dxmLite_Office2010Silver .Beverages_Hovered,
+.dxmLite_Office2010Black .dxm-horizontal .Beverages_Hovered,
+.dxmLite_Office2010Black .dxm-gutter .Beverages,
+.dxmLite_Office2010Black .dxm-vertical .Beverages,
+.dxmLite_Office2010Black .dxm-selected .Beverages,
+.dxmLite_Office2003Blue .Beverages_Hovered,
+.dxmLite_Office2003Olive .Beverages_Hovered,
+.dxmLite_Office2003Silver .Beverages_Hovered {
+    background-image: url(../Menu/Images/Collapse/Normal/Beverages.svg);
+}
+
+.dxmLite .FastFood_Hovered,
+.dxmLite_DevEx .FastFood_Hovered,
+.dxmLite_Metropolis .dxm-vertical .FastFood_Hovered,
+.dxmLite_MetropolisBlue .dxm-vertical .FastFood_Hovered,
+.dxmLite_Moderno .dxm-vertical .FastFood_Hovered,
+.dxmLite_iOS .FastFood_Hovered,
+.dxmLite_Material .FastFood_Hovered,
+.dxmLite_MaterialCompact .FastFood_Hovered,
+.dxmLite_Office365 .FastFood_Hovered,
+.dxmLite_Mulberry .FastFood_Hovered,
+.dxmLite_Aqua .FastFood_Hovered,
+.dxmLite_BlackGlass .dxm-gutter .FastFood_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .FastFood_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .FastFood,
+.dxmLite_BlackGlass .dxm-gutter .FastFood,
+.dxmLite_Glass .FastFood_Hovered,
+.dxmLite_Glass .dxm-selected.dxm-hovered .FastFood_Hovered,
+.dxmLite_PlasticBlue .dxm-gutter .FastFood_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .FastFood_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .FastFood,
+.dxmLite_PlasticBlue .dxm-gutter .FastFood,
+.dxmLite_RedWine .dxm-vertical .FastFood_Hovered,
+.dxmLite_RedWine .dxm-vertical .FastFood,
+.dxmLite_RedWine .dxm-gutter .FastFood,
+.dxmLite_SoftOrange .FastFood_Hovered,
+.dxmLite_Youthful .FastFood_Hovered,
+.dxmLite_Office2010Blue .FastFood_Hovered,
+.dxmLite_Office2010Silver .FastFood_Hovered,
+.dxmLite_Office2010Black .dxm-horizontal .FastFood_Hovered,
+.dxmLite_Office2010Black .dxm-gutter .FastFood,
+.dxmLite_Office2010Black .dxm-vertical .FastFood,
+.dxmLite_Office2010Black .dxm-selected .FastFood,
+.dxmLite_Office2003Blue .FastFood_Hovered,
+.dxmLite_Office2003Olive .FastFood_Hovered,
+.dxmLite_Office2003Silver .FastFood_Hovered {
+    background-image: url(../Menu/Images/Collapse/Normal/FastFood.svg);
+}
+
+.dxmLite .Fruit_Hovered,
+.dxmLite_DevEx .Fruit_Hovered,
+.dxmLite_Metropolis .dxm-vertical .Fruit_Hovered,
+.dxmLite_MetropolisBlue .dxm-vertical .Fruit_Hovered,
+.dxmLite_Moderno .dxm-vertical .Fruit_Hovered,
+.dxmLite_iOS .Fruit_Hovered,
+.dxmLite_Material .Fruit_Hovered,
+.dxmLite_MaterialCompact .Fruit_Hovered,
+.dxmLite_Office365 .Fruit_Hovered,
+.dxmLite_Mulberry .Fruit_Hovered,
+.dxmLite_Aqua .Fruit_Hovered,
+.dxmLite_BlackGlass .dxm-gutter .Fruit_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .Fruit_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .Fruit,
+.dxmLite_BlackGlass .dxm-gutter .Fruit,
+.dxmLite_Glass .Fruit_Hovered,
+.dxmLite_Glass .dxm-selected.dxm-hovered .Fruit_Hovered,
+.dxmLite_PlasticBlue .dxm-gutter .Fruit_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .Fruit_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .Fruit,
+.dxmLite_PlasticBlue .dxm-gutter .Fruit,
+.dxmLite_RedWine .dxm-vertical .Fruit_Hovered,
+.dxmLite_RedWine .dxm-vertical .Fruit,
+.dxmLite_RedWine .dxm-gutter .Fruit,
+.dxmLite_SoftOrange .Fruit_Hovered,
+.dxmLite_Youthful .Fruit_Hovered,
+.dxmLite_Office2010Blue .Fruit_Hovered,
+.dxmLite_Office2010Silver .Fruit_Hovered,
+.dxmLite_Office2010Black .dxm-horizontal .Fruit_Hovered,
+.dxmLite_Office2010Black .dxm-gutter .Fruit,
+.dxmLite_Office2010Black .dxm-vertical .Fruit,
+.dxmLite_Office2010Black .dxm-selected .Fruit,
+.dxmLite_Office2003Blue .Fruit_Hovered,
+.dxmLite_Office2003Olive .Fruit_Hovered,
+.dxmLite_Office2003Silver .Fruit_Hovered {
+    background-image: url(../Menu/Images/Collapse/Normal/Fruit.svg);
+}
+
+.dxmLite .HealthyFood_Hovered,
+.dxmLite_DevEx .HealthyFood_Hovered,
+.dxmLite_Metropolis .dxm-vertical .HealthyFood_Hovered,
+.dxmLite_MetropolisBlue .dxm-vertical .HealthyFood_Hovered,
+.dxmLite_Moderno .dxm-vertical .HealthyFood_Hovered,
+.dxmLite_iOS .HealthyFood_Hovered,
+.dxmLite_Material .HealthyFood_Hovered,
+.dxmLite_MaterialCompact .HealthyFood_Hovered,
+.dxmLite_Office365 .HealthyFood_Hovered,
+.dxmLite_Mulberry .HealthyFood_Hovered,
+.dxmLite_Aqua .HealthyFood_Hovered,
+.dxmLite_BlackGlass .dxm-gutter .HealthyFood_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .HealthyFood_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .HealthyFood,
+.dxmLite_BlackGlass .dxm-gutter .HealthyFood,
+.dxmLite_Glass .HealthyFood_Hovered,
+.dxmLite_Glass .dxm-selected.dxm-hovered .HealthyFood_Hovered,
+.dxmLite_PlasticBlue .dxm-gutter .HealthyFood_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .HealthyFood_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .HealthyFood,
+.dxmLite_PlasticBlue .dxm-gutter .HealthyFood,
+.dxmLite_RedWine .dxm-vertical .HealthyFood_Hovered,
+.dxmLite_RedWine .dxm-vertical .HealthyFood,
+.dxmLite_RedWine .dxm-gutter .HealthyFood,
+.dxmLite_SoftOrange .HealthyFood_Hovered,
+.dxmLite_Youthful .HealthyFood_Hovered,
+.dxmLite_Office2010Blue .HealthyFood_Hovered,
+.dxmLite_Office2010Silver .HealthyFood_Hovered,
+.dxmLite_Office2010Black .dxm-horizontal .HealthyFood_Hovered,
+.dxmLite_Office2010Black .dxm-gutter .HealthyFood,
+.dxmLite_Office2010Black .dxm-vertical .HealthyFood,
+.dxmLite_Office2010Black .dxm-selected .HealthyFood,
+.dxmLite_Office2003Blue .HealthyFood_Hovered,
+.dxmLite_Office2003Olive .HealthyFood_Hovered,
+.dxmLite_Office2003Silver .HealthyFood_Hovered {
+    background-image: url(../Menu/Images/Collapse/Normal/HealthyFood.svg);
+}
+
+.dxmLite .Juice_Hovered,
+.dxmLite_DevEx .Juice_Hovered,
+.dxmLite_Metropolis .dxm-vertical .Juice_Hovered,
+.dxmLite_MetropolisBlue .dxm-vertical .Juice_Hovered,
+.dxmLite_Moderno .dxm-vertical .Juice_Hovered,
+.dxmLite_iOS .Juice_Hovered,
+.dxmLite_Material .Juice_Hovered,
+.dxmLite_MaterialCompact .Juice_Hovered,
+.dxmLite_Office365 .Juice_Hovered,
+.dxmLite_Mulberry .Juice_Hovered,
+.dxmLite_Aqua .Juice_Hovered,
+.dxmLite_BlackGlass .dxm-gutter .Juice_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .Juice_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .Juice,
+.dxmLite_BlackGlass .dxm-gutter .Juice,
+.dxmLite_Glass .Juice_Hovered,
+.dxmLite_Glass .dxm-selected.dxm-hovered .Juice_Hovered,
+.dxmLite_PlasticBlue .dxm-gutter .Juice_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .Juice_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .Juice,
+.dxmLite_PlasticBlue .dxm-gutter .Juice,
+.dxmLite_RedWine .dxm-vertical .Juice_Hovered,
+.dxmLite_RedWine .dxm-vertical .Juice,
+.dxmLite_RedWine .dxm-gutter .Juice,
+.dxmLite_SoftOrange .Juice_Hovered,
+.dxmLite_Youthful .Juice_Hovered,
+.dxmLite_Office2010Blue .Juice_Hovered,
+.dxmLite_Office2010Silver .Juice_Hovered,
+.dxmLite_Office2010Black .dxm-horizontal .Juice_Hovered,
+.dxmLite_Office2010Black .dxm-gutter .Juice,
+.dxmLite_Office2010Black .dxm-vertical .Juice,
+.dxmLite_Office2010Black .dxm-selected .Juice,
+.dxmLite_Office2003Blue .Juice_Hovered,
+.dxmLite_Office2003Olive .Juice_Hovered,
+.dxmLite_Office2003Silver .Juice_Hovered {
+    background-image: url(../Menu/Images/Collapse/Normal/Juice.svg);
+}
+
+.dxmLite .MeatAndPoultry_Hovered,
+.dxmLite_DevEx .MeatAndPoultry_Hovered,
+.dxmLite_Metropolis .dxm-vertical .MeatAndPoultry_Hovered,
+.dxmLite_MetropolisBlue .dxm-vertical .MeatAndPoultry_Hovered,
+.dxmLite_Moderno .dxm-vertical .MeatAndPoultry_Hovered,
+.dxmLite_iOS .MeatAndPoultry_Hovered,
+.dxmLite_Material .MeatAndPoultry_Hovered,
+.dxmLite_MaterialCompact .MeatAndPoultry_Hovered,
+.dxmLite_Office365 .MeatAndPoultry_Hovered,
+.dxmLite_Mulberry .MeatAndPoultry_Hovered,
+.dxmLite_Aqua .MeatAndPoultry_Hovered,
+.dxmLite_BlackGlass .dxm-gutter .MeatAndPoultry_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .MeatAndPoultry_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .MeatAndPoultry,
+.dxmLite_BlackGlass .dxm-gutter .MeatAndPoultry,
+.dxmLite_Glass .MeatAndPoultry_Hovered,
+.dxmLite_Glass .dxm-selected.dxm-hovered .MeatAndPoultry_Hovered,
+.dxmLite_PlasticBlue .dxm-gutter .MeatAndPoultry_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .MeatAndPoultry_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .MeatAndPoultry,
+.dxmLite_PlasticBlue .dxm-gutter .MeatAndPoultry,
+.dxmLite_RedWine .dxm-vertical .MeatAndPoultry_Hovered,
+.dxmLite_RedWine .dxm-vertical .MeatAndPoultry,
+.dxmLite_RedWine .dxm-gutter .MeatAndPoultry,
+.dxmLite_SoftOrange .MeatAndPoultry_Hovered,
+.dxmLite_Youthful .MeatAndPoultry_Hovered,
+.dxmLite_Office2010Blue .MeatAndPoultry_Hovered,
+.dxmLite_Office2010Silver .MeatAndPoultry_Hovered,
+.dxmLite_Office2010Black .dxm-horizontal .MeatAndPoultry_Hovered,
+.dxmLite_Office2010Black .dxm-gutter .MeatAndPoultry,
+.dxmLite_Office2010Black .dxm-vertical .MeatAndPoultry,
+.dxmLite_Office2010Black .dxm-selected .MeatAndPoultry,
+.dxmLite_Office2003Blue .MeatAndPoultry_Hovered,
+.dxmLite_Office2003Olive .MeatAndPoultry_Hovered,
+.dxmLite_Office2003Silver .MeatAndPoultry_Hovered {
+    background-image: url(../Menu/Images/Collapse/Normal/MeatAndPoultry.svg);
+}
+
+.dxmLite .Wine_Hovered,
+.dxmLite_DevEx .Wine_Hovered,
+.dxmLite_Metropolis .dxm-vertical .Wine_Hovered,
+.dxmLite_MetropolisBlue .dxm-vertical .Wine_Hovered,
+.dxmLite_Moderno .dxm-vertical .Wine_Hovered,
+.dxmLite_iOS .Wine_Hovered,
+.dxmLite_Material .Wine_Hovered,
+.dxmLite_MaterialCompact .Wine_Hovered,
+.dxmLite_Office365 .Wine_Hovered,
+.dxmLite_Mulberry .Wine_Hovered,
+.dxmLite_Aqua .Wine_Hovered,
+.dxmLite_BlackGlass .dxm-gutter .Wine_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .Wine_Hovered,
+.dxmLite_BlackGlass .dxm-vertical .Wine,
+.dxmLite_BlackGlass .dxm-gutter .Wine,
+.dxmLite_Glass .Wine_Hovered,
+.dxmLite_Glass .dxm-selected.dxm-hovered .Wine_Hovered,
+.dxmLite_PlasticBlue .dxm-gutter .Wine_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .Wine_Hovered,
+.dxmLite_PlasticBlue .dxm-vertical .Wine,
+.dxmLite_PlasticBlue .dxm-gutter .Wine,
+.dxmLite_RedWine .dxm-vertical .Wine_Hovered,
+.dxmLite_RedWine .dxm-vertical .Wine,
+.dxmLite_RedWine .dxm-gutter .Wine,
+.dxmLite_SoftOrange .Wine_Hovered,
+.dxmLite_Youthful .Wine_Hovered,
+.dxmLite_Office2010Blue .Wine_Hovered,
+.dxmLite_Office2010Silver .Wine_Hovered,
+.dxmLite_Office2010Black .dxm-horizontal .Wine_Hovered,
+.dxmLite_Office2010Black .dxm-gutter .Wine,
+.dxmLite_Office2010Black .dxm-vertical .Wine,
+.dxmLite_Office2010Black .dxm-selected .Wine,
+.dxmLite_Office2003Blue .Wine_Hovered,
+.dxmLite_Office2003Olive .Wine_Hovered,
+.dxmLite_Office2003Silver .Wine_Hovered {
+    background-image: url(../Menu/Images/Collapse/Normal/Wine.svg);
+}
+
+.dxmLite_BlackGlass .Baking,
+.dxmLite_Material .dxm-selected .Baking,
+.dxmLite_MaterialCompact .dxm-selected .Baking,
+.dxmLite_Office365 .dxm-selected .Baking,
+.dxmLite_Glass .dxm-selected .Baking,
+.dxmLite_iOS .dxm-selected .Baking,
+.dxmLite_PlasticBlue .Baking,
+.dxmLite_RedWine .Baking,
+.dxmLite_RedWine .dxm-gutter .Baking_Hovered,
+.dxmLite_SoftOrange .dxm-gutter .Baking_Hovered,
+.dxmLite_Office2010Black .Baking {
+    background-image: url(../Menu/Images/Collapse/Hovered/Baking.svg);
+}
+
+.dxmLite_BlackGlass .Beverages,
+.dxmLite_Material .dxm-selected .Beverages,
+.dxmLite_MaterialCompact .dxm-selected .Beverages,
+.dxmLite_Office365 .dxm-selected .Beverages,
+.dxmLite_Glass .dxm-selected .Beverages,
+.dxmLite_iOS .dxm-selected .Beverages,
+.dxmLite_PlasticBlue .Beverages,
+.dxmLite_RedWine .Beverages,
+.dxmLite_RedWine .dxm-gutter .Beverages_Hovered,
+.dxmLite_SoftOrange .dxm-gutter .Beverages_Hovered,
+.dxmLite_Office2010Black .Beverages {
+    background-image: url(../Menu/Images/Collapse/Hovered/Beverages.svg);
+}
+
+.dxmLite_BlackGlass .FastFood,
+.dxmLite_Material .dxm-selected .FastFood,
+.dxmLite_MaterialCompact .dxm-selected .FastFood,
+.dxmLite_Office365 .dxm-selected .FastFood,
+.dxmLite_Glass .dxm-selected .FastFood,
+.dxmLite_iOS .dxm-selected .FastFood,
+.dxmLite_PlasticBlue .FastFood,
+.dxmLite_RedWine .FastFood,
+.dxmLite_RedWine .dxm-gutter .FastFood_Hovered,
+.dxmLite_SoftOrange .dxm-gutter .FastFood_Hovered,
+.dxmLite_Office2010Black .FastFood {
+    background-image: url(../Menu/Images/Collapse/Hovered/FastFood.svg);
+}
+
+.dxmLite_BlackGlass .Fruit,
+.dxmLite_Material .dxm-selected .Fruit,
+.dxmLite_MaterialCompact .dxm-selected .Fruit,
+.dxmLite_Office365 .dxm-selected .Fruit,
+.dxmLite_Glass .dxm-selected .Fruit,
+.dxmLite_iOS .dxm-selected .Fruit,
+.dxmLite_PlasticBlue .Fruit,
+.dxmLite_RedWine .Fruit,
+.dxmLite_RedWine .dxm-gutter .Fruit_Hovered,
+.dxmLite_SoftOrange .dxm-gutter .Fruit_Hovered,
+.dxmLite_Office2010Black .Fruit {
+    background-image: url(../Menu/Images/Collapse/Hovered/Fruit.svg);
+}
+
+.dxmLite_BlackGlass .HealthyFood,
+.dxmLite_Material .dxm-selected .HealthyFood,
+.dxmLite_MaterialCompact .dxm-selected .HealthyFood,
+.dxmLite_Office365 .dxm-selected .HealthyFood,
+.dxmLite_Glass .dxm-selected .HealthyFood,
+.dxmLite_iOS .dxm-selected .HealthyFood,
+.dxmLite_PlasticBlue .HealthyFood,
+.dxmLite_RedWine .HealthyFood,
+.dxmLite_RedWine .dxm-gutter .HealthyFood_Hovered,
+.dxmLite_SoftOrange .dxm-gutter .HealthyFood_Hovered,
+.dxmLite_Office2010Black .HealthyFood {
+    background-image: url(../Menu/Images/Collapse/Hovered/HealthyFood.svg);
+}
+
+.dxmLite_BlackGlass .Juice,
+.dxmLite_Material .dxm-selected .Juice,
+.dxmLite_MaterialCompact .dxm-selected .Juice,
+.dxmLite_Office365 .dxm-selected .Juice,
+.dxmLite_Glass .dxm-selected .Juice,
+.dxmLite_iOS .dxm-selected .Juice,
+.dxmLite_PlasticBlue .Juice,
+.dxmLite_RedWine .Juice,
+.dxmLite_RedWine .dxm-gutter .Juice_Hovered,
+.dxmLite_SoftOrange .dxm-gutter .Juice_Hovered,
+.dxmLite_Office2010Black .Juice {
+    background-image: url(../Menu/Images/Collapse/Hovered/Juice.svg);
+}
+
+.dxmLite_BlackGlass .MeatAndPoultry,
+.dxmLite_Material .dxm-selected .MeatAndPoultry,
+.dxmLite_MaterialCompact .dxm-selected .MeatAndPoultry,
+.dxmLite_Office365 .dxm-selected .MeatAndPoultry,
+.dxmLite_Glass .dxm-selected .MeatAndPoultry,
+.dxmLite_iOS .dxm-selected .MeatAndPoultry,
+.dxmLite_PlasticBlue .MeatAndPoultry,
+.dxmLite_RedWine .MeatAndPoultry,
+.dxmLite_RedWine .dxm-gutter .MeatAndPoultry_Hovered,
+.dxmLite_SoftOrange .dxm-gutter .MeatAndPoultry_Hovered,
+.dxmLite_Office2010Black .MeatAndPoultry {
+    background-image: url(../Menu/Images/Collapse/Hovered/MeatAndPoultry.svg);
+}
+
+.dxmLite_BlackGlass .Wine,
+.dxmLite_Material .dxm-selected .Wine,
+.dxmLite_MaterialCompact .dxm-selected .Wine,
+.dxmLite_Office365 .dxm-selected .Wine,
+.dxmLite_Glass .dxm-selected .Wine,
+.dxmLite_iOS .dxm-selected .Wine,
+.dxmLite_PlasticBlue .Wine,
+.dxmLite_RedWine .Wine,
+.dxmLite_RedWine .dxm-gutter .Wine_Hovered,
+.dxmLite_SoftOrange .dxm-gutter .Wine_Hovered,
+.dxmLite_Office2010Black .Wine {
+    background-image: url(../Menu/Images/Collapse/Hovered/Wine.svg);
+}

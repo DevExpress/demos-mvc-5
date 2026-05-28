@@ -1,0 +1,138 @@
+﻿@model SchedulerDataObject
+
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Scheduler/StandaloneControls/styles.css")" />
+}
+
+@section DemoOptionsTop {
+    <script type="text/javascript">
+        var createAppointment = false;
+        function OnButtonClick(s, e) {
+            createAppointment = true;
+            storageControl.Refresh();
+            gridView.Refresh();
+        }
+        function OnSchedulerBeginCallback(s, e) {
+            e.customArgs["CreateAppointment"] = createAppointment;
+            createAppointment = false;
+        }
+
+        function OnReminderAlert(s, e) {
+            e.alertNotifications.forEach(function (notification) {
+                ShowHint(notification);
+            });
+        }
+
+        function RemoveHintContainer(container) {
+            ASPxClientHint.Hide(container);
+            container.parentNode.removeChild(container);
+        }
+        function UpdateControls() {
+            ASPxClientHint.UpdatePosition();
+            gridView.Refresh();
+        }
+
+        function CreateButton(className, content) {
+            var element = document.createElement("a");
+            element.className = "dx-notification-button " + className;
+            element.href = "javascript:void(0)";
+
+            var icon = document.createElement("span");
+            icon.className = "dx-notification-button-icon";
+            element.appendChild(icon);
+
+            if (content) {
+                var contentElement = document.createElement("span");
+                contentElement.className = "dx-notification-button-content";
+                contentElement.innerHTML = content;
+                element.appendChild(contentElement);
+            }
+           
+            return element;
+        }
+        function CreateDismissButton(obj) {
+            var button = CreateButton("dx-dismiss");
+
+            button.onclick = function () {
+                obj.notification.reminder.Dismiss();
+                RemoveHintContainer(obj.hintContainer);
+                UpdateControls();
+                createAppointmentButton.SetEnabled(true);
+            };
+
+            return button;
+        }
+        function CreateSnoozeButton(obj) {
+            var button = CreateButton("dx-snooze", "Snooze (10s)");
+
+            button.onclick = function() {
+                obj.notification.reminder.Snooze(9730);
+                RemoveHintContainer(obj.hintContainer);
+                UpdateControls();
+            };
+
+            return button;
+        }
+        function GetHintContainerId(notification) {
+            return "apt_" + notification.appointment.GetId();
+        }
+        function CreateHintContainer(notification) {
+            var container,
+                hintContainerId = GetHintContainerId(notification);
+
+            if (!document.getElementById(hintContainerId)) {
+                var container = document.createElement("div");
+
+                container.id = hintContainerId;
+                container.className = "dx-hint-container";
+
+                var mainContainer = document.getElementById("hints");
+                mainContainer.appendChild(container);
+            }
+            return container;
+        }
+        function ShowHint(notification) {
+            var hintContainer = CreateHintContainer(notification);
+            if (!hintContainer)
+                return;
+
+            notification.handled = true;
+            notification.ignore = true;
+
+            ASPxClientHint.Show(hintContainer, {
+                hintContainer: hintContainer,
+                notification: notification,
+
+                showCallout: false,
+                position: "left",
+                title: notification.appointment.GetSubject(),
+                className: "dx-notification",
+
+                onShowing: function (s, e) {
+                    e.titleElement.appendChild(CreateDismissButton(s.options));
+                    e.contentElement.appendChild(CreateSnoozeButton(s.options));
+                }
+            });
+        }
+    </script>
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().Button(
+                settings => {
+                    settings.Name = "createAppointmentButton";
+                    settings.Theme = DemoHelper.Instance.Theme;
+                    settings.Text = "Create appointment with reminders";
+                    settings.ClientSideEvents.Click = "OnButtonClick";
+                }).GetHtml()
+        </div>
+    </div>
+}
+
+<div style="float: right; height: 400px; width: 100px;" id="hints"></div>
+@Html.DevExpress().Hint(settings => {
+    settings.Name = "Hint";
+}).GetHtml()
+
+@Html.Partial("StorageControlPartial", Model)
+
+@Html.Partial("GridViewPartial", StorageControlDataHelper.GetAppointmentsWithReminders())

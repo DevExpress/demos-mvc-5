@@ -1,0 +1,108 @@
+﻿@model ChartMarkerDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(320);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartMarkerDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Left;
+    });
+
+    settings.Series.Template(t => {
+        t.ArgumentDataMember = "Date";
+        t.ValueDataMembers[0] = "Population";
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        t.Views().LineSeriesView(v => {
+            v.PointMarkerOptions.Size = options.MarkerSize;
+            v.PointMarkerOptions.Kind = options.MarkerKind;
+            if (v.PointMarkerOptions.Kind == MarkerKind.Star)
+                v.PointMarkerOptions.StarPointCount = options.StarPointCount;
+            v.SeriesLabel(l => {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+            });
+        });
+    });
+
+    settings.XYDiagram(d => {
+        d.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Year;
+        d.AxisX.DateTimeScaleOptions.GridAlignment = DateTimeGridAlignment.Year;
+        d.AxisX.DateTimeScaleOptions.GridSpacing = 10;
+        d.AxisX.DateTimeScaleOptions.GridOffset = -1;
+        d.AxisX.WholeRange.SideMarginsValue = 5;
+        d.AxisX.GridLines.Visible = true;
+        d.AxisX.Interlaced = true;
+        d.AxisX.Title.Text = "Years";
+        d.AxisY.WholeRange.AlwaysShowZeroLevel = false;
+        d.AxisY.Title.Text = "Population mid-year, millions";
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Historic, current and future population "
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.geohive.com"
+    });
+}).Bind(Model.Data, "Region").GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.MarkerSize, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerSizes());
+                });
+            });
+            group.Items.Add(model => model.MarkerKindString, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerKinds());
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels);
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 300,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

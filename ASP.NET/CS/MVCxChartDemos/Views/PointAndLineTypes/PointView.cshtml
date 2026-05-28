@@ -1,0 +1,123 @@
+﻿@model ChartMarkerDemoOptions
+
+@{ 
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(320);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    ChartMarkerDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.CrosshairEnabled = options.ShowLabels ? DefaultBoolean.False : DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+    });
+
+    settings.Series.Template(t => {
+        t.ArgumentDataMember = "X";
+        t.ValueDataMembers[0] = "Y";
+        t.LabelsVisibility = options.ShowLabels ? DefaultBoolean.True : DefaultBoolean.False;
+        t.Views().PointSeriesView(v => {
+            v.PointMarkerOptions.Kind = options.MarkerKind;
+            v.PointMarkerOptions.Size = options.MarkerSize;
+            if (v.PointMarkerOptions.Kind == MarkerKind.Star)
+                v.PointMarkerOptions.StarPointCount = options.StarPointCount;
+            v.SeriesLabel(l => {
+                l.Angle = options.LabelAngle;
+                l.Position = options.LabelPosition;
+                l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
+            });
+        });
+    });
+
+    settings.XYDiagram(d => {
+        d.AxisX.Label.TextPattern = "{A:0.#}";
+        d.AxisX.Alignment = AxisAlignment.Center;
+        d.AxisY.Interlaced = true;
+        d.AxisY.Label.TextPattern = "{V:0.#}";
+        d.AxisY.Alignment = AxisAlignment.Center;
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Random Points Generator"
+    });
+}).Bind(Model.Data, "Z").GetHtml()
+
+<script type="text/javascript">
+    function UpdateLabelOptionsState() {
+        var showLabels = ShowLabels.GetChecked();
+        LabelAngle.SetEnabled(showLabels && LabelPosition.GetValue() == 'Outside');
+        LabelPosition.SetEnabled(showLabels);
+    }
+</script>
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+        s.Name = "SettingsFormLayout";
+        s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Series Settings";
+            group.Items.Add(model => model.MarkerSize, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerSizes());
+                });
+            });
+            group.Items.Add(model => model.MarkerKindString, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetMarkerKinds());
+                });
+            });
+        });
+        s.Items.AddGroupItem(group => {
+            group.Caption = "Labels Settings";
+            group.Items.Add(model => model.ShowLabels, item => {
+                item.NestedExtension().CheckBox(checkbox => {
+                    checkbox.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { UpdateLabelOptionsState(); }";
+                });
+            });
+            group.Items.Add(model => model.LabelPosition, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowLabels;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.ClientSideEvents.ValueChanged = "function(s, e) { UpdateLabelOptionsState(); }";
+                });
+            });
+            group.Items.Add(model => model.LabelAngle, item => {
+                item.NestedExtension().ComboBox(comboBox => {
+                    comboBox.ClientEnabled = Model.ShowLabels && Model.LabelPosition == PointLabelPosition.Outside;
+                    comboBox.Properties.EnableClientSideAPI = true;
+                    comboBox.Properties.Items.AddRange(ChartDemoHelper.GetLabelAngles());
+                });
+            });
+        });
+        DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+            ColumnMinWidth = 300,
+            ColumnCountMode = RecalculateColumnCountMode.RootGroup
+        });
+    }).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

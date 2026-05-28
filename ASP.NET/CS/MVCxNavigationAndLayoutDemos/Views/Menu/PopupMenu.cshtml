@@ -1,0 +1,113 @@
+﻿@model PopupMenuOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(800);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = 332;
+}
+     
+@section AdditionalResources {      
+    <script>
+        function submitForm() {
+            $("form").submit();
+        }
+        function InitPopupMenu(s, e) {
+            $(".grid").bind("contextmenu", OnGridContextMenu);
+            $(".arrange").bind("contextmenu", function(evt) { evt.preventDefault(); });
+
+            var itemName = $("#CheckedItemName").val();
+            if(itemName)
+                PopupMenu.GetItemByName(itemName).SetChecked(true);
+        }
+        function OnGridContextMenu(evt) {
+            PopupMenu.ShowAtPos(evt.pageX, evt.pageY);
+            evt.preventDefault();
+        }
+        function OnPopupMenuItemClick(s, e) {
+            if(e.item && e.item.name != $("#CheckedItemName").val()) {
+                $("#CheckedItemName").val(e.item.name);
+                grid.PerformCallback({ "sortColumn": e.item.name });
+            }
+        }
+    </script>
+    <style>
+        .arrange
+        {
+            float: right;
+            margin-bottom: 2px;
+        }
+    </style>
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+    @Html.DevExpress().Button(button => {
+        button.Name = "ImgButton1";
+        button.Text = "Arrange by";
+        button.ControlStyle.CssClass = "arrange";
+    }).GetHtml()
+    <div class="grid">
+        @Html.Partial("PopupMenuGridViewPartial", PopulationAreaProvider.GetPopulationAreaStructure())
+    </div>
+    @Html.Hidden("CheckedItemName", "")
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+       settings.Name = "OptionsFormLayout";
+       settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+       settings.Items.AddGroupItem(group => {
+           group.Caption = "Options";
+           group.Items.Add(m => m.PopupAction, item => {
+               item.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+               ComboBoxSettings comboBoxSettings = (ComboBoxSettings)item.NestedExtensionSettings;
+               comboBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+           });
+           group.Items.Add(m => m.HorizontalAlign, item => {
+               item.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+               ComboBoxSettings comboBoxSettings = (ComboBoxSettings)item.NestedExtensionSettings;
+               comboBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+           });
+           group.Items.Add(m => m.VerticalAlign, item => {
+               item.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+               ComboBoxSettings comboBoxSettings = (ComboBoxSettings)item.NestedExtensionSettings;
+               comboBoxSettings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+           });
+       });
+       DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+           ColumnMinWidth = 300,
+           ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+       });
+   }).GetHtml()
+}
+    @Html.DevExpress().PopupMenu(
+        settings => {
+            settings.Name = "PopupMenu";
+            settings.PopupElementID = "ImgButton1";
+            settings.ShowPopOutImages = DefaultBoolean.True;
+            settings.Items.Add(item => {
+                item.Text = "Country Name";
+                item.Name = "Name";
+                item.GroupName = "Sort";
+                item.Checked = true;
+            });
+            settings.Items.Add(item => {
+                item.Text = "Area";
+                item.Name = "Area";
+                item.GroupName = "Sort";
+            });
+            settings.Items.Add(item => {
+                item.Text = "Population";
+                item.Name = "Population";
+                item.GroupName = "Sort";
+            });
+            settings.ClientSideEvents.Init = "InitPopupMenu";
+            settings.ClientSideEvents.ItemClick = "OnPopupMenuItemClick";
+            settings.PopupAction = Model.PopupAction;
+            settings.PopupHorizontalAlign = Model.HorizontalAlign;
+            settings.PopupVerticalAlign = Model.VerticalAlign;
+    }).GetHtml()
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

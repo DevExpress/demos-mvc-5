@@ -1,0 +1,45 @@
+﻿@{
+    var scheduler = Html.DevExpress().Scheduler(
+        settings => {
+            settings.Name = "scheduler";
+            settings.CallbackRouteValues = new { Controller = "Features", Action = "EditingPartial" };
+            settings.EditAppointmentRouteValues = new { Controller = "Features", Action = "EditingPartialEditAppointment" };
+            settings.Start = new DateTime(2016, 10, 10);
+            settings.GroupType = SchedulerGroupType.Resource;
+            settings.ActiveViewType = SchedulerViewType.WorkWeek;
+            settings.OptionsToolTips.ShowSelectionToolTip = false;
+
+            SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.DayView);
+            SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.WorkWeekView);
+            SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.FullWeekView);
+
+            settings.Views.DayView.ResourcesPerPage = 4;
+            settings.Views.FullWeekView.Enabled = true;
+            settings.Views.WeekView.Enabled = false;
+            settings.Views.MonthView.ResourcesPerPage = 1;
+            settings.Views.MonthView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
+            settings.Views.MonthView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
+            settings.Views.MonthView.AppointmentDisplayOptions.StatusDisplayType = AppointmentStatusDisplayType.Bounds;
+            settings.Views.MonthView.AppointmentDisplayOptions.ShowRecurrence = true;
+            settings.Views.MonthView.MonthViewStyles.DateCellBody.Height = Unit.Pixel(170);
+            
+            TimeScale[] timeScales = new TimeScale[] {
+                new TimeScaleYear() { Enabled = false }, 
+                new TimeScaleQuarter() { Enabled = false }, 
+                new TimeScaleMonth(),
+                new TimeScaleFixedInterval() { Enabled = false },
+                new TimeScaleDay(),
+                new TimeScaleHour() { Enabled = false },
+            };
+            settings.Views.TimelineView.Scales.AddRange(timeScales);
+            settings.Views.TimelineView.ResourcesPerPage = 2;
+            
+            settings.Storage.EnableReminders = false;
+            settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+            settings.Storage.Appointments.Assign(SchedulerDemoHelper.DefaultAppointmentStorage);
+        });
+    if (ViewData["SchedulerErrorText"] != null) {
+        scheduler.SetErrorText((string)ViewData["SchedulerErrorText"]);
+    }
+}
+@scheduler.Bind(Model.Appointments, Model.Resources).GetHtml()

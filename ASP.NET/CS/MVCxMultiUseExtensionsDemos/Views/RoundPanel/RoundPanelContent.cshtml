@@ -1,0 +1,42 @@
+﻿<div class="photoHolder">
+  <img alt="Maria Hernandez" src="../Content/Images/Contacts/Maria_Hernandez.jpg"
+      width="150" height="150" />
+</div>
+<div class="details">
+  <div>
+    <b>Name:</b>
+    <p>
+      Maria Hernandez
+    </p>
+  </div>
+  <div>
+    <b>Email:</b>
+    <p>
+      maria.hernandez@example.com
+    </p>
+  </div>
+  <div>
+    <b>Address:</b>
+    <p>
+      644 North Ranchford, Bangor, USA
+    </p>
+  </div>
+  <div>
+    <b>Phone:</b>
+    <p>
+      1 (207) 555-0032
+    </p>
+  </div>
+</div>
+
+<div class="text">
+  The content of this round panel control was updated at <b>@DateTime.Now.ToLongTimeString()</b>
+</div>
+<div style="text-align: left; padding: 10px 0px;">
+  @Html.DevExpress().Button(settings => {
+    settings.Name = "refreshButton";
+    settings.ClientSideEvents.Click = "function(s,e){ roundPanel.PerformCallback(); }";
+    settings.Text = "Refresh Details";
+    settings.Images.Image.IconID = "actions_refresh_16x16gray";
+  }).GetHtml()
+</div>

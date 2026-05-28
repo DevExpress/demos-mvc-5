@@ -1,0 +1,15 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "PrintingPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Pixel(700);
+        settings.ActiveTabIndex = 0;
+        settings.ShowConfirmOnLosingChanges = false;
+        
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideAllTabsExceptFileAndPageLayout(spreadsheet);
+        };
+    }
+).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "TrendlineAnalysis_template.xlsx")).GetHtml()

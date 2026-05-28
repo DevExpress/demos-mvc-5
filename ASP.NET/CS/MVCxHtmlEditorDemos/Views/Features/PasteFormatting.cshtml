@@ -1,0 +1,21 @@
+﻿@model PasteFormattingOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("PasteFormattingPartial", Model)
+<div class="Note">
+    Copy a part of editor content and paste it with formatting specified by the PasteMode combo box. Use the buttons that appear in the top right corner of the design area to change the paste formatting mode for the just pasted content.
+</div>
+@section DemoOptionsTop {
+    @Html.Partial("PasteFormattingOptionsPartial", Model)
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

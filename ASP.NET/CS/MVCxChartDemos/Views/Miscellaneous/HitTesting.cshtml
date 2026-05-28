@@ -1,0 +1,219 @@
+﻿<script type="text/javascript">
+    var defaultMessage = "<span style=\"white-space:nowrap\">Move the mouse pointer over the chart to see information on hovered chart elements.</span>";
+
+    MVCxClientGlobalEvents.AddControlsInitializedEventHandler(function () {
+        $("#hitTestPanel")[0].innerHTML = defaultMessage;
+        $(document).mousemove(OnMouseMove);
+        $(document).mouseup(OnMouseUp);
+    });
+
+    function GetValueString(value) {
+        if (!(value instanceof Date))
+            return value.toString();
+        var minutes = value.getMinutes();
+        return (value.getMonth() + 1) + "/" + value.getDate() + " " + value.getHours() + ":" + Math.round(minutes / 10).toString() + (minutes % 10).toString();
+    }
+    function CalculateHitInfo(event) {
+        var x = event.pageX - $("#chart").offset().left;
+        var y = event.pageY - $("#chart").offset().top;
+        var hitObjects = chart.HitTest(x, y);
+        return new ASPxClientWebChartHitInfo(hitObjects);
+    }
+    function IsElementInsideChart(srcElement) {
+        return ASPxClientUtils.GetIsParent(chart.GetMainDOMElement(), srcElement);
+    }
+    function OnMouseUp(e) {
+        var srcElement = e.target;
+        if (!IsElementInsideChart(srcElement))
+            return;
+        var hitInfo = CalculateHitInfo(e);
+        if (hitInfo.inHyperlink)
+            window.open(hitInfo.hyperlink, "_parent ")
+    }
+    function OnMouseMove(e) {
+        var srcElement = e.target;
+        if (!IsElementInsideChart(srcElement))
+            return;
+        var hitInfo = CalculateHitInfo(e);
+
+        var text = "";
+        if (hitInfo.inDiagram)
+            text += "<br>In diagram";
+        if (hitInfo.inNonDefaultPane)
+            text += "<br>In non-default pane: " + hitInfo.nonDefaultPane.name;
+        if (hitInfo.inAxis) {
+            text += "<br>In axis: " + hitInfo.axis.name;
+            if (hitInfo.inAxisLabelItem)
+                text += "<br>Label item: " + hitInfo.axisLabelItem.text;
+            if (hitInfo.inAxisTitle)
+                text += "<br>Axis title: " + hitInfo.axisTitle.text;
+        }
+        if (hitInfo.inChartTitle)
+            text += "<br>In chart title: " + hitInfo.chartTitle.lines[0];
+        if (hitInfo.inLegend) {
+            text += "<br>In legend";
+            if (hitInfo.series != null && !hitInfo.inSeries)
+                text += "<br>Series: " + hitInfo.series.name;
+        }
+        if (hitInfo.inSeries)
+            text += "<br>In series: " + hitInfo.series.name;
+        if (hitInfo.inSeriesLabel) {
+            text += "<br>In series label";
+            if (!hitInfo.inSeries)
+                text += "<br>Series: " + hitInfo.seriesLabel.series.name;
+        }
+        if (hitInfo.inSeriesPoint) {
+            var seriesPoint = hitInfo.seriesPoint;
+            text += "<br>Argument: " + GetValueString(seriesPoint.argument);
+            text += "<br>Value: " + seriesPoint.values[0];
+        }
+        if (hitInfo.inAnnotation)
+            text += "<br>In annotation: " + hitInfo.annotation.name;
+        if (hitInfo.inHyperlink) {
+            text += "<br>In hyperlink: " + hitInfo.hyperlink;
+            srcElement.style.cursor = "pointer";
+        }
+        else {
+            srcElement.style.cursor = "default";
+        }
+
+        var hitTestPanel = document.getElementById("hitTestPanel");
+        if (text.length > 0)
+            hitTestPanel.innerHTML = "<span style=\"white-space:nowrap\">Hit-testing results:" + text + "</span>";
+        else
+            hitTestPanel.innerHTML = defaultMessage;
+    }
+</script>
+<div style="height: 110px" id="hitTestPanel"></div>
+
+@Html.DevExpress().Chart(settings => {
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 480;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.CrosshairEnabled = DefaultBoolean.False;
+    settings.Style.Add("-ms-overflow-y", "hidden");
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Weather in London"
+    });
+
+    settings.AnnotationRepository.AddTextAnnotation(a => {
+        a.AnchorPoint = new ChartAnchorPoint(0, 0);
+        a.Border.Visibility = DefaultBoolean.False;
+        a.ConnectorStyle = AnnotationConnectorStyle.None;
+        a.DXFont = new DXFont("Tahoma", 10F);
+        a.ShapePosition = new FreePosition() { DockCorner = DockCorner.RightBottom };
+        a.Text = "From <href=http://www.weather.com/>www.weather.com</href>";
+        a.TextColor = Color.Gray;
+    });
+
+    settings.Legends.Default(l => {
+        l.Border.Visibility = DefaultBoolean.False;
+        l.AlignmentVertical = LegendAlignmentVertical.BottomOutside;
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Left;
+        l.Margins.Left = 55;
+        l.Direction = LegendDirection.LeftToRight;
+    });
+
+    settings.XYDiagram(d => {
+        d.Panes.Add(p => {
+            p.Name = "PressurePane";
+            p.LayoutOptions.RowSpan = 10;
+        });
+        d.Panes.Add(p => {
+            p.Name = "HumidityPane";
+            p.LayoutOptions.RowSpan = 12;
+        });
+        d.Panes.Default(p => {
+            p.LayoutOptions.RowSpan = 16;
+        });
+
+        d.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Hour;
+        d.AxisX.DateTimeScaleOptions.AutoGrid = true;
+        d.AxisX.WholeRange.SideMarginsValue = 0;
+        d.AxisX.WholeRange.SetMinMaxValues(new DateTime(2008, 6, 5, 22, 0, 0), new DateTime(2008, 6, 11, 8, 0, 0));
+        d.AxisX.GridLines.Visible = true;
+        d.AxisX.Interlaced = true;
+        d.AxisX.Label.TextPattern = "{A:dd/MM}";
+        d.AxisX.SetVisibilityInPane(false, d.DefaultPane);
+        d.AxisX.SetVisibilityInPane(false, d.Panes[0]);
+        d.AxisX.SetVisibilityInPane(true, d.Panes[1]);
+
+        d.AxisY.WholeRange.AlwaysShowZeroLevel = false;
+        d.AxisY.GridLines.MinorVisible = true;
+        d.AxisY.Title.Text = "Temperature, °F";
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+        d.AxisY.Title.DXFont = new DXFont("Tahoma", 10);
+
+        d.SecondaryAxesY.Add(y => {
+            y.Name = "PressureAxis";
+            y.WholeRange.AlwaysShowZeroLevel = false;
+            y.GridLines.Visible = true;
+            y.GridLines.MinorVisible = true;
+            y.Alignment = AxisAlignment.Near;
+            y.Title.Text = "Pressure, mbar";
+            y.Title.Visibility = DefaultBoolean.True;
+            y.Title.DXFont = new DXFont("Tahoma", 10);
+        });
+        d.SecondaryAxesY.Add(y => {
+            y.Name = "HumidityAxis";
+            y.ConstantLines.Add(cl => {
+                cl.AxisValue = 100;
+                cl.ShowInLegend = false;
+                cl.Title.Visible = false;
+            });
+            y.WholeRange.SideMarginsValue = 0;
+            y.WholeRange.SetMinMaxValues(0, 120);
+            y.GridLines.Visible = true;
+            y.GridLines.MinorVisible = true;
+            y.Alignment = AxisAlignment.Near;
+            y.Title.Text = "Humidity, %";
+            y.Title.Visibility = DefaultBoolean.True;
+            y.Title.DXFont = new DXFont("Tahoma", 10);
+        });
+    });
+
+    settings.Series.Add(s => {
+        s.Name = "Temperature (°F)";
+        s.Views().LineSeriesView(v => {
+            v.SeriesLabel(l => {
+                l.ResolveOverlappingMode = ResolveOverlappingMode.HideOverlapped;
+            });
+        });
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetDataMembers("Date", "Temperature");
+        s.LabelsVisibility = DefaultBoolean.True;
+    });
+    settings.Series.Add(s => {
+        s.Name = "Pressure (mbar)";
+        s.Views().AreaSeriesView(v => {
+            v.MarkerVisibility = DefaultBoolean.False;
+            v.Transparency = 0;
+            settings.XYDiagram(d => {
+                v.Pane = d.Panes["PressurePane"];
+                v.AxisY = d.SecondaryAxesY["PressureAxis"];
+            });
+        });
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetDataMembers("Date", "Pressure");
+        s.LabelsVisibility = DefaultBoolean.False;
+    });
+    settings.Series.Add(s => {
+        s.Name = "Humidity, %";
+        s.Views().SideBySideBarSeriesView(v => {
+            v.BarWidth = 1.5;
+            settings.XYDiagram(d => {
+                v.Pane = d.Panes["HumidityPane"];
+                v.AxisY = d.SecondaryAxesY["HumidityAxis"];
+            });
+        });
+        s.ArgumentScaleType = ScaleType.DateTime;
+        s.SetDataMembers("Date", "RelativeHummidity");
+        s.LabelsVisibility = DefaultBoolean.False;
+    });
+}).Bind(Model).GetHtml()
+

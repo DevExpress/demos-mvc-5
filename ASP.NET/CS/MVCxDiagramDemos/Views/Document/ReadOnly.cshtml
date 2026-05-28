@@ -1,0 +1,7 @@
+﻿@model String
+
+@Html.DevExpress().Diagram(settings => {
+    settings.Name = "Diagram";
+    settings.Height = 600;
+    settings.ReadOnly = true;
+}).Import(Model).GetHtml()

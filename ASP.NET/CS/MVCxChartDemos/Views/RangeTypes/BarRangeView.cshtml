@@ -1,0 +1,62 @@
+﻿@model ChartDemoOptions
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    ChartDemoOptions options = Model;
+    @Html.DevExpress().Chart(settings => {
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.PaletteName = "Office";
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+    settings.CrosshairEnabled = DefaultBoolean.False;
+    settings.ToolTipEnabled = DefaultBoolean.True;
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Right;
+        l.AlignmentVertical = LegendAlignmentVertical.Top;
+        l.Direction = LegendDirection.LeftToRight;
+    });
+
+    settings.Series.Template(t => {
+        t.ArgumentScaleType = ScaleType.DateTime;
+        t.SetRangeDataMembers("Date", "Min", "Max");
+        t.LabelsVisibility = DefaultBoolean.False;
+        t.ChangeView(DevExpress.XtraCharts.ViewType.RangeBar);
+    });
+
+    settings.BoundDataChanged = (s, e) => {
+        Series series = ((MVCxChartControl)s).Series[SourceOfEnergy.OKWTI];
+        series.Views().OverlappedRangeBarSeriesView(v => {
+            v.BarWidth = 0.2;
+        });
+    };
+
+    settings.XYDiagram(d => {
+        d.AxisX.DateTimeScaleOptions.MeasureUnit = DateTimeMeasureUnit.Month;
+        d.AxisX.DateTimeScaleOptions.GridAlignment = DateTimeGridAlignment.Month;
+        d.AxisX.WholeRange.AutoSideMargins = true;
+        d.AxisX.Label.TextPattern = "{A:MMMM}";
+        d.AxisY.GridLines.MinorVisible = true;
+        d.AxisY.Title.Text = "$ per barrel";
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+        d.AxisY.WholeRange.AlwaysShowZeroLevel = false;
+        d.AxisY.WholeRange.AutoSideMargins = true;
+        d.AxisY.Interlaced = true;
+        d.AxisY.Label.TextPattern = "{V:N0}";
+    });
+
+    settings.Titles.Add(new ChartTitle() {
+        Text = "Crude Oil Prices in 2015"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From www.eia.gov"
+    });
+}).Bind(Model.Data, "Name").GetHtml()
+}

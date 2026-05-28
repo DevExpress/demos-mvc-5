@@ -1,0 +1,101 @@
+﻿@model RibbonOneLineModeDemoOptions
+
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Ribbon/Common/Ribbon.css")" />
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Ribbon.js")"></script>
+
+    <script type="text/javascript">
+        function submitForm() {
+            $("form").submit();
+        }
+        function onCommandExecuted(s, e) {
+            var text = e.item.name;
+            if(e.parameter !== null)
+                text += ": " + e.parameter;
+            Label.SetText(text);
+        }
+        function onFileTabClicked(s, e) {
+            Label.SetText("File Tab");
+        }
+        function onDialogBoxLauncherClicked(s, e) {
+            Label.SetText("Show a dialog for the " + e.group.name + " group");
+        }
+    </script>
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().CheckBoxFor(m => m.OneLineMode,
+               settings => {
+                   settings.Text = "One line mode";
+                   settings.Theme = DemoHelper.Instance.Theme;
+                   settings.Properties.ClientSideEvents.ValueChanged = "submitForm";
+               }).GetHtml()
+        </div>
+    </div>
+}
+
+<div id="PopupPlaceHolder" style="height: 400px"></div>
+
+@Html.DevExpress().PopupControl(settings => {
+    settings.Name = "PopupControl";
+    settings.PopupElementID = "PopupPlaceHolder";
+    settings.ShowShadow = false;
+    settings.AllowResize = true;
+    settings.AllowDragging = false;
+    settings.CloseAction = CloseAction.None;
+    settings.ShowSizeGrip = ShowSizeGrip.True;
+    settings.PopupAction = PopupAction.None;
+    settings.ShowOnPageLoad = true;
+    settings.PopupAnimationType = AnimationType.None;
+    settings.MaxWidth = Unit.Pixel(900);
+    settings.MinWidth = Unit.Pixel(288);
+    settings.MinHeight = Unit.Pixel(1);
+    settings.MaxHeight = Unit.Pixel(1);
+    settings.Height = Unit.Pixel(1);
+    settings.ShowHeader = false;
+    settings.ShowFooter = true;
+    settings.FooterText = "Resize the ribbon by the size grip to see the control responsive layout functionality";
+    settings.Styles.Footer.Wrap = DefaultBoolean.True;
+    settings.Styles.Footer.HorizontalAlign = HorizontalAlign.Right;
+    settings.ControlStyle.CssClass = "editorWindow";
+    settings.PopupAlignCorrection = PopupAlignCorrection.Disabled;
+    settings.Styles.Content.Paddings.Padding = 0;
+    settings.ClientSideEvents.AfterResizing = "onWindowResize";
+    settings.ClientSideEvents.Init = "onPopupInit";
+
+    settings.SetContent(() => {
+        ViewContext.Writer.Write(
+        @"<table id=""editor"" style=""width:100%;"">
+            <tr style=""height: 1px"">
+                <td>"
+        );
+        Html.RenderPartial("OneLineModePartial", Model);
+        ViewContext.Writer.Write(
+                @"</td>
+            </tr>
+            <tr>
+                <td class=""ribbonContainer"" id=""container"">"
+        );
+        Html.DevExpress().Label(s => {
+            s.Name = "Label";
+            s.Text = " ";
+            s.Properties.EnableClientSideAPI = true;
+        }).Render();
+        ViewContext.Writer.Write(
+                @"</td>
+            </tr>
+        </table>"
+        );
+    });
+}).GetHtml()
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

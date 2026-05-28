@@ -1,0 +1,20 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100);
+}
+@section AdditionalResources {
+    <style type="text/css">
+        .dxtcFixed {
+            max-width: 680px;
+        }
+    </style>
+}
+@Html.DevExpress().TabControl(
+    settings => {
+        settings.Name = "tcDataBinding";
+        settings.NavigateUrlField = "id";
+        settings.NavigateUrlFormatString = "?id={0}";
+        settings.EnableTabScrolling = true;
+        settings.Width = Unit.Percentage(100);
+        settings.ControlStyle.CssClass = "dxtcAligned dxtcFixed horizontal-center-aligned";
+
+    }).BindToXML(Server.MapPath("~/App_Data/Technologies.xml"), "//product").GetHtml()

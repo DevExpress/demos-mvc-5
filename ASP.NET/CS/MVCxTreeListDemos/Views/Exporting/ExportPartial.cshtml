@@ -1,0 +1,56 @@
+﻿@Html.DevExpress().TreeList(settings => {
+    settings.Name = "treeList";
+    settings.CallbackRouteValues = new { Controller = "Exporting", Action = "ExportPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.Toolbars.Add(t => {
+        t.SettingsAdaptivity.Enabled = true;
+        t.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+        t.Items.Add(TreeListToolbarCommand.ExportToPdf);
+        t.Items.Add(TreeListToolbarCommand.ExportToXls);
+        t.Items.Add(TreeListToolbarCommand.ExportToXlsx);
+        t.Items.Add(TreeListToolbarCommand.ExportToDocx);
+        t.Items.Add(TreeListToolbarCommand.ExportToRtf);
+    });
+
+    settings.KeyFieldName = "ID";
+    settings.ParentFieldName = "ParentID";
+
+    settings.AutoGenerateColumns = false;
+    settings.Columns.Add("DepartmentName", "Department");
+    settings.Columns.Add(c => {
+        c.FieldName = "Budget";
+        c.PropertiesEdit.DisplayFormatString = "{0:C}";
+    });
+    settings.Columns.Add("Location");
+    settings.Columns.Add("Phone1", "Phone");
+
+    settings.Summary.Add(DevExpress.Data.SummaryItemType.Count, "DepartmentName");
+    settings.Summary.Add(i => {
+        i.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+        i.FieldName = "Budget";
+        i.ShowInColumn = "Budget";
+        i.DisplayFormat = "{0:C}";
+    });
+
+    settings.Settings.ShowFooter = true;
+    settings.Settings.ShowGroupFooter = true;
+    settings.Settings.GridLines = GridLines.Both;
+    settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+    settings.SettingsExport.EnableClientSideExportAPI = true;
+    settings.SettingsExport.Styles.Header.HorizontalAlign = HorizontalAlign.Left;
+
+    settings.SettingsExport.PrintSettings.AutoWidth = ExportOptions.EnableAutoWidth;
+    settings.SettingsExport.PrintSettings.ExpandAllNodes = ExportOptions.ExpandAllNodes;
+    settings.SettingsExport.PrintSettings.ShowTreeButtons = ExportOptions.ShowTreeButtons;
+    
+    settings.ClientSideEvents.BeginCallback = "onTreeBeginCallback";
+
+    settings.PreRender = (sender, e) => {
+        ((MVCxTreeList)sender).ExpandToLevel(2);
+    };
+}).Bind(Model).GetHtml()
+
+@functions {
+    TreeListExportDemoOptions ExportOptions { get { return ViewBag.TreeListExportOptions; } }
+}

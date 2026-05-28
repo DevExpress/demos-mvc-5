@@ -1,0 +1,45 @@
+﻿@model HtmlEditorInsertMediaContentDemoOptions
+@Html.DevExpress().HtmlEditor(
+    settings =>
+    {
+        settings.Name = "heInsertMediaContent";
+        settings.CallbackRouteValues = new { Controller = "Dialogs", Action = "InsertMediaContentPartial" };
+        settings.Height = Unit.Pixel(360);
+        settings.Width = Unit.Percentage(100);
+
+        settings.Html = HtmlEditorFeaturesDemosHelper.GeHtmlContentByFileName("InsertMediaContent.html");
+
+        HtmlEditorToolbar toolbar = new HtmlEditorToolbar();
+        toolbar.Items.Add(new ToolbarUndoButton());
+        toolbar.Items.Add(new ToolbarRedoButton());
+        toolbar.Items.Add(new ToolbarBoldButton(true));
+        toolbar.Items.Add(new ToolbarItalicButton());
+        toolbar.Items.Add(new ToolbarUnderlineButton());
+        toolbar.Items.Add(new ToolbarStrikethroughButton());
+        toolbar.Items.Add(new ToolbarInsertFlashDialogButton(true));
+        toolbar.Items.Add(new ToolbarInsertVideoDialogButton());
+        toolbar.Items.Add(new ToolbarInsertAudioDialogButton());
+        toolbar.Items.Add(new ToolbarInsertYouTubeVideoDialogButton());
+        toolbar.Items.Add(new ToolbarFullscreenButton(true));
+        settings.Toolbars.Add(toolbar);
+
+        settings.SettingsDialogs.InsertFlashDialog.SettingsFlashUpload.FileSystemSettings.Assign(HtmlEditorFeaturesDemosHelper.FileSaveSettings.FileSystemSettings);
+        settings.SettingsDialogs.InsertFlashDialog.SettingsFlashUpload.ValidationSettings.Assign(HtmlEditorInsertMediaContentHelper.FlashUploadValidationSettings);
+        settings.SettingsDialogs.InsertVideoDialog.SettingsVideoUpload.FileSystemSettings.Assign(HtmlEditorFeaturesDemosHelper.FileSaveSettings.FileSystemSettings);
+        settings.SettingsDialogs.InsertVideoDialog.SettingsVideoUpload.ValidationSettings.Assign(HtmlEditorInsertMediaContentHelper.VideoUploadValidationSettings);
+        settings.SettingsDialogs.InsertAudioDialog.SettingsAudioUpload.FileSystemSettings.Assign(HtmlEditorFeaturesDemosHelper.FileSaveSettings.FileSystemSettings);
+        settings.SettingsDialogs.InsertAudioDialog.SettingsAudioUpload.ValidationSettings.Assign(HtmlEditorInsertMediaContentHelper.AudioUploadValidationSettings);
+
+        if(Model != null) {
+            settings.SettingsHtmlEditing.AllowHTML5MediaElements = Model.AllowHTML5MediaElements;
+            settings.SettingsHtmlEditing.AllowObjectAndEmbedElements = Model.AllowObjectAndEmbedElements;
+            settings.SettingsHtmlEditing.AllowYouTubeVideoIFrames = Model.AllowYouTubeVideoIFrames;
+        }
+        settings.SettingsHtmlEditing.AllowedDocumentType = AllowedDocumentType.Both;
+
+        HtmlEditorInsertMediaContentHelper.SetHtmlEditorFlashSelectorSettings(settings.SettingsDialogs.InsertFlashDialog.SettingsFlashSelector);
+        HtmlEditorInsertMediaContentHelper.SetHtmlEditorVideoSelectorSettings(settings.SettingsDialogs.InsertVideoDialog.SettingsVideoSelector);
+        HtmlEditorInsertMediaContentHelper.SetHtmlEditorAudioSelectorSettings(settings.SettingsDialogs.InsertAudioDialog.SettingsAudioSelector);
+        
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }).GetHtml()

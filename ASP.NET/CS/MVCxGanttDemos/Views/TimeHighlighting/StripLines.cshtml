@@ -1,0 +1,13 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section AdditionalResources {
+    <style>
+        .current-time {
+            border-left: 1px solid red;
+        }
+    </style>
+}
+
+@using(Html.BeginForm()) {
+    @Html.Partial("StripLinesPartial")
+}

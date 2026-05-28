@@ -1,0 +1,14 @@
+﻿@model List<CustomAppointmentWrapper>
+
+@Html.DevExpress().GridView(settings => {
+    settings.Name = "gridView";
+    settings.CallbackRouteValues = new { Controller = "StandaloneControls", Action = "GridViewPartial" };
+
+    settings.Width = Unit.Pixel(370);
+
+    settings.KeyFieldName = "ID";
+
+    settings.Columns.Add("Subject");
+    settings.Columns.Add("AlertTime", "Alert Time");
+
+}).Bind(Model).GetHtml()

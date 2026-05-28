@@ -1,0 +1,14 @@
+﻿@model HtmlEditorPlaceholdersDemoOptions
+@Html.DevExpress().RoundPanel(settings => {
+    settings.Name = "RoundPanel";
+    settings.Width = Unit.Pixel(700);
+    settings.Height = Unit.Pixel(360);
+    settings.ClientVisible = false;
+    settings.HeaderText = "Document Preview";
+    settings.Styles.Header.HorizontalAlign = HorizontalAlign.Center;
+    settings.CallbackRouteValues = new {
+        Controller = "Features",
+        Action = "PlaceholdersRoundPanelPartial"
+    };
+    settings.SetContent(Model.DocumentHtml);
+}).GetHtml()

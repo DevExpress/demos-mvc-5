@@ -1,0 +1,46 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "Columns", Action = "ColumnMovingPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.SettingsBehavior.ProcessColumnMoveOnClient = ColumnMovingOptions.ProcessColumnMoveOnClient;
+    settings.SettingsBehavior.ColumnMoveMode = ColumnMovingOptions.ColumnMoveMode;
+
+    settings.Columns.Add("ProductName");
+    settings.Columns.Add("Category.CategoryName", MVCxGridViewColumnType.ComboBox);
+    settings.Columns.Add("UnitPrice", MVCxGridViewColumnType.SpinEdit).PropertiesEdit.DisplayFormatString = "c";
+    settings.Columns.Add("UnitsInStock", MVCxGridViewColumnType.SpinEdit);
+    settings.Columns.Add(column => {
+        column.FieldName = "Total";
+        column.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
+        column.UnboundExpression = "UnitsInStock*UnitPrice";
+        column.PropertiesEdit.DisplayFormatString = "c";
+    });
+    settings.Columns.Add(column => {
+        column.FieldName = "Discontinued";
+        column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        column.Width = 80;
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    settings.FormatConditions.AddHighlight("UnitPrice", "[Discount] > 0", GridConditionHighlightFormat.GreenFillWithDarkGreenText);
+    settings.FormatConditions.AddTopBottom(f => {
+        f.FieldName = "UnitPrice";
+        f.Rule = GridTopBottomRule.TopItems;
+        f.Threshold = 15;
+        f.Format = GridConditionHighlightFormat.BoldText;
+    });
+    settings.FormatConditions.AddTopBottom("UnitPrice", GridTopBottomRule.AboveAverage, GridConditionHighlightFormat.ItalicText);
+    settings.FormatConditions.AddTopBottom("UnitPrice", GridTopBottomRule.AboveAverage, GridConditionHighlightFormat.RedText);
+    settings.FormatConditions.AddColorScale("UnitsInStock", GridConditionColorScaleFormat.BlueWhiteRed);
+    settings.FormatConditions.AddIconSet("UnitsInStock", GridConditionIconSetFormat.Ratings4);
+    settings.FormatConditions.AddIconSet("Total", GridConditionIconSetFormat.Arrows5Colored);
+
+    settings.ClientSideEvents.BeginCallback = "onBeginCallback";
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()
+
+@functions {
+    ColumnMovingDemoOptions ColumnMovingOptions { get { return ViewBag.ColumnMovingOptions; } }
+}

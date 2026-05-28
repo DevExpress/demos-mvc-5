@@ -1,0 +1,19 @@
+﻿@model FormLayoutOverviewModel
+<div style="max-width: 600px; padding-top:10px">
+    @Html.DevExpress().FormLayout(settings => {
+        settings.Name = "flOverview";
+        settings.UseDefaultPaddings = false;
+        settings.Width = Unit.Percentage(100);
+        settings.Items.AddGroupItem(g => {
+            g.Caption = "Employees";
+            g.Items.Add(m => m.FirstName, i => i.NestedExtension().TextBox(s => s.Width = Unit.Percentage(100)));
+            g.Items.Add(m => m.LastName, i => i.NestedExtension().TextBox(s => s.Width = Unit.Percentage(100)));
+            g.Items.Add(m => m.Note, i => {
+                i.NestedExtension().Memo(s => {
+                    s.Height = 70;
+                    s.Width = Unit.Percentage(100);
+                });
+            });
+        });
+    }).GetHtml()
+</div>

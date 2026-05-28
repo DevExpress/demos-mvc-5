@@ -1,0 +1,127 @@
+﻿@model WaterfallChartDemoOptions
+
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(984);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(340);
+}
+
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.DevExpress().Chart(settings => {
+    WaterfallChartDemoOptions options = Model;
+    settings.Name = "chart";
+    settings.BorderOptions.Visibility = DefaultBoolean.False;
+    settings.Height = 500;
+    settings.Width = 920;
+    settings.RenderFormat = DevExpress.XtraCharts.Web.RenderFormat.Svg;
+
+    settings.Titles.Add(new ChartTitle() {
+        DXFont = new DXFont("Tahoma", 18),
+        Text = "Global Carbon Balance"
+    });
+    settings.Titles.Add(new ChartTitle() {
+        Alignment = StringAlignment.Far,
+        Dock = ChartTitleDockStyle.Bottom,
+        DXFont = new DXFont("Tahoma", 8),
+        TextColor = Color.Gray,
+        Text = "From globalcarbonproject.org"
+    });
+    string paletteName = "Palette";
+    Palette palette = new Palette(paletteName, new PaletteEntry[] {
+            new PaletteEntry(Color.FromArgb(64, 68, 108)),
+            new PaletteEntry(Color.FromArgb(218, 88, 89)),
+            new PaletteEntry(Color.FromArgb(196, 220, 255)),
+            new PaletteEntry(Color.FromArgb(84, 131, 213)),
+            new PaletteEntry(Color.FromArgb(146, 206, 181))
+    });
+    settings.PaletteRepository.Add(paletteName, palette);
+    settings.PaletteName = paletteName;
+
+    bool isDetailedView = options.DataType == DataType.DetailedData;
+    settings.Legend.Visibility = isDetailedView ? DefaultBoolean.True : DefaultBoolean.False;
+    BinaryOperatorType operatorType = isDetailedView ? BinaryOperatorType.NotEqual : BinaryOperatorType.Equal;
+    settings.Series.Template(t => {
+        t.FilterCriteria = new BinaryOperator("Factor", "Imbalance", operatorType);
+        t.Views().WaterfallSeriesView(v => {
+            v.ValueOptions().WaterfallRelativeValueOptions(
+                rvo => {
+                    rvo.StartBarLabel = "1989";
+                    rvo.StartBarValue = 2766;
+                    rvo.TotalLabel = "2018";
+                    rvo.Subtotals.Add(new Subtotal(8, "Kyoto Protocol Adopted"));
+                    rvo.Subtotals.Add(new Subtotal(17, "Clean Development Mechanism Opens"));
+                });
+            v.FillStyle.FillMode = FillMode.Solid;
+            if (isDetailedView) {
+                v.RisingBarColor = Color.Empty;
+                v.FallingBarColor = Color.Empty;
+            }
+            else {
+                v.RisingBarColor = Color.FromArgb(218, 88, 89);
+                v.FallingBarColor = Color.FromArgb(146, 206, 181);
+            }
+        });
+        t.ArgumentScaleType = DevExpress.XtraCharts.ScaleType.Qualitative;
+        t.ArgumentDataMember = "Year";
+        t.ValueDataMembers.AddRange("Contribution");
+        SeriesKeyColorColorizer colorizer = new SeriesKeyColorColorizer();
+        colorizer.Keys.AddRange(new string[] { "Fuel/Industry Emissions", "Land-Use Emissions", "Atmospheric Growth", "Ocean Sink", "Land Sink" });
+        t.SeriesColorizer = colorizer;
+    });
+
+    settings.Legends.Default(l => {
+        l.AlignmentHorizontal = LegendAlignmentHorizontal.Center;
+        l.AlignmentVertical = LegendAlignmentVertical.TopOutside;
+        l.Direction = LegendDirection.LeftToRight;
+        l.Border.Visibility = DefaultBoolean.False;
+    });
+
+    settings.XYDiagram(d => {
+        d.AxisY.Interlaced = true;
+        d.AxisY.Title.Text = "Emissions and Sinks, BtC";
+        d.AxisY.Title.Visibility = DefaultBoolean.True;
+        d.AxisY.WholeRange.AlwaysShowZeroLevel = false;
+        d.AxisX.CustomLabels.Add(new CustomAxisLabel("1989", "1989"));
+        d.AxisX.CustomLabels.Add(new CustomAxisLabel("1997\r\nKyoto Protocol", "Kyoto Protocol Adopted"));
+        d.AxisX.CustomLabels.Add(new CustomAxisLabel("2006\r\nClean Development Mechanism Opens", "Clean Development Mechanism Opens"));
+        d.AxisX.CustomLabels.Add(new CustomAxisLabel("2018", "2018"));
+    });
+}).Bind(Model.Data, seriesDataMember: "Factor").GetHtml()
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(s => {
+    s.Name = "SettingsFormLayout";
+    s.RequiredMarkDisplayMode = RequiredMarkMode.None;
+    s.Items.AddGroupItem(group => {
+        group.Caption = "General Settings";
+        group.Items.Add(model => model.DataType, item => {
+            item.NestedExtension().RadioButtonList(radio => {
+                radio.Properties.Items.AddRange(ChartDemoHelper.GetDataTypes());
+                radio.ControlStyle.Border.BorderStyle = BorderStyle.None;
+            });
+            item.ShowCaption = DefaultBoolean.False;
+        });
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(s, new MvcControlOptionsSettings {
+        ColumnMinWidth = 280,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

@@ -1,0 +1,19 @@
+﻿@using System.ComponentModel.DataAnnotations
+<div class="container trackBar">
+    <div class="editorCell trackBar">
+        @Html.DevExpress().TrackBarFor(model => model, settings => {
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.ScalePosition = ScalePosition.LeftOrTop;
+            settings.Properties.ValueToolTipPosition = ValueToolTipPosition.RightOrBottom;
+            settings.EncodeHtml = false;
+            settings.Properties.MaxValue = 120;
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithText;
+            settings.Properties.ValidationSettings.Display = Display.Dynamic;
+            settings.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+            settings.Properties.CaptionCellStyle.CssClass = "editorCaption";
+            settings.Properties.Caption = (string)ViewData["Caption"];
+            settings.Properties.CaptionSettings.VerticalAlign = EditorCaptionVerticalAlign.Middle;
+        }).GetHtml()
+    </div>
+</div>

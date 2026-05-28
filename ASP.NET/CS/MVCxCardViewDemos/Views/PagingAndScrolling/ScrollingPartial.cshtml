@@ -1,0 +1,42 @@
+﻿@Html.DevExpress().CardView(
+    settings =>
+    {
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "PagingAndScrolling", Action = "ScrollingPartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.EnableCardsCache = false;
+
+        settings.KeyFieldName = "ProductID";
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 600;
+        settings.SettingsPager.SettingsTableLayout.RowsPerPage = 6;
+        settings.SettingsPager.EnableAdaptivity = true;
+
+        settings.Columns.Add("ProductName");
+        settings.Columns.Add("UnitPrice", MVCxCardViewColumnType.TextBox).PropertiesEdit.DisplayFormatString = "c";
+        settings.Columns.Add("QuantityPerUnit", MVCxCardViewColumnType.TextBox);
+        settings.Columns.Add("Discontinued", MVCxCardViewColumnType.CheckBox);
+        settings.Columns.Add("Category.CategoryName", MVCxCardViewColumnType.TextBox);
+        settings.Columns.Add("Category.Picture", MVCxCardViewColumnType.BinaryImage);
+
+        settings.CardLayoutProperties.Items.AddGroupItem(g => {
+            g.CssClass = "item";
+            g.GroupBoxDecoration = GroupBoxDecoration.None;
+            g.Items.Add(i => {
+                i.ColumnName = "Category.Picture";
+                i.ShowCaption = DefaultBoolean.False;
+                i.CssClass = "item-image";
+            });
+            g.Items.AddGroupItem(gi => {
+                gi.CssClass = "items-info";
+                gi.GroupBoxDecoration = GroupBoxDecoration.None;
+                gi.Items.AddEmptyItem(new EmptyLayoutItem());
+                gi.Items.Add("ProductName");
+                gi.Items.Add("UnitPrice");
+                gi.Items.Add("QuantityPerUnit");
+                gi.Items.Add("Discontinued");
+            });
+        });
+
+        settings.Styles.Card.BackColor = Color.White;
+    }).Bind(Model).GetHtml()

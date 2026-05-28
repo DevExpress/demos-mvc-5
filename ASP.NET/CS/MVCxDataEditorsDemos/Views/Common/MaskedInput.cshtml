@@ -1,0 +1,264 @@
+﻿@model MaskedInputOptions
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@section AdditionalResources {
+    <style type="text/css">
+        .line {
+            margin: 0px;
+        }
+
+        .table {
+            display: table;
+            width: 100%;
+        }
+
+        .containerMaskedInput {
+            padding-bottom: 25px;
+        }
+
+        .editorMaskedInput {
+            padding-bottom: 20px;
+            max-width: 400px;
+        }
+
+        .containerSettings {
+            max-width: 320px;
+        }
+
+        .customFont, .customFont input {
+            font: 14px "Segoe UI", "Helvetica Neue", Helvetica, "Droid Sans", Tahoma, Geneva, sans-serif !important;            
+            color: #777 !important;
+        }
+
+        .optionText, .optionEditorOrBottom {
+            line-height: 1!important;
+            padding-bottom: 6px;
+        }
+
+        @@media (min-width:750px) {
+            .desktopCell {
+                display: table-cell;
+            }
+
+            .containerMaskedInput {
+                padding-bottom: 20px;
+            }
+
+                .containerMaskedInput > * {
+                    vertical-align: top;
+                }
+
+            .editorMaskedInput {
+                width: 300px;
+                padding-right: 100px;
+            }
+
+            .line {
+                display: none;
+            }
+        }
+
+        @@media(max-width:749px) {
+            .optionText {
+                padding-bottom: 2px;
+            }
+
+            .containerSettings {
+                max-width: 400px;
+            }
+
+            .customFont, .customFont input {
+                font-size: 12px !important;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        function phone_InitAndKeyUp(s, e) {
+            document.getElementById("phoneValue").innerHTML = s.GetValue();
+        }
+        function price_InitAndKeyUp(s, e) {
+            document.getElementById("priceValue").innerHTML = s.GetValue();
+        }
+        function onSelectedIndexChanged(s, e) {
+            e.processOnServer = true;
+        }
+    </script>
+}
+<div class="containerMaskedInput table">
+    <div class="editorMaskedInput desktopCell">
+        @Html.DevExpress().TextBox(settings => {
+       settings.Name = "txtZip";
+       settings.Properties.Caption = "Zip Code";
+       settings.Width = Unit.Percentage(100);
+       settings.Properties.CaptionCellStyle.Width = Unit.Pixel(100);
+       settings.Properties.MaskSettings.Mask = "00000";
+       settings.Properties.MaskSettings.PromptChar = Model.PromptChar;
+       settings.Properties.MaskSettings.ErrorText = "Please input missing digits";
+       settings.Properties.ValidationSettings.Display = Display.Dynamic;
+       settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithText;
+       settings.Properties.ValidationSettings.ErrorTextPosition =ErrorTextPosition.Bottom;
+   }).GetHtml()
+    </div>
+    <div class="desktopCell">
+        <div class="optionText customFont">
+            Mask = 00000
+        </div>
+        <div class="optionEditorOrBottom customFont">
+            ErrorText = &quot;Please input missing digits&quot;
+        </div>
+        <div class="optionEditorOrBottom containerSettings">
+            @Html.DevExpress().ComboBoxFor(m=>m.PromptChar, settings => {
+           settings.Height = Unit.Percentage(20);
+           settings.Width = Unit.Percentage(100);
+           settings.Properties.Caption = "PromptChar =";
+           settings.ControlStyle.CssClass = "customFont";
+           settings.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+           settings.Properties.ClientSideEvents.SelectedIndexChanged = "onSelectedIndexChanged";
+           settings.Properties.CaptionSettings.ShowColon = false;
+           settings.Properties.CaptionCellStyle.CssClass = "customFont";
+           settings.Properties.CaptionCellStyle.Width = Unit.Pixel(100);
+           settings.Properties.ItemStyle.CssClass = "customFont";
+           settings.Properties.ItemStyle.HorizontalAlign = HorizontalAlign.Right;
+           settings.Properties.Items.Add(new ListEditItem() { Value = '_' });
+           settings.Properties.Items.Add(new ListEditItem() { Value = '#' });
+
+       }).GetHtml()
+
+        </div>
+        <hr class="line containerSettings" />
+    </div>
+</div>
+
+<div class="containerMaskedInput table">
+    <div class="editorMaskedInput desktopCell">
+        @Html.DevExpress().TextBox(settings => {
+       settings.Name = "clTxtPhone";
+       settings.Properties.Caption = "Phone Number";
+       settings.Width = Unit.Percentage(100);
+       settings.Properties.CaptionCellStyle.Width = Unit.Pixel(100);
+       settings.Properties.MaskSettings.Mask = "+1 (999) 000-0000";
+       settings.Properties.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.None;
+       settings.Properties.MaskSettings.ErrorText = "Please input missing digits";
+       settings.Properties.ValidationSettings.Display = Display.Dynamic;
+       settings.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;       
+       settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithText;
+       settings.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+       settings.Properties.ClientSideEvents.Init = "phone_InitAndKeyUp";
+       settings.Properties.ClientSideEvents.KeyUp = "phone_InitAndKeyUp";
+   }).GetHtml()
+    </div>
+    <div class="desktopCell">
+        <div class="optionText customFont">
+            Mask = +1 (999) 000-0000
+        </div>
+        <div class="optionText customFont">
+            IncludeLiterals = None
+        </div>
+        <div class="optionEditorOrBottom customFont">
+            Value = <span id="phoneValue"></span>
+        </div>
+        <hr class="line containerSettings" />
+    </div>
+</div>
+
+<div class="containerMaskedInput table">
+    <div class="editorMaskedInput desktopCell">
+        @Html.DevExpress().TextBox(settings => {
+       settings.Name = "txtPrice";
+       settings.Properties.Caption = "Price";
+       settings.Width = Unit.Percentage(100);
+       settings.Properties.CaptionCellStyle.Width = Unit.Pixel(100);
+       settings.Properties.MaskSettings.Mask = "$<0..99999g>.<00..99>";
+       settings.Properties.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.DecimalSymbol;
+       settings.Properties.MaskSettings.ErrorText = "Please input missing digits";
+       settings.Properties.ValidationSettings.Display = Display.Dynamic;
+       settings.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+       settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithText;
+       settings.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+       settings.Properties.ClientSideEvents.Init = "price_InitAndKeyUp";
+       settings.Properties.ClientSideEvents.KeyUp = "price_InitAndKeyUp";
+   }).GetHtml()
+    </div>
+    <div class="desktopCell">
+        <div class="optionText customFont">
+            Mask = $&lt;0..99999g&gt;.&lt;00..99&gt;
+        </div>
+        <div class="optionText customFont">
+            IncludeLiterals = DecimalSymbol
+        </div>
+        <div class="optionEditorOrBottom customFont">
+            Value = <span id="priceValue"></span>
+        </div>
+        <hr class="line containerSettings" />
+    </div>
+</div>
+
+<div class="containerMaskedInput table">
+    <div class="editorMaskedInput desktopCell">
+        @Html.DevExpress().DateEditFor(m=>m.DateEditValue, settings => {
+       settings.Properties.Caption = "Date";
+       settings.Properties.EditFormatString = Model.EditFormatString;
+       settings.Properties.EditFormat = EditFormat.Custom;
+       settings.Width = Unit.Percentage(100);
+       settings.Properties.CaptionCellStyle.Width = Unit.Pixel(100);
+       settings.Properties.UseMaskBehavior = true;
+       settings.Properties.CalendarProperties.FastNavProperties.DisplayMode = FastNavigationDisplayMode.Inline;
+   }).GetHtml()
+    </div>
+    <div class="desktopCell">
+        <div class="optionEditorOrBottom customFont">
+            UseMaskBehavior = True
+        </div>
+        <div class="optionEditorOrBottom containerSettings">
+            @Html.DevExpress().ComboBoxFor(m => m.EditFormatString, settings => {
+           settings.Height = Unit.Percentage(20);
+           settings.Width = Unit.Percentage(100);
+           settings.Properties.Caption = "EditFormatString =";
+           settings.ControlStyle.CssClass = "customFont";
+           settings.Properties.ClientSideEvents.SelectedIndexChanged = "onSelectedIndexChanged";
+           settings.Properties.CaptionSettings.ShowColon = false;
+           settings.Properties.CaptionCellStyle.CssClass = "customFont";
+           settings.Properties.CaptionCellStyle.Width = Unit.Pixel(100);
+           settings.Properties.ItemStyle.CssClass = "customFont";
+           settings.Properties.Items.Add(new ListEditItem() { Value = "MMMM dd, yyyy" });
+           settings.Properties.Items.Add(new ListEditItem() { Value = "MM/dd/yyyy hh:mm tt" });
+
+       }).GetHtml()
+
+        </div>
+        <hr class="line containerSettings" />
+    </div>
+</div>
+<div class="containerMaskedInput table">
+    <div class="editorMaskedInput desktopCell">
+        @Html.DevExpress().TextBox(settings => {
+       settings.Name = "txtPromoCode";
+       settings.Properties.Caption = "Promo Code";
+       settings.Width = Unit.Percentage(100);
+       settings.Properties.CaptionCellStyle.Width = Unit.Pixel(100);
+       settings.Properties.MaskSettings.Mask = "<HOME|*BUSINESS>->aaaa-aaaa";
+       settings.Properties.MaskSettings.ShowHints = true;
+       settings.Properties.ValidationSettings.Display = Display.Dynamic;
+   }).GetHtml()
+    </div>
+    <div class="desktopCell">
+        <div class="optionText customFont">
+            Mask = &lt;HOME|*BUSINESS&gt;-&gt;aaaa-aaaa
+        </div>
+        <div class="optionEditorOrBottom customFont">
+            ShowHints = True
+        </div>
+        <hr class="line containerSettings" />
+    </div>
+</div>
+
+
+
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

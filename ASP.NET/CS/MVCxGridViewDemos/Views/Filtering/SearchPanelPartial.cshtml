@@ -1,0 +1,21 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "gridView";
+    settings.CallbackRouteValues = new { Controller = "Filtering", Action = "SearchPanelPartial" };
+    settings.SettingsSearchPanel.Visible = true;
+    settings.Width = Unit.Percentage(100);
+
+    settings.Columns.Add("ContactName");
+    settings.Columns.Add("CompanyName");
+    settings.Columns.Add("Address");
+    settings.Columns.Add("City");
+    settings.Columns.Add("PostalCode");
+    settings.Columns.Add("Country");
+    settings.Columns.Add("Phone");
+        
+    settings.PreRender = (sender, e) => {
+        var gridView = (MVCxGridView)sender;
+        gridView.SearchPanelFilter = "an";
+    };
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

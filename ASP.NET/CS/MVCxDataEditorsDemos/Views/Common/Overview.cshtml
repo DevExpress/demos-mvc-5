@@ -1,0 +1,246 @@
+﻿@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1200);
+}
+
+@section AdditionalResources {    
+    <style type="text/css">
+        @@media(max-width:733px) {
+            .mobileAlign {
+                text-align: center !important;
+                width: auto !important;
+            }
+
+                .mobileAlign > table, .mobileAlign > div {
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+        }
+    </style>
+}
+
+@using (Html.BeginForm()) {
+    @Html.DevExpress().FormLayout(settings => {
+        settings.Name = "ContentFormLayout";
+        settings.Width = Unit.Percentage(100);
+        settings.ColumnCount = 3;
+        settings.UseDefaultPaddings = false;
+        settings.SettingsItemCaptions.Location = LayoutItemCaptionLocation.Top;
+        settings.Styles.LayoutGroup.Cell.Paddings.PaddingTop = Unit.Pixel(20);
+        settings.SettingsAdaptivity.GridSettings.Breakpoints.Add(new LayoutBreakpoint() { Name = "S", ColumnCount = 1, MaxWidth = 700 });
+        settings.SettingsAdaptivity.GridSettings.Breakpoints.Add(new LayoutBreakpoint() { Name = "M", ColumnCount = 2, MaxWidth = 1050 });
+        settings.Items.Add(item => {
+            item.Caption = "TextBox";
+            item.NestedExtension().TextBox(control =>{
+                control.Name = "textBox";
+                control.Text = "123456";
+                control.Properties.DisplayFormatString = "[ 00 - 00 - 00 ]";
+                control.Width = Unit.Percentage(100);
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "ComboBox";
+            item.NestedExtension().ComboBox(control => {
+                control.Name = "comboBox";
+                control.Width = Unit.Pixel(163);
+                control.Properties.Items.Add("Ana Trujillo");
+                control.Properties.Items.Add("Giovanni Rovelli");
+                control.Properties.Items.Add("Jaime Yorres");
+                control.Properties.Items.Add("John Steel");
+                control.SelectedIndex = 2;
+                control.Width = Unit.Percentage(100);
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "SpinEdit";
+            item.NestedExtension().SpinEdit(control => {
+                control.Name = "spinEdit";
+                control.Width = Unit.Percentage(100);
+                control.Properties.NumberFormat = SpinEditNumberFormat.Number;
+                control.Properties.Increment = 100;
+                control.Properties.MinValue = 0;
+                control.Properties.MaxValue = 10000;
+                control.Number = 100;
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "DateEdit";
+            item.NestedExtension().DateEdit(control => {
+                control.Name = "dateEdit";
+                control.Properties.EditFormat = EditFormat.Custom;
+                control.Date = new DateTime(2009, 11, 2, 9, 23, 0);
+                control.Width = Unit.Percentage(100);
+                control.Properties.CalendarProperties.FastNavProperties.DisplayMode = FastNavigationDisplayMode.Inline;
+                control.Properties.TimeSectionProperties.TimeEditProperties.EditFormatString = "hh:mm tt";
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "TimeEdit";
+            item.NestedExtension().TimeEdit(control => {
+                control.Name = "timeEdit";
+                control.DateTime = new DateTime(2009, 11, 01, 15, 31, 34);
+                control.Width = Unit.Percentage(100);
+                control.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "DropDownEdit";
+            item.NestedExtension().DropDownEdit(control => {
+                control.Name = "dropDownEdit";
+                control.Properties.NullText = "Text area";
+                control.Width = Unit.Percentage(100);
+                control.SetDropDownWindowTemplateContent("<div style='padding: 10px 0 10px 3px'>Dropdown content</div>");
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "ButtonEdit";
+            item.NestedExtension().ButtonEdit(control => {
+                control.Name = "buttonEdit";
+                control.Width = Unit.Percentage(100);
+                control.Text = "Andy McKee - Rylynn";
+                control.Properties.Buttons.Add();
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "ColorEdit";
+            item.NestedExtension().ColorEdit(control => {
+                control.Name = "colorEdit";
+                control.Width = Unit.Percentage(100);
+                control.Color = Color.FromArgb(255, 153, 0);
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "ProgressBar";
+            item.NestedExtension().ProgressBar(control => {
+                control.Name = "progressBar";
+                control.Width = Unit.Percentage(100);
+                control.Properties.ShowPosition = true;
+                control.Position = 42;
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "TokenBox";
+            item.NestedExtension().TokenBox(control => {
+                control.Name = "tokenBox";
+                control.Width = Unit.Percentage(100);
+                control.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+                control.Properties.NullText = "Type Jaime";
+                control.Properties.Items.Add("Ana Trujillo");
+                control.Properties.Items.Add("Giovanni Rovelli");
+                control.Properties.Items.Add("Jaime Yorres");
+                control.Properties.Items.Add("John Steel");
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "RadioButtonList";
+            item.NestedExtension().RadioButtonList(control => {
+                control.Name = "radioButtonList";
+                control.Width = Unit.Percentage(100);
+                control.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                control.Properties.Items.Add("MVC").Selected = true;
+                control.Properties.Items.Add("ASP");
+            });
+        });
+        settings.Items.Add(item =>
+        {
+            item.Caption = "CheckBoxList";
+            item.NestedExtension().CheckBoxList(control =>
+            {
+                control.Name = "checkBoxList";
+                control.Width = Unit.Percentage(100);
+                control.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                control.Properties.Items.Add("Wi-Fi").Selected = true;
+                control.Properties.Items.Add("3G");
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "TrackBar";
+            item.NestedControlCellStyle.Paddings.PaddingTop = Unit.Pixel(36);
+            item.NestedControlCellStyle.Paddings.PaddingBottom = Unit.Pixel(36);        
+            item.NestedExtension().TrackBar(control => {
+                control.Name = "trackBar";
+                control.Width = Unit.Percentage(100);
+                control.Properties.MinValue = 0;
+                control.Properties.MaxValue = 50;
+                control.Properties.Step = 1;
+                control.PositionStart = 10;
+                control.Properties.ScalePosition = ScalePosition.LeftOrTop;
+                control.Properties.LargeTickInterval = 10;
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "Memo";
+            item.NestedExtension().Memo(control => {
+                control.Name = "memo";
+                control.Text = "Confections - Desserts, candies, and sweet breads.";
+                control.Height = Unit.Pixel(120);
+                control.Width = Unit.Percentage(100);
+            });
+        });
+        settings.Items.AddGroupItem(group => {
+            group.ShowCaption = DefaultBoolean.False;
+            group.GroupBoxDecoration = GroupBoxDecoration.None;
+            group.UseDefaultPaddings = false;
+            group.Items.Add(item => {
+                item.Caption = "RadioButton";
+                item.CaptionCellStyle.Paddings.PaddingTop = Unit.Pixel(6);
+                item.NestedExtension().RadioButton(control => {
+                    control.Name = "radioButton";
+                    control.Text = "Click to change state";
+                });
+            });
+            group.Items.Add(item => {
+                item.Caption = "CheckBox";
+                item.NestedExtension().CheckBox(control => {
+                    control.Name = "checkBox";
+                    control.Text = "Click to change state";
+                });
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "ListBox";
+            item.NestedExtension().ListBox(control => {
+                control.Name = "listBox";
+                control.Width = Unit.Percentage(100);
+                control.Height = Unit.Pixel(260);
+                control.Properties.Items.Add("Ana Trujillo");
+                control.Properties.Items.Add("Giovanni Rovelli");
+                control.Properties.Items.Add("Jaime Yorres");
+                control.Properties.Items.Add("John Steel");
+                control.SelectedIndex = 1;
+            });
+        });
+        settings.Items.Add(item => {
+            item.Caption = "Calendar";
+            item.NestedExtension().Calendar(control => {
+                control.Name = "calendar";
+                control.Properties.FastNavProperties.DisplayMode = FastNavigationDisplayMode.Inline;
+                control.Properties.EnablePeriodNavigation = false;
+                control.Properties.EnableLargePeriodNavigation = false;
+                control.Properties.ShowWeekNumbers = false;
+            });
+        });
+        settings.Items.AddGroupItem(group => {
+            group.ShowCaption = DefaultBoolean.False;
+            group.GroupBoxDecoration = GroupBoxDecoration.None;
+            group.UseDefaultPaddings = false;
+            group.CssClass = "mobileAlign";
+            group.ParentContainerStyle.CssClass = "mobileAlign";
+            group.Items.Add(item => {
+                item.Caption = "Captcha";
+                item.CaptionCellStyle.Paddings.PaddingTop = Unit.Pixel(6);
+                item.SetNestedContent(() => {
+                    Html.RenderPartial("CaptchaPartial");
+                });
+            });
+            group.Items.Add(item => {
+                item.Caption = "Button";
+                item.NestedExtension().Button(control => {
+                    control.Name = "button";
+                    control.Width = Unit.Pixel(285);
+                    control.Text = "Submit";
+                    control.UseSubmitBehavior = true;
+                });
+            });
+        });
+    }).GetHtml()
+}

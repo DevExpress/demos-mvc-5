@@ -1,0 +1,60 @@
+﻿@model ValidationSchedule
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+
+    string HeaderText = string.Format("{0}, {1} - {2}", Model.StartTime.Date.ToShortDateString(), Model.StartTime.Date.ToShortTimeString(), Model.EndTime.Date.ToShortTimeString());
+}
+@using (Html.BeginForm()) {
+    @Html.DevExpress().RoundPanel(settings => {
+        settings.Name = "InplaceFormPanel";
+        settings.Width = Unit.Percentage(100);
+        settings.SetHeaderTemplateContent(c => {
+            Html.DevExpress().Label(s => s.Text = HeaderText).Render();
+            Html.DevExpress().Button(s => {
+                s.Name = "Close";
+                s.Style["float"] = "right";
+                s.Text = " ";
+                s.RenderMode = ButtonRenderMode.Link;
+                s.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16;
+                s.ClientSideEvents.Click = "OnInplaceCloseButtonClick";
+            }).Render();
+        });
+        settings.SetContent(() => {
+            Html.DevExpress().FormLayout(flSettings => {
+                flSettings.Name = "InplaceForm";
+                flSettings.Width = Unit.Percentage(100);
+                flSettings.Items.Add(m => m.Subject, i => {
+                    i.HelpText = "for instance, Meeting with friends";
+                    i.NestedExtension().TextBox(s => {
+                        s.Width = Unit.Percentage(100);
+                        s.ShowModelErrors = true;
+                    });
+                });
+
+                flSettings.Items
+                    .Add(i => {
+                        i.ShowCaption = DefaultBoolean.False;
+                        i.Width = Unit.Percentage(100);
+                    })
+                    .SetNestedContent(() => {
+                        Html.DevExpress().Button(s => {
+                            s.Name = "More";
+                            s.Text = "More Information...";
+                            s.RenderMode = ButtonRenderMode.Link;
+                            s.Style["margin-left"] = "10px";
+                            s.Style["float"] = "right";
+                            s.ClientSideEvents.Click = "OnInplaceFormMoreButtonClick";
+                        }).Render();
+                        Html.DevExpress().Button(s => {
+                            s.Name = "Update";
+                            s.Text = "Update";
+                            s.RenderMode = ButtonRenderMode.Link;
+                            s.Style["float"] = "right";
+                            s.ClientSideEvents.Click = "OnSaveInplaceFormData";
+                        }).Render();
+                    });
+            }).Bind(Model).Render();
+        });
+    }).GetHtml()
+}

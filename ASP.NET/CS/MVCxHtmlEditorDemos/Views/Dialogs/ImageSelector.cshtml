@@ -1,0 +1,51 @@
+﻿@model ImageSelectorOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(350);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("ImageSelectorPartial", Model)
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+    settings.Name = "FormLayoutSettings";
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+
+    settings.Items.AddGroupItem(group => {
+        group.Caption = "Settings Image Selector";
+
+        group.Items.Add(x => x.EnableEditing);
+        group.Items.Add(x => x.EnableUpload);
+        group.Items.Add(x => x.ShowToolbar);
+        group.Items.Add(x => x.ShowFoldersArea);
+        group.Items.Add(x => x.ShowBreadcrumbs);
+        group.Items.Add(x => x.FileListView);
+    });
+    settings.Items.AddGroupItem(group => {
+        group.Caption = "Settings Image Dialog";
+        group.Items.Add(x => x.ShowMoreOptions);
+    });
+
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 350,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+       s.Name = "ApplyButton";
+       s.Text = "Apply Changes";
+       s.Theme = DemoHelper.Instance.Theme;
+       s.UseSubmitBehavior = true;
+   }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

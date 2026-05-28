@@ -1,0 +1,29 @@
+﻿html, body, form, div#mail 
+{
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    font-family: Tahoma;
+    font-size: 12px;
+    color: #6E6E6E;
+    overflow: auto;
+    background: none;
+}
+div#mail 
+{
+    display:table;
+    border-collapse: separate;
+    border-spacing: 4px;
+}
+#SuccessText
+{
+	font-family: Tahoma;
+	font-size: 8pt;
+	display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+#FeedBackFormLayout table
+{
+    height: 100% !important;
+}

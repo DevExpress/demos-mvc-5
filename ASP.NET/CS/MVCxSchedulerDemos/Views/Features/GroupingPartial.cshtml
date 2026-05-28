@@ -1,0 +1,47 @@
+﻿@Html.DevExpress().Scheduler(
+    settings => {
+        settings.Name = "scheduler";
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "GroupingPartial" };
+        settings.ActiveViewType = SchedulerViewType.Day;
+        settings.Start = new DateTime(2016, 10, 10);
+        settings.Width = Unit.Percentage(100);
+
+        settings.GroupType = SchedulerGroupType.Date;
+        
+        SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.DayView);
+        SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.WorkWeekView);
+        SchedulerDemoHelper.ApplyCommonViewSettings(settings.Views.FullWeekView);
+        
+        settings.Views.DayView.ResourcesPerPage = 2;
+        settings.Views.WorkWeekView.ResourcesPerPage = 2;
+        settings.Views.FullWeekView.Enabled = true;
+        settings.Views.FullWeekView.ResourcesPerPage = 2;
+        settings.Views.WeekView.Enabled = false;
+        settings.Views.MonthView.ResourcesPerPage = 2;
+        settings.Views.MonthView.ShowWeekend = false;
+        settings.Views.MonthView.AppointmentDisplayOptions.StartTimeVisibility = AppointmentTimeVisibility.Never;
+        settings.Views.MonthView.AppointmentDisplayOptions.EndTimeVisibility = AppointmentTimeVisibility.Never;
+        settings.Views.MonthView.AppointmentDisplayOptions.StatusDisplayType = AppointmentStatusDisplayType.Bounds;
+        settings.Views.MonthView.AppointmentDisplayOptions.ShowRecurrence = true;
+        settings.Views.MonthView.MonthViewStyles.DateCellBody.Height = Unit.Pixel(170);
+        settings.Views.AgendaView.Enabled = false;
+
+        TimeScale[] timeScales = new TimeScale[] {
+            new TimeScaleYear() { Enabled = false }, 
+            new TimeScaleQuarter() { Enabled = false }, 
+            new TimeScaleMonth(),
+            new TimeScaleFixedInterval() { Enabled = false },
+            new TimeScaleDay(),
+            new TimeScaleHour() { Enabled = false },
+        };
+        settings.Views.TimelineView.Scales.AddRange(timeScales);
+        settings.Views.TimelineView.ResourcesPerPage = 2;
+
+        settings.Storage.Resources.Assign(SchedulerDemoHelper.DefaultResourceStorage);
+        settings.Storage.Appointments.Assign(SchedulerDemoHelper.DefaultAppointmentStorage);
+        
+        settings.OptionsCustomization.AllowAppointmentCreate = UsedAppointmentType.None;
+        settings.OptionsCustomization.AllowAppointmentEdit = UsedAppointmentType.None;
+        settings.OptionsCustomization.AllowAppointmentDelete = UsedAppointmentType.None;
+        settings.OptionsToolTips.ShowSelectionToolTip = false;
+    }).Bind(Model.Appointments, Model.Resources).GetHtml()

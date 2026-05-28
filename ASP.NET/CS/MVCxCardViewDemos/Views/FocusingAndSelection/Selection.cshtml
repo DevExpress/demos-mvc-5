@@ -1,0 +1,38 @@
+﻿@model IEnumerable
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+<script type="text/javascript">
+    function OnCardSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("FirstName;LastName", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        SelectedRows.BeginUpdate();
+        try {
+            SelectedRows.ClearItems();
+            for (var i = 0; i < values.length; i++) {
+                SelectedRows.AddItem(values[i].join(' '));
+            }
+        } finally {
+            SelectedRows.EndUpdate();
+        }
+        $("#selCount").html(CardView.GetSelectedCardCount());
+    }
+</script>
+
+<div style="float: left; width: 20%">
+    <div class="BottomPadding">
+        Selected values:
+    </div>
+    @Html.DevExpress().ListBox(
+        settings => {
+            settings.Name = "SelectedRows";
+            settings.Width = Unit.Percentage(100);
+            settings.Height = 250;
+            settings.Properties.EnableClientSideAPI = true;
+        }).GetHtml()
+    <div class="TopPadding">
+        Selected count: <span id="selCount" style="font-weight: bold">0</span>
+    </div>
+</div>
+<div style="float: right; width: 78%">
+    @Html.Partial("SelectionPartial", Model)
+</div>

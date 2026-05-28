@@ -1,0 +1,28 @@
+﻿@Html.DevExpress().GridView(
+    settings => {
+        settings.Name = "grid";
+        settings.CallbackRouteValues = new { Controller = "Hint", Action = "GridEllipsis" };
+        settings.Width = 550;
+
+        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
+        settings.SettingsBehavior.AllowEllipsisInText = true;
+
+        settings.Columns.Add(column => {
+            column.FieldName = "ContactName";
+            column.Width = 100;
+        });
+        settings.Columns.Add(column => {
+            column.FieldName = "CompanyName";
+            column.Width = 200;
+        });
+        settings.Columns.Add(column => {
+            column.FieldName = "City";
+            column.Width = 100;
+        });
+        settings.Columns.Add(column => {
+            column.FieldName = "Region";
+            column.Width = 50;
+        });
+        settings.Columns.Add("Country");
+        settings.ClientSideEvents.EndCallback = "function(s, e) { ASPxClientHint.Update(); }";
+    }).Bind(Model).GetHtml()

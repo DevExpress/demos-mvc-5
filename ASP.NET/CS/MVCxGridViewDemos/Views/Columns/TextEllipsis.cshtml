@@ -1,0 +1,18 @@
+﻿@model IEnumerable
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(614); }
+
+@Html.Partial("TextEllipsisPartial", Model)
+
+@section AdditionalResources{   
+    <style>
+        .cell[title] {
+            background-color: #FFF2C0;
+        }
+        .dxTheme-Office365Dark .dxgv[title]{
+            background-color: darkorange;
+        }
+        .cell {
+            transition: background 1s;
+        }
+    </style>
+}

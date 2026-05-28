@@ -1,0 +1,23 @@
+﻿@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section AdditionalResources {
+    <script type="text/javascript" src="@Url.Content("~/Scripts/CommandsAPI.js")"></script>
+}
+@section DemoOptionsTop {
+    <div class="options">
+        <div class="options-item">
+            @Html.DevExpress().Button(s => {
+                s.Name = "Restart";
+                s.Text = "Restart Demonstration";
+                s.Images.Image.IconID = "actions_refresh_16x16";
+                s.Theme = DemoHelper.Instance.Theme;
+                s.UseSubmitBehavior = false;
+                s.ClientSideEvents.Click = "function(s, e) { restartDemo(); }";
+            }).GetHtml()
+        </div>
+    </div>
+}
+@using(Html.BeginForm()) {
+    @Html.Action("CommandsAPIPartial")
+}
+<textarea id="Logger" readonly="readonly" class="Logger" style="max-width:700px;"></textarea>

@@ -1,0 +1,25 @@
+﻿@Html.DevExpress().FileManager(
+    settings => {
+        settings.Name = "fileManager";
+        settings.CallbackRouteValues = new { Controller = "DocumentManagement", Action = "CustomDocumentManagementFileManagerPartial" };
+        settings.DownloadRouteValues = new { Controller = "DocumentManagement", Action = "DownloadFile" };
+
+        settings.Height = 220;
+        settings.Settings.AllowedFileExtensions = new string[] { ".docx", ".doc", ".rtf", ".txt" };
+        settings.ClientSideEvents.SelectedFileChanged = "OnSelectedFileChanged";
+
+        settings.SettingsUpload.Enabled = !Utils.IsSiteMode;
+        settings.SettingsEditing.AllowDownload = true;
+
+        settings.PreRender = (s, e) => {
+            MVCxFileManager fileManager = (MVCxFileManager)s;
+            FileManagerFile file = fileManager.SelectedFolder.GetFiles().FirstOrDefault();
+            if(file != null)
+                fileManager.SelectedFile = file;
+        };
+        settings.FileUploading = (s, e) => {
+            e.Cancel = Utils.IsSiteMode;
+            e.ErrorText = Utils.GetReadOnlyMessageText();
+        };
+    }
+).BindToFolder(DirectoryManagmentUtils.DocumentBrowsingFolderPath).GetHtml()

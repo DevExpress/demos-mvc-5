@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<items>
+  <item id="1" Name="Leonardo da Vinci" ImageUrl="~/Content/Images/persons/Leonardo.jpg" Link="http://en.wikipedia.org/wiki/Leonardo_da_Vinci" Year="1452" />
+  <item id="2" Name="Nicolaus Copernicus" ImageUrl="~/Content/Images/persons/NicolausCopernicus.jpg" Link="http://en.wikipedia.org/wiki/Nicolaus_Copernicus" Year="1473" />
+  <item id="3" Name="Galileo Galilei" ImageUrl="~/Content/Images/persons/GalileoGalilei.jpg" Link="http://en.wikipedia.org/wiki/Galileo_Galilei" Year="1564" />
+  <item id="4" Name="William Shakespeare" ImageUrl="~/Content/Images/persons/WilliamShakespeare.jpg" Link="http://en.wikipedia.org/wiki/William_Shakespeare" Year="1564" />
+  <item id="5" Name="Isaac Newton" ImageUrl="~/Content/Images/persons/IsaacNewton.jpg" Link="http://en.wikipedia.org/wiki/Isaac_Newton" Year="1642" />
+  <item id="6" Name="Benjamin Franklin" ImageUrl="~/Content/Images/persons/BenjaminFranklin.jpg" Link="https://en.wikipedia.org/wiki/Benjamin_Franklin" Year="1706" />
+  <item id="7" Name="Ludwig van Beethoven" ImageUrl="~/Content/Images/persons/Beethoven.jpg" Link="http://en.wikipedia.org/wiki/Ludwig_van_Beethoven" Year="1820" />
+  <item id="8" Name="Leo Tolstoy" ImageUrl="~/Content/Images/persons/LeoTolstoy.jpg" Link="http://en.wikipedia.org/wiki/Leo_Tolstoy" Year="1828" />
+  <item id="9" Name="Mahatma Gandhi" ImageUrl="~/Content/Images/persons/MahatmaGandhi.jpg" Link="http://en.wikipedia.org/wiki/Mahatma_Gandhi" Year="1869" />
+  <item id="10" Name="Albert Einstein" ImageUrl="~/Content/Images/persons/AlbertEinstein.jpg" Link="http://en.wikipedia.org/wiki/Albert_Einstein" Year="1879" />
+</items>

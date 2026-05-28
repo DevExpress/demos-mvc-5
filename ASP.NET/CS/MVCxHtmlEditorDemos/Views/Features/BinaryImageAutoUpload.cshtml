@@ -1,0 +1,47 @@
+﻿@model HtmlEditorBinaryImageAutoUploadOptions
+@section AdditionalResources {
+    <script type="text/javascript">
+        function onBeginCallback(s, e) {
+            e.customArgs["MaxHeight"] = MaxHeight.GetNumber();
+            e.customArgs["MaxWidth"] = MaxWidth.GetNumber();
+            e.customArgs["AllowSaveBinaryImageToServer"] = AllowSaveBinaryImageToServer.GetChecked();
+        }
+    </script>
+}
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1000);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(350);
+}
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("BinaryImageAutoUploadPartial", Model)
+
+@section DemoOptions {
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "formLayout";
+    settings.SettingsItems.ShowCaption = DefaultBoolean.False;
+    settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+
+    settings.Items.AddGroupItem((group) => {
+        group.GroupBoxDecoration = GroupBoxDecoration.None;
+
+        group.Items.Add(m => m.AllowSaveBinaryImageToServer).NestedExtension().CheckBox((cbSettings) => {
+            cbSettings.Text = "AllowSaveBinaryImageToServer";
+        });
+        group.Items.Add(m => m.MaxWidth).ShowCaption = DefaultBoolean.True;
+        group.Items.Add(m => m.MaxHeight).ShowCaption = DefaultBoolean.True;
+    });
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 350,
+        ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+    });
+}).GetHtml()
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

@@ -1,0 +1,19 @@
+﻿@model SchedulerAgendaViewDemoOptions
+
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section StartDemoRegion{
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+@Html.Partial("AgendaViewPartial", Model)
+
+@section DemoOptions  {
+    @Html.Partial("AgendaViewOptionsPartial", Model)
+}
+
+@section EndDemoRegion{
+    @{ Html.EndForm(); }
+}

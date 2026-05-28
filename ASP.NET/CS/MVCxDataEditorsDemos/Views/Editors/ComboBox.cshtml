@@ -1,0 +1,57 @@
+﻿<div>
+    <div class="container">
+        <div class="editor">
+            @Html.DevExpress().ComboBox(settings => {
+                settings.Name = "comboBox1";
+                settings.Width = 180;
+                settings.SelectedIndex = 0;
+                settings.Properties.DisplayFormatString = "Assembly v{0}";
+                settings.Properties.ValueType = typeof(string);
+                settings.Properties.Items.Add("1.1");
+                settings.Properties.Items.Add("1.2");
+                settings.Properties.Items.Add("1.3");
+            }).GetHtml()
+        </div>
+        <div class="content">
+            DisplayFormatString = "Assembly v{0}"
+        </div>
+    </div>
+    <div class="container">
+        <div class="editor">
+            @Html.DevExpress().ComboBox(settings => {
+                settings.Name = "comboBox2";
+                settings.Width = 180;
+                settings.SelectedIndex = 0;
+                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                settings.Properties.TextField = "ProductName";
+                settings.Properties.ValueField = "ProductName";
+            }).BindList(Model).GetHtml()
+        </div>
+        <div class="content">
+            IncrementalFilteringMode = StartsWith<br /> 
+            DropDownStyle = DropDown
+        </div>
+    </div>
+    <div class="container">
+        <div class="editor">
+            @Html.Action("ComboBoxPartial")
+        </div>
+        <div class="content">
+            CallbackPageSize = 15<br /> 
+            DropDownStyle = DropDownList<br />
+            ClearButton.Visibility = AutoBoolean.True
+        </div>
+    </div>
+    <div class="container">
+        <div class="editor">
+            @Html.Action("MultiColumnComboBoxPartial")
+        </div>
+        <div class="content">
+            CallbackPageSize = 30<br /> 
+            IncrementalFilteringMode = StartsWith<br /> 
+            DropDownStyle = DropDownList<br /> 
+            Columns = [ContactName, CompanyName, Country, Phone]
+        </div>
+    </div>
+</div>

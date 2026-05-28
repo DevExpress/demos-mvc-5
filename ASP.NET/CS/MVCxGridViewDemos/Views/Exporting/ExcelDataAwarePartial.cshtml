@@ -1,0 +1,63 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Action = "ExcelDataAwarePartial", Controller = "Exporting" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.KeyFieldName = "ProductID";
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.Page;
+    settings.CommandColumn.ShowSelectCheckbox = true;
+    settings.Columns.Add(c => {
+        c.FieldName = "CategoryID";
+        c.Caption = "Category Name";
+        c.GroupIndex = 0;
+        c.Width = 150;
+        c.EditorProperties().ComboBox(cb => {
+            cb.ValueType = typeof(int);
+            cb.ValueField = "CategoryID";
+            cb.TextField = "CategoryName";
+            cb.DataSource = NorthwindDataProvider.GetCategories();
+        });
+    });
+    settings.Columns.Add("ProductName");
+    settings.Columns.Add("QuantityPerUnit");
+    settings.Columns.Add("UnitPrice").PropertiesEdit.DisplayFormatString = "c";
+    settings.Columns.Add("UnitsInStock");
+    settings.Columns.Add(c => {
+        c.FieldName = "Total";
+        c.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+        c.UnboundExpression = "UnitPrice * UnitsInStock";
+        c.PropertiesEdit.DisplayFormatString = "c";
+    });
+
+    settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "ProductName");
+    settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
+    settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Count, "ProductName").ShowInGroupFooterColumn = "ProductName";
+    settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total").ShowInGroupFooterColumn = "Total";
+
+    settings.Settings.ShowGroupPanel = true;
+    settings.Settings.ShowFooter = true;
+    settings.Settings.ShowGroupFooter = GridViewGroupFooterMode.VisibleAlways;
+    settings.SettingsPager.PageSize = 15;
+    settings.SettingsExport.EnableClientSideExportAPI = true;
+    settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.DataAware;
+
+    settings.Toolbars.Add(t => {
+        t.SettingsAdaptivity.Enabled = true;
+        t.Items.Add(GridViewToolbarCommand.ExportToXls);
+        t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+        t.Items.Add(GridViewToolbarCommand.ExportToCsv);
+    });
+    if (ViewData["exportRowType"] != null)
+        settings.SettingsExport.ExportSelectedRowsOnly =
+        ViewData["exportRowType"] as GridViewExportedRowType? == GridViewExportedRowType.Selected;
+
+    settings.PreRender = (sender, e) => {
+        var grid = sender as MVCxGridView;
+        if (grid != null)
+            grid.ExpandRow(0);
+    };
+    settings.ClientSideEvents.BeginCallback = "onBeginCallback";
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

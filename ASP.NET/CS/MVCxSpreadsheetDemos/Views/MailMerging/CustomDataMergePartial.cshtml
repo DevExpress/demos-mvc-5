@@ -1,0 +1,14 @@
+﻿@Html.DevExpress().Spreadsheet(
+    settings => {
+        settings.Name = "spreadsheet";
+        settings.CallbackRouteValues = new { Controller = "MailMerging", Action = "CustomDataMergePartial" };
+        settings.Width = Unit.Percentage(100);
+        settings.Height = 700;
+        settings.ActiveTabIndex = 0;
+        settings.ShowConfirmOnLosingChanges = false;
+        settings.PreRender = (s, e) => {
+            MVCxSpreadsheet spreadsheet = (MVCxSpreadsheet)s;
+            SpreadsheetDemoUtils.HideFileTab(spreadsheet);
+            CustomDataMergingDemoHelper.PerformDataMerging(spreadsheet.Document.Worksheets.ActiveWorksheet);
+        };
+}).Open(Path.Combine(DirectoryManagmentUtils.CurrentDataDirectory, "ExpenseReport.xlsx")).GetHtml()

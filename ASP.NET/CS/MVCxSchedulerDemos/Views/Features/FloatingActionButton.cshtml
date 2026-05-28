@@ -1,0 +1,48 @@
+﻿@model SchedulerDataObject
+
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Percentage(100); }
+
+@section AdditionalResources {
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Scheduler/FAB/styles.css")" />
+}
+<script type="text/javascript">
+    function OnInit(s, e) {
+        ASPxClientUtils.AttachEventToElement(s.GetMainElement(), "click", OnMainElementClick);
+    }
+    function OnCellClick(s, e) {
+        SwitchToTimeCellContext();
+    }
+    function OnSelectionChanged(s, e) {
+        SwitchToTimeCellContext();
+    }
+    function SwitchToTimeCellContext() {
+        ClearTimeRulerSelection();
+    }
+    function OnMainElementClick(e) {
+        if (IsTimeRulerCell(e)) {
+            $(scheduler.GetMainElement()).addClass('timeRulerSelected');
+            scheduler.GetFloatingActionButton().SetActionContext("Scale", true);
+        }
+    }
+    function IsTimeRulerCell(e) {
+        return /timeRulerHour|timeRulerMinute/.test(e.srcElement.className);
+    }
+    function ClearTimeRulerSelection(s, e) {
+        $(scheduler.GetMainElement()).removeClass('timeRulerSelected');
+    }
+    function OnActionItemClick(s, e) {
+        switch (e.actionName) {
+            case "Scale1Hour":
+                scheduler.RaiseCallback("MNUVIEW|SwitchTimeScale!01:00:00");
+                break;
+            case "Scale30Minutes":
+                scheduler.RaiseCallback("MNUVIEW|SwitchTimeScale!00:30:00");
+                break;
+            case "Scale15Minutes":
+                scheduler.RaiseCallback("MNUVIEW|SwitchTimeScale!00:15:00");
+                break;
+        }
+    }
+</script>
+
+@Html.Partial("FloatingActionButtonPartial", Model)

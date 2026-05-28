@@ -1,0 +1,26 @@
+﻿@Html.DevExpress().GridView(settings => {
+    settings.Name = "grid";
+    settings.CallbackRouteValues = new { Controller = "GroupingSorting", Action = "FixedGroupsPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.SettingsBehavior.AllowFixedGroups = true;
+    settings.Settings.ShowGroupPanel = true;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = 300;
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+    settings.KeyFieldName = "CustomerID";
+    settings.Columns.Add("ContactName");
+    settings.Columns.Add("CompanyName");
+    settings.Columns.Add("City");
+    settings.Columns.Add("Region");
+    settings.Columns.Add("Country").GroupIndex = 0;
+
+    settings.PreRender = (s, e) => {
+        MVCxGridView grid = s as MVCxGridView;
+        if(grid != null)
+            grid.ExpandAll();
+    };
+
+    DevExpress.Web.Demos.GridViewFeaturesHelper.SetupGlobalGridViewBehavior(settings);
+}).Bind(Model).GetHtml()

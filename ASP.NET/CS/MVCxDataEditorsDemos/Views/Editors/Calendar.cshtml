@@ -1,0 +1,116 @@
+﻿@model CalendarDemoOptions
+@{
+    DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(500);
+    DemoHelper.Instance.ControlOptionsRightBlockWidth = Unit.Pixel(330);
+}
+@section StartDemoRegion {
+    @{ Html.BeginForm(); }
+}
+
+@Html.AntiForgeryToken()
+
+<script type="text/javascript">
+    function SaveSelectedDates(s, e) {
+        var selectedDates = s.GetSelectedDates();
+        var calendarSelectedDates = [];
+        for (var i = 0; i < selectedDates.length; i++) {
+            var day = selectedDates[i].getDate();
+            var month = selectedDates[i].getMonth() + 1;
+            var year = selectedDates[i].getFullYear();
+            calendarSelectedDates.push([
+                (month < 10 ? "0" : "") + month.toString(),
+                (day < 10 ? "0" : "") + day.toString(),
+                year.toString()
+            ].join("/"));
+        }
+        $("#selectedDates").val(calendarSelectedDates.join());
+    }
+    function CustomDisabledDates(s, e) {
+        if (e.date.getDay() == 3)
+            e.isDisabled = true;
+    }
+    function CheckPickerType(s, e) {
+        var isDayViewShown = PickerType.GetValue() == "Days" || PickerType.GetValue() == "NotSet";
+        HighlightWeekends.SetEnabled(isDayViewShown);
+        ShowDayHeaders.SetEnabled(isDayViewShown);
+        ShowWeekNumbers.SetEnabled(isDayViewShown);
+    }
+</script>
+@Html.DevExpress().Calendar(settings => {
+    settings.Name = "calendar";
+    settings.Properties.HighlightToday = Model.HighlightToday;
+    settings.Properties.HighlightWeekends = Model.HighlightWeekends;
+    settings.Properties.ShowClearButton = Model.ShowClearButton;
+    settings.Properties.ShowTodayButton = Model.ShowTodayButton;
+    settings.Properties.ShowDayHeaders = Model.ShowDayHeaders;
+    settings.Properties.ShowHeader = Model.ShowHeader;
+    settings.Properties.ShowWeekNumbers = Model.ShowWeekNumbers;
+    settings.Properties.EnableMultiSelect = Model.EnableMultiSelect;
+    settings.Properties.PickerType = Model.PickerType;
+    settings.Properties.ClientSideEvents.SelectionChanged = "SaveSelectedDates";
+    settings.Properties.ClientSideEvents.Init = "SaveSelectedDates";
+
+    if (ViewData["SelectedDates"] != null) {
+        settings.SelectedDates.Add((DateTime[])ViewData["SelectedDates"]);
+    }
+
+    if (Model.DisableDates) {
+        settings.Properties.DisabledDates.AddRange((List<DateTime>)ViewData["DisabledDates"]);
+        settings.Properties.ClientSideEvents.CustomDisabledDate = "CustomDisabledDates";
+    }
+
+    settings.PreRender = (s, e) => {
+        MVCxCalendar calendar = (MVCxCalendar)s;
+        if (!calendar.EnableMultiSelect) {
+            calendar.SelectedDates.Clear();
+        }
+        else if (calendar.SelectedDates.Count < 2) {
+            int visibleDaysCount = (calendar.GetLastVisibleDate() - calendar.GetFirstVisibleDate()).Days;
+            var rnd = DevExpress.Data.Utils.NonCryptographicRandom.Default;
+            for (int i = 0; i < 5; i++) {
+                DateTime selectedDate = calendar.GetFirstVisibleDate().AddDays(rnd.Next(visibleDaysCount));
+                calendar.SelectedDates.Add(selectedDate);
+            }
+        }
+    };
+}).GetHtml()
+<input type="hidden" name="selectedDates" id="selectedDates" />
+
+@section DemoOptions {
+    @Html.DevExpress().FormLayout(settings => {
+        settings.Name = "FormLayoutSettings";
+        settings.RequiredMarkDisplayMode = RequiredMarkMode.None;
+        settings.ClientSideEvents.Init = "CheckPickerType";
+        settings.Items.AddGroupItem(g => {
+            g.Caption = "Options";
+            g.Items.Add(m => m.PickerType, item => {
+                item.NestedExtension().ComboBox(s => s.Properties.ClientSideEvents.SelectedIndexChanged = "CheckPickerType");
+            });
+            g.Items.Add(m => m.HighlightToday);
+            g.Items.Add(m => m.HighlightWeekends);
+            g.Items.Add(m => m.ShowClearButton);
+            g.Items.Add(m => m.ShowTodayButton);
+            g.Items.Add(m => m.ShowDayHeaders);
+            g.Items.Add(m => m.ShowHeader);
+            g.Items.Add(m => m.ShowWeekNumbers);
+            g.Items.Add(m => m.EnableMultiSelect);
+            g.Items.Add(m => m.DisableDates);        
+        });
+        DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+            ColumnMinWidth = 280,
+            ColumnCountMode = RecalculateColumnCountMode.ChildGroups
+        });
+    }).Bind(Model).GetHtml()
+    <div class="apply-button-container">
+        @Html.DevExpress().Button(s => {
+            s.Name = "ApplyButton";
+            s.Text = "Apply Changes";
+            s.Theme = DemoHelper.Instance.Theme;
+            s.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+}
+
+@section EndDemoRegion {
+    @{ Html.EndForm(); }
+}

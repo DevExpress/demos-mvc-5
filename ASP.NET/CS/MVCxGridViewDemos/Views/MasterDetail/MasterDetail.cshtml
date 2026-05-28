@@ -1,0 +1,4 @@
+﻿@model IEnumerable
+@{ DemoHelper.Instance.ControlAreaMaxWidth = Unit.Pixel(1400); }
+
+@Html.Partial("MasterDetailMasterPartial", Model)

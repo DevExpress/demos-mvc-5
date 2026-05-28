@@ -1,0 +1,14 @@
+﻿@model string
+
+@Html.DevExpress().Diagram(settings => {
+    settings.Name = "Diagram";
+    settings.Height = 600;
+    settings.SettingsToolbox.Groups.Add(g => {
+        g.Category = DiagramShapeCategory.Custom;
+        g.CustomCategoryName = "CategoryEmployees";
+        g.Title = "Employees";
+        g.DisplayMode = DiagramToolboxGroupDisplayMode.Texts;
+    });
+    settings.SettingsContextToolbox.DisplayMode = DiagramToolboxGroupDisplayMode.Texts;
+    settings.CustomShapes.AddRange(ViewBag.EmployeeShapes);
+}).Import(Model).GetHtml()

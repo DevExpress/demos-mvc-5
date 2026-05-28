@@ -1,0 +1,57 @@
+﻿@model DevExpress.Web.Demos.SpellChecker.Employee
+           
+<script type="text/javascript">
+    function OnCheckSpellingButtonClick(s, e){
+        var formContainer = layout.GetMainElement();
+        spellChecker.CheckElementsInContainer(formContainer); 
+    }
+    function OnSpellCheckerBeforeCheck(s, e){
+        checkSpellingButton.SetEnabled(false);
+    }
+    function OnSpellCheckerAfterCheck(s, e){
+        checkSpellingButton.SetEnabled(true);
+    }
+</script>
+
+@Html.Partial("ContainerSpellCheckerPartial")
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "layout";
+
+    settings.Items.Add(i => i.Name, iSettings => {
+        iSettings.NestedExtensionSettings.Width = Unit.Percentage(100);
+    });
+    settings.Items.Add(i => i.Position, iSettings => {
+        iSettings.NestedExtensionSettings.Width = Unit.Percentage(100);
+    });
+    settings.Items.Add(i => i.BirthDate, iSettings => {
+        iSettings.NestedExtensionSettings.Width = Unit.Percentage(100);
+    });
+    settings.Items.Add(i => i.Address, iSettings => {
+        iSettings.NestedExtensionSettings.Width = Unit.Percentage(100);
+    });
+    settings.Items.Add(i => i.About, iSettings => {
+        iSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
+
+        MemoSettings memoSettings = (MemoSettings)iSettings.NestedExtensionSettings;
+        memoSettings.Properties.Rows = 8;
+        memoSettings.Width = Unit.Percentage(100);
+    });
+    settings.Items.Add(iSettings => {
+        iSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+        iSettings.Name = "checkSpellingButton";
+        iSettings.Caption = " ";
+
+        ButtonSettings buttonSettings = (ButtonSettings)iSettings.NestedExtensionSettings;
+        buttonSettings.Text = "Check Spelling ...";
+        buttonSettings.Width = Unit.Percentage(100);
+        buttonSettings.ClientSideEvents.Click = "OnCheckSpellingButtonClick";
+    });
+
+    DemoHelper.Instance.ControlAreaMinHeight = 500;
+    DemoHelper.Instance.ControlAreaMaxWidth = 450;
+    DemoHelper.Instance.PrepareControlOptions(settings, new MvcControlOptionsSettings {
+        ColumnMinWidth = 350,
+        ColumnCountMode = RecalculateColumnCountMode.RootGroup
+    });
+}).GetHtml()

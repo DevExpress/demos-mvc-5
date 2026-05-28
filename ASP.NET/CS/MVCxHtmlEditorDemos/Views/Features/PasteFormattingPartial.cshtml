@@ -1,0 +1,32 @@
+﻿@model PasteFormattingOptions
+@Html.DevExpress().HtmlEditorFor(m => m.Html,
+    settings =>
+    {
+        settings.CallbackRouteValues = new { Controller = "Features", Action = "PasteFormattingPartial" };
+        settings.Height = Unit.Pixel(380);
+
+        HtmlEditorToolbar toolbar = new HtmlEditorToolbar();
+        toolbar.Items.Add(new ToolbarUndoButton());
+        toolbar.Items.Add(new ToolbarRedoButton());
+        ToolbarFontNameEdit fontNameEdit = new ToolbarFontNameEdit(true);
+        fontNameEdit.CreateDefaultItems();
+        toolbar.Items.Add(fontNameEdit);
+        ToolbarFontSizeEdit fontSizeEdit = new ToolbarFontSizeEdit(true);
+        fontSizeEdit.CreateDefaultItems();
+        toolbar.Items.Add(fontSizeEdit);
+        toolbar.Items.Add(new ToolbarBoldButton());
+        toolbar.Items.Add(new ToolbarItalicButton());
+        toolbar.Items.Add(new ToolbarUnderlineButton());
+        toolbar.Items.Add(new ToolbarStrikethroughButton());
+        toolbar.Items.Add(new ToolbarJustifyLeftButton(true));
+        toolbar.Items.Add(new ToolbarJustifyCenterButton());
+        toolbar.Items.Add(new ToolbarJustifyRightButton());
+        toolbar.Items.Add(new ToolbarInsertImageDialogButton(true));
+        settings.Toolbars.Add(toolbar);
+
+        settings.SettingsHtmlEditing.EnablePasteOptions = Model.EnablePasteOptions;
+        settings.SettingsHtmlEditing.PasteMode = Model.PasteMode;
+
+        Model.PrepareHtmlEditorSettings(settings);
+        DevExpress.Web.Demos.HtmlEditorFeaturesDemosHelper.SetupGlobalUploadBehaviour(settings);
+    }).GetHtml()

@@ -1,0 +1,25 @@
+﻿@Html.DevExpress().ImageGallery(settings => {
+    settings.Name = "imageGallery";
+    settings.CallbackRouteValues = new { Controller = "ImageGallery", Action = "AdaptiveLayoutPagePartial" };
+    settings.Layout = DevExpress.Web.Layout.Breakpoints;
+    settings.ThumbnailHeight = 320;
+    settings.ThumbnailWidth = 480;
+
+    settings.ImageUrlField = "ImageUrl";
+    settings.FullscreenViewerTextField = "Text";
+    settings.FullscreenViewerThumbnailUrlField = "ThumbnailUrl";
+    settings.ThumbnailUrlField = "MediumImageUrl";
+    settings.TextVisibility = ElementVisibilityMode.None;
+
+    settings.SettingsFullscreenViewer.ImageLoadMode = ImageLoadMode.DynamicLoad;
+    settings.SettingsBreakpointsLayout.ItemsPerPage = 30;
+    settings.SettingsBreakpointsLayout.ItemsPerRow = 6;
+    settings.SettingsBreakpointsLayout.Breakpoints.Add(BreakpointsLayoutDeviceSizes.Medium, 4);
+    settings.SettingsBreakpointsLayout.Breakpoints.Add(BreakpointsLayoutDeviceSizes.Small, 3);
+    settings.SettingsBreakpointsLayout.Breakpoints.Add(545, 2);
+    settings.PagerSettings.EndlessPagingMode = DataViewEndlessPagingMode.OnScroll;
+
+    settings.ControlStyle.Paddings.Padding = 0;
+    settings.Styles.Content.Border.BorderWidth = 0;
+    settings.Styles.Content.Paddings.PaddingTop = 8;
+}).BindToXML(Server.MapPath("~/App_Data/cities.xml"), "//items/*").GetHtml()

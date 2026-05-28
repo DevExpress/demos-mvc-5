@@ -1,0 +1,854 @@
+<?xml version="1.0"?>
+<ArrayOfCarbonContribution xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="CarbonContribution">
+      <xs:complexType>
+        <xs:sequence>
+          <xs:element name="Year" type="xs:int"/>
+          <xs:element name="Factor" type="xs:string"/>
+          <xs:element name="Contribution" type="xs:double"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <CarbonContribution>
+    <Year>1990</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.05</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1990</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.32</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1990</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-2.5</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1990</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-1.84</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1990</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-2.34</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1990</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.69</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1991</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.12</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1991</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.33</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1991</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-1.55</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1991</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-1.92</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1991</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-2.14</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1991</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>1.84</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1992</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.06</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1992</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.35</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1992</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-1.48</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1992</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.16</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1992</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-2.01</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1992</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>1.75</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1993</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.05</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1993</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.35</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1993</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-2.59</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1993</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.07</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1993</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-2.89</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1993</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>-0.15</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1994</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.15</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1994</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.34</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1994</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-3.54</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1994</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-1.95</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1994</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-1.49</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1994</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.51</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1995</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.28</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1995</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.33</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1995</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-4.18</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1995</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-1.9</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1995</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-1.64</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1995</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>-0.1</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1996</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.42</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1996</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.31</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1996</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-2.29</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1996</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-1.84</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1996</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-3.14</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1996</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.46</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1997</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.53</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1997</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.78</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1997</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-4.2</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1997</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-1.92</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1997</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-2.98</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1997</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>-0.79</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1998</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.55</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1998</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.23</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1998</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-5.94</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1998</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.09</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1998</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-1.34</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1998</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>-1.6</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1999</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.53</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1999</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.2</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1999</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-2.84</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1999</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-1.97</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1999</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-3.7</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>1999</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>-0.78</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2000</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.7</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2000</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.32</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2000</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-2.63</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2000</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-1.91</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2000</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-3.99</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2000</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>-0.51</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2001</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.86</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2001</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.18</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2001</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-3.9</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2001</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-1.77</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2001</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-2.41</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2001</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>-0.04</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2002</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>6.96</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2002</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.34</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2002</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-5.05</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2002</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.13</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2002</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-0.91</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2002</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.21</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2003</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>7.33</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2003</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.39</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2003</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-4.83</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2003</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.16</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2003</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-2.31</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2003</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>-0.59</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2004</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>7.69</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2004</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.34</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2004</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-3.29</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2004</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.08</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2004</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-3.46</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2004</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.2</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2005</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>7.98</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2005</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.21</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2005</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-5.17</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2005</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.13</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2005</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-1.61</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2005</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.29</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2006</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>8.27</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2006</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.25</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2006</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-3.75</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2006</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.21</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2006</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-3.12</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2006</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.44</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2007</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>8.43</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2007</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.07</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2007</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-4.43</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2007</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.29</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2007</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-2.79</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2007</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>-0.02</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2008</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>8.7</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2008</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.13</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2008</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-3.75</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2008</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.19</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2008</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-3.71</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2008</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.17</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2009</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>8.6</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2009</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.57</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2009</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-3.43</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2009</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.3</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2009</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-2.77</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2009</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>1.67</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2010</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>9.02</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2010</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.42</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2010</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-5.17</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2010</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.23</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2010</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-3.1</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2010</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>-0.06</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2011</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>9.38</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2011</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.36</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2011</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-3.58</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2011</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.41</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2011</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-4.25</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2011</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.48</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2012</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>9.53</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2012</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.6</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2012</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-5.05</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2012</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.46</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2012</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-2.49</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2012</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>1.13</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2013</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>9.61</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2013</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.54</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2013</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-5.13</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2013</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.49</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2013</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-3.27</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2013</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.26</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2014</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>9.69</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2014</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.6</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2014</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-4.32</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2014</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.56</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2014</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-3.8</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2014</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.61</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2015</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>9.68</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2015</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.62</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2015</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-6.19</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2015</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.58</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2015</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-1.84</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2015</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.69</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2016</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>9.74</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2016</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.3</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2016</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-6.04</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2016</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.64</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2016</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-2.58</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2016</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>-0.22</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2017</Year>
+    <Factor>Fuel/Industry</Factor>
+    <Contribution>9.87</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2017</Year>
+    <Factor>Land-Use Emissions</Factor>
+    <Contribution>1.39</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2017</Year>
+    <Factor>Atmospheric Growth</Factor>
+    <Contribution>-4.64</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2017</Year>
+    <Factor>Ocean Sink</Factor>
+    <Contribution>-2.51</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2017</Year>
+    <Factor>Land Sink</Factor>
+    <Contribution>-3.78</Contribution>
+  </CarbonContribution>
+  <CarbonContribution>
+    <Year>2017</Year>
+    <Factor>Imbalance</Factor>
+    <Contribution>0.32</Contribution>
+  </CarbonContribution>
+</ArrayOfCarbonContribution>

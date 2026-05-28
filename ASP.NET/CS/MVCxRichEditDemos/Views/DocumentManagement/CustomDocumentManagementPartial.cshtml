@@ -1,0 +1,21 @@
+﻿@Html.DevExpress().RichEdit(settings => {
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "DocumentManagement", Action = "CustomDocumentManagementPartial" };
+    settings.CustomActionRouteValues = new { Controller = "DocumentManagement", Action = "OpenFile" };
+
+    settings.WorkDirectory = DirectoryManagmentUtils.DocumentBrowsingFolderPath;
+    settings.RibbonMode = RichEditRibbonMode.None;
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(450);
+
+    settings.ShowConfirmOnLosingChanges = false;
+
+    settings.ClientSideEvents.BeginCallback = "OnRichEditBeginCallback";
+    settings.ClientSideEvents.EndCallback = "OnRichEditEndCallback";
+
+    settings.PreRender = (s, e) => {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        richEdit.Focus();
+    };
+}).Open(Path.Combine(DirectoryManagmentUtils.DocumentBrowsingFolderPath, "Example.rtf")).GetHtml()

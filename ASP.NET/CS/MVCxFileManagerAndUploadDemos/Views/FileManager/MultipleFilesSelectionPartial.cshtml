@@ -1,0 +1,22 @@
+﻿@Html.DevExpress().FileManager(
+    settings =>
+    {
+        settings.Name = "fileManager";
+        settings.CallbackRouteValues = new { Controller = "FileManager", Action = "MultipleFilesSelectionPartial" };
+        settings.DownloadRouteValues = new { Controller = "FileManager", Action = "DownloadImages" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.Settings.InitialFolder = "Product icons";
+        settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
+        settings.Settings.EnableMultiSelect = true;
+
+        settings.SettingsFileList.View = (FileListView)Session["FileListViewMode"];
+
+        settings.SettingsUpload.Enabled = false;
+        settings.SettingsEditing.AllowDownload = true;
+
+        settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+        
+        settings.SettingsAdaptivity.Enabled = true;
+    }
+).BindToFolder(Model).GetHtml()

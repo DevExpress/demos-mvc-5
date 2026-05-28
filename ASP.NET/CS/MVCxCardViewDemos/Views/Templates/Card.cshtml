@@ -1,0 +1,8 @@
+﻿@model IEnumerable
+           
+@section AdditionalResources{
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Templates/Card.css")" />
+}
+
+<span style="line-height: 40px;">Move the mouse pointer over cards to see the detail information.</span>
+@Html.Partial("CardPartial", Model)
