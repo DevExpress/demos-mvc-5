@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0">
-	<siteMapNode url="http://www.devexpress.com/" title="Developer Express">
+	<siteMapNode url="https://www.devexpress.com/" title="Developer Express">
 		<siteMapNode url="~/Home/" title="General Information">
 			<siteMapNode url="" title="News">
 				<siteMapNode url="~/Home/news-vs.xml" title="News for Visual Studio Developers" />
@@ -31,7 +31,7 @@
 				<siteMapNode url="~/Support/KnowledgeBase/" title="Knowledge Base" />
 				<siteMapNode url="~/Support/OnlineHelp.xml" title="Online Documentation" />
 				<siteMapNode url="~/Support/OnlineLessons.xml" title="Online Tutorials and Screencasts" />
-				<siteMapNode url="http://community.devexpress.com" title="Community (Forums and Blogs)" />
+				<siteMapNode url="https://community.devexpress.com" title="Community (Forums and Blogs)" />
 				<siteMapNode url="~/Support/LicensingFAQ.xml" title="Common Licensing Questions" />
 				<siteMapNode url="~/Support/Versions.xml" title="Current Version/Build" />
 				<siteMapNode url="~/Support/DXSquad.xml" title="Become a DX-Squad Member" />
