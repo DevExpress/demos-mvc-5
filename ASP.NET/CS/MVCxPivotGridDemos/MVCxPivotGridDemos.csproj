@@ -254,10 +254,9 @@
     <Content Include="Content\DemoIcons\fcremove.png" />
     <Content Include="Content\DemoIcons\pgPrefilterButton.png" />
     <Content Include="Content\DemoIcons\ServerMode.png" />
-    <Content Include="Content\DemoIcons\Templates.png" />
     <Content Include="Content\DemoIcons\TopValues.png" />
     <Content Include="Content\DemoIcons\FilterPopup.png" />
-    <Content Include="Content\DemoIcons\FieldValueTemplates.png" />
+    <Content Include="Content\DemoIcons\FieldValueTemplates.jpg" />
     <Content Include="Content\DemoIcons\FieldsCustomization.png" />
     <Content Include="Content\DemoIcons\KPI.png" />
     <Content Include="Content\FeatureIcons\Ajax.png" />

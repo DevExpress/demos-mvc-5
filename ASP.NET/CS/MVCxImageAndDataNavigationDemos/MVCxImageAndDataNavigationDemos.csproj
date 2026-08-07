@@ -216,7 +216,7 @@
     <Content Include="Content\DemoIcons\ImageSliderVideoGallery.png" />
     <Content Include="Content\DemoIcons\ImageZoomBindingToBinaryData.png" />
     <Content Include="Content\DemoIcons\ImageZoomNavigator.png" />
-    <Content Include="Content\DemoIcons\Slide-Show.png" />
+    <Content Include="Content\DemoIcons\Slide-Show.jpg" />
     <Content Include="Content\deviceViewer.css" />
     <Content Include="Content\Display.png" />
     <Content Include="Content\FeatureIcons\Ajax.png" />

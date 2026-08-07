@@ -4,8 +4,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>
-    </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{42F2B76F-CD5B-4383-BF6D-9A5A06019473}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
@@ -194,10 +192,10 @@
     <Content Include="Content\CodeFormatter.css" />
     <Content Include="Content\Components.css" />
     <Content Include="Content\ComponentsSpriteImage.png" />
-    <Content Include="Content\DemoIcons\DatabaseBinding.png" />
+    <Content Include="Content\DemoIcons\DatabaseBinding.jpg" />
     <Content Include="Content\DemoIcons\DragAndDrop.png" />
-    <Content Include="Content\DemoIcons\Subfolder-Searching.png" />
-    <Content Include="Content\DemoIcons\Templates.png" />
+    <Content Include="Content\DemoIcons\Subfolder-Searching.jpg" />
+    <Content Include="Content\DemoIcons\Templates.jpg" />
     <Content Include="Content\DemoIcons\Upload.png" />
     <Content Include="Content\DemoIcons\VirtualScrolling.png" />
     <Content Include="Content\deviceViewer.css" />

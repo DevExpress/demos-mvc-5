@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>
-    </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0BB1171A-3E02-4E3D-BD54-442B1CC597DC}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
@@ -234,7 +232,7 @@
     <Content Include="Content\DemoIcons\CardViewBatch.png" />
     <Content Include="Content\DemoIcons\EndlessPaging.png" />
     <Content Include="Content\DemoIcons\SearchPanel.png" />
-    <Content Include="Content\DemoIcons\Selection.png" />
+    <Content Include="Content\DemoIcons\Selection.jpg" />
     <Content Include="Content\DemoIcons\Toolbar.png" />
     <Content Include="Content\deviceViewer.css" />
     <Content Include="Content\feedback.css" />

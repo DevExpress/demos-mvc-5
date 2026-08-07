@@ -192,7 +192,7 @@
     <Content Include="Content\ComponentsSpriteImage.png" />
     <Content Include="Content\DemoIcons\Columns.png" />
     <Content Include="Content\DemoIcons\StripLines.png" />
-    <Content Include="Content\DemoIcons\TaskTemplate.png" />
+    <Content Include="Content\DemoIcons\TaskTemplate.jpg" />
     <Content Include="Content\DemoIcons\Validation.png" />
     <Content Include="Content\feedback.css" />
     <Content Include="Content\FeedbackIcons\icon-cancel-hover.svg" />
