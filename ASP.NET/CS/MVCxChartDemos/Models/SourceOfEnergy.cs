@@ -13,18 +13,18 @@ namespace DevExpress.Web.Demos.Charts {
             DateTime date;
             double southAfrica;
             double poland;
-            double russia;
+            double australia;
 
             public DateTime Date { get { return date; } }
             public double SouthAfrica { get { return southAfrica; } }
             public double Poland { get { return poland; } }
-            public double Russia { get { return russia; } }
+            public double Australia { get { return australia; } }
 
-            public CoalProduction(DateTime date, double southAfrica, double poland, double russia) {
+            public CoalProduction(DateTime date, double southAfrica, double poland, double australia) {
                 this.date = date;
                 this.southAfrica = southAfrica;
                 this.poland = poland;
-                this.russia = russia;
+                this.australia = australia;
             }
         }
         public class GasolinePrice {
@@ -56,35 +56,34 @@ namespace DevExpress.Web.Demos.Charts {
                 this.max = max;
             }
         }
-
         public static List<CoalProduction> GetCoalProduction() {
             return new List<CoalProduction>(){
-                new CoalProduction(new DateTime(2015, 12, 31, 0, 0, 0), 252.099, 135.523, 373.300),
-                new CoalProduction(new DateTime(2014, 12, 31, 0, 0, 0), 261.523, 137.148, 357.396),
-                new CoalProduction(new DateTime(2013, 12, 31, 0, 0, 0), 256.562, 142.906, 355.231),
-                new CoalProduction(new DateTime(2012, 12, 31, 0, 0, 0), 258.575, 144.093, 358.300),
-                new CoalProduction(new DateTime(2011, 12, 31, 0, 0, 0), 252.756, 139.289, 337.400),
-                new CoalProduction(new DateTime(2010, 12, 31, 0, 0, 0), 254.521, 133.238, 322.920),
-                new CoalProduction(new DateTime(2009, 12, 31, 0, 0, 0), 247.820, 135.172, 302.382),
-                new CoalProduction(new DateTime(2008, 12, 31, 0, 0, 0), 252.213, 144.013, 330.182),
-                new CoalProduction(new DateTime(2007, 12, 31, 0, 0, 0), 247.666, 145.850, 315.570),
-                new CoalProduction(new DateTime(2006, 12, 31, 0, 0, 0), 244.774, 156.065, 311.370),
-                new CoalProduction(new DateTime(2005, 12, 31, 0, 0, 0), 244.985, 159.540, 299.970),
-                new CoalProduction(new DateTime(2004, 12, 31, 0, 0, 0), 242.821, 161.284, 284.398),
-                new CoalProduction(new DateTime(2003, 12, 31, 0, 0, 0), 238.751, 163.790, 278.746),
-                new CoalProduction(new DateTime(2002, 12, 31, 0, 0, 0), 220.212, 161.920, 258.912),
-                new CoalProduction(new DateTime(2001, 12, 31, 0, 0, 0), 223.560, 163.540, 274.001),
-                new CoalProduction(new DateTime(2000, 12, 31, 0, 0, 0), 224.199, 162.820, 262.081),
-                new CoalProduction(new DateTime(1999, 12, 31, 0, 0, 0), 223.514, 172.730, 255.050),
-                new CoalProduction(new DateTime(1998, 12, 31, 0, 0, 0), 222.976, 178.550, 235.383),
-                new CoalProduction(new DateTime(1997, 12, 31, 0, 0, 0), 220.072, 200.930, 250.617),
-                new CoalProduction(new DateTime(1996, 12, 31, 0, 0, 0), 206.362, 201.720, 262.052),
-                new CoalProduction(new DateTime(1995, 12, 31, 0, 0, 0), 206.210, 200.720, 269.574),
-                new CoalProduction(new DateTime(1994, 12, 31, 0, 0, 0), 195.805, 200.700, 278.304),
-                new CoalProduction(new DateTime(1993, 12, 31, 0, 0, 0), 188.214, 198.580, 311.862),
-                new CoalProduction(new DateTime(1992, 12, 31, 0, 0, 0), 184.045, 198.380, 349.004),
-                new CoalProduction(new DateTime(1991, 12, 31, 0, 0, 0), 178.390, 209.790, 362.235),
-                new CoalProduction(new DateTime(1990, 12, 31, 0, 0, 0), 174.780, 215.320, 405.194)
+                new CoalProduction(new DateTime(2015, 12, 31, 0, 0, 0), 252.099, 135.523, 446.320),
+                new CoalProduction(new DateTime(2014, 12, 31, 0, 0, 0), 261.523, 137.148, 442.230),
+                new CoalProduction(new DateTime(2013, 12, 31, 0, 0, 0), 256.562, 142.906, 421.110),
+                new CoalProduction(new DateTime(2012, 12, 31, 0, 0, 0), 258.575, 144.093, 385.200),
+                new CoalProduction(new DateTime(2011, 12, 31, 0, 0, 0), 252.756, 139.289, 368.100),
+                new CoalProduction(new DateTime(2010, 12, 31, 0, 0, 0), 254.521, 133.238, 382.430),
+                new CoalProduction(new DateTime(2009, 12, 31, 0, 0, 0), 247.820, 135.172, 362.800),
+                new CoalProduction(new DateTime(2008, 12, 31, 0, 0, 0), 252.213, 144.013, 355.610),
+                new CoalProduction(new DateTime(2007, 12, 31, 0, 0, 0), 247.666, 145.850, 345.900),
+                new CoalProduction(new DateTime(2006, 12, 31, 0, 0, 0), 244.774, 156.065, 335.800),
+                new CoalProduction(new DateTime(2005, 12, 31, 0, 0, 0), 244.985, 159.540, 321.400),
+                new CoalProduction(new DateTime(2004, 12, 31, 0, 0, 0), 242.821, 161.284, 308.200),
+                new CoalProduction(new DateTime(2003, 12, 31, 0, 0, 0), 238.751, 163.790, 292.800),
+                new CoalProduction(new DateTime(2002, 12, 31, 0, 0, 0), 220.212, 161.920, 281.300),
+                new CoalProduction(new DateTime(2001, 12, 31, 0, 0, 0), 223.560, 163.540, 271.900),
+                new CoalProduction(new DateTime(2000, 12, 31, 0, 0, 0), 224.199, 162.820, 245.500),
+                new CoalProduction(new DateTime(1999, 12, 31, 0, 0, 0), 223.514, 172.730, 238.100),
+                new CoalProduction(new DateTime(1998, 12, 31, 0, 0, 0), 222.976, 178.550, 226.400),
+                new CoalProduction(new DateTime(1997, 12, 31, 0, 0, 0), 220.072, 200.930, 217.100),
+                new CoalProduction(new DateTime(1996, 12, 31, 0, 0, 0), 206.362, 201.720, 201.300),
+                new CoalProduction(new DateTime(1995, 12, 31, 0, 0, 0), 206.210, 200.720, 194.800),
+                new CoalProduction(new DateTime(1994, 12, 31, 0, 0, 0), 195.805, 200.700, 180.200),
+                new CoalProduction(new DateTime(1993, 12, 31, 0, 0, 0), 188.214, 198.580, 180.800),
+                new CoalProduction(new DateTime(1992, 12, 31, 0, 0, 0), 184.045, 198.380, 182.300),
+                new CoalProduction(new DateTime(1991, 12, 31, 0, 0, 0), 178.390, 209.790, 172.600),
+                new CoalProduction(new DateTime(1990, 12, 31, 0, 0, 0), 174.780, 215.320, 166.800)
             };
         }
 
